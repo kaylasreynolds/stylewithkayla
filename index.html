@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Style with Kayla</title>
+  <meta name="description" content="Free personal styling appointments with Kayla at Macy's Boise." />
+  <style>
+    :root{
+      --cream:#fbf7f0;
+      --blush:#ead7cf;
+      --rose:#b67b6f;
+      --brown:#3a2a24;
+      --taupe:#8d776d;
+      --white:#fffdf9;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: Georgia, 'Times New Roman', serif;
+      color:var(--brown);
+      background:
+        radial-gradient(circle at top left, #f1ddd6 0, transparent 34%),
+        linear-gradient(135deg,var(--cream),#fffaf6 55%,#f4e8df);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
+    }
+    .card{
+      width:min(760px,100%);
+      background:rgba(255,253,249,.9);
+      border:1px solid rgba(182,123,111,.25);
+      border-radius:34px;
+      padding:54px 30px;
+      text-align:center;
+      box-shadow:0 24px 60px rgba(58,42,36,.12);
+      position:relative;
+      overflow:hidden;
+    }
+    .card:before,.card:after{
+      content:"";
+      position:absolute;
+      width:160px;
+      height:160px;
+      border-radius:50%;
+      background:rgba(234,215,207,.55);
+      z-index:0;
+    }
+    .card:before{top:-70px;right:-50px}
+    .card:after{bottom:-90px;left:-60px}
+    .content{position:relative;z-index:1}
+    .eyebrow{
+      font-family:Arial,Helvetica,sans-serif;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.78rem;
+      color:var(--rose);
+      font-weight:700;
+      margin-bottom:16px;
+    }
+    h1{
+      font-size:clamp(2.8rem,8vw,5.2rem);
+      line-height:.95;
+      margin:0 0 18px;
+      letter-spacing:-.055em;
+      font-weight:500;
+    }
+    .subhead{
+      font-family:Arial,Helvetica,sans-serif;
+      font-size:clamp(1.05rem,3vw,1.3rem);
+      line-height:1.6;
+      color:var(--taupe);
+      max-width:570px;
+      margin:0 auto 30px;
+    }
+    .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:30px}
+    a.button{
+      font-family:Arial,Helvetica,sans-serif;
+      display:inline-block;
+      text-decoration:none;
+      border-radius:999px;
+      padding:14px 22px;
+      font-weight:700;
+      transition:.2s ease;
+    }
+    .primary{background:var(--brown);color:white}
+    .secondary{background:#f3e5dd;color:var(--brown);border:1px solid rgba(182,123,111,.22)}
+    a.button:hover{transform:translateY(-2px)}
+    .details{
+      font-family:Arial,Helvetica,sans-serif;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      max-width:620px;
+      margin:0 auto;
+    }
+    .pill{
+      background:white;
+      border:1px solid rgba(182,123,111,.22);
+      border-radius:18px;
+      padding:14px 12px;
+      color:#6f5d55;
+      font-size:.95rem;
+    }
+    .footer{
+      font-family:Arial,Helvetica,sans-serif;
+      margin-top:28px;
+      font-size:.9rem;
+      color:#927c72;
+    }
+    @media(max-width:640px){
+      .card{padding:42px 22px;border-radius:28px}
+      .details{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="content">
+      <div class="eyebrow">Macy’s Boise Personal Stylist</div>
+      <h1>Style with Kayla</h1>
+      <p class="subhead">Free personal styling appointments with pre-pulled looks, easy outfit ideas, and a calm shopping experience designed around your confidence.</p>
+      <div class="actions">
+        <a class="button primary" href="mailto:kaylasreynolds@gmail.com?subject=Free%20Styling%20Appointment">Book a Free Styling Appointment</a>
+        <a class="button secondary" href="mailto:kaylasreynolds@gmail.com">Contact Kayla</a>
+      </div>
+      <section class="details" aria-label="Styling services">
+        <div class="pill">Women’s Styling</div>
+        <div class="pill">Men’s Styling</div>
+        <div class="pill">Events + Occasions</div>
+      </section>
+      <div class="footer">More details coming soon · styled by Kayla</div>
+    </div>
+  </main>
+</body>
+</html>
