@@ -15,21 +15,21 @@
 
   <header class="site-header" aria-label="Site header">
     <div class="container header-inner">
-      <a class="brand" href="#top" aria-label="Style with Kayla home">Style with Kayla</a>
+      <a class="site-logo" href="#top" aria-label="Style with Kayla home">Style with Kayla</a>
       <nav class="site-nav" aria-label="Main navigation">
         <a href="#how-it-works">How it works</a>
         <a href="#services">Services</a>
         <a href="#about">About</a>
         <a href="#testimonials">Testimonials</a>
       </nav>
-      <a class="button header-button" href="mailto:kayla.reynolds@macys.com?subject=Free%20Styling%20Appointment">Book now</a>
+      <a class="button header-cta" href="mailto:kayla.reynolds@macys.com?subject=Free%20Styling%20Appointment">Book now</a>
     </div>
   </header>
 
   <main id="top">
     <section class="hero section" aria-labelledby="hero-title">
-      <div class="container hero-grid">
-        <div class="hero-content">
+      <div class="container hero__inner">
+        <div class="hero__content">
           <div class="section-label">Macy’s Boise Personal Stylist</div>
           <h1 class="section-heading" id="hero-title">Style that feels effortless, polished, and completely you.</h1>
           <p class="body-copy hero-copy">Book a free appointment with Kayla for pre-pulled looks, easy outfit ideas, and a calm shopping experience designed around your confidence.</p>
@@ -38,7 +38,7 @@
             <a class="button button--secondary" href="mailto:kayla.reynolds@macys.com">Contact Kayla</a>
           </div>
         </div>
-        <div class="hero-image-card" aria-label="Placeholder styling image">
+        <div class="hero__media" aria-label="Placeholder styling image">
           <div class="image-placeholder">Wardrobe image placeholder</div>
         </div>
       </div>
@@ -51,18 +51,18 @@
           <h2 class="section-heading" id="how-heading">A simple styling experience from first hello to final look.</h2>
         </div>
         <div class="steps-grid">
-          <article class="info-card">
-            <span class="step-number">01</span>
+          <article class="step-card">
+            <span class="step-icon">01</span>
             <h3>Share your needs</h3>
             <p class="body-copy">Tell Kayla about your sizes, style goals, occasion, budget, and what you want your wardrobe to do next.</p>
           </article>
-          <article class="info-card">
-            <span class="step-number">02</span>
+          <article class="step-card">
+            <span class="step-icon">02</span>
             <h3>Arrive to curated options</h3>
             <p class="body-copy">Kayla pulls placeholder-friendly outfit ideas before you arrive so the appointment feels relaxed and focused.</p>
           </article>
-          <article class="info-card">
-            <span class="step-number">03</span>
+          <article class="step-card">
+            <span class="step-icon">03</span>
             <h3>Leave with confidence</h3>
             <p class="body-copy">Try pieces, mix outfits, and take home styling notes that make getting dressed easier after your visit.</p>
           </article>
@@ -71,33 +71,42 @@
     </section>
 
     <section class="services-preview section" id="services" aria-labelledby="services-heading">
-      <div class="container split-layout">
+      <div class="container services-layout">
         <div>
           <div class="section-label">Services preview</div>
           <h2 class="section-heading" id="services-heading">Styling support for everyday updates and special moments.</h2>
           <p class="body-copy">These free services can be customized once the full service menu is ready. For now, each option is written to be easy to replace with final copy.</p>
         </div>
-        <div class="services-list">
-          <article class="service-item">
-            <h3>Women’s Styling</h3>
-            <p class="body-copy">Fresh seasonal outfits, wardrobe refreshes, and versatile pieces for work, weekends, and travel.</p>
+        <div class="services-grid">
+          <article class="service-card">
+            <div class="service-card__image" aria-hidden="true"></div>
+            <div class="service-card__content">
+              <h3>Women’s Styling</h3>
+              <p class="body-copy">Fresh seasonal outfits, wardrobe refreshes, and versatile pieces for work, weekends, and travel.</p>
+            </div>
           </article>
-          <article class="service-item">
-            <h3>Men’s Styling</h3>
-            <p class="body-copy">Easy outfit building, fit guidance, and polished looks for everyday life or upcoming events.</p>
+          <article class="service-card">
+            <div class="service-card__image" aria-hidden="true"></div>
+            <div class="service-card__content">
+              <h3>Men’s Styling</h3>
+              <p class="body-copy">Easy outfit building, fit guidance, and polished looks for everyday life or upcoming events.</p>
+            </div>
           </article>
-          <article class="service-item">
-            <h3>Events + Occasions</h3>
-            <p class="body-copy">Placeholder-ready support for weddings, parties, photos, interviews, and milestone celebrations.</p>
+          <article class="service-card">
+            <div class="service-card__image" aria-hidden="true"></div>
+            <div class="service-card__content">
+              <h3>Events + Occasions</h3>
+              <p class="body-copy">Placeholder-ready support for weddings, parties, photos, interviews, and milestone celebrations.</p>
+            </div>
           </article>
         </div>
       </div>
     </section>
 
     <section class="about-preview section" id="about" aria-labelledby="about-heading">
-      <div class="container about-grid">
-        <div class="portrait-placeholder">Kayla portrait placeholder</div>
-        <div>
+      <div class="container about-split">
+        <div class="about-split__image">Kayla portrait placeholder</div>
+        <div class="about-split__content">
           <div class="section-label">About Kayla</div>
           <h2 class="section-heading" id="about-heading">A friendly guide for a more personal shopping trip.</h2>
           <p class="body-copy">Kayla helps clients feel seen, comfortable, and ready to try new ideas without pressure. This section can later include a fuller bio, store details, and a favorite styling philosophy.</p>
@@ -113,15 +122,23 @@
           <h2 class="section-heading" id="testimonials-heading">Client stories coming soon.</h2>
           <p class="body-copy">Use this area for quotes once clients share feedback about their styling appointments.</p>
         </div>
-        <div class="testimonial-grid">
-          <blockquote>
-            <p class="body-copy">“Placeholder quote about feeling confident and prepared.”</p>
-            <cite>Future client</cite>
-          </blockquote>
-          <blockquote>
-            <p class="body-copy">“Placeholder quote about an easy, enjoyable shopping experience.”</p>
-            <cite>Future client</cite>
-          </blockquote>
+        <div class="testimonial-slider">
+          <button class="testimonial-arrow testimonial-arrow--prev" aria-label="Previous testimonial">←</button>
+          <div class="testimonial-grid">
+            <blockquote>
+              <p class="body-copy">“Placeholder quote about feeling confident and prepared.”</p>
+              <cite>Future client</cite>
+            </blockquote>
+            <blockquote>
+              <p class="body-copy">“Placeholder quote about an easy, enjoyable shopping experience.”</p>
+              <cite>Future client</cite>
+            </blockquote>
+          </div>
+          <button class="testimonial-arrow testimonial-arrow--next" aria-label="Next testimonial">→</button>
+          <div class="testimonial-dots" aria-label="Testimonial slides">
+            <button class="testimonial-dot testimonial-dot--active" aria-label="Show testimonial 1"></button>
+            <button class="testimonial-dot" aria-label="Show testimonial 2"></button>
+          </div>
         </div>
       </div>
     </section>
@@ -129,8 +146,18 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p class="body-copy">Style with Kayla · Macy’s Boise Personal Stylist</p>
-      <a href="mailto:kayla.reynolds@macys.com">kayla.reynolds@macys.com</a>
+      <div class="footer-column">
+        <p class="footer-kicker">Style with Kayla</p>
+        <p class="body-copy">Macy’s Boise Personal Stylist</p>
+      </div>
+      <div class="footer-column">
+        <p class="footer-kicker">Book</p>
+        <a href="mailto:kayla.reynolds@macys.com">kayla.reynolds@macys.com</a>
+      </div>
+      <div class="footer-column">
+        <p class="footer-kicker">Visit</p>
+        <p class="body-copy">Boise, Idaho</p>
+      </div>
     </div>
   </footer>
 </body>
