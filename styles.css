@@ -601,10 +601,8 @@ cite {
     display: none;
   }
 
-  .actions,
   .testimonial-grid,
   .services-grid,
-  .service-card,
   .footer-inner {
     grid-template-columns: 1fr;
   }
