@@ -9,6 +9,8 @@
   --color-charcoal: #1F1F1F;
   --color-gray: #5A5552;
   --color-divider: #DDD2CA;
+  --font-heading: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Inter", Arial, sans-serif;
 }
 
 /* Base/reset */
@@ -26,17 +28,28 @@ body {
 }
 
 /* Typography */
-body,
-h1 {
-  font-family: Georgia, 'Times New Roman', serif;
+body {
+  font-family: var(--font-body);
 }
 
+h1,
+h2,
+h3,
+.card-title,
+.section-heading {
+  font-family: var(--font-heading);
+}
+
+p,
+button,
+a.button,
+nav,
+label,
 .eyebrow,
 .subhead,
-a.button,
 .details,
 .footer {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
 }
 
 .eyebrow {
