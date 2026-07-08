@@ -49,19 +49,34 @@ button,
 a.button,
 nav,
 label,
-.eyebrow,
-.subhead,
+.section-label,
+.body-copy,
 .site-footer {
   font-family: var(--font-body);
 }
 
-.eyebrow {
+.section-label {
+  font-family: var(--font-body);
   text-transform: uppercase;
-  letter-spacing: .18em;
-  font-size: .78rem;
+  letter-spacing: 0.15em;
   color: var(--color-rose);
+  font-size: 0.875rem;
   font-weight: 700;
   margin-bottom: 16px;
+}
+
+.section-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 5vw, 3.5rem);
+  line-height: 1;
+  font-weight: 500;
+}
+
+.body-copy {
+  font-family: var(--font-body);
+  color: var(--color-gray);
+  font-size: 1.125rem;
+  line-height: 1.7;
 }
 
 h1,
@@ -98,10 +113,7 @@ p {
   line-height: 1.7;
 }
 
-.subhead {
-  font-size: clamp(1.05rem, 3vw, 1.3rem);
-  line-height: 1.6;
-  color: var(--color-gray);
+.hero-copy {
   max-width: 650px;
   margin-bottom: 30px;
 }
@@ -321,9 +333,9 @@ blockquote {
   gap: 16px;
 }
 
-.service-item p,
-.info-card p,
-blockquote p {
+.service-item .body-copy,
+.info-card .body-copy,
+blockquote .body-copy {
   margin-bottom: 0;
 }
 
