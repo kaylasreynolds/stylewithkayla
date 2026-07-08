@@ -115,6 +115,15 @@ a.button:hover {
 }
 
 /* Layout */
+.container {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.section {
+  padding: 120px 0;
+}
+
 .content {
   position: relative;
   z-index: 1;
@@ -123,8 +132,15 @@ a.button:hover {
 /* Header */
 
 /* Hero */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  align-items: center;
+}
+
 .card {
   width: min(760px, 100%);
+  margin: 0 auto;
   background: color-mix(in srgb, var(--color-white) 90%, transparent);
   border: 1px solid var(--color-divider);
   border-radius: 34px;
@@ -177,8 +193,15 @@ a.button:hover {
 }
 
 /* About */
+.about {
+  text-align: center;
+}
 
 /* Testimonials */
+.testimonials {
+  background: var(--color-blush);
+  text-align: center;
+}
 
 /* Footer */
 .footer {
@@ -188,7 +211,25 @@ a.button:hover {
 }
 
 /* Responsive rules */
+@media (max-width: 900px) {
+  .container {
+    width: min(100% - 40px, 1180px);
+  }
+
+  .section {
+    padding: 90px 0;
+  }
+}
+
 @media (max-width: 640px) {
+  .container {
+    width: min(100% - 24px, 1180px);
+  }
+
+  .section {
+    padding: 70px 0;
+  }
+
   .card {
     padding: 42px 22px;
     border-radius: 28px;
