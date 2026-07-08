@@ -1,11 +1,14 @@
 /* Design tokens */
 :root {
-  --cream: #fbf7f0;
-  --blush: #ead7cf;
-  --rose: #b67b6f;
-  --brown: #3a2a24;
-  --taupe: #8d776d;
-  --white: #fffdf9;
+  --color-rose: #CF8C93;
+  --color-rose-hover: #BE747E;
+  --color-ivory: #FCF9F6;
+  --color-blush: #F6EEEB;
+  --color-pale-rose: #F1E1DE;
+  --color-white: #FFFFFF;
+  --color-charcoal: #1F1F1F;
+  --color-gray: #5A5552;
+  --color-divider: #DDD2CA;
 }
 
 /* Base/reset */
@@ -16,10 +19,10 @@
 body {
   margin: 0;
   min-height: 100vh;
-  color: var(--brown);
+  color: var(--color-charcoal);
   background:
-    radial-gradient(circle at top left, #f1ddd6 0, transparent 34%),
-    linear-gradient(135deg, var(--cream), #fffaf6 55%, #f4e8df);
+    radial-gradient(circle at top left, var(--color-pale-rose) 0, transparent 34%),
+    linear-gradient(135deg, var(--color-ivory), var(--color-white) 55%, var(--color-blush));
 }
 
 /* Typography */
@@ -40,7 +43,7 @@ a.button,
   text-transform: uppercase;
   letter-spacing: .18em;
   font-size: .78rem;
-  color: var(--rose);
+  color: var(--color-rose);
   font-weight: 700;
   margin-bottom: 16px;
 }
@@ -56,7 +59,7 @@ h1 {
 .subhead {
   font-size: clamp(1.05rem, 3vw, 1.3rem);
   line-height: 1.6;
-  color: var(--taupe);
+  color: var(--color-gray);
   max-width: 570px;
   margin: 0 auto 30px;
 }
@@ -80,14 +83,22 @@ a.button {
 }
 
 .primary {
-  background: var(--brown);
-  color: white;
+  background: var(--color-rose);
+  color: var(--color-white);
+}
+
+.primary:hover {
+  background: var(--color-rose-hover);
 }
 
 .secondary {
-  background: #f3e5dd;
-  color: var(--brown);
-  border: 1px solid rgba(182, 123, 111, .22);
+  background: var(--color-white);
+  color: var(--color-charcoal);
+  border: 1px solid var(--color-rose);
+}
+
+.secondary:hover {
+  background: var(--color-blush);
 }
 
 a.button:hover {
@@ -112,12 +123,12 @@ body {
 /* Hero */
 .card {
   width: min(760px, 100%);
-  background: rgba(255, 253, 249, .9);
-  border: 1px solid rgba(182, 123, 111, .25);
+  background: color-mix(in srgb, var(--color-white) 90%, transparent);
+  border: 1px solid var(--color-divider);
   border-radius: 34px;
   padding: 54px 30px;
   text-align: center;
-  box-shadow: 0 24px 60px rgba(58, 42, 36, .12);
+  box-shadow: 0 24px 60px rgba(31, 31, 31, .12);
   position: relative;
   overflow: hidden;
 }
@@ -129,7 +140,7 @@ body {
   width: 160px;
   height: 160px;
   border-radius: 50%;
-  background: rgba(234, 215, 207, .55);
+  background: color-mix(in srgb, var(--color-pale-rose) 55%, transparent);
   z-index: 0;
 }
 
@@ -155,11 +166,11 @@ body {
 }
 
 .pill {
-  background: white;
-  border: 1px solid rgba(182, 123, 111, .22);
+  background: var(--color-white);
+  border: 1px solid var(--color-divider);
   border-radius: 18px;
   padding: 14px 12px;
-  color: #6f5d55;
+  color: var(--color-gray);
   font-size: .95rem;
 }
 
@@ -171,7 +182,7 @@ body {
 .footer {
   margin-top: 28px;
   font-size: .9rem;
-  color: #927c72;
+  color: var(--color-gray);
 }
 
 /* Responsive rules */
