@@ -123,22 +123,22 @@
           <h2 class="section-heading" id="testimonials-heading">Client stories coming soon.</h2>
           <p class="body-copy">Use this area for quotes once clients share feedback about their styling appointments.</p>
         </div>
-        <div class="testimonial-slider">
-          <button class="testimonial-arrow testimonial-arrow--prev" aria-label="Previous testimonial">←</button>
-          <div class="testimonial-grid">
-            <blockquote>
+        <div class="testimonial-slider" data-testimonial-slider>
+          <button class="testimonial-arrow testimonial-arrow--prev" type="button" aria-label="Previous testimonial" data-testimonial-prev>←</button>
+          <div class="testimonial-track" aria-live="polite">
+            <blockquote class="testimonial-slide testimonial-slide--active" data-testimonial-slide>
               <p class="body-copy">“Placeholder quote about feeling confident and prepared.”</p>
               <cite>Future client</cite>
             </blockquote>
-            <blockquote>
+            <blockquote class="testimonial-slide" data-testimonial-slide hidden>
               <p class="body-copy">“Placeholder quote about an easy, enjoyable shopping experience.”</p>
               <cite>Future client</cite>
             </blockquote>
           </div>
-          <button class="testimonial-arrow testimonial-arrow--next" aria-label="Next testimonial">→</button>
-          <div class="testimonial-dots" aria-label="Testimonial slides">
-            <button class="testimonial-dot testimonial-dot--active" aria-label="Show testimonial 1"></button>
-            <button class="testimonial-dot" aria-label="Show testimonial 2"></button>
+          <button class="testimonial-arrow testimonial-arrow--next" type="button" aria-label="Next testimonial" data-testimonial-next>→</button>
+          <div class="testimonial-dots" role="tablist" aria-label="Choose testimonial">
+            <button class="testimonial-dot testimonial-dot--active" type="button" aria-label="Show testimonial 1" aria-selected="true" role="tab" data-testimonial-dot></button>
+            <button class="testimonial-dot" type="button" aria-label="Show testimonial 2" aria-selected="false" role="tab" data-testimonial-dot></button>
           </div>
         </div>
       </div>
@@ -177,5 +177,6 @@
       <p>&copy; 2026 Style with Kayla. All rights reserved.</p>
     </div>
   </footer>
+  <script src="script.js"></script>
 </body>
 </html>
