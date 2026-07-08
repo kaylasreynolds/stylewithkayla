@@ -375,7 +375,11 @@ p {
 }
 
 .service-card__content .body-copy {
-  margin-bottom: 0;
+  margin-bottom: 14px;
+}
+
+.service-card__content .text-link {
+  display: inline-block;
 }
 
 /* About */
