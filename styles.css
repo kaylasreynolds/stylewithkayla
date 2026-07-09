@@ -321,8 +321,8 @@ p {
 
 .hero-copy {
   max-width: 470px;
-  font-size: 1.28rem;
-  line-height: 1.55;
+  font-size: 1.0rem;
+  line-height: 1.4;
   color: var(--color-charcoal);
   margin-bottom: 42px;
 }
