@@ -308,6 +308,7 @@ p {
   font-size: clamp(3.3rem, 4.6vw, 4.8rem);
   line-height: 1.10;
   max-width: 600px;
+  color: var(--color-rose);
 }
 
 .hero .section-heading::after {
@@ -317,6 +318,7 @@ p {
   height: 2px;
   background: var(--color-rose);
   margin-top: 34px;
+  transform: translateX(-20px);
 }
 
 .hero-copy {
@@ -370,8 +372,6 @@ p {
   object-fit: cover;
   object-position: 68% 25%;
 }
-
-
 
 /* How It Works */
 .steps-grid {
@@ -803,16 +803,4 @@ cite {
   a.button {
     text-align: center;
   }
-}
-
-
-
-.hero .section-heading {
-  color: var(--color-rose);
-}
-
-
-.hero .section-heading::after {
-  margin-left: auto;
-  margin-right: auto;
 }
