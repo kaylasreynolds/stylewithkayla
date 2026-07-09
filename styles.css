@@ -276,7 +276,7 @@ p {
 .hero__inner {
   display: grid;
   grid-template-columns: 47% 53%;
- 
+
 }
 
 .hero__content {
@@ -292,12 +292,10 @@ p {
 .hero__content::after {
   right: -10vw;
   width: 18vw;
-  background: linear-gradient(
-    90deg,
-    var(--color-ivory) 0%,
-    color-mix(in srgb, var(--color-ivory) 55%, transparent) 48%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      var(--color-ivory) 0%,
+      color-mix(in srgb, var(--color-ivory) 55%, transparent) 48%,
+      transparent 100%);
 }
 
 .hero .section-label {
@@ -307,9 +305,9 @@ p {
 }
 
 .hero .section-heading {
-  font-size: clamp(3.7rem, 5.2vw, 5.4rem);
-  line-height: 0.95;
-  max-width: 650px;
+  font-size: clamp(3.3rem, 4.6vw, 4.8rem);
+  line-height: 1.10;
+  max-width: 600px;
 }
 
 .hero .section-heading::after {
@@ -341,7 +339,7 @@ p {
 }
 
 .hero__media {
-  margin-left:-120px;
+  margin-left: -120px;
   z-index: 1;
   position: relative;
   min-height: calc(100vh - 124px);
@@ -354,20 +352,18 @@ p {
 }
 
 .hero__media::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 180px;
-    height: 100%;
-    min-height: 760px;
-    background: linear-gradient(
-        to right,
-        var(--color-ivory),
-        rgba(252,249,246,.85),
-        rgba(252,249,246,0)
-    );
-    z-index: 2;
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 180px;
+  height: 100%;
+  min-height: 760px;
+  background: linear-gradient(to right,
+      var(--color-ivory),
+      rgba(252, 249, 246, .85),
+      rgba(252, 249, 246, 0));
+  z-index: 2;
 }
 
 .hero__image {
@@ -376,7 +372,7 @@ p {
 }
 
 
-  
+
 /* How It Works */
 .steps-grid {
   display: grid;
@@ -614,7 +610,7 @@ cite {
   padding-right: 28px;
 }
 
-.footer-column + .footer-column {
+.footer-column+.footer-column {
   border-left: 1px solid var(--color-divider);
   padding-left: 28px;
 }
@@ -789,7 +785,7 @@ cite {
   }
 
   .footer-column,
-  .footer-column + .footer-column {
+  .footer-column+.footer-column {
     border-left: 0;
     border-top: 1px solid var(--color-divider);
     padding: 22px 0 0;
