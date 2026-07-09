@@ -804,3 +804,15 @@ cite {
     text-align: center;
   }
 }
+
+
+
+.hero .section-heading {
+  color: var(--color-rose);
+}
+
+
+.hero .section-heading::after {
+  margin-left: auto;
+  margin-right: auto;
+}
