@@ -191,6 +191,8 @@ p {
 }
 
 /* Header */
+/*TODO: Change font and size announcement bar */
+
 .announcement-bar {
   background: var(--color-charcoal);
   color: var(--color-white);
@@ -777,7 +779,7 @@ cite {
     display: none;
   }
 
-   .hero {
+  .hero {
     padding: 0;
     min-height: auto;
   }
