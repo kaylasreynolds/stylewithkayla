@@ -805,12 +805,7 @@ cite {
   }
 }
 
-.hero__content {
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  transform: none;
-}
+
 
 .hero .section-heading {
   color: var(--color-rose);
