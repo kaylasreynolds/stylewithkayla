@@ -514,6 +514,7 @@ p {
 }
 
 .service-card {
+  position: relative;
   background: var(--color-white);
   border: 1px solid var(--color-divider);
   border-radius: 10px;
@@ -522,12 +523,25 @@ p {
   grid-template-rows: 170px 1fr;
   min-width: 0;
   overflow: hidden;
+  cursor: pointer;
   transition: transform 250ms ease, box-shadow 250ms ease;
 }
 
 .service-card:hover {
   box-shadow: 0 18px 42px rgba(31, 31, 31, .1);
   transform: translateY(-4px);
+}
+
+.service-card .text-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.service-card:has(.text-link:focus-visible) {
+  outline: 3px solid color-mix(in srgb, var(--color-rose) 55%, transparent);
+  outline-offset: 4px;
 }
 
 .service-card__image {
