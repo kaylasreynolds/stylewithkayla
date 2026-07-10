@@ -1,47 +1,54 @@
 # PROJECT_INSTRUCTIONS.md
 
-Version: 1.0
+Version: 1.1  
 Last Updated: July 10, 2026
 
 ---
 
-# Project Overview
+# Purpose and Document Hierarchy
 
-Style With Kayla is the personal styling website for Kayla Reynolds, a Personal Stylist at Macy's in Boise, Idaho.
+Style With Kayla is the client-facing website for Kayla Reynolds, a Personal Stylist at Macy's in Boise, Idaho.
 
-This project is more than a marketing website.
+This file is the primary guide for:
 
-It is the digital extension of Kayla's styling experience.
+- Business goals
+- Brand voice
+- Client experience
+- Project workflow
+- Current priorities
+- Major project decisions
 
-Every decision should make clients feel prepared, confident, and taken care of before they ever walk into Macy's.
+For visual design, layout, components, responsive behavior, and front-end standards, follow:
 
-The website should eventually become the central hub for:
+`docs/WEBSITE_DESIGN_SYSTEM.md`
 
-- Learning about services
-- Booking appointments
-- Preparing for appointments
-- Client resources
-- Ongoing relationships
+If the two documents appear to conflict, this file governs brand voice, business priorities, and client experience. The design system governs visual implementation.
 
 ---
 
-# Mission
+# Project Mission
 
-Create the most approachable premium styling experience possible.
+Create a polished, approachable styling experience that feels personal, prepared, and easy to use.
 
-Clients should leave the website thinking:
+Every decision should help clients feel confident, clear, and taken care of before they arrive at Macy's.
 
-> "This feels easy."
+The website should gradually become the central client destination for:
 
-not
+- Learning about styling services
+- Booking appointments
+- Preparing for appointments
+- Completing Style Profiles
+- Viewing appointment details and resources
+- Contacting Kayla
+- Returning for future needs
 
-> "This feels complicated."
+The website is the client-facing experience. Clientele remains the internal CRM and relationship-management system.
 
 ---
 
 # Brand Personality
 
-Style With Kayla should always feel:
+Style With Kayla should feel:
 
 - Warm
 - Practical
@@ -51,368 +58,332 @@ Style With Kayla should always feel:
 - Organized
 - Calm
 - Personal
+- Fun in small, natural moments
 
-Never:
+It should never feel:
 
 - Pushy
 - Sales-heavy
 - Corporate
 - Intimidating
-- Overly trendy
 - Fashion-snobby
+- Overly formal
+- Generic
+
+The overall impression should be a helpful, organized friend who also happens to be a knowledgeable stylist.
 
 ---
 
 # Writing Style
 
-Every page should sound like Kayla.
+Write like Kayla speaks.
 
 Prioritize:
 
-- Short paragraphs
 - Clear language
-- Real conversations
-- Practical advice
-- Confidence-building
+- Short, useful paragraphs
+- Practical guidance
+- Confidence-building language
+- Natural warmth
+- Direct next steps
+- Light personality when appropriate
 
 Avoid:
 
 - Fashion jargon
-- Buzzwords
 - Corporate language
+- Luxury buzzwords
 - Over-explaining
-- Excessive exclamation points
+- Repetitive reassurance
 - Pressure tactics
+- Long lists of examples when one clear sentence will do
 
-The client should feel like Kayla is talking directly to them.
+The client should feel like Kayla is speaking directly to them.
+
+Approved messaging includes:
+
+- “Style that feels effortless, polished, and completely you.”
+- Practical outfit ideas
+- Support built around the client’s life, needs, and budget
+- “I help women and men simplify shopping, build complete outfits, and feel more confident in what they wear.”
+- “We can narrow, compare, pause, or change direction at any point.”
+- “Already know what you need? I’ll help you get there efficiently. Not sure where to start? I’ll ask the right questions and build a direction for you.”
+
+Avoid phrases such as:
+
+- “Style words”
+- “Fashion terminology”
+- Language that implies clients must understand fashion before booking
 
 ---
 
-# Core Principles
+# Client Experience Principles
 
 ## Reduce Friction
 
-Every page should answer the client's next question before they ask it.
+Every page should answer the client’s next question before they need to ask it.
 
-Examples:
+Common questions include:
 
-- Where do I go?
+- Can Kayla help me?
+- Which appointment fits my needs?
 - What happens next?
-- How do I book?
-- What should I expect?
+- Where do I go?
+- How do I contact Kayla?
 
----
+## One Primary Goal
 
-## Keep It Simple
+Every page should have one primary goal and a clearly ranked set of supporting actions.
 
-Prefer:
+A page may include several useful actions, but the main next step should always be obvious.
 
-One clear message
+## Show and Explain in Balance
 
-instead of
+Use photography, graphics, icons, cards, and layout to reduce unnecessary reading.
 
-Several competing messages.
+Do not remove information a client needs to:
 
-Every page should have one primary purpose.
-
----
-
-## Show More. Explain Less.
-
-Whenever possible:
-
-Use:
-
-- Photography
-- Graphics
-- Icons
-- Cards
-- Layout
-
-instead of additional paragraphs.
-
----
+- Make a decision
+- Complete a form
+- Prepare for an appointment
+- Find the location
+- Understand an offer or policy
 
 ## Warm Over Clever
 
-Choose clarity over creativity.
+Choose clear, human wording over clever marketing language.
 
-If something sounds like marketing copy,
+## Practical Over Performative
 
-rewrite it.
-
----
-
-# Design Philosophy
-
-The website should feel like walking into Kayla's fitting room.
-
-Characteristics:
-
-- Calm
-- Clean
-- Welcoming
-- Bright
-- Premium
-- Organized
-
-Clients should immediately feel comfortable.
+The website should demonstrate care through preparation, useful details, and clear choices—not through repeated claims that the experience is personalized or pressure-free.
 
 ---
 
-# Website Workflow
+# Page Goals
 
-Every new page follows this process.
+## Homepage
 
-## STEP 1 — Design
+Primary question:
 
-Create desktop and mobile mockups.
+> Can Kayla help me?
 
-Do not write HTML yet.
+The homepage should introduce the experience, create trust, and guide visitors toward services, contact, or booking.
 
-Revise until approved.
+It should not explain every service in full.
 
----
+## About Page
 
-## STEP 2 — Build
+Primary question:
 
-Write HTML/CSS that matches the approved design.
+> Do I trust and like Kayla?
 
-Do not redesign while coding.
+The page should include Kayla’s thoughtful, organized side and her fun, silly, approachable personality.
 
----
+## Service Pages
 
-## STEP 3 — Copy
+Primary question:
 
-Review all text.
+> Which kind of help is right for me?
 
-Rewrite until it feels authentic to Kayla.
+Service pages may explain in more detail than the homepage.
 
----
+## Appointment Experience
 
-## STEP 4 — Review
+Primary question:
 
-Review for:
+> What happens next?
 
-- UX
-- Mobile
-- Accessibility
-- Performance
-- Consistency
+The appointment hub should make the next steps obvious and keep appointment information in one place.
 
-Only after review is the page considered complete.
+## Style Profiles
 
----
+Primary question:
 
-# Website Goals
+> What does Kayla need to know so she can prepare?
 
-The homepage should answer:
+Style Profiles should feel conversational, mobile-friendly, and visually engaging—not like paperwork.
 
-"Can Kayla help me?"
+## Resource Library
 
----
+Primary question:
 
-The About page should answer:
+> How can Kayla continue helping me?
 
-"Can I trust Kayla?"
-
----
-
-The Services pages should answer:
-
-"Which appointment is right for me?"
-
----
-
-The Appointment Experience should answer:
-
-"What happens next?"
-
----
-
-The Resources section should answer:
-
-"How can Kayla continue helping me?"
+Resources should support appointments, repeat visits, and practical style decisions.
 
 ---
 
 # Client Journey
 
-Every client follows this path.
-
-Discover
-
-↓
-
-Learn
-
-↓
-
-Book
-
-↓
-
-Prepare
-
-↓
-
-Appointment
-
-↓
-
-Follow-Up
-
-↓
-
+Discover  
+↓  
+Learn  
+↓  
+Book  
+↓  
+Prepare  
+↓  
+Appointment  
+↓  
+Follow Up  
+↓  
 Return
 
-Every page should support one of these stages.
+Each page or feature should support at least one stage of this journey.
 
 ---
 
-# Current Priorities
+# Workflow
 
-Priority 1
+## Full Workflow: New Pages and Major Features
 
-- Homepage refinement
-- About page
-- Women's Styling
-- Men's Styling
-- Events & Occasion Styling
-- Macy's Events
+Use the full workflow for:
 
-Priority 2
+- New pages
+- Major sections
+- New forms or tools
+- Booking and appointment flows
+- Significant interaction changes
+- Features likely to span multiple sessions
 
-- Appointment Experience
-- Women's Style Profile
-- Men's Style Profile
-- Event Style Profile
-- Bra Fit Profile
-- Replace Microsoft Forms
+Process:
 
-Priority 3
+1. Create desktop and mobile mockups.
+2. Revise until the direction is approved.
+3. Build the approved design.
+4. Refine copy so it sounds like Kayla.
+5. Review UX, mobile behavior, accessibility, consistency, and performance.
+6. Ship and close the related GitHub Issue.
 
-- Booking Experience
-- Replace Microsoft Bookings
-- Calendar integration
+Do not redesign the layout while coding unless a technical or accessibility issue requires it.
 
-Priority 4
+## Lightweight Workflow: Small Changes
 
-- Resource Library
-- Color Guides
-- Body Shape Guides
-- Style Guides
-- Outfit Inspiration
+Small maintenance edits may move directly to implementation and review.
 
-Priority 5
+Examples:
 
-- Photography
-- Testimonials
-- SEO
-- Accessibility
-- Performance
-- Analytics
+- Typos
+- Link corrections
+- Event date updates
+- Minor spacing adjustments
+- Image swaps
+- One-line CSS fixes
+- Small copy refinements
+
+These do not require a mockup or separate GitHub Issue unless tracking would be useful.
+
+---
+
+# GitHub Issue Guidelines
+
+Create a GitHub Issue for:
+
+- New pages
+- New features
+- Multi-step improvements
+- Bugs that may take more than one session
+- Work that requires design, copy, and development
+- Ideas that should be saved for later
+
+A separate issue is usually unnecessary for:
+
+- Minor copy changes
+- Small CSS corrections
+- Routine content updates
+- Broken-link fixes
+- Simple image replacements
+
+GitHub Issues are the project backlog, not a log of every tiny edit.
 
 ---
 
 # Current Design Decisions
 
-Keep the homepage hero headline:
-
-"Style that feels effortless, polished, and completely you."
-
-Homepage should introduce.
-
-Service pages should explain.
-
-Reduce visible text whenever possible.
-
-Service cards should remain concise.
-
-Use one full-width section beneath service cards for additional services.
-
-Appointment pages should feel personal rather than automated.
-
-Questionnaires are called "Style Profiles."
-
-The Style Profiles should eventually replace Microsoft Forms.
-
-Clientele remains the CRM and business management system.
-
-The website is the client-facing experience.
+- Keep the homepage hero headline: “Style that feels effortless, polished, and completely you.”
+- Keep the section title: “A Simple, Personalized Experience.”
+- Homepage content should introduce; service pages should explain.
+- Keep the three primary service cards concise.
+- Add one full-width section beneath the service cards for additional ways Kayla can help.
+- Use “free styling appointment” for primary CTAs.
+- Use “complimentary” in supporting copy when appropriate.
+- Standard CTA: “Book a Free Styling Appointment.”
+- Questionnaires are called “Style Profiles.”
+- Replace Microsoft Forms as a high priority.
+- The Appointment Hub and Style Profiles should be designed as one connected experience.
+- Clientele remains the internal CRM.
+- Microsoft Bookings may be replaced later, but Style Profiles and appointment confirmation are the immediate priorities.
+- Public navigation should remain simple. Style Profiles should be introduced within the appointment journey, not as a primary navigation section.
+- Use real testimonials only. Hide placeholder testimonials.
 
 ---
 
-# Technical Guidelines
+# Current Priorities
 
-Reuse components whenever possible.
+## Priority 1 — Public Website
 
-Avoid duplicate CSS.
+- Homepage refinement
+- About page personality and copy
+- Women’s Styling
+- Men’s Styling
+- Events & Occasion Styling
+- Macy’s Events
 
-Maintain consistent spacing.
+## Priority 2 — Appointment Experience and Style Profiles
 
-Desktop and mobile designs should both be intentional.
+- Your Appointment hub
+- Women’s Style Profile
+- Profile completion experience
+- Men’s Style Profile
+- Event Style Profile
+- Bra Fit Profile
+- Replace Microsoft Forms
 
-Always preserve accessibility.
+## Priority 3 — Booking Experience
 
-Optimize images before uploading.
+- Appointment selection
+- Booking flow
+- Replace Microsoft Bookings over time
+- Calendar integration
 
----
+## Priority 4 — Client Resources
 
-# GitHub Workflow
+- Resource library structure
+- Color guides
+- Body shape guides
+- Style guides
+- Outfit inspiration
+- Appointment preparation resources
 
-Every feature should have a GitHub Issue before development begins.
+## Priority 5 — Optimization
 
-Workflow:
-
-Issue
-
-↓
-
-Design
-
-↓
-
-Approval
-
-↓
-
-Build
-
-↓
-
-Review
-
-↓
-
-Close Issue
-
-GitHub Issues are the project's master backlog.
-
----
-
-# Before Making Changes
-
-Before redesigning or changing existing work, ask:
-
-Does this improve the client experience?
-
-Does this reduce friction?
-
-Does this sound like Kayla?
-
-If the answer is "no," do not change it.
+- Photography
+- Testimonials
+- SEO
+- Accessibility review
+- Performance
+- Analytics
 
 ---
 
-# Future AI Instructions
+# Working Rules for Future AI Assistance
 
-If you are assisting with this repository:
+Before making recommendations or changes:
 
-1. Read this file before making recommendations.
-2. Respect previous design decisions unless there is a clear usability or business reason to change them.
-3. Build upon the existing design system.
-4. Prefer refinement over redesign.
-5. Prioritize shipping completed features over endless planning.
+1. Read this file.
+2. Read `docs/WEBSITE_DESIGN_SYSTEM.md` for visual and front-end standards.
+3. Review the existing page or code before proposing a redesign.
+4. Respect approved decisions unless there is a clear usability, accessibility, technical, or business reason to change them.
+5. Prefer refinement over reinvention.
+6. Provide the requested deliverable instead of repeatedly describing future work.
+7. Use the full mockup workflow only when the scope justifies it.
+8. Prioritize completed, useful features over additional planning documents.
 
-The goal is to create a cohesive, evolving product—not a collection of disconnected pages.
+When a decision is unclear, ask:
+
+- Does this make the client experience easier?
+- Does this reduce uncertainty?
+- Does this sound like Kayla?
+- Does this support booking, preparation, trust, or repeat relationships?
+
+The goal is a cohesive client experience—not a collection of disconnected pages or tools.
