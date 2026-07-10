@@ -406,13 +406,18 @@ p {
 }
 
 /* How It Works */
+.how-it-works {
+  padding-top: 0;
+  border-top: 7px solid var(--color-charcoal);
+}
+
 .steps-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
   justify-items: center;
   align-items: start;
-  border-top: 7px solid var(--color-charcoal);
+
 }
 
 .step-card {
