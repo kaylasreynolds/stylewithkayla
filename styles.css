@@ -293,7 +293,7 @@ p {
 /* Hero */
 
 .hero {
-  min-height: calc(100vh - 124px);
+  min-height: auto;
   padding: 0;
   background: var(--color-ivory);
   overflow: hidden;
@@ -406,9 +406,11 @@ p {
 }
 
 /* How It Works */
+
 .how-it-works {
-  padding-top: 0;
   border-top: 7px solid var(--color-charcoal);
+  padding-top: 0;
+  margin-top: 0;
 }
 
 .steps-grid {
