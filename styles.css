@@ -415,7 +415,7 @@ p {
 .how-it-works.section {
   border-top: 7px solid var(--color-charcoal);
   border-bottom: 7px solid var(--color-charcoal);
-  padding: 48px 0 64px;
+  padding: 24px 0 64px;
   margin: 0;
 }
 
@@ -1053,15 +1053,12 @@ cite {
 
 /* Additional shopping support */
 .additional-support {
-  padding: 38px 0;
-  background: var(--color-pale-rose);
-}
-
-.additional-support__panel {
-  padding: 74px clamp(28px, 6vw, 88px);
+  margin-top: 28px;
+  padding: 58px clamp(28px, 6vw, 88px);
   border: 1px solid var(--color-divider);
-  border-radius: 6px;
+  border-radius: 10px;
   background: var(--color-white);
+  box-shadow: 0 12px 32px rgba(31, 31, 31, .06);
   text-align: center;
 }
 
@@ -1102,11 +1099,8 @@ cite {
 
 @media (max-width: 700px) {
   .additional-support {
-    padding: 24px 0;
-  }
-
-  .additional-support__panel {
-    padding: 48px 20px;
+    margin-top: 22px;
+    padding: 44px 20px;
   }
 
   .additional-support .section-heading {
