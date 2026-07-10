@@ -190,8 +190,7 @@ p {
   text-align: center;
 }
 
-/* Header */
-/*TODO: Change font and size announcement bar */
+
 
 .announcement-bar {
   background: var(--color-charcoal);
@@ -263,7 +262,7 @@ p {
 }
 
 /* Hero */
-/* Hero */
+
 .hero {
   min-height: calc(100vh - 124px);
   padding: 0;
@@ -298,7 +297,7 @@ p {
   width: 18vw;
   background: linear-gradient(90deg,
       var(--color-ivory) 0%,
-      color-mix(in srgb, var(--color-ivory) 55%, transparent) 48%,
+      color-mix(in srgb, var(--color-ivory) 55%, transparent) 45%,
       transparent 100%);
 }
 
