@@ -493,7 +493,9 @@ p {
 /* Services */
 
 .services-preview {
+  padding: 60px 0 78px;
   background: var(--color-blush);
+  border-bottom: 7px solid var(--color-charcoal);
 }
 
 .services-preview .section-label {
@@ -501,9 +503,16 @@ p {
 }
 
 .services-preview .section-heading {
-  max-width: 1050px;
+  max-width: none;
   margin: 0 auto 52px;
+  font-size: clamp(2.5rem, 3.7vw, 3rem);
   text-align: center;
+}
+
+@media (min-width: 981px) {
+  .services-preview > .container > .section-heading {
+    white-space: nowrap;
+  }
 }
 
 .services-grid {
