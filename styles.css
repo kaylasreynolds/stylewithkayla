@@ -789,8 +789,7 @@ blockquote::before {
   content: "“";
   position: absolute;
   top: -64px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 30px;
   color: var(--color-rose);
   font-family: var(--font-heading);
   font-size: 9rem;
@@ -1052,7 +1051,7 @@ cite::before {
 
   blockquote::before {
     top: -52px;
-    left: 50%;
+    left: 22px;
     font-size: 7.5rem;
   }
 
