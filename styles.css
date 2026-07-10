@@ -407,10 +407,11 @@ p {
 
 /* How It Works */
 
-.how-it-works {
+.how-it-works.section {
   border-top: 7px solid var(--color-charcoal);
-  padding-top: 0;
-  margin-top: 0;
+  border-bottom: 7px solid var(--color-charcoal);
+  padding: 48px 0 64px;
+  margin: 0;
 }
 
 .steps-grid {
