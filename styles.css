@@ -1464,11 +1464,15 @@ cite {
 .site-footer .footer-social .button {
   width: 100%;
   margin-top: 4px;
-  padding: 13px 18px;
-  border-radius: 5px;
-  font-size: .82rem;
-  letter-spacing: .04em;
-  text-transform: uppercase;
+  padding: 16px 14px;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-align: center;
+  text-transform: none;
+  white-space: nowrap;
 }
 
 .footer-bottom {
