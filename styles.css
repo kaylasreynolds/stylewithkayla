@@ -1086,11 +1086,22 @@ cite {
   box-shadow: 0 24px 60px rgba(31, 31, 31, .12);
 }
 
-.service-page-hero__media img {
-  width: 100%;
-  height: 560px;
-  object-fit: cover;
-  object-position: 68% 25%;
+.service-page-hero__placeholder {
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, .72), transparent 34%),
+    linear-gradient(145deg, var(--color-blush), var(--color-pale-rose));
+  color: var(--color-gray);
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.service-page-hero__placeholder span {
+  padding: 24px;
 }
 
 .appointment-options {
@@ -1269,10 +1280,6 @@ cite {
     border-radius: 160px 160px 18px 18px;
   }
 
-  .service-page-hero__media img {
-    height: 460px;
-  }
-
   .service-options-grid {
     grid-template-columns: 1fr;
     max-width: 720px;
@@ -1300,10 +1307,6 @@ cite {
   .service-page-hero__media {
     min-height: 360px;
     border-radius: 100px 100px 12px 12px;
-  }
-
-  .service-page-hero__media img {
-    height: 360px;
   }
 
   .service-option-card {
