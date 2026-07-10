@@ -640,6 +640,7 @@ p {
 
 /* About */
 .about-preview {
+  padding-bottom: 64px;
   background: var(--color-ivory);
 }
 
@@ -698,7 +699,11 @@ p {
 
 @media (max-width: 700px) {
   .about-preview {
-    padding: 64px 0;
+    padding: 64px 0 48px;
+  }
+
+  .testimonials {
+    padding-top: 48px;
   }
 
   .about-split {
@@ -727,6 +732,7 @@ p {
 
 /* Testimonials */
 .testimonials {
+  padding-top: 64px;
   background: var(--color-pale-rose);
 }
 
