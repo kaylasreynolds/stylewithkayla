@@ -428,7 +428,7 @@ p {
 }
 
 .step-card h3 {
-  margin: 12px 0 8px;
+  margin: 8px 0 10px;
   font-size: 1rem;
   letter-spacing: .12em;
   text-transform: uppercase;
@@ -442,20 +442,34 @@ p {
 }
 
 .step-icon {
-  width: 60px;
-  height: 60px;
+  width: 66px;
+  height: 66px;
   border-radius: 999px;
   background: var(--color-pale-rose);
-  color: var(--color-rose-hover);
-  display: inline-grid;
+  display: grid;
   place-items: center;
+  margin-bottom: 10px;
+}
+
+.step-icon__placeholder {
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--color-rose-hover);
+  border-radius: 10px;
+  background: var(--color-white);
+}
+
+.step-number {
+  display: block;
+  margin-bottom: 12px;
   font-size: 1rem;
-  font-weight: 800;
-  letter-spacing: .14em;
-  margin-bottom: 14px;
+  font-weight: 700;
+  color: var(--color-charcoal);
+  letter-spacing: .12em;
 }
 
 /* Services */
+
 .services-preview {
   background: var(--color-blush);
 }
