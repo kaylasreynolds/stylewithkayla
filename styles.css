@@ -410,6 +410,18 @@ p {
   object-position: 68% 25%;
 }
 
+@media (min-width: 1600px) {
+  .hero__inner {
+    grid-template-columns: 760px minmax(0, 1fr);
+  }
+
+  .hero__content {
+    width: 100%;
+    max-width: 760px;
+    padding: 92px 72px 92px 112px;
+  }
+}
+
 /* How It Works */
 
 .how-it-works.section {
