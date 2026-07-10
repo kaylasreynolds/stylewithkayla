@@ -496,9 +496,14 @@ p {
   background: var(--color-blush);
 }
 
+.services-preview .section-label {
+  text-align: center;
+}
+
 .services-preview .section-heading {
-  max-width: 760px;
-  margin-bottom: 34px;
+  max-width: 1050px;
+  margin: 0 auto 52px;
+  text-align: center;
 }
 
 .services-grid {
