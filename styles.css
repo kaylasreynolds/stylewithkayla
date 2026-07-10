@@ -1051,6 +1051,84 @@ cite {
   }
 }
 
+/* Additional shopping support */
+.additional-support {
+  padding: 38px 0;
+  background: var(--color-pale-rose);
+}
+
+.additional-support__panel {
+  padding: 74px clamp(28px, 6vw, 88px);
+  border: 1px solid var(--color-divider);
+  border-radius: 6px;
+  background: var(--color-white);
+  text-align: center;
+}
+
+.additional-support .section-heading {
+  margin-bottom: 28px;
+  color: var(--color-charcoal);
+  font-size: clamp(3rem, 5vw, 4.6rem);
+  line-height: 1;
+}
+
+.additional-support__categories {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0 0 22px;
+  padding: 0;
+  color: var(--color-charcoal);
+  font-size: 1.05rem;
+  list-style: none;
+}
+
+.additional-support__categories li:not(:last-child)::after {
+  content: "•";
+  margin: 0 18px;
+  color: var(--color-rose);
+}
+
+.additional-support .body-copy {
+  margin: 0 auto 28px;
+  color: var(--color-charcoal);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.additional-support .button {
+  min-width: 280px;
+}
+
+@media (max-width: 700px) {
+  .additional-support {
+    padding: 24px 0;
+  }
+
+  .additional-support__panel {
+    padding: 48px 20px;
+  }
+
+  .additional-support .section-heading {
+    font-size: clamp(2.6rem, 12vw, 3.5rem);
+  }
+
+  .additional-support__categories {
+    gap: 10px 0;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .additional-support__categories li:not(:last-child)::after {
+    margin: 0 10px;
+  }
+
+  .additional-support .button {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
 /* Women's Styling page */
 .service-page-hero {
   background: var(--color-ivory);
