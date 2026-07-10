@@ -230,6 +230,7 @@ p {
   white-space: nowrap;
 }
 
+/* TODO: Ensure references match html */
 .site-nav {
   display: flex;
   gap: 22px;
@@ -249,6 +250,9 @@ p {
 .site-nav a:hover,
 .site-footer a:hover {
   color: var(--color-rose-hover);
+  text-decoration: underline;
+  text-decoration-color: var(--color-rose-hover);
+  text-decoration-thickness: 1px;
 }
 
 .header-cta {
