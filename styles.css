@@ -390,11 +390,13 @@ p {
   position: absolute;
   left: 0;
   top: 0;
-  width: 110px;
+  width: 150px;
   height: 100%;
   background: linear-gradient(to right,
-      rgba(252, 249, 246, .72) 0%,
-      rgba(252, 249, 246, .32) 45%,
+      var(--color-ivory) 0%,
+      rgba(252, 249, 246, .90) 10%,
+      rgba(252, 249, 246, .42) 34%,
+      rgba(252, 249, 246, .10) 68%,
       rgba(252, 249, 246, 0) 100%);
   z-index: 2;
   pointer-events: none;
@@ -837,7 +839,7 @@ cite {
   }
 
   .hero__media::before {
-    width: 80px;
+    width: 110px;
   }
 
   .hero__image {
