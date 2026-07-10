@@ -1397,12 +1397,12 @@ cite {
 .footer-kicker {
   margin: 0 0 18px;
   color: var(--color-charcoal);
-  font-family: var(--font-body);
-  font-size: .82rem;
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
   font-weight: 700;
-  letter-spacing: .14em;
-  line-height: 1.2;
-  text-transform: uppercase;
+  letter-spacing: normal;
+  line-height: 1.1;
+  text-transform: none;
 }
 
 .footer-links,
