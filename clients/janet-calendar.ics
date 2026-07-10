@@ -1,0 +1,40 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Style with Kayla//Appointment//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VTIMEZONE
+TZID:America/Boise
+X-LIC-LOCATION:America/Boise
+BEGIN:DAYLIGHT
+TZOFFSETFROM:-0700
+TZOFFSETTO:-0600
+TZNAME:MDT
+DTSTART:19700308T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:-0600
+TZOFFSETTO:-0700
+TZNAME:MST
+DTSTART:19701101T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:janet-20260711T110000-stylewithkayla@stylewithkayla.com
+DTSTAMP:20260710T190000Z
+DTSTART;TZID=America/Boise:20260711T110000
+DTEND;TZID=America/Boise:20260711T140000
+SUMMARY:Personal Styling Appointment with Kayla
+LOCATION:At Your Service Counter\, West Entrance\, Macy's Boise Towne Square\, 370 N. Milwaukee St.\, Boise\, ID 83704
+DESCRIPTION:Your complimentary personal styling appointment with Kayla Reynolds.\n\nMeet at the At Your Service counter near the west entrance.\n\nQuestions or changes? Call or text 208-859-6427 or email kayla.reynolds@macys.com.
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+BEGIN:VALARM
+TRIGGER:-P1D
+ACTION:DISPLAY
+DESCRIPTION:Personal styling appointment with Kayla tomorrow
+END:VALARM
+END:VEVENT
+END:VCALENDAR
