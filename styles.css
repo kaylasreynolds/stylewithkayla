@@ -764,7 +764,7 @@ p {
 
 .testimonial-track {
   display: grid;
-  padding-top: 38px;
+  padding-top: 48px;
 }
 
 .testimonial-slide {
@@ -788,11 +788,12 @@ blockquote {
 blockquote::before {
   content: "“";
   position: absolute;
-  top: -48px;
-  left: 30px;
+  top: -64px;
+  left: 50%;
+  transform: translateX(-50%);
   color: var(--color-rose);
   font-family: var(--font-heading);
-  font-size: 7rem;
+  font-size: 9rem;
   font-weight: 600;
   line-height: 1;
 }
@@ -1050,9 +1051,9 @@ cite::before {
   }
 
   blockquote::before {
-    top: -40px;
-    left: 22px;
-    font-size: 6rem;
+    top: -52px;
+    left: 50%;
+    font-size: 7.5rem;
   }
 
   .container {
