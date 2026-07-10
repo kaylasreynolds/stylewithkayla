@@ -13,9 +13,59 @@
     rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
+    .announcement-bar {
+      position: relative;
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      border-bottom: 1px solid rgba(255, 255, 255, .14);
+      font-family: var(--font-body);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      line-height: 1.2;
+      padding: 12px clamp(170px, 15vw, 260px) 12px clamp(48px, 7vw, 120px);
+      text-transform: uppercase;
+      white-space: pre;
+    }
+
+    .announcement-bar::before {
+      content: "♥";
+      font-size: .8rem;
+      line-height: 1;
+      margin-right: 2px;
+    }
+
+    .announcement-bar::after {
+      content: "*EXCLUSIONS APPLY";
+      position: absolute;
+      right: clamp(24px, 4vw, 70px);
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: .68rem;
+      letter-spacing: .14em;
+      opacity: .92;
+      white-space: nowrap;
+    }
+
     @media (min-width: 701px) {
       .hero__content {
         transform: translateY(-42px);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .announcement-bar {
+        min-height: 40px;
+        gap: 10px;
+        padding: 10px 14px;
+        white-space: normal;
+      }
+
+      .announcement-bar::after {
+        display: none;
       }
     }
   </style>
