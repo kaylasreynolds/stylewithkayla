@@ -271,6 +271,13 @@
       border: 0
     }
 
+    .sizing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 12px
+    }
+
     .checks {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -367,7 +374,8 @@
       }
 
       .details,
-      .checks {
+      .checks,
+      .sizing-grid {
         grid-template-columns: 1fr
       }
 
@@ -421,30 +429,34 @@
                 <label class="check"><input type="checkbox" name="Lifestyle needs" value="A little of everything"> A little of everything</label>
               </div>
             </fieldset>
-
             <fieldset>
-              <legend>Which categories should I focus on?</legend>
-              <p class="small">Choose as many as you would like.</p>
-              <div class="checks">
-                <label class="check"><input type="checkbox" name="Shopping focus" value="Tops"> Tops</label>
-                <label class="check"><input type="checkbox" name="Shopping focus" value="Pants and jeans"> Pants & jeans</label>
-                <label class="check"><input type="checkbox" name="Shopping focus" value="Dresses and skirts"> Dresses & skirts</label>
-                <label class="check"><input type="checkbox" name="Shopping focus" value="Jackets and layers"> Jackets & layers</label>
-                <label class="check"><input type="checkbox" name="Shopping focus" value="Shoes"> Shoes</label>
-                <label class="check"><input type="checkbox" name="Shopping focus" value="Accessories"> Accessories</label>
-              </div>
-            </fieldset>
-
-            <fieldset>
-              <legend>Which style directions feel most like you?</legend>
-              <p class="small">Choose up to three. These are simply a starting point.</p>
-              <div class="checks">
-                <label class="check"><input type="checkbox" name="Style direction" value="Classic and timeless"> Classic & timeless</label>
-                <label class="check"><input type="checkbox" name="Style direction" value="Polished and tailored"> Polished & tailored</label>
-                <label class="check"><input type="checkbox" name="Style direction" value="Relaxed and comfortable"> Relaxed & comfortable</label>
-                <label class="check"><input type="checkbox" name="Style direction" value="Feminine and soft"> Feminine & soft</label>
-                <label class="check"><input type="checkbox" name="Style direction" value="Modern and simple"> Modern & simple</label>
-                <label class="check"><input type="checkbox" name="Style direction" value="A few current trends"> A few current trends</label>
+              <legend>Your sizing</legend>
+              <p class="small">Estimates are completely fine. Add only what you know.</p>
+              <div class="sizing-grid">
+                <div class="field">
+                  <label for="top-size">Top size</label>
+                  <input id="top-size" name="Top size" type="text" value="14/16">
+                </div>
+                <div class="field">
+                  <label for="bottom-size">Bottom or jean size</label>
+                  <input id="bottom-size" name="Bottom or jean size" type="text" value="14/16">
+                </div>
+                <div class="field">
+                  <label for="dress-size">Dress size</label>
+                  <input id="dress-size" name="Dress size" type="text" value="14/16">
+                </div>
+                <div class="field">
+                  <label for="bra-size">Bra size</label>
+                  <input id="bra-size" name="Bra size" type="text" placeholder="If known">
+                </div>
+                <div class="field">
+                  <label for="shoe-size">Shoe size</label>
+                  <input id="shoe-size" name="Shoe size" type="text">
+                </div>
+                <div class="field">
+                  <label for="height">Height</label>
+                  <input id="height" name="Height" type="text" placeholder="Helpful for lengths">
+                </div>
               </div>
             </fieldset>
 
