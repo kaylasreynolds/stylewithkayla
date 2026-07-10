@@ -404,29 +404,90 @@
             timeless pieces with small hints of trends, and want help finding flattering options as your shape has
             changed.</div>
           <form id="profile-form">
-            <div class="field"><label for="needs">What would you most like to find tomorrow?</label><textarea id="needs"
-                name="What Janet wants to find" required></textarea></div>
+            <div class="field">
+              <label for="needs">What would make this appointment feel successful?</label>
+              <textarea id="needs" name="Main goal" required placeholder="For example: a few complete outfits, better-fitting pants, or pieces that make getting dressed easier."></textarea>
+            </div>
+
             <fieldset>
-              <legend>Which categories should I focus on?</legend>
+              <legend>Where do you most need outfits right now?</legend>
+              <p class="small">Choose all that apply.</p>
               <div class="checks">
-                <label class="check"><input type="checkbox" name="Focus" value="Tops"> Tops</label>
-                <label class="check"><input type="checkbox" name="Focus" value="Bottoms"> Bottoms</label>
-                <label class="check"><input type="checkbox" name="Focus" value="Dresses"> Dresses</label>
-                <label class="check"><input type="checkbox" name="Focus" value="Layers"> Jackets & layers</label>
-                <label class="check"><input type="checkbox" name="Focus" value="Shoes"> Shoes</label>
-                <label class="check"><input type="checkbox" name="Focus" value="Accessories"> Accessories</label>
+                <label class="check"><input type="checkbox" name="Lifestyle needs" value="Everyday casual"> Everyday casual</label>
+                <label class="check"><input type="checkbox" name="Lifestyle needs" value="Work"> Work</label>
+                <label class="check"><input type="checkbox" name="Lifestyle needs" value="Dinner and social plans"> Dinner & social plans</label>
+                <label class="check"><input type="checkbox" name="Lifestyle needs" value="Special occasions"> Special occasions</label>
+                <label class="check"><input type="checkbox" name="Lifestyle needs" value="Travel"> Travel</label>
+                <label class="check"><input type="checkbox" name="Lifestyle needs" value="A little of everything"> A little of everything</label>
               </div>
             </fieldset>
-            <div class="field"><label for="fit">Are there fit concerns or areas you want me to pay special attention
-                to?</label><textarea id="fit" name="Fit priorities"></textarea></div>
-            <div class="field"><label for="colors">Colors you love—or do not want to wear</label><input id="colors"
-                name="Color preferences" type="text"></div>
-            <div class="field"><label for="budget">Is there a budget or price range you would like me to work
-                within?</label><input id="budget" name="Budget" type="text"></div>
-            <div class="field"><label for="avoid">Anything you definitely do not want me to pull?</label><textarea
-                id="avoid" name="Avoid"></textarea></div>
-            <div class="field"><label for="notes">Anything else that would help me prepare?</label><textarea id="notes"
-                name="Additional notes"></textarea></div>
+
+            <fieldset>
+              <legend>Which categories should I focus on?</legend>
+              <p class="small">Choose as many as you would like.</p>
+              <div class="checks">
+                <label class="check"><input type="checkbox" name="Shopping focus" value="Tops"> Tops</label>
+                <label class="check"><input type="checkbox" name="Shopping focus" value="Pants and jeans"> Pants & jeans</label>
+                <label class="check"><input type="checkbox" name="Shopping focus" value="Dresses and skirts"> Dresses & skirts</label>
+                <label class="check"><input type="checkbox" name="Shopping focus" value="Jackets and layers"> Jackets & layers</label>
+                <label class="check"><input type="checkbox" name="Shopping focus" value="Shoes"> Shoes</label>
+                <label class="check"><input type="checkbox" name="Shopping focus" value="Accessories"> Accessories</label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Which style directions feel most like you?</legend>
+              <p class="small">Choose up to three. These are simply a starting point.</p>
+              <div class="checks">
+                <label class="check"><input type="checkbox" name="Style direction" value="Classic and timeless"> Classic & timeless</label>
+                <label class="check"><input type="checkbox" name="Style direction" value="Polished and tailored"> Polished & tailored</label>
+                <label class="check"><input type="checkbox" name="Style direction" value="Relaxed and comfortable"> Relaxed & comfortable</label>
+                <label class="check"><input type="checkbox" name="Style direction" value="Feminine and soft"> Feminine & soft</label>
+                <label class="check"><input type="checkbox" name="Style direction" value="Modern and simple"> Modern & simple</label>
+                <label class="check"><input type="checkbox" name="Style direction" value="A few current trends"> A few current trends</label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>How do you prefer clothing to fit?</legend>
+              <div class="checks">
+                <label class="check"><input type="checkbox" name="Preferred fit" value="More fitted and shape defining"> More fitted</label>
+                <label class="check"><input type="checkbox" name="Preferred fit" value="Gently shaped"> Gently shaped</label>
+                <label class="check"><input type="checkbox" name="Preferred fit" value="Relaxed and easy"> Relaxed & easy</label>
+                <label class="check"><input type="checkbox" name="Preferred fit" value="Not sure and open to guidance"> Not sure—help me decide</label>
+              </div>
+            </fieldset>
+
+            <div class="field">
+              <label for="fit">Are there fit concerns or areas you want me to pay special attention to?</label>
+              <textarea id="fit" name="Fit priorities" placeholder="You can also share anything that has become harder to fit as your shape has changed."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="colors">Tell me about your color and pattern preferences.</label>
+              <textarea id="colors" name="Colors and patterns" placeholder="Colors you love, colors you avoid, and whether you enjoy prints or prefer solids."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="brands">Are there brands, pieces, or outfits you already know work well for you?</label>
+              <textarea id="brands" name="What already works"></textarea>
+            </div>
+
+            <div class="field">
+              <label for="budget">Is there a budget or price range you would like me to work within?</label>
+              <input id="budget" name="Budget" type="text" placeholder="An overall budget or comfortable range per item is helpful.">
+            </div>
+
+            <div class="field">
+              <label for="avoid">Anything you definitely do not want me to pull?</label>
+              <textarea id="avoid" name="Please avoid" placeholder="Specific cuts, fabrics, colors, trends, or categories you do not enjoy."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="notes">Anything else that would help me prepare?</label>
+              <textarea id="notes" name="Additional notes"></textarea>
+            </div>
+
             <button class="button primary" type="submit">Finish My Style Profile</button>
           </form>
           <div class="status" id="email-status" role="status">Your email app should open with your answers ready to
