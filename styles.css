@@ -196,6 +196,8 @@ p {
 .announcement-bar {
   background: var(--color-charcoal);
   color: var(--color-white);
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
   font-size: .9rem;
   font-weight: 700;
   letter-spacing: .02em;
