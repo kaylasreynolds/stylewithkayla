@@ -409,41 +409,53 @@ p {
 .steps-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
+  gap: 20px;
+  justify-items: center;
   align-items: start;
 }
 
 .step-card {
   background: var(--color-white);
   border: 1px solid var(--color-divider);
-  border-radius: 20px;
-  padding: 22px;
+  border-radius: 999px;
+  width: min(100%, 230px);
+  aspect-ratio: 1 / 1;
+  min-height: 230px;
+  padding: 22px 18px;
   box-shadow: 0 10px 24px rgba(31, 31, 31, .06);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
 }
 
 .step-card h3 {
-  margin: 0 0 12px;
-  font-size: 1.05rem;
-  letter-spacing: -.02em;
+  margin: 12px 0 8px;
+  font-size: 1rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
 }
 
 .step-card .body-copy {
   margin-bottom: 0;
+  max-width: 210px;
+  font-size: .98rem;
+  line-height: 1.5;
 }
 
 .step-icon {
-  width: 46px;
-  height: 46px;
+  width: 60px;
+  height: 60px;
   border-radius: 999px;
   background: var(--color-pale-rose);
   color: var(--color-rose-hover);
   display: inline-grid;
   place-items: center;
-  font-size: .85rem;
+  font-size: 1rem;
   font-weight: 800;
   letter-spacing: .14em;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
 
 /* Services */
