@@ -1,77 +1,97 @@
-# Style with Kayla
-# Website Design System
+# Style with Kayla Website Design System
 
-Version 1.0
-
----
-
-> This document is the single source of truth for the Style with Kayla website.
->
-> All pages, components, and future updates should follow these standards unless a specific project requirement explicitly overrides them.
->
-> Maintain consistency before introducing new design patterns.
+Version: 1.1  
+Last Updated: July 10, 2026
 
 ---
 
-# Brand Vision
+# Purpose and Document Hierarchy
 
-Style with Kayla is a modern personal styling brand built around confidence, simplicity, and personalized service.
+This document is the source of truth for visual design and front-end implementation standards across the Style with Kayla website.
 
-The website should immediately feel:
+It governs:
 
-• Elegant
+- Color
+- Typography
+- Layout
+- Spacing
+- Components
+- Responsive behavior
+- Accessibility
+- Front-end consistency
 
-• Boutique
+For business goals, brand voice, client experience, workflow, and current priorities, follow:
 
-• Editorial
+`docs/project_instructions.md`
 
-• Modern
+This design system supports—but does not override—the project instructions.
 
-• Feminine
-
-• Calm
-
-• Spacious
-
-• Premium
-
-• Timeless
-
-The experience should never feel like a department store website.
-
-Instead, it should feel like walking into a beautiful personal styling studio.
-
-Photography should always be the visual focus.
+Maintain consistency before introducing new visual patterns.
 
 ---
 
-# Design Philosophy
+# Visual Direction
 
-Every design decision should support these principles.
+The website should feel:
 
-1. Simplicity
+- Polished
+- Approachable
+- Calm
+- Spacious
+- Editorial-inspired
+- Modern
+- Feminine without feeling overly delicate
+- Professional without feeling corporate
+- Personal rather than template-like
 
-Reduce unnecessary visual noise.
+The experience should not resemble a busy department-store website.
 
-2. White Space
+It should feel like entering a thoughtfully prepared personal styling space: welcoming, organized, visually refined, and easy to navigate.
 
-Generous spacing communicates confidence and luxury.
+Avoid:
 
-3. Consistency
+- Clutter
+- Harsh contrast used without purpose
+- Overly decorative layouts
+- Fashion-industry pretension
+- Generic template patterns
+- Heavy shadows
+- Cartoonish icons
+- Visual effects that compete with the content
 
-Reuse established patterns instead of creating new ones.
+---
 
-4. Hierarchy
+# Design Principles
 
-Guide attention with typography, spacing, imagery, and color.
+## 1. Simplicity
 
-5. Photography
+Reduce unnecessary visual noise and competing calls to action.
 
-Photography should always be more visually dominant than text.
+## 2. Breathing Room
 
-6. Calm Experience
+Use generous spacing to improve hierarchy and comfort, but do not add space merely to make a page longer.
 
-Avoid anything that feels overwhelming or cluttered.
+Prioritize balanced rhythm, readability, and page length.
+
+## 3. Consistency
+
+Reuse established components, spacing values, and layout patterns.
+
+## 4. Hierarchy
+
+Guide attention through typography, spacing, imagery, and color.
+
+## 5. Visual Support
+
+Photography and graphics should support understanding and brand connection.
+
+On marketing and storytelling pages, photography may lead the composition.
+
+On task-based pages—including forms, appointment hubs, booking, directions, and calendars—clarity and usability take priority over photography.
+
+## 6. Calm Interaction
+
+Avoid anything that feels visually overwhelming, rushed, or distracting.
 
 ---
 
@@ -79,198 +99,134 @@ Avoid anything that feels overwhelming or cluttered.
 
 ## Primary Rose
 
-HEX
-#CF8C93
+`#CF8C93`
 
 Use for:
 
-• Primary buttons
+- Primary buttons
+- Links
+- Active navigation
+- Icons
+- Small decorative accents
+- Section labels
+- Focused promotional highlights
 
-• Active navigation
+Avoid using Primary Rose as the dominant background across large portions of a page.
 
-• Links
-
-• Icons
-
-• Small decorative accents
-
-• Section labels
-
-Never use as a large page background.
-
----
+It may be used for a contained callout or promotional section when contrast remains accessible.
 
 ## Rose Hover
 
-HEX
-
-#BE747E
+`#BE747E`
 
 Use for:
 
-• Hover states
-
-• Active states
-
-• Interactive elements
-
----
+- Hover states
+- Active states
+- Interactive emphasis
 
 ## Warm Ivory
 
-HEX
-
-#FCF9F6
+`#FCF9F6`
 
 Primary website background.
 
 Use for:
 
-• Body
-
-• Hero
-
-• Navigation
-
-• Footer
-
-• Standard sections
-
----
+- Body
+- Hero sections
+- Navigation
+- Footer
+- Standard content sections
 
 ## Soft Blush
 
-HEX
-
-#F6EEEB
+`#F6EEEB`
 
 Use for:
 
-• Alternate sections
-
-• Testimonials
-
-• Featured content
-
-• Background separation
-
----
+- Alternate sections
+- Featured content
+- Background separation
+- Testimonial sections
+- Soft callouts
 
 ## Pale Rose
 
-HEX
+`#F1E1DE`
 
-#F1E1DE
+Use sparingly for:
 
-Use sparingly.
-
-Examples:
-
-• Decorative gradients
-
-• Soft image overlays
-
-• Icon backgrounds
-
----
+- Decorative gradients
+- Soft image overlays
+- Icon backgrounds
+- Small accent panels
 
 ## White
 
-HEX
-
-#FFFFFF
+`#FFFFFF`
 
 Use for:
 
-• Cards
-
-• Forms
-
-• Elevated containers
-
-• Dialogs
-
----
+- Cards
+- Forms
+- Elevated containers
+- Dialogs
+- Content panels
 
 ## Rich Charcoal
 
-HEX
-
-#1F1F1F
+`#1F1F1F`
 
 Use for:
 
-• Headlines
-
-• Navigation
-
-• Icons
-
-• High emphasis text
-
-• Announcement bar
-
----
+- Headlines
+- Navigation
+- Icons
+- High-emphasis text
+- Announcement bar
 
 ## Warm Gray
 
-HEX
-
-#5A5552
+`#5A5552`
 
 Use for:
 
-• Paragraphs
-
-• Supporting copy
-
-• Descriptions
-
-• Footer text
-
----
+- Paragraphs
+- Supporting copy
+- Descriptions
+- Footer text
+- Secondary labels
 
 ## Divider
 
-HEX
-
-#DDD2CA
+`#DDD2CA`
 
 Use for:
 
-• Borders
+- Borders
+- Vertical dividers
+- Input outlines
+- Subtle horizontal rules
 
-• Vertical dividers
-
-• Input outlines
-
-• Horizontal rules
-
-Keep subtle.
+Keep borders understated.
 
 ---
 
 # Color Balance
 
-Warm Ivory
-45%
+Use these percentages as a general visual guide, not a rigid formula:
 
-White
-25%
+- Warm Ivory: approximately 45%
+- White: approximately 25%
+- Soft Blush: approximately 15%
+- Warm Gray: approximately 8%
+- Primary Rose: approximately 5%
+- Rich Charcoal: approximately 2%
 
-Soft Blush
-15%
+The overall appearance should remain light, warm, and airy.
 
-Warm Gray
-8%
-
-Primary Rose
-5%
-
-Rich Charcoal
-2%
-
-Overall appearance should remain light and airy.
+Pink should act primarily as an accent and point of focus.
 
 ---
 
@@ -282,23 +238,18 @@ Cormorant Garamond
 
 Use for:
 
-• Hero headings
+- Hero headings
+- Section headings
+- Page titles
+- Card titles
+- Selected footer headings
 
-• Section headings
+Recommended weights:
 
-• Page titles
-
-• Card titles
-
-Weights
-
-400
-
-500 (default)
-
-600
-
----
+- 400
+- 500
+- 600
+- 700 only where stronger emphasis is intentionally needed
 
 ## Body Font
 
@@ -306,379 +257,346 @@ Inter
 
 Use for:
 
-• Navigation
+- Navigation
+- Paragraphs
+- Buttons
+- Forms
+- Labels
+- Footer copy
+- Contact information
 
-• Paragraphs
+Recommended weights:
 
-• Buttons
-
-• Forms
-
-• Labels
-
-• Footer
-
-• Contact information
-
-Weights
-
-400
-
-500
-
-600
-
----
+- 400
+- 500
+- 600
 
 ## Typography Hierarchy
 
-Hero Heading
+Use fluid, responsive sizing rather than fixed values everywhere.
 
-72–84px
+Approximate desktop ranges:
 
-Section Heading
+- Hero heading: 64–84px
+- Section heading: 44–56px
+- Card title: 26–36px
+- Navigation: 15–16px
+- Body: 17–18px
+- Footer: 15–16px
+- Labels: 13–15px
 
-48–56px
+Mobile body text should never be smaller than 16px.
 
-Card Title
+Uppercase labels may use approximately `0.12em–0.15em` letter spacing.
 
-28–36px
-
-Navigation
-
-15–16px
-
-Body
-
-18px
-
-Footer
-
-15px
-
-Labels
-
-14–15px
-
-Uppercase
-
-Letter spacing
-
-0.15em
-
-Primary Rose
+Do not use uppercase for long sentences or paragraphs.
 
 ---
 
 # Layout
 
-Maximum Width
+## Width
 
-1280px
+- Maximum content width: 1280px
+- Comfortable content width: 1180px
 
-Content Width
+## Horizontal Padding
 
-1180px
+Suggested values:
 
-Desktop Padding
+- Desktop: 64px
+- Tablet: 40px
+- Mobile: 24px
 
-64px
+Content should never touch the browser edge.
 
-Tablet
+## Vertical Rhythm
 
-40px
+Suggested major-section spacing:
 
-Mobile
+- Desktop: approximately 110–120px
+- Tablet: approximately 85–90px
+- Mobile: approximately 64–70px
 
-24px
+These values may be reduced when a page feels unnecessarily long or when sections are closely related.
 
-Never allow content to touch the browser edge.
+Spacing should create hierarchy, not empty distance.
 
----
+## Grid
 
-# Vertical Rhythm
-
-Desktop
-
-120px
-
-Tablet
-
-90px
-
-Mobile
-
-70px
-
-Maintain consistent spacing between all major sections.
-
-When uncertain, increase spacing rather than reducing it.
-
----
-
-# Grid
-
-Content should align to a consistent central grid.
-
-Cards should align perfectly.
-
-Buttons should align with surrounding content.
-
-Avoid inconsistent widths.
+- Align content to a consistent central grid.
+- Keep card tops, bottoms, and internal spacing aligned where practical.
+- Align buttons with surrounding content.
+- Avoid unexplained width changes.
+- Allow intentional asymmetry only when it improves the composition.
 
 ---
 
 # Buttons
 
-Shape
+## Shape
 
-Fully rounded
+- Fully rounded
+- Recommended radius: `999px`
 
-Radius
+## Padding
 
-999px
+Suggested default:
 
-Padding
+`16px 28px`
 
-16px 28px
+Adjust when necessary for responsive layouts or compact secondary actions.
 
-Primary
+## Primary Button
 
-Background
+- Background: `#CF8C93`
+- Text: white
+- Hover: `#BE747E`
 
-#CF8C93
+## Secondary Button
 
-Text
+- Background: white or transparent
+- Border: Primary Rose or subtle Divider
+- Hover: Soft Blush
 
-White
+## Behavior
 
-Hover
-
-#BE747E
-
-Secondary
-
-White
-
-Rose border
-
-Hover
-
-Soft Blush
-
-Transition
-
-250ms ease
-
-Buttons should never feel oversized or bulky.
+- Recommended transition: `250ms ease`
+- Buttons should not feel oversized or bulky.
+- Text should clearly state the action.
+- Primary CTAs should be visually obvious.
+- Preserve visible keyboard focus states.
+- Touch targets should be at least approximately 44px high.
 
 ---
 
 # Cards
 
-Background
+Recommended default:
 
-White
+- Background: white
+- Radius: 20px
+- Border: very light
+- Shadow: soft and subtle
+- Hover: slight lift or shadow increase when the whole card is interactive
+- Transition: `250ms ease`
 
-Radius
+Cards should feel structured and touchable without appearing heavy.
 
-20px
+Do not add hover movement to static informational cards unless it communicates interactivity.
 
-Border
-
-Very light
-
-Shadow
-
-Soft
-
-Hover
-
-Slight lift
-
-Slight shadow increase
-
-Transition
-
-250ms ease
-
-Cards should appear elevated but subtle.
+Reuse the established card structure before creating a new variation.
 
 ---
 
-# Images
-
-Photography is the primary design element.
+# Images and Photography
 
 Use:
 
-Large imagery
+- Natural lighting
+- Lifestyle moments
+- Real interactions
+- Editorial-inspired composition
+- Minimal editing
+- Neutral or visually calm environments
+- Images that feel warm, human, and believable
 
-Natural lighting
+Recommended corner radius:
 
-Editorial composition
+- Approximately 20px, unless the existing component uses another approved radius
 
-Minimal editing
+Photography should lead on:
 
-Neutral environments
+- Homepage storytelling
+- About pages
+- Service introductions
+- Event promotion
 
-Lifestyle photography whenever possible.
+Photography should not displace essential controls or instructions on:
 
-Rounded corners
+- Style Profiles
+- Appointment hubs
+- Forms
+- Booking pages
+- Directions
+- Calendar actions
 
-20px
-
-Images should occupy more visual space than text.
+Optimize images before uploading and provide meaningful alternative text when the image conveys information.
 
 ---
 
 # Icons
 
-Use only thin outline icons.
+Use:
+
+- Thin outline icons
+- Simple shapes
+- Consistent stroke weight
+- Familiar symbols for task-based actions
 
 Avoid:
 
-Filled icons
+- Filled icon sets mixed with outline icons
+- Heavy icons
+- Cartoon icons
+- Decorative icons that reduce clarity
 
-Heavy icons
-
-Cartoon icons
-
-Keep icons simple and refined.
-
----
-
-# Shadows
-
-Soft only.
-
-Avoid dramatic shadows.
-
-Elevation should remain subtle.
+Do not rely on an icon alone when the action may be unclear; include a text label.
 
 ---
 
-# Borders
+# Shadows and Borders
 
-Very light.
+## Shadows
 
-Prefer white space over borders.
+- Soft only
+- Avoid dramatic depth
+- Use elevation consistently
 
-Vertical footer dividers are encouraged.
+## Borders
 
-Avoid excessive horizontal rules.
+- Prefer white space over excessive borders
+- Use light borders to clarify cards, forms, or grouping
+- Vertical footer dividers are part of the approved direction
+- Avoid frequent horizontal rules unless they improve scanning
 
 ---
 
-# Animations
+# Motion
 
 Use subtle motion only.
 
-Fade
+Appropriate effects:
 
-Fade Up
+- Fade
+- Fade up
+- Small movement
 
-Small movement
+Recommended maximum movement:
 
-Maximum movement
+- Approximately 20px
 
-20px
+Recommended duration:
 
-Duration
+- Approximately 300–600ms depending on the interaction
 
-500–700ms
+Avoid:
 
-Avoid
+- Bounce
+- Spin
+- Elastic effects
+- Slow animations that delay tasks
+- Motion that competes with content
 
-Bounce
+Honor reduced-motion preferences.
 
-Spin
-
-Elastic effects
-
-Luxury websites move slowly.
+Motion should feel calm and unobtrusive—not “luxurious” for its own sake.
 
 ---
 
-# Forms
+# Forms and Style Profiles
 
-Inputs should feel clean and approachable.
+Inputs should feel clean, approachable, and easy to complete on a phone.
 
-Radius
+Recommended standards:
 
-14px
+- Radius: approximately 14px
+- Large click and tap areas
+- Simple, visible labels
+- Minimal but clear borders
+- Consistent spacing
+- Clear validation messages
+- Visible focus states
+- Plain-language instructions
 
-Large click area
+For image-driven Style Profile choices:
 
-Simple labels
-
-Minimal borders
-
-Consistent spacing
+- Make the selected state obvious without relying on color alone.
+- Keep image grids easy to scan.
+- Allow users to change their choices.
+- Keep required information clear without making the experience feel like paperwork.
+- Break long forms into logical steps when that reduces overwhelm.
 
 ---
 
 # Navigation
 
-Sticky
+Navigation should be:
 
-Light background
+- Light
+- Minimal
+- Balanced
+- Easy to scan
+- Consistent across public pages
 
-Minimal
-
-Balanced spacing
-
-Single primary CTA
+Use one prominent primary CTA.
 
 Navigation should never dominate the page.
+
+Sticky behavior is optional and should be used only when it improves access without reducing usable screen space.
+
+Public navigation should remain simple. Appointment-specific tools and Style Profiles should appear within the client journey rather than becoming unnecessary top-level links.
 
 ---
 
 # Footer
 
-Light background
+Default direction:
 
-Vertical dividers
+- Light background
+- Vertical dividers
+- Simple organization
+- Consistent typography
+- Subtle icons
+- Working links only
 
-Simple organization
+Avoid dark footers by default.
 
-Consistent typography
+A darker treatment may be considered only when readability, contrast, and the balance of the full page clearly improve.
 
-Subtle icons
-
-Avoid dark footers.
+Do not display inactive social-media icons as though they are links.
 
 ---
 
-# Mobile
+# Responsive Design
 
-Design mobile-first.
+Design both desktop and mobile intentionally.
 
-Layouts should stack naturally.
+For forms, booking, appointment hubs, and client tools, begin with mobile needs because clients are likely to use them on a phone.
 
-No horizontal scrolling.
+For editorial marketing pages, establish a strong desktop composition and verify the mobile layout before approval.
 
-Buttons should remain easy to tap.
+Mobile requirements:
 
-Images should remain large.
+- No horizontal scrolling
+- Natural stacking
+- Easy-to-tap buttons and links
+- Readable typography
+- Full-width cards when appropriate
+- Images that retain useful visual presence
+- No content touching screen edges
+- Clear navigation pattern
 
-Typography should scale smoothly.
-
-Navigation becomes a clean hamburger menu.
-
-Cards become full width.
+A hamburger menu may be used when the number or width of navigation links requires it; it is not mandatory when a simpler mobile pattern works better.
 
 ---
 
 # Accessibility
 
-Maintain sufficient color contrast.
+Maintain:
 
-Body text should never be smaller than 16px on mobile.
+- Sufficient color contrast
+- Body text of at least 16px on mobile
+- Visible focus states
+- Appropriately sized touch targets
+- Semantic headings
+- Useful link and button labels
+- Alternative text for meaningful images
+- Keyboard-accessible interactions
+- Error messages that explain how to fix the problem
+- Reduced-motion support
 
-Interactive elements should always have hover and focus states.
-
-Touch targets should be appropriately sized.
+Accessibility takes priority over decorative consistency.
 
 ---
 
@@ -686,64 +604,45 @@ Touch targets should be appropriately sized.
 
 When creating new sections or pages:
 
-Reuse existing components whenever possible.
+1. Reuse an existing component when it serves the content.
+2. Modify an existing component carefully when a new need is closely related.
+3. Introduce a new pattern only when the existing system cannot support the experience clearly.
 
-Avoid introducing new card styles, button styles, spacing systems, or layouts unless necessary.
+Avoid unnecessary new:
 
-Consistency is more valuable than variety.
+- Card styles
+- Button styles
+- Spacing systems
+- Radius values
+- Shadows
+- Layout structures
 
----
-
-# Future Development
-
-As the website grows:
-
-Refine existing components.
-
-Avoid visual redesigns.
-
-Maintain a cohesive experience across every page.
-
-Future pages should immediately feel like they belong to the same website.
+Consistency is more valuable than variety, but usability is more important than rigid sameness.
 
 ---
 
-# Final Design Principles
+# Implementation Rules
 
-Every page should feel:
+- Use CSS custom properties for approved colors, fonts, spacing, and radii.
+- Avoid duplicate CSS declarations when a reusable class or variable can solve the need.
+- Do not use inline styles unless a temporary or highly specific need justifies them.
+- Keep responsive rules near the related component or organized consistently within the stylesheet.
+- Do not change shared components to solve a single-page problem without checking the effect on every page.
+- Test links, hover states, keyboard focus, and mobile layout after implementation.
+- Match approved mockups for major work, while allowing technical adjustments required for accessibility and responsive behavior.
 
-Elegant
+---
 
-Calm
+# Final Decision Order
 
-Spacious
+When visual decisions compete, prioritize:
 
-Editorial
+1. Usability
+2. Accessibility
+3. Consistency
+4. Readability
+5. Simplicity
+6. Brand expression
+7. Photography and decorative detail
 
-Boutique
-
-Modern
-
-Professional
-
-Photography should be the hero.
-
-Typography should establish hierarchy.
-
-Color should guide attention.
-
-White space should communicate luxury.
-
-When making design decisions, prioritize:
-
-1. Consistency
-
-2. Simplicity
-
-3. Readability
-
-4. Photography
-
-5. White Space
-
-If a decision conflicts with these principles, choose the option that creates the most timeless and cohesive user experience.
+The best solution should feel cohesive, timeless, approachable, and easy for the client to use.
