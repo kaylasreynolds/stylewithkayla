@@ -412,6 +412,7 @@ p {
   gap: 20px;
   justify-items: center;
   align-items: start;
+  border-top: 7px solid var(--color-charcoal);
 }
 
 .step-card {
