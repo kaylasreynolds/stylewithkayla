@@ -390,14 +390,14 @@ p {
   position: absolute;
   left: 0;
   top: 0;
-  width: 180px;
+  width: 110px;
   height: 100%;
-  min-height: 760px;
   background: linear-gradient(to right,
-      var(--color-ivory),
-      rgba(252, 249, 246, .85),
-      rgba(252, 249, 246, 0));
+      rgba(252, 249, 246, .72) 0%,
+      rgba(252, 249, 246, .32) 45%,
+      rgba(252, 249, 246, 0) 100%);
   z-index: 2;
+  pointer-events: none;
 }
 
 .hero__image {
@@ -837,7 +837,7 @@ cite {
   }
 
   .hero__media::before {
-    width: 130px;
+    width: 80px;
   }
 
   .hero__image {
