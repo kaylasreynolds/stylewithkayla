@@ -1130,8 +1130,10 @@ cite {
 }
 
 .service-option-card--featured {
-  border: 2px solid var(--color-rose);
-  transform: translateY(-8px);
+  border-color: var(--color-rose);
+  box-shadow:
+    0 0 0 1px var(--color-rose),
+    0 12px 30px rgba(31, 31, 31, .06);
 }
 
 .service-duration {
