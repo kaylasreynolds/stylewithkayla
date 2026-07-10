@@ -1466,6 +1466,7 @@ cite {
   margin-top: 4px;
   padding: 16px 14px;
   border-radius: 999px;
+  color: var(--color-white);
   font-size: .78rem;
   font-weight: 700;
   letter-spacing: 0;
@@ -1473,6 +1474,10 @@ cite {
   text-align: center;
   text-transform: none;
   white-space: nowrap;
+}
+
+.site-footer .footer-social .button:hover {
+  color: var(--color-white);
 }
 
 .footer-bottom {
