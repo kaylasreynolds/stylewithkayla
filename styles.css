@@ -376,7 +376,7 @@ p {
   margin-left: -120px;
   z-index: 1;
   position: relative;
-  min-height: calc(100vh - 124px);
+  min-height: 620px;
   overflow: hidden;
   border: 0;
   border-radius: 0;
