@@ -1613,6 +1613,14 @@ cite::before {
   gap: 9px;
 }
 
+.footer-link--inactive {
+  color: var(--color-gray);
+  font-size: .92rem;
+  font-weight: 500;
+  opacity: .58;
+  cursor: default;
+}
+
 .footer-links a,
 .footer-contact a {
   font-size: .92rem;
