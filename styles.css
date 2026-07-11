@@ -1758,8 +1758,16 @@ cite::before {
     border-top: 0;
   }
 
+  .footer-logo {
+    max-width: 100%;
+  }
+
   .footer-logo img {
-    height: 82px;
+    width: min(100%, 300px);
+    height: auto;
+    max-height: none;
+    transform: none;
+    transform-origin: initial;
   }
 
   .site-footer .footer-social .button {
