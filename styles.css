@@ -2029,6 +2029,390 @@ cite::before {
   }
 }
 
+/* About page — personal story sections */
+.about-intro,
+.about-personal,
+.about-why {
+  overflow: hidden;
+}
+
+.about-intro {
+  padding: clamp(72px, 8vw, 120px) 0;
+  background: var(--color-ivory);
+}
+
+.about-intro__inner {
+  display: grid;
+  grid-template-columns: minmax(0, .95fr) minmax(420px, 1.05fr);
+  gap: clamp(56px, 7vw, 104px);
+  align-items: center;
+}
+
+.about-intro__content {
+  max-width: 650px;
+}
+
+.about-intro__content .section-label {
+  margin-bottom: 24px;
+}
+
+.about-intro__content h1 {
+  margin: 0 0 30px;
+  color: var(--color-charcoal);
+  font-family: var(--font-heading);
+  font-size: clamp(4.7rem, 7.7vw, 7.4rem);
+  font-weight: 500;
+  letter-spacing: -.045em;
+  line-height: .88;
+}
+
+.about-intro__content p:not(.section-label) {
+  max-width: 570px;
+  margin: 0 0 24px;
+  color: var(--color-charcoal);
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.about-intro__content p:last-child {
+  margin-bottom: 0;
+}
+
+.about-intro__portrait {
+  aspect-ratio: 1 / 1.08;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--color-blush);
+}
+
+.about-intro__portrait img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 29% center;
+}
+
+.about-personal {
+  padding: clamp(82px, 9vw, 132px) 0;
+  background:
+    radial-gradient(circle at 82% 34%, rgba(255, 255, 255, .7), transparent 28%),
+    var(--color-blush);
+}
+
+.about-personal__inner {
+  display: grid;
+  grid-template-columns: minmax(430px, .9fr) minmax(0, 1.1fr);
+  gap: clamp(70px, 8vw, 120px);
+  align-items: center;
+}
+
+.about-collage {
+  position: relative;
+  min-height: 700px;
+}
+
+.about-collage__item {
+  position: absolute;
+  margin: 0;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, .9);
+  border-radius: 16px;
+  box-shadow: 0 14px 32px rgba(31, 31, 31, .09);
+}
+
+.about-collage__item img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.about-collage__item--main {
+  inset: 0 auto auto 0;
+  width: 68%;
+  height: 66%;
+  z-index: 1;
+}
+
+.about-collage__item--main img {
+  object-position: 54% center;
+}
+
+.about-collage__item--sewing {
+  top: 12%;
+  right: 2%;
+  width: 38%;
+  height: 30%;
+  z-index: 3;
+}
+
+.about-collage__item--cats {
+  top: 44%;
+  right: 0;
+  width: 38%;
+  height: 29%;
+  z-index: 4;
+}
+
+.about-collage__item--escape {
+  bottom: 0;
+  left: 0;
+  width: 47%;
+  height: 35%;
+  z-index: 3;
+}
+
+.about-collage__item--reading {
+  right: 10%;
+  bottom: 1%;
+  width: 42%;
+  height: 28%;
+  z-index: 5;
+}
+
+.about-collage__placeholder {
+  display: grid;
+  place-items: end start;
+  padding: 18px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, .15), transparent),
+    linear-gradient(135deg, var(--color-pale-rose), var(--color-rose));
+  color: var(--color-charcoal);
+}
+
+.about-collage__placeholder:nth-of-type(even) {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, .5), transparent),
+    linear-gradient(135deg, var(--color-blush), var(--color-divider));
+}
+
+.about-collage__placeholder span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(252, 249, 246, .86);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.about-personal__content {
+  max-width: 690px;
+}
+
+.about-personal__content h2,
+.about-why__belief h2 {
+  margin: 0;
+  color: var(--color-charcoal);
+  font-family: var(--font-heading);
+  font-weight: 500;
+}
+
+.about-personal__content h2 {
+  font-size: clamp(3.1rem, 5vw, 5rem);
+  line-height: 1;
+}
+
+.about-accent {
+  width: 54px;
+  height: 2px;
+  display: block;
+  margin: 24px 0 32px;
+  background: var(--color-rose);
+}
+
+.about-personal__content p {
+  max-width: 650px;
+  margin: 0 0 22px;
+  color: var(--color-charcoal);
+  font-size: .98rem;
+  line-height: 1.7;
+}
+
+.about-personal__content .about-personal__lead {
+  margin-bottom: 28px;
+  font-family: var(--font-heading);
+  font-size: clamp(1.55rem, 2.1vw, 2rem);
+  line-height: 1.35;
+}
+
+.about-personal__content p:last-child {
+  margin-bottom: 0;
+}
+
+.about-personal__content em {
+  color: var(--color-rose-hover);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.about-why {
+  padding: clamp(84px, 9vw, 132px) 0;
+  background:
+    radial-gradient(circle at 88% 42%, rgba(241, 225, 222, .95), transparent 30%),
+    var(--color-ivory);
+}
+
+.about-why__inner {
+  display: grid;
+  grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+  gap: clamp(64px, 8vw, 120px);
+  align-items: center;
+}
+
+.about-why__belief .section-label {
+  margin-bottom: 0;
+}
+
+.about-why__belief h2 {
+  max-width: 620px;
+  font-size: clamp(3rem, 4.6vw, 4.5rem);
+  line-height: 1.08;
+}
+
+.about-why__note {
+  max-width: 650px;
+  padding: 16px 0 16px clamp(32px, 4vw, 54px);
+  border-left: 2px solid var(--color-rose);
+}
+
+.about-why__note p {
+  margin: 0 0 25px;
+  color: var(--color-charcoal);
+  font-family: var(--font-heading);
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+  line-height: 1.42;
+}
+
+.about-why__note p:last-child {
+  margin-bottom: 0;
+}
+
+.about-why__note strong {
+  color: var(--color-rose-hover);
+  font-size: 1.35em;
+  font-weight: 600;
+}
+
+@media (max-width: 980px) {
+  .about-intro__inner,
+  .about-personal__inner,
+  .about-why__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .about-intro__inner {
+    gap: 50px;
+  }
+
+  .about-intro__content,
+  .about-personal__content,
+  .about-why__belief,
+  .about-why__note {
+    max-width: 760px;
+  }
+
+  .about-intro__portrait {
+    max-width: 720px;
+  }
+
+  .about-personal__inner {
+    gap: 64px;
+  }
+
+  .about-collage {
+    width: min(100%, 680px);
+    min-height: 680px;
+  }
+
+  .about-why__inner {
+    gap: 48px;
+  }
+}
+
+@media (max-width: 700px) {
+  .about-intro {
+    padding: 58px 0 72px;
+  }
+
+  .about-intro__content h1 {
+    margin-bottom: 24px;
+    font-size: clamp(4rem, 20vw, 5.7rem);
+  }
+
+  .about-intro__content p:not(.section-label) {
+    font-size: .98rem;
+    line-height: 1.65;
+  }
+
+  .about-intro__portrait {
+    aspect-ratio: 4 / 5;
+    border-radius: 14px;
+  }
+
+  .about-personal {
+    padding: 72px 0 78px;
+  }
+
+  .about-personal__inner {
+    gap: 52px;
+  }
+
+  .about-collage {
+    min-height: 540px;
+  }
+
+  .about-collage__item {
+    border-width: 2px;
+    border-radius: 12px;
+  }
+
+  .about-collage__item--main {
+    width: 70%;
+    height: 64%;
+  }
+
+  .about-collage__item--sewing,
+  .about-collage__item--cats {
+    width: 39%;
+  }
+
+  .about-collage__placeholder {
+    padding: 10px;
+  }
+
+  .about-collage__placeholder span {
+    padding: 6px 8px;
+    font-size: .62rem;
+  }
+
+  .about-personal__content h2 {
+    font-size: clamp(2.9rem, 13vw, 4rem);
+  }
+
+  .about-personal__content .about-personal__lead {
+    font-size: 1.5rem;
+  }
+
+  .about-why {
+    padding: 76px 0 82px;
+  }
+
+  .about-why__belief h2 {
+    font-size: clamp(2.7rem, 12vw, 3.7rem);
+  }
+
+  .about-why__note {
+    padding: 4px 0 4px 24px;
+  }
+
+  .about-why__note p {
+    font-size: 1.45rem;
+  }
+}
+
 
 /* Store Events page */
 .events-page-hero {
