@@ -2111,14 +2111,16 @@ cite::before {
 
 .about-personal__inner {
   display: grid;
-  grid-template-columns: minmax(430px, .9fr) minmax(0, 1.1fr);
-  gap: clamp(70px, 8vw, 120px);
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: clamp(56px, 6vw, 88px);
   align-items: center;
 }
 
 .about-collage {
   position: relative;
-  min-height: 700px;
+  width: 100%;
+  max-width: 520px;
+  min-height: 650px;
 }
 
 .about-collage__item {
@@ -2183,11 +2185,15 @@ cite::before {
 .about-collage__placeholder {
   display: grid;
   place-items: end start;
-  padding: 18px;
+  padding: 0;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, .15), transparent),
-    linear-gradient(135deg, var(--color-pale-rose), var(--color-rose));
+    linear-gradient(145deg, rgba(255, 255, 255, .55), transparent),
+    linear-gradient(135deg, var(--color-pale-rose), var(--color-divider));
   color: var(--color-charcoal);
+}
+
+.about-collage__placeholder span {
+  display: none;
 }
 
 .about-collage__placeholder:nth-of-type(even) {
@@ -2219,8 +2225,8 @@ cite::before {
 }
 
 .about-personal__content h2 {
-  font-size: clamp(3.1rem, 5vw, 5rem);
-  line-height: 1;
+  font-size: clamp(2.8rem, 3.8vw, 3.8rem);
+  line-height: 1.05;
 }
 
 .about-accent {
@@ -2242,8 +2248,8 @@ cite::before {
 .about-personal__content .about-personal__lead {
   margin-bottom: 28px;
   font-family: var(--font-heading);
-  font-size: clamp(1.55rem, 2.1vw, 2rem);
-  line-height: 1.35;
+  font-size: clamp(1.35rem, 1.65vw, 1.65rem);
+  line-height: 1.45;
 }
 
 .about-personal__content p:last-child {
@@ -2398,11 +2404,11 @@ cite::before {
   }
 
   .about-personal__content h2 {
-    font-size: clamp(2.9rem, 13vw, 4rem);
+    font-size: clamp(2.65rem, 11vw, 3.35rem);
   }
 
   .about-personal__content .about-personal__lead {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
   }
 
   .about-why {
