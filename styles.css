@@ -2045,7 +2045,7 @@ cite::before {
 }
 
 .about-intro {
-  padding: clamp(72px, 8vw, 120px) 0;
+  padding: clamp(70px, 8vw, 120px) 0;
   background: var(--color-ivory);
 }
 
