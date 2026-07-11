@@ -378,6 +378,7 @@ Before making recommendations or changes:
 6. Provide the requested deliverable instead of repeatedly describing future work.
 7. Use the full mockup workflow only when the scope justifies it.
 8. Prioritize completed, useful features over additional planning documents.
+9. Use `components/site-footer.html` as the canonical footer for every public page. New pages must begin with that footer unchanged, and footer updates must be applied to the canonical component and every existing public page in the same change.
 
 When a decision is unclear, ask:
 
