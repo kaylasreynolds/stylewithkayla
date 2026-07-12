@@ -2755,12 +2755,16 @@ cite::before {
 }
 
 .service-option-card h3 {
+  width: 100%;
   margin-bottom: 18px;
-  font-size: clamp(2rem, 2.7vw, 2.65rem);
+  font-size: clamp(1.65rem, 2.15vw, 2.05rem);
   font-weight: 500;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
 .service-option-card .body-copy {
+  min-height: 4.65em;
   max-width: 330px;
   margin: 0 auto 24px;
   color: var(--color-charcoal);
@@ -3049,6 +3053,14 @@ body.service-dialog-open {
 
   .service-option-card {
     padding: 28px 22px;
+  }
+
+  .service-option-card h3 {
+    font-size: clamp(1.4rem, 6.3vw, 1.75rem);
+  }
+
+  .service-option-card .body-copy {
+    min-height: 0;
   }
 
   .service-option-icon {
