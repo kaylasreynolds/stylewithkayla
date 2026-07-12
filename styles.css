@@ -2445,7 +2445,7 @@ cite::before {
 }
 
 .about-closing-cta h2 {
-  margin: 0 auto 24px;
+  margin: 0 auto 0px;
   color: var(--color-charcoal);
   font-family: var(--font-heading);
   font-size: clamp(2.8rem, 4.7vw, 4.4rem);
@@ -2453,7 +2453,7 @@ cite::before {
   line-height: 1.05;
 }
 
-.about-closing-cta__inner > p:not(.section-label) {
+.about-closing-cta__inner>p:not(.section-label) {
   max-width: 700px;
   margin: 0 auto 30px;
   color: var(--color-gray);
@@ -2474,7 +2474,7 @@ cite::before {
     font-size: clamp(2.5rem, 11.5vw, 3.4rem);
   }
 
-  .about-closing-cta__inner > p:not(.section-label) {
+  .about-closing-cta__inner>p:not(.section-label) {
     font-size: 1rem;
   }
 
