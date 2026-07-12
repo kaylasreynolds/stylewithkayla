@@ -2120,7 +2120,8 @@ cite::before {
   position: relative;
   width: 100%;
   max-width: 520px;
-  min-height: 650px;
+  aspect-ratio: 4 / 5;
+  min-height: 0;
 }
 
 .about-collage__item {
@@ -2339,7 +2340,7 @@ cite::before {
 
   .about-collage {
     width: min(100%, 680px);
-    min-height: 680px;
+    min-height: 0;
   }
 
   .about-why__inner {
@@ -2376,7 +2377,7 @@ cite::before {
   }
 
   .about-collage {
-    min-height: 540px;
+    min-height: 0;
   }
 
   .about-collage__item {
