@@ -2746,10 +2746,10 @@ cite::before {
 }
 
 .service-option-icon img {
-  width: 100%;
-  height: 100%;
+  width: 88%;
+  height: 88%;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .service-option-icon svg {
