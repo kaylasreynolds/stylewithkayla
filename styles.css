@@ -2433,6 +2433,62 @@ cite::before {
 }
 
 
+/* About page closing CTA */
+.about-closing-cta {
+  padding: clamp(76px, 8vw, 112px) 0;
+  background: var(--color-pale-rose);
+  text-align: center;
+}
+
+.about-closing-cta__inner {
+  max-width: 920px;
+}
+
+.about-closing-cta .section-label {
+  margin-bottom: 22px;
+}
+
+.about-closing-cta h2 {
+  margin: 0 auto 24px;
+  color: var(--color-charcoal);
+  font-family: var(--font-heading);
+  font-size: clamp(2.8rem, 4.7vw, 4.4rem);
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+.about-closing-cta__inner > p:not(.section-label) {
+  max-width: 700px;
+  margin: 0 auto 30px;
+  color: var(--color-gray);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.about-closing-cta .button {
+  padding-inline: 34px;
+}
+
+@media (max-width: 700px) {
+  .about-closing-cta {
+    padding: 68px 0 72px;
+  }
+
+  .about-closing-cta h2 {
+    font-size: clamp(2.5rem, 11.5vw, 3.4rem);
+  }
+
+  .about-closing-cta__inner > p:not(.section-label) {
+    font-size: 1rem;
+  }
+
+  .about-closing-cta .button {
+    width: 100%;
+    padding-inline: 20px;
+  }
+}
+
+
 /* Store Events page */
 .events-page-hero {
   padding: 110px 0;
