@@ -2141,8 +2141,8 @@ cite::before {
 
 .about-collage__item--main {
   inset: 0 auto auto 0;
-  width: 68%;
-  height: 66%;
+  width: 76%;
+  height: 72%;
   z-index: 1;
 }
 
@@ -2385,8 +2385,8 @@ cite::before {
   }
 
   .about-collage__item--main {
-    width: 70%;
-    height: 64%;
+    width: 76%;
+    height: 70%;
   }
 
   .about-collage__item--sewing,
