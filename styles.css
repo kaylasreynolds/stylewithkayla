@@ -3022,11 +3022,23 @@ body.service-dialog-open {
     border-radius: 16px;
   }
 
-  .service-dialog__close {
+  .service-dialog {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .service-dialog__panel > form {
     position: sticky;
+    z-index: 3;
+    top: 0;
+    height: 0;
+  }
+
+  .service-dialog__close {
+    position: relative;
     top: 12px;
     float: right;
-    margin: 12px 12px -46px 0;
+    margin: 0 12px 0 0;
   }
 
   .service-dialog__primary,
