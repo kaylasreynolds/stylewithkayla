@@ -2746,8 +2746,8 @@ cite::before {
 }
 
 .service-option-icon img {
-  width: 88%;
-  height: 88%;
+  width: 82%;
+  height: 82%;
   display: block;
   object-fit: contain;
 }
