@@ -3148,3 +3148,74 @@ body.service-dialog-open {
     transition: none;
   }
 }
+
+
+/* Event and occasion styling option cards */
+.occasion-options .service-option-card {
+  min-height: 520px;
+  align-items: stretch;
+  padding: 44px 40px 38px;
+  text-align: center;
+}
+
+.occasion-options .service-duration {
+  align-self: flex-start;
+  margin: 0 0 28px;
+  padding: 11px 18px;
+  font-size: .82rem;
+  letter-spacing: .06em;
+}
+
+.occasion-options .service-option-card h3 {
+  margin-bottom: 24px;
+  font-size: clamp(1.7rem, 2vw, 2.05rem);
+  white-space: nowrap;
+}
+
+.occasion-options .service-option-card .body-copy {
+  min-height: 5.1em;
+  max-width: 340px;
+  margin: 0 auto 28px;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.occasion-options .service-option-card ul {
+  width: fit-content;
+  margin: 0 auto 32px;
+  padding-left: 1.3em;
+  color: var(--color-gray);
+  font-size: 1rem;
+  line-height: 1.9;
+  text-align: left;
+}
+
+.occasion-options .service-option-card .text-link {
+  align-self: center;
+  margin-top: auto;
+  color: var(--color-rose-hover);
+}
+
+@media (max-width: 980px) {
+  .occasion-options .service-option-card {
+    min-height: 0;
+  }
+
+  .occasion-options .service-option-card .body-copy {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .occasion-options .service-option-card {
+    padding: 32px 24px;
+  }
+
+  .occasion-options .service-option-card h3 {
+    white-space: normal;
+  }
+
+  .occasion-options .service-option-card ul {
+    margin-bottom: 28px;
+  }
+}
