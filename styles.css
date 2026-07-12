@@ -2127,9 +2127,9 @@ cite::before {
   position: absolute;
   margin: 0;
   overflow: hidden;
-  border: 3px solid rgba(255, 255, 255, .9);
+  border: 4px solid rgba(255, 255, 255, .96);
   border-radius: 16px;
-  box-shadow: 0 14px 32px rgba(31, 31, 31, .09);
+  box-shadow: 0 16px 34px rgba(31, 31, 31, .12);
 }
 
 .about-collage__item img {
@@ -2151,35 +2151,39 @@ cite::before {
 }
 
 .about-collage__item--sewing {
-  top: 12%;
-  right: 2%;
+  top: 10%;
+  right: -2%;
   width: 38%;
   height: 30%;
   z-index: 3;
+  transform: rotate(1.25deg);
 }
 
 .about-collage__item--cats {
-  top: 44%;
-  right: 0;
+  top: 42%;
+  right: -4%;
   width: 38%;
   height: 29%;
   z-index: 4;
+  transform: rotate(-1deg);
 }
 
 .about-collage__item--escape {
-  bottom: 0;
-  left: 0;
+  bottom: -1%;
+  left: -2%;
   width: 47%;
   height: 35%;
   z-index: 3;
+  transform: rotate(-1.25deg);
 }
 
 .about-collage__item--reading {
-  right: 10%;
-  bottom: 1%;
+  right: 7%;
+  bottom: -2%;
   width: 42%;
   height: 28%;
   z-index: 5;
+  transform: rotate(1.5deg);
 }
 
 .about-collage__placeholder {
