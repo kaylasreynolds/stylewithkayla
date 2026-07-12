@@ -2448,7 +2448,7 @@ cite::before {
   margin: 0 auto 0px;
   color: var(--color-charcoal);
   font-family: var(--font-heading);
-  font-size: clamp(2.8rem, 4.7vw, 4.4rem);
+  font-size: clamp(2.2rem, 3.4vw, 3.2rem);
   font-weight: 500;
   line-height: 1.05;
 }
@@ -2471,7 +2471,7 @@ cite::before {
   }
 
   .about-closing-cta h2 {
-    font-size: clamp(2.5rem, 11.5vw, 3.4rem);
+    font-size: clamp(2rem, 9vw, 2.7rem);
   }
 
   .about-closing-cta__inner>p:not(.section-label) {
