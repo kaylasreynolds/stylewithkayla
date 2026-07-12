@@ -1384,83 +1384,86 @@ cite::before {
   margin-top: auto;
 }
 
-.styling-support {
-  background: var(--color-ivory);
-}
 
-.styling-support__inner {
-  display: grid;
-  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
-  gap: 76px;
-  align-items: center;
-}
-
-.styling-support__intro .section-heading {
-  font-size: clamp(2.7rem, 4.2vw, 3.8rem);
-}
-
-.styling-checklist {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.styling-checklist li {
-  position: relative;
-  min-height: 74px;
-  padding: 20px 18px 18px 52px;
-  border: 1px solid var(--color-divider);
-  border-radius: 10px;
-  background: var(--color-white);
-  color: var(--color-charcoal);
-  line-height: 1.45;
-}
-
-.styling-checklist li::before {
-  content: "✓";
-  position: absolute;
-  left: 18px;
-  top: 18px;
-  color: var(--color-rose-hover);
-  font-size: 1.2rem;
-  font-weight: 700;
-}
 
 .service-process {
   background: var(--color-white);
   border-top: 1px solid var(--color-divider);
 }
 
+.service-process .section-intro {
+  max-width: 900px;
+  margin-bottom: 72px;
+}
+
+.service-process .section-intro .section-heading {
+  font-size: clamp(2.9rem, 4.6vw, 4.6rem);
+}
+
 .service-process-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
 }
 
 .service-process-grid article {
-  padding-top: 24px;
-  border-top: 2px solid var(--color-rose);
+  position: relative;
+  padding: 38px 24px 0;
+  border-top: 1px solid var(--color-rose);
+  text-align: center;
+}
+
+.service-process-grid article + article {
+  border-left: 1px solid var(--color-divider);
 }
 
 .service-process-grid span {
-  display: block;
-  margin-bottom: 18px;
-  color: var(--color-rose);
-  font-size: .82rem;
-  font-weight: 700;
-  letter-spacing: .14em;
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--color-rose);
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-rose-hover);
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  transform: translateX(-50%);
+}
+
+.service-process-icon {
+  width: 82px;
+  height: 82px;
+  display: grid;
+  place-items: center;
+  margin: 8px auto 22px;
+  color: var(--color-charcoal);
+}
+
+.service-process-icon svg {
+  width: 74px;
+  height: 74px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .service-process-grid h3 {
-  font-size: 1.8rem;
+  min-height: 2.2em;
+  margin-bottom: 14px;
+  font-size: 1.75rem;
+  font-weight: 500;
 }
 
 .service-process-grid .body-copy {
-  margin-bottom: 0;
-  font-size: 1rem;
+  margin: 0;
+  font-size: .96rem;
+  line-height: 1.55;
 }
 
 .service-page-cta {
@@ -1474,7 +1477,28 @@ cite::before {
 }
 
 .service-page-cta .section-heading {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  font-size: clamp(3rem, 5vw, 4.8rem);
+  font-weight: 500;
+}
+
+.service-page-cta .button {
+  min-width: min(100%, 420px);
+}
+
+.service-page-cta__note {
+  margin: 14px 0 0;
+  color: var(--color-gray);
+  font-size: .78rem;
+  line-height: 1.5;
+}
+
+.service-page-cta__help {
+  display: inline-block;
+  margin-top: 10px;
+  color: var(--color-rose-hover);
+  font-size: .9rem;
+  text-underline-offset: 4px;
 }
 
 .service-page-cta .body-copy {
@@ -1483,8 +1507,7 @@ cite::before {
 
 @media (max-width: 980px) {
 
-  .service-page-hero__inner,
-  .styling-support__inner {
+  .service-page-hero__inner {
     grid-template-columns: 1fr;
   }
 
@@ -1526,13 +1549,27 @@ cite::before {
     padding: 26px 22px;
   }
 
-  .styling-support__inner {
-    gap: 38px;
+  .service-process .section-intro {
+    margin-bottom: 54px;
   }
 
-  .styling-checklist,
   .service-process-grid {
     grid-template-columns: 1fr;
+    gap: 52px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .service-process-grid article {
+    padding: 38px 8px 0;
+  }
+
+  .service-process-grid article + article {
+    border-left: 0;
+  }
+
+  .service-process-grid h3 {
+    min-height: 0;
   }
 
   .service-page-cta {
@@ -2655,6 +2692,13 @@ cite::before {
   margin: 18px auto 0;
   color: var(--color-charcoal);
   font-size: 1rem;
+}
+
+.appointment-options__complimentary {
+  margin: 8px auto 0;
+  color: var(--color-rose-hover);
+  font-size: .92rem;
+  font-weight: 600;
 }
 
 .section-divider {
