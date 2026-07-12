@@ -52,24 +52,17 @@ serviceDialogTriggers.forEach((trigger) => {
   trigger.addEventListener('click', () => {
     const dialog = document.getElementById(trigger.dataset.dialogOpen);
 
-    if (!dialog) return;
+    if (!dialog || typeof dialog.showModal !== 'function' || dialog.open) return;
 
     lastServiceDialogTrigger = trigger;
-    document.body.classList.add('service-dialog-open');
     dialog.showModal();
+    document.body.classList.add('service-dialog-open');
   });
 });
 
 document.querySelectorAll('.service-dialog').forEach((dialog) => {
   dialog.addEventListener('click', (event) => {
-    const bounds = dialog.getBoundingClientRect();
-    const clickedBackdrop =
-      event.clientX < bounds.left ||
-      event.clientX > bounds.right ||
-      event.clientY < bounds.top ||
-      event.clientY > bounds.bottom;
-
-    if (clickedBackdrop) dialog.close();
+    if (event.target === dialog) dialog.close();
   });
 
   dialog.addEventListener('close', () => {
