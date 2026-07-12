@@ -2740,8 +2740,16 @@ cite::before {
   display: grid;
   place-items: center;
   margin: 0 auto 26px;
+  overflow: hidden;
   border-radius: 50%;
   background: var(--color-pale-rose);
+}
+
+.service-option-icon img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
 }
 
 .service-option-icon svg {
