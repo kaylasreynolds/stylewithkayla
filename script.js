@@ -42,3 +42,42 @@ if (testimonialSlider) {
   });
 }
 
+
+
+// Service detail dialogs
+const serviceDialogTriggers = document.querySelectorAll('[data-dialog-open]');
+let lastServiceDialogTrigger = null;
+
+serviceDialogTriggers.forEach((trigger) => {
+  trigger.addEventListener('click', () => {
+    const dialog = document.getElementById(trigger.dataset.dialogOpen);
+
+    if (!dialog) return;
+
+    lastServiceDialogTrigger = trigger;
+    document.body.classList.add('service-dialog-open');
+    dialog.showModal();
+  });
+});
+
+document.querySelectorAll('.service-dialog').forEach((dialog) => {
+  dialog.addEventListener('click', (event) => {
+    const bounds = dialog.getBoundingClientRect();
+    const clickedBackdrop =
+      event.clientX < bounds.left ||
+      event.clientX > bounds.right ||
+      event.clientY < bounds.top ||
+      event.clientY > bounds.bottom;
+
+    if (clickedBackdrop) dialog.close();
+  });
+
+  dialog.addEventListener('close', () => {
+    document.body.classList.remove('service-dialog-open');
+
+    if (lastServiceDialogTrigger) {
+      lastServiceDialogTrigger.focus();
+      lastServiceDialogTrigger = null;
+    }
+  });
+});
