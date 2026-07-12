@@ -60,57 +60,191 @@
     <section class="appointment-options section" aria-labelledby="appointment-options-title">
       <div class="container">
         <div class="section-intro appointment-options__intro">
-          <p class="section-label">Choose Your Appointment</p>
-          <h2 class="section-heading" id="appointment-options-title">The right amount of support for what you need.</h2>
-          <p class="body-copy">Not sure which option fits? Tell me what you’re shopping for and I’ll help you choose.
-          </p>
+          <h2 class="section-heading" id="appointment-options-title">Women’s Styling Services</h2>
+          <span class="section-divider" aria-hidden="true"></span>
+          <p class="body-copy">Personalized styling support for your wardrobe, your lifestyle, and the moments that matter.</p>
         </div>
 
         <div class="service-options-grid">
           <article class="service-option-card">
-            <p class="service-duration">About 45 minutes</p>
-            <h3>Event Styling</h3>
-            <p class="body-copy">Find a polished look for a wedding, party, work event, vacation, or other special
-              occasion.</p>
-            <ul>
-              <li>Pre-selected outfit options</li>
-              <li>Fit and styling guidance</li>
-              <li>Shoes and accessories</li>
-            </ul>
-            <a class="text-link" href="mailto:kayla.reynolds@macys.com?subject=Event%20Styling%20Appointment">Book Event
-              Styling →</a>
-          </article>
-
-          <article class="service-option-card service-option-card--featured">
-            <p class="service-duration">About 90 minutes</p>
-            <h3>Seasonal Style Update</h3>
-            <p class="body-copy">Refresh your wardrobe with versatile pieces and outfits that work for your current
-              season of life.</p>
-            <ul>
-              <li>Everyday outfit building</li>
-              <li>Seasonal wardrobe gaps</li>
-              <li>Mix-and-match ideas</li>
-            </ul>
-            <a class="text-link" href="mailto:kayla.reynolds@macys.com?subject=Seasonal%20Style%20Update">Book a Style
-              Update →</a>
+            <div class="service-option-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" focusable="false"><path d="M24 10h16l2 10 8 8-9 8 6 18H17l6-18-9-8 8-8 2-10Zm0 0c1 6 15 6 16 0M23 36h18"/></svg>
+            </div>
+            <h3>Event &amp; Occasion Styling</h3>
+            <p class="body-copy">Personalized support finding a complete look that fits your event and feels like you.</p>
+            <p class="service-option-meta">45–60 minutes <span aria-hidden="true">•</span> Complimentary</p>
+            <button class="service-option-card__trigger" type="button" data-dialog-open="event-styling-dialog">
+              More Details <span aria-hidden="true">→</span>
+            </button>
           </article>
 
           <article class="service-option-card">
-            <p class="service-duration">About 2.5–3 hours</p>
-            <h3>Full Wardrobe Reset</h3>
-            <p class="body-copy">Build a clearer, more complete wardrobe when your size, lifestyle, career, or personal
-              style has changed.</p>
-            <ul>
-              <li>Complete outfit planning</li>
-              <li>Fit, color, and proportion help</li>
-              <li>A practical wardrobe foundation</li>
-            </ul>
-            <a class="text-link" href="mailto:kayla.reynolds@macys.com?subject=Full%20Wardrobe%20Reset">Book a Full
-              Reset →</a>
+            <div class="service-option-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" focusable="false"><path d="M32 14c0-5 8-5 8 1 0 5-8 6-8 12M32 27 9 43c-3 2-1 7 3 7h40c4 0 6-5 3-7L32 27Z"/></svg>
+            </div>
+            <h3>Everyday Styling</h3>
+            <p class="body-copy">Personalized support finding pieces that fit your style, lifestyle, and everyday wardrobe needs.</p>
+            <p class="service-option-meta">60–90 minutes <span aria-hidden="true">•</span> Complimentary</p>
+            <button class="service-option-card__trigger" type="button" data-dialog-open="everyday-styling-dialog">
+              More Details <span aria-hidden="true">→</span>
+            </button>
+          </article>
+
+          <article class="service-option-card">
+            <div class="service-option-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" focusable="false"><path d="M8 12h48v42H8zM24 12v42M40 12v42M16 22c0-4 6-4 6 0 0 3-6 4-6 8l-5 4h16l-5-4M32 22c0-4 6-4 6 0 0 3-6 4-6 8l-5 4h16l-5-4M48 22c0-4 6-4 6 0 0 3-6 4-6 8l-5 4h12"/></svg>
+            </div>
+            <h3>Full Closet Refresh</h3>
+            <p class="body-copy">Update your wardrobe with coordinated outfits you can easily mix, match, and rewear.</p>
+            <p class="service-option-meta">2.5–3 hours <span aria-hidden="true">•</span> Complimentary</p>
+            <button class="service-option-card__trigger" type="button" data-dialog-open="closet-refresh-dialog">
+              More Details <span aria-hidden="true">→</span>
+            </button>
           </article>
         </div>
       </div>
     </section>
+
+    <dialog class="service-dialog" id="event-styling-dialog" aria-labelledby="event-styling-dialog-title">
+      <div class="service-dialog__panel">
+        <form method="dialog">
+          <button class="service-dialog__close" type="submit" aria-label="Close Event and Occasion Styling details">×</button>
+        </form>
+        <div class="service-dialog__grid">
+          <div class="service-dialog__primary">
+            <h2 id="event-styling-dialog-title">Event &amp; Occasion Styling</h2>
+            <span class="service-dialog__accent" aria-hidden="true"></span>
+            <p class="service-dialog__intro">Perfect for when you have an upcoming event and want help pulling the entire look together.</p>
+            <h3>Complimentary Event Styling Features</h3>
+            <ul class="service-dialog__list">
+              <li>45–60-minute styling service</li>
+              <li>Pre-selected pieces based on your event and personal preferences</li>
+              <li>Guidance navigating dress codes or event requirements, when needed</li>
+              <li>One-on-one support finding your best fit, silhouette, and size</li>
+              <li>Complete outfit styling, including accessories, shoes, and beauty</li>
+              <li>Option to include a bra fitting</li>
+            </ul>
+            <div class="service-dialog__meta">
+              <p><strong>Cost:</strong> Complimentary</p>
+              <p><strong>Time:</strong> 45–60 minutes</p>
+            </div>
+            <a class="button button--primary service-dialog__schedule" href="mailto:kayla.reynolds@macys.com?subject=Event%20and%20Occasion%20Styling">Schedule Event Styling</a>
+          </div>
+          <div class="service-dialog__secondary">
+            <h3>Every Complimentary Styling Appointment Includes</h3>
+            <ul class="service-dialog__list">
+              <li>One-on-one styling</li>
+              <li>Pre-appointment planning</li>
+              <li>A private fitting room</li>
+              <li>Flexibility to add other needs or preferences</li>
+              <li>Clear communication throughout the experience</li>
+              <li>Honest, supportive guidance</li>
+              <li>A welcoming, judgment-free space</li>
+            </ul>
+            <aside class="service-dialog__callout">
+              <h3>Attending with a partner, friend, or group?</h3>
+              <p>Schedule a custom appointment so the experience can be tailored around everyone’s needs.</p>
+              <a class="button button--secondary" href="mailto:kayla.reynolds@macys.com?subject=Custom%20Event%20Styling%20Appointment">Contact Me</a>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="service-dialog" id="everyday-styling-dialog" aria-labelledby="everyday-styling-dialog-title">
+      <div class="service-dialog__panel">
+        <form method="dialog">
+          <button class="service-dialog__close" type="submit" aria-label="Close Everyday Styling details">×</button>
+        </form>
+        <div class="service-dialog__grid">
+          <div class="service-dialog__primary">
+            <h2 id="everyday-styling-dialog-title">Everyday Styling</h2>
+            <span class="service-dialog__accent" aria-hidden="true"></span>
+            <p class="service-dialog__intro">Perfect for when you want help finding new pieces, creating outfits, or updating a specific part of your wardrobe.</p>
+            <h3>Complimentary Everyday Styling Features</h3>
+            <ul class="service-dialog__list">
+              <li>60–90-minute styling service</li>
+              <li>Pre-selected pieces based on your current needs and personal preferences</li>
+              <li>Support finding the right fit, silhouette, and size</li>
+              <li>Outfit ideas using new pieces together</li>
+              <li>Help filling specific gaps in your wardrobe</li>
+              <li>Complete styling with accessories, shoes, and beauty</li>
+              <li>Option to include a bra fitting</li>
+            </ul>
+            <div class="service-dialog__meta">
+              <p><strong>Cost:</strong> Complimentary</p>
+              <p><strong>Time:</strong> 60–90 minutes</p>
+            </div>
+            <a class="button button--primary service-dialog__schedule" href="mailto:kayla.reynolds@macys.com?subject=Everyday%20Styling">Schedule Everyday Styling</a>
+          </div>
+          <div class="service-dialog__secondary">
+            <h3>Every Complimentary Styling Appointment Includes</h3>
+            <ul class="service-dialog__list">
+              <li>One-on-one styling</li>
+              <li>Pre-appointment planning</li>
+              <li>A private fitting room</li>
+              <li>Flexibility to add other needs or preferences</li>
+              <li>Clear communication throughout the experience</li>
+              <li>Honest, supportive guidance</li>
+              <li>A welcoming, judgment-free space</li>
+            </ul>
+            <aside class="service-dialog__callout">
+              <h3>Shopping for several different needs?</h3>
+              <p>Contact me to create a custom appointment based on what you’re looking for.</p>
+              <a class="button button--secondary" href="mailto:kayla.reynolds@macys.com?subject=Custom%20Everyday%20Styling%20Appointment">Contact Me</a>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="service-dialog" id="closet-refresh-dialog" aria-labelledby="closet-refresh-dialog-title">
+      <div class="service-dialog__panel">
+        <form method="dialog">
+          <button class="service-dialog__close" type="submit" aria-label="Close Full Closet Refresh details">×</button>
+        </form>
+        <div class="service-dialog__grid">
+          <div class="service-dialog__primary">
+            <h2 id="closet-refresh-dialog-title">Full Closet Refresh</h2>
+            <span class="service-dialog__accent" aria-hidden="true"></span>
+            <p class="service-dialog__intro">Perfect for when you’re ready to make a larger wardrobe update and want coordinated pieces that create more outfit possibilities.</p>
+            <h3>Complimentary Full Closet Refresh Features</h3>
+            <ul class="service-dialog__list">
+              <li>2.5–3-hour styling service</li>
+              <li>In-depth pre-appointment planning</li>
+              <li>Pre-selected pieces across multiple clothing categories</li>
+              <li>Multiple complete outfits designed to work together</li>
+              <li>Help identifying and filling key wardrobe gaps</li>
+              <li>Guidance creating a more versatile, coordinated wardrobe</li>
+              <li>Styling across clothing, shoes, accessories, and beauty</li>
+              <li>Option to include a bra fitting</li>
+            </ul>
+            <div class="service-dialog__meta">
+              <p><strong>Cost:</strong> Complimentary</p>
+              <p><strong>Time:</strong> 2.5–3 hours</p>
+            </div>
+            <a class="button button--primary service-dialog__schedule" href="mailto:kayla.reynolds@macys.com?subject=Full%20Closet%20Refresh">Schedule a Full Closet Refresh</a>
+          </div>
+          <div class="service-dialog__secondary">
+            <h3>Every Complimentary Styling Appointment Includes</h3>
+            <ul class="service-dialog__list">
+              <li>One-on-one styling</li>
+              <li>Pre-appointment planning</li>
+              <li>A private fitting room</li>
+              <li>Flexibility to add other needs or preferences</li>
+              <li>Clear communication throughout the experience</li>
+              <li>Honest, supportive guidance</li>
+              <li>A welcoming, judgment-free space</li>
+            </ul>
+            <aside class="service-dialog__callout">
+              <h3>Updating more than just a few pieces?</h3>
+              <p>Contact me so we can tailor the experience and reserve the right amount of time.</p>
+              <a class="button button--secondary" href="mailto:kayla.reynolds@macys.com?subject=Custom%20Closet%20Refresh%20Appointment">Contact Me</a>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </dialog>
 
     <section class="styling-support section" aria-labelledby="styling-support-title">
       <div class="container styling-support__inner">
@@ -235,6 +369,7 @@
       <span>All Rights Reserved</span>
     </div>
   </footer>
+  <script src="script.js"></script>
 </body>
 
 </html>
