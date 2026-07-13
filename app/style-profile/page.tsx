@@ -83,8 +83,8 @@ export default function StyleProfilePage() {
           </div>}
 
           {step === 3 && <div className="profile-step">
-            <p className="small-label">PART THREE OF FOUR</p><h2>Sizes and silhouettes</h2><p className="profile-step-intro">Your usual sizes are a starting point. Choose “Not sure” whenever that is the most honest answer.</p>
-            <div className="size-grid">{[["top","Top size"],["pant","Pant size"],["dress","Dress size"],["shoe","Shoe size"]].map(([key,label]) => <label key={key}><span>{label} *</span><input value={sizes[key as keyof typeof sizes]} onChange={(e) => setSizes({...sizes,[key]:e.target.value})} placeholder="Enter size or Not sure" /></label>)}</div>
+            <p className="small-label">PART THREE OF FOUR</p><h2>Sizes and silhouettes</h2><p className="profile-step-intro">Provide your best estimate for a starting point and we&apos;ll narrow it down from there.</p>
+            <div className="size-grid">{[["top","Top size"],["pant","Pant size"],["dress","Dress size"],["shoe","Shoe size"]].map(([key,label]) => <label key={key}><span>{label} *</span><input value={sizes[key as keyof typeof sizes]} onChange={(e) => setSizes({...sizes,[key]:e.target.value})} placeholder="Enter Size(s)" /></label>)}</div>
             <Question title="How do you usually like your tops to fit?"><div className="answer-chips">{["More fitted", "Relaxed", "Oversized", "No preference"].map((option) => <button key={option}>{option}</button>)}</div></Question>
             <Question title="Which pant cuts do you prefer?" hint="Choose all that apply"><div className="answer-chips">{["Skinny", "Straight", "Bootcut", "Boyfriend / Girlfriend", "Wide Leg", "Open to trying different cuts"].map((option) => <button key={option}>{option}</button>)}</div></Question>
             <Question title="What bra size do you usually wear, if known?" optional><input value={sizes.bra} onChange={(e) => setSizes({...sizes,bra:e.target.value})} /></Question>
