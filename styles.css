@@ -3204,6 +3204,60 @@ body.service-dialog-open {
   color: var(--color-rose-hover);
 }
 
+.occasion-options .service-option-icon {
+  flex: 0 0 auto;
+  margin-bottom: 22px;
+}
+
+.occasion-options .service-duration {
+  align-self: center;
+}
+
+.event-booking-path {
+  margin-top: 54px;
+  padding: 48px 36px;
+  scroll-margin-top: 24px;
+  border-radius: 22px;
+  background: var(--color-blush);
+  text-align: center;
+}
+
+.event-booking-path .section-label {
+  margin-bottom: 14px;
+}
+
+.event-booking-path h3 {
+  margin-bottom: 12px;
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.event-booking-path > p:not(.section-label) {
+  max-width: 680px;
+  margin: 0 auto 24px;
+  color: var(--color-charcoal);
+  line-height: 1.6;
+}
+
+.event-booking-path__actions {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
+
+.event-booking-path__actions .button {
+  min-width: min(100%, 310px);
+}
+
+.event-booking-path__group {
+  display: inline-block;
+  margin-top: 20px;
+  color: var(--color-rose-hover);
+  font-weight: 600;
+  text-underline-offset: 4px;
+}
+
 @media (max-width: 980px) {
   .occasion-options .service-option-card {
     min-height: 0;
@@ -3211,6 +3265,23 @@ body.service-dialog-open {
 
   .occasion-options .service-option-card .body-copy {
     min-height: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .event-booking-path {
+    margin-top: 38px;
+    padding: 38px 20px;
+    border-radius: 18px;
+  }
+
+  .event-booking-path__actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .event-booking-path__actions .button {
+    width: 100%;
   }
 }
 
