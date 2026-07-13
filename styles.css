@@ -1646,6 +1646,11 @@ cite::before {
   color: var(--color-rose-hover);
 }
 
+.site-footer a.footer-social-icon {
+  display: grid;
+  place-items: center;
+}
+
 .footer-social-icon img {
   width: 19px;
   height: 19px;
