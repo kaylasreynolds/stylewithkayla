@@ -107,8 +107,8 @@ textarea { resize:vertical; }
 .measurement-inputs { display:grid; grid-template-columns:70px 70px; gap:14px; margin-top:10px; }
 .measurement-inputs label { display:block; }
 .measurement-inputs input { width:70px; height:42px; min-width:0; padding:8px; }
-.age-group > div { display:flex; flex-wrap:nowrap; gap:8px; margin-top:10px; }
-.age-group button { min-width:0; padding:12px 10px; white-space:nowrap; }
+.age-group > div { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:10px; }
+.age-group button { width:100%; min-width:0; min-height:52px; padding:9px 7px; line-height:1.25; white-space:normal; overflow-wrap:anywhere; }
 .privacy-check { grid-template-columns:20px 1fr !important; display:grid !important; align-items:start; padding:14px; background:var(--soft); border-radius:5px; }
 .privacy-check input { width:17px; height:17px; margin:1px 0 0; accent-color:var(--rose); }
 .privacy-check span { font-weight:400 !important; line-height:1.55; }
