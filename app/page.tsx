@@ -142,6 +142,7 @@ export default function Home() {
           </div>
           <button className="button secondary-button" onClick={() => { setSubmitted(false); setStep(1); }}>Return to booking preview</button>
         </main>
+        <Footer />
       </div>
     );
   }
@@ -222,6 +223,7 @@ export default function Home() {
                   <div className="time-list">
                     {slots.map((slot) => <button key={slot} className={selectedTime === slot ? "selected" : ""} onClick={() => setSelectedTime(slot)}>{selectedTime === slot && <span>✓</span>}{slot}</button>)}
                   </div>
+                  <p className="time-contact">Don&apos;t see a time that works? <a href="mailto:kayla.reynolds@macys.com?subject=Appointment%20Time%20Request">Send me a message.</a></p>
                 </div>
               </div>
             </div>
@@ -232,12 +234,12 @@ export default function Home() {
               <p className="small-label">STEP THREE</p>
               <h2>Your details</h2>
               <div className="form-grid">
+                {selectedService.needsAge && <fieldset className="full choice-field routing-question"><legend>Which age range applies to you? *</legend><p>This helps me send the right Style Profile after your appointment is confirmed.</p><div>{["Under 40", "40 or older", "Prefer not to answer"].map((value) => <button type="button" className={form.age === value ? "selected" : ""} key={value} onClick={() => updateField("age", value)}>{value}</button>)}</div></fieldset>}
                 <label className="full"><span>Full name *</span><input value={form.name} onChange={(e) => updateField("name", e.target.value)} placeholder="First and last name" /></label>
                 <label><span>Email address *</span><input type="email" value={form.email} onChange={(e) => updateField("email", e.target.value)} placeholder="you@example.com" /></label>
                 <label><span>Phone number *</span><input type="tel" value={form.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="(208) 555-0123" /></label>
                 <fieldset className="full choice-field"><legend>Have we worked together before? *</legend><div>{["Yes", "No"].map((value) => <button type="button" className={form.returning === value ? "selected" : ""} key={value} onClick={() => updateField("returning", value)}>{value}</button>)}</div></fieldset>
                 {form.returning === "No" && <label className="full"><span>How did you hear about me?</span><select value={form.heard} onChange={(e) => updateField("heard", e.target.value)}><option value="">Select one</option><option>Instagram</option><option>Facebook</option><option>In-store</option><option>Referral</option><option>{"Macy's event"}</option><option>Other</option></select></label>}
-                {selectedService.needsAge && <fieldset className="full choice-field"><legend>Which age range applies to you? *</legend><div>{["Under 40", "40 or older", "Prefer not to answer"].map((value) => <button type="button" className={form.age === value ? "selected" : ""} key={value} onClick={() => updateField("age", value)}>{value}</button>)}</div></fieldset>}
                 {selectedService.isEvent && <><label><span>What type of event? *</span><select value={form.eventType} onChange={(e) => updateField("eventType", e.target.value)}><option value="">Select one</option><option>Wedding Guest</option><option>Wedding Party</option><option>Business Event</option><option>Gala or Formal Event</option><option>School Dance</option><option>Other</option></select></label><label><span>When is the event? *</span><input type="date" value={form.eventDate} onChange={(e) => updateField("eventDate", e.target.value)} /></label></>}
                 <label className="full"><span>Anything helpful for me to know?</span><textarea value={form.notes} onChange={(e) => updateField("notes", e.target.value)} placeholder="Optional" rows={3} /></label>
                 <label className="privacy-check full"><input type="checkbox" checked={form.privacy} onChange={(e) => updateField("privacy", e.target.checked)} /><span>I understand my information will be used to manage and prepare for my appointment. <a href="#privacy">Privacy details</a></span></label>
@@ -265,21 +267,51 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <footer><p>Style With Kayla · Macy&apos;s Boise Personal Stylist</p><p id="privacy">Complimentary personal styling · Appointment requests require confirmation</p></footer>
+      <Footer />
     </div>
   );
 }
 
 function Announcement() {
-  return <div className="announcement">Complimentary personal styling at Macy&apos;s Boise</div>;
+  return <div className="announcement-bar">Complimentary Personal Styling Appointments | 20% Off For First Time Clients*</div>;
 }
 
 function Header() {
   return (
-    <header className="site-header">
-      <div className="brand"><span>STYLE WITH KAYLA</span><small>PERSONAL STYLIST</small></div>
-      <nav aria-label="Main navigation"><a href="#services">Services</a><a href="#events">Events</a><a href="#guides">Guides</a><a href="#faq">FAQ</a><a href="#about">About Me</a><a href="#contact">Contact</a><a className="header-cta" href="#booking">Book an Appointment</a></nav>
+    <header className="site-header" aria-label="Site header">
+      <div className="container header-inner">
+        <a className="site-logo" href="#top" aria-label="Style with Kayla home"><img src="/images/stylewithkayla_logo.png" alt="Style with Kayla" /></a>
+        <nav className="site-nav" aria-label="Main navigation"><a href="#top">Home</a><a href="#services">Services</a><a href="#events">Events</a><a href="#about">About Me</a><a href="#contact">Contact</a></nav>
+        <a className="button header-cta" href="mailto:kayla.reynolds@macys.com?subject=Free%20Styling%20Appointment">BOOK APPOINTMENT</a>
+      </div>
     </header>
+  );
+}
+
+function Footer() {
+  const socialIcons = ["instagram", "facebook", "pinterest", "linkedin"];
+  return (
+    <footer className="site-footer" id="contact">
+      <div className="container footer-inner">
+        <div className="footer-column footer-brand"><a className="footer-logo" href="#top" aria-label="Style with Kayla home"><img src="/images/stylewithkayla_logo.png" alt="Style with Kayla" /></a></div>
+        <nav className="footer-column footer-links" aria-label="Footer quick links">
+          <p className="footer-kicker">Quick Links</p><a href="#services">Services</a><a href="#events">Events</a><span className="footer-link--inactive" aria-disabled="true">Guides</span><span className="footer-link--inactive" aria-disabled="true">FAQ</span><a href="#about">About Me</a><a href="#contact">Contact</a>
+        </nav>
+        <div className="footer-column footer-contact">
+          <p className="footer-kicker">Let&apos;s Connect</p>
+          <div className="footer-contact-item"><span aria-hidden="true"><img src="/images/phone.png" alt="" /></span><a href="tel:+12088596427">208-859-6427</a></div>
+          <div className="footer-contact-item"><span aria-hidden="true"><img src="/images/email.png" alt="" /></span><a href="mailto:kayla.reynolds@macys.com">kayla.reynolds@macys.com</a></div>
+          <div className="footer-contact-item"><span aria-hidden="true"><img src="/images/location.png" alt="" /></span><p>Macy&apos;s Boise Towne Square<br />370 N. Milwaukee St.<br />Boise, ID 83704</p></div>
+        </div>
+        <div className="footer-column footer-social">
+          <p className="footer-kicker">Follow Along</p>
+          <div className="footer-social-links" aria-label="Social profiles">{socialIcons.map((icon) => <span className="footer-social-icon" role="img" aria-label={icon[0].toUpperCase() + icon.slice(1)} key={icon}><img src={`/images/${icon}.png`} alt="" aria-hidden="true" /></span>)}</div>
+          <a className="button button--primary" href="mailto:kayla.reynolds@macys.com?subject=Free%20Styling%20Appointment">Book Appointment</a>
+        </div>
+      </div>
+      <div className="container footer-bottom"><span>&copy; 2026 Style with Kayla</span><span aria-hidden="true">|</span><span>Personal Stylist at Macy&apos;s</span><span aria-hidden="true">|</span><span>All Rights Reserved</span></div>
+      <span id="privacy" />
+    </footer>
   );
 }
 
