@@ -142,7 +142,10 @@ export default function Home() {
             <div><span>2</span><p><strong>You receive confirmation</strong><br />Or an alternate time if the request needs adjusting.</p></div>
             <div><span>3</span><p><strong>Complete your Style Profile</strong><br />Your private link arrives after the appointment is confirmed.</p></div>
           </div>
-          <button className="button secondary-button" onClick={() => { setSubmitted(false); setStep(1); }}>Return to booking preview</button>
+          <div className="success-actions">
+            <a className="button primary-button" href="/style-profile">Preview Style Profile</a>
+            <button className="button secondary-button" onClick={() => { setSubmitted(false); setStep(1); }}>Return to booking preview</button>
+          </div>
         </main>
         <Footer />
       </div>
