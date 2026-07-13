@@ -58,6 +58,8 @@ export default function Home() {
     returning: "",
     heard: "",
     age: "",
+    height: "",
+    weight: "",
     eventType: "",
     eventDate: "",
     notes: "",
@@ -234,11 +236,21 @@ export default function Home() {
               <p className="small-label">STEP THREE</p>
               <h2>Your details</h2>
               <div className="form-grid">
-                {selectedService.needsAge && <fieldset className="full choice-field routing-question"><legend>Which age range applies to you? *</legend><p>This helps me send the right Style Profile after your appointment is confirmed.</p><div>{["Under 40", "40 or older", "Prefer not to answer"].map((value) => <button type="button" className={form.age === value ? "selected" : ""} key={value} onClick={() => updateField("age", value)}>{value}</button>)}</div></fieldset>}
                 <label className="full"><span>Full name *</span><input value={form.name} onChange={(e) => updateField("name", e.target.value)} placeholder="First and last name" /></label>
                 <label><span>Email address *</span><input type="email" value={form.email} onChange={(e) => updateField("email", e.target.value)} placeholder="you@example.com" /></label>
                 <label><span>Phone number *</span><input type="tel" value={form.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="(208) 555-0123" /></label>
-                <fieldset className="full choice-field"><legend>Have we worked together before? *</legend><div>{["Yes", "No"].map((value) => <button type="button" className={form.returning === value ? "selected" : ""} key={value} onClick={() => updateField("returning", value)}>{value}</button>)}</div></fieldset>
+                <div className={`profile-details-row full ${selectedService.needsAge ? "with-age" : ""}`}>
+                  <fieldset className="choice-field detail-group"><legend>Have we worked together before? *</legend><div>{["Yes", "No"].map((value) => <button type="button" className={form.returning === value ? "selected" : ""} key={value} onClick={() => updateField("returning", value)}>{value}</button>)}</div></fieldset>
+                  <fieldset className="measurements-group detail-group">
+                    <legend>Height &amp; weight</legend>
+                    <p className="optional-note">Optional—leave these blank if you&apos;d rather not share.</p>
+                    <div className="measurement-inputs">
+                      <label><span>Height</span><input value={form.height} onChange={(e) => updateField("height", e.target.value)} placeholder={'5\' 6"'} /></label>
+                      <label><span>Weight</span><input inputMode="numeric" value={form.weight} onChange={(e) => updateField("weight", e.target.value)} placeholder="lbs" /></label>
+                    </div>
+                  </fieldset>
+                  {selectedService.needsAge && <fieldset className="choice-field detail-group age-group"><legend>Which age range applies to you? *</legend><div>{["Under 40", "40 or older", "Prefer not to answer"].map((value) => <button type="button" className={form.age === value ? "selected" : ""} key={value} onClick={() => updateField("age", value)}>{value}</button>)}</div></fieldset>}
+                </div>
                 {form.returning === "No" && <label className="full"><span>How did you hear about me?</span><select value={form.heard} onChange={(e) => updateField("heard", e.target.value)}><option value="">Select one</option><option>Instagram</option><option>Facebook</option><option>In-store</option><option>Referral</option><option>{"Macy's event"}</option><option>Other</option></select></label>}
                 {selectedService.isEvent && <><label><span>What type of event? *</span><select value={form.eventType} onChange={(e) => updateField("eventType", e.target.value)}><option value="">Select one</option><option>Wedding Guest</option><option>Wedding Party</option><option>Business Event</option><option>Gala or Formal Event</option><option>School Dance</option><option>Other</option></select></label><label><span>When is the event? *</span><input type="date" value={form.eventDate} onChange={(e) => updateField("eventDate", e.target.value)} /></label></>}
                 <label className="full"><span>Anything helpful for me to know?</span><textarea value={form.notes} onChange={(e) => updateField("notes", e.target.value)} placeholder="Optional" rows={3} /></label>
@@ -255,6 +267,7 @@ export default function Home() {
                 <div><span>Service</span><strong>{selectedService.name}</strong><button type="button" onClick={() => setStep(1)}>Edit</button></div>
                 <div><span>Date & time</span><strong>{readableDate(selectedDate)}<br />{selectedTime}</strong><button type="button" onClick={() => setStep(2)}>Edit</button></div>
                 <div><span>Contact</span><strong>{form.name}<br />{form.email}<br />{form.phone}</strong><button type="button" onClick={() => setStep(3)}>Edit</button></div>
+                {(form.height || form.weight) && <div><span>Optional fit details</span><strong>{form.height && `Height: ${form.height}`}{form.height && form.weight && <br />}{form.weight && `Weight: ${form.weight} lbs`}</strong><button type="button" onClick={() => setStep(3)}>Edit</button></div>}
                 {selectedService.needsAge && <div><span>Style Profile routing</span><strong>{form.age}</strong><button type="button" onClick={() => setStep(3)}>Edit</button></div>}
               </div>
               <div className="pending-callout"><span>i</span><p><strong>This is an appointment request.</strong><br />Your selected time will be held while Kayla reviews it. You will receive a confirmation or an alternate-time option.</p></div>
