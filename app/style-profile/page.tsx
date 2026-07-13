@@ -4,7 +4,7 @@ import { useState, type ReactNode } from "react";
 import Link from "next/link";
 
 const steps = ["Your Goals", "Fit & Comfort", "Sizes & Silhouettes", "Final Details"];
-const shoppingOptions = ["Everyday Outfits", "Workwear", "Event", "Vacation", "Closet Reset", "Other"];
+const shoppingOptions = ["Everyday Outfits", "Workwear", "Event", "Vacation", "Other"];
 const styleOptions = [
   ["Minimal", "Clean lines and simple details"],
   ["Statement", "Bold pieces that stand out"],
