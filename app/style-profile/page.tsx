@@ -58,7 +58,7 @@ export default function StyleProfilePage() {
           </div>
 
           {step === 1 && <div className="profile-step">
-            <p className="small-label">PART ONE OF FOUR</p><h2>What are you looking for?</h2><p className="profile-step-intro">This gives me a feel for the life your clothes need to support.</p>
+            <p className="small-label">PART ONE OF FOUR</p><h2>Your styling goals</h2><p className="profile-step-intro">This gives me a feel for the life your clothes need to support.</p>
             <Question title="What are you shopping for?" hint={`${shoppingFor.length}/3 selected · Choose up to 3`}>
               <div className="answer-chips">{shoppingOptions.map((option) => <button key={option} className={shoppingFor.includes(option) ? "selected" : ""} onClick={() => setShoppingFor(toggleLimited(shoppingFor, option))}>{option}</button>)}</div>
             </Question>
