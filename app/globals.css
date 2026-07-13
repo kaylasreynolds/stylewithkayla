@@ -168,6 +168,10 @@ textarea { resize:vertical; }
 .answer-chips button { min-height:44px; padding:10px 16px; border:1px solid var(--line); border-radius:5px; background:white; color:#514a48; cursor:pointer; }
 .answer-chips button:hover, .answer-chips button.selected { border-color:var(--rose); background:var(--blush); color:var(--rose-dark); }
 .profile-question .other-answer { display:block; width:min(100%,440px); margin-top:12px; }
+.fit-question-layout { display:grid; grid-template-columns:minmax(180px,240px) 1fr; gap:22px; align-items:center; margin-top:16px; }
+.fit-question-layout .answer-chips { align-content:center; margin-top:0; }
+.fit-image-space { min-height:170px; display:grid; place-items:center; padding:18px; border:1px dashed #c9b9b4; border-radius:6px; background:linear-gradient(145deg,rgba(246,238,235,.75),rgba(255,255,255,.9)); color:#887d79; text-align:center; }
+.fit-image-space span { max-width:130px; font-family:var(--font-heading); font-size:18px; line-height:1.2; }
 .visual-answer-grid, .shape-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:16px; }
 .visual-answer-grid button, .shape-grid button { min-width:0; min-height:190px; display:flex; flex-direction:column; align-items:flex-start; padding:14px; border:1px solid var(--line); border-radius:6px; background:white; color:var(--ink); text-align:left; cursor:pointer; transition:.16s ease; }
 .visual-answer-grid button:hover, .shape-grid button:hover { transform:translateY(-2px); border-color:#d2a8ac; }
@@ -317,6 +321,8 @@ textarea { resize:vertical; }
   .profile-step h2 { font-size:35px; }
   .visual-answer-grid, .shape-grid { grid-template-columns:1fr 1fr; }
   .visual-answer-grid button, .shape-grid button { min-height:174px; }
+  .fit-question-layout { grid-template-columns:1fr; }
+  .fit-image-space { min-height:150px; }
   .two-question-grid, .size-grid { grid-template-columns:1fr; }
   .profile-actions { position:sticky; bottom:0; z-index:4; grid-template-columns:1fr auto; margin:24px -20px -58px; padding:14px 20px; background:rgba(252,249,246,.97); box-shadow:0 -8px 24px rgba(57,43,42,.06); }
   .profile-actions > span { display:none; }
