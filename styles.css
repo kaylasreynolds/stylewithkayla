@@ -22,6 +22,11 @@ html {
   scroll-behavior: smooth;
 }
 
+.site-logo img {
+  height: 52px;
+  width: auto;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -3413,4 +3418,3 @@ body.service-dialog-open {
     font-size: 2.25rem;
   }
 }
-
