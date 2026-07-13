@@ -168,7 +168,7 @@ textarea { resize:vertical; }
 .answer-chips button { min-height:44px; padding:10px 16px; border:1px solid var(--line); border-radius:5px; background:white; color:#514a48; cursor:pointer; }
 .answer-chips button:hover, .answer-chips button.selected { border-color:var(--rose); background:var(--blush); color:var(--rose-dark); }
 .profile-question .other-answer { display:block; width:min(100%,440px); margin-top:12px; }
-.fit-question-layout { display:grid; grid-template-columns:minmax(180px,240px) 1fr; gap:22px; align-items:center; margin-top:16px; }
+.fit-question-layout { display:grid; grid-template-columns:1fr; gap:18px; align-items:start; margin-top:16px; }
 .fit-question-layout .answer-chips { align-content:center; margin-top:0; }
 .fit-image-space { min-height:170px; display:grid; place-items:center; padding:18px; border:1px dashed #c9b9b4; border-radius:6px; background:linear-gradient(145deg,rgba(246,238,235,.75),rgba(255,255,255,.9)); color:#887d79; text-align:center; }
 .fit-image-space.top-fit-image { width:100%; min-height:0; aspect-ratio:2/1; }
