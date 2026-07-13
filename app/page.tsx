@@ -242,14 +242,14 @@ export default function Home() {
                 <div className={`profile-details-row full ${selectedService.needsAge ? "with-age" : ""}`}>
                   <fieldset className="choice-field detail-group"><legend>Have we worked together before? *</legend><div>{["Yes", "No"].map((value) => <button type="button" className={form.returning === value ? "selected" : ""} key={value} onClick={() => updateField("returning", value)}>{value}</button>)}</div></fieldset>
                   <fieldset className="measurements-group detail-group">
-                    <legend>Height &amp; weight</legend>
-                    <p className="optional-note">Optional—leave these blank if you&apos;d rather not share.</p>
+                    <legend>Height / Weight</legend>
                     <div className="measurement-inputs">
-                      <label><span>Height</span><input value={form.height} onChange={(e) => updateField("height", e.target.value)} placeholder={'5\' 6"'} /></label>
-                      <label><span>Weight</span><input inputMode="numeric" value={form.weight} onChange={(e) => updateField("weight", e.target.value)} placeholder="lbs" /></label>
+                      <label><span className="sr-only">Height</span><input aria-label="Height" value={form.height} onChange={(e) => updateField("height", e.target.value)} /></label>
+                      <label><span className="sr-only">Weight</span><input aria-label="Weight" inputMode="numeric" value={form.weight} onChange={(e) => updateField("weight", e.target.value)} /></label>
                     </div>
+                    <p className="optional-note">Optional—you don&apos;t have to share these.</p>
                   </fieldset>
-                  {selectedService.needsAge && <fieldset className="choice-field detail-group age-group"><legend>Which age range applies to you? *</legend><div>{["Under 40", "40 or older", "Prefer not to answer"].map((value) => <button type="button" className={form.age === value ? "selected" : ""} key={value} onClick={() => updateField("age", value)}>{value}</button>)}</div></fieldset>}
+                  {selectedService.needsAge && <fieldset className="choice-field detail-group age-group"><legend>Age Range *</legend><div>{["Under 40", "40 or older", "Prefer not to answer"].map((value) => <button type="button" className={form.age === value ? "selected" : ""} key={value} onClick={() => updateField("age", value)}>{value}</button>)}</div></fieldset>}
                 </div>
                 {form.returning === "No" && <label className="full"><span>How did you hear about me?</span><select value={form.heard} onChange={(e) => updateField("heard", e.target.value)}><option value="">Select one</option><option>Instagram</option><option>Facebook</option><option>In-store</option><option>Referral</option><option>{"Macy's event"}</option><option>Other</option></select></label>}
                 {selectedService.isEvent && <><label><span>What type of event? *</span><select value={form.eventType} onChange={(e) => updateField("eventType", e.target.value)}><option value="">Select one</option><option>Wedding Guest</option><option>Wedding Party</option><option>Business Event</option><option>Gala or Formal Event</option><option>School Dance</option><option>Other</option></select></label><label><span>When is the event? *</span><input type="date" value={form.eventDate} onChange={(e) => updateField("eventDate", e.target.value)} /></label></>}
