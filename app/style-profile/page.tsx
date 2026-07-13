@@ -89,7 +89,7 @@ export default function StyleProfilePage() {
               <div className="fit-question-layout"><div className="fit-image-space top-fit-image" aria-label="Reserved space for a 3000 by 1500 pixel top-fit reference image"><span>Top fit reference image</span></div><div className="answer-chips">{["More fitted", "Relaxed", "Oversized", "No preference"].map((option) => <button key={option}>{option}</button>)}</div></div>
             </Question>
             <Question title="Which pant cuts do you prefer?" hint="Choose all that apply">
-              <div className="fit-question-layout"><div className="fit-image-space" aria-label="Reserved space for a pant-fit reference image"><span>Pant fit reference image</span></div><div className="answer-chips">{["Skinny", "Straight", "Bootcut", "Boyfriend / Girlfriend", "Wide Leg", "Open to trying different cuts"].map((option) => <button key={option}>{option}</button>)}</div></div>
+              <div className="fit-question-layout"><div className="fit-image-space pant-fit-image" aria-label="Reserved space for a 1672 by 836 pixel pant-fit reference image"><span>Pant fit reference image</span></div><div className="answer-chips">{["Skinny", "Straight", "Bootcut", "Boyfriend / Girlfriend", "Wide Leg", "Open to trying different cuts"].map((option) => <button key={option}>{option}</button>)}</div></div>
             </Question>
             <Question title="What bra size do you usually wear, if known?" optional><input value={sizes.bra} onChange={(e) => setSizes({...sizes,bra:e.target.value})} /></Question>
           </div>}
