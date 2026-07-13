@@ -34,6 +34,7 @@ export default function StyleProfilePage() {
   const [styles, setStyles] = useState<string[]>([]);
   const [bodyShape, setBodyShape] = useState("");
   const [fitAreas, setFitAreas] = useState<string[]>([]);
+  const [otherFit, setOtherFit] = useState("");
   const [details, setDetails] = useState("");
   const [sizes, setSizes] = useState({ top: "", pant: "", dress: "", shoe: "", bra: "" });
 
@@ -76,6 +77,7 @@ export default function StyleProfilePage() {
             </Question>
             <Question title="Which areas are usually most difficult to fit?" hint="Choose all that apply">
               <div className="answer-chips">{["Midsection", "Chest", "Hips", "Arms", "Length", "No consistent difficulty", "Other"].map((option) => <button key={option} className={fitAreas.includes(option) ? "selected" : ""} onClick={() => setFitAreas(toggleLimited(fitAreas, option, 7))}>{option}</button>)}</div>
+              {fitAreas.includes("Other") && <input className="other-answer" aria-label="Describe another area that is difficult to fit" value={otherFit} onChange={(e) => setOtherFit(e.target.value)} placeholder="Tell me what is usually difficult to fit" autoFocus />}
             </Question>
             <div className="two-question-grid"><Question title="Which sizing department usually works best for you?"><select defaultValue=""><option value="" disabled>Select one</option><option>Regular</option><option>Petite</option><option>Plus</option><option>Tall / Long</option><option>Not sure</option><option>Other</option></select></Question><Question title="What tends to feel best on your body?"><select defaultValue=""><option value="" disabled>Select one</option><option>Structured</option><option>Stretchy</option><option>A mix</option><option>Not sure / open to both</option></select></Question></div>
           </div>}
