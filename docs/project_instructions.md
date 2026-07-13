@@ -304,6 +304,7 @@ GitHub Issues are the project backlog, not a log of every tiny edit.
 - Keep the section title: “A Simple, Personalized Experience.”
 - Homepage content should introduce; service pages should explain.
 - Keep the three primary service cards concise.
+- Event styling stays within the Women’s Styling and Men’s Styling pages; do not create a separate occasion styling page.
 - Add one full-width section beneath the service cards for additional ways Kayla can help.
 - Use “free styling appointment” for primary CTAs.
 - Use “complimentary” in supporting copy when appropriate.
@@ -326,7 +327,6 @@ GitHub Issues are the project backlog, not a log of every tiny edit.
 - About page personality and copy
 - Women’s Styling
 - Men’s Styling
-- Events & Occasion Styling
 - Macy’s Events
 
 ## Priority 2 — Appointment Experience and Style Profiles
