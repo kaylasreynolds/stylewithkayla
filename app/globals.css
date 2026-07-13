@@ -107,11 +107,8 @@ textarea { resize:vertical; }
 .measurement-inputs { display:grid; grid-template-columns:70px 70px; gap:14px; margin-top:10px; }
 .measurement-inputs label { display:block; }
 .measurement-inputs input { width:70px; height:42px; min-width:0; padding:8px; }
-.age-group { padding:12px 14px; background:rgba(255,255,255,.7); }
-.age-group legend { width:100%; padding:0; text-align:center; font-family:var(--font-heading); font-size:18px; }
-.age-group > div { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; margin-top:8px; }
-.age-group button { min-width:0; padding:10px 6px; border-color:transparent; white-space:nowrap; font-size:11px; }
-.age-group button:hover { border-color:var(--line); }
+.age-group > div { display:flex; flex-wrap:nowrap; gap:8px; margin-top:10px; }
+.age-group button { min-width:0; padding:12px 10px; white-space:nowrap; }
 .privacy-check { grid-template-columns:20px 1fr !important; display:grid !important; align-items:start; padding:14px; background:var(--soft); border-radius:5px; }
 .privacy-check input { width:17px; height:17px; margin:1px 0 0; accent-color:var(--rose); }
 .privacy-check span { font-weight:400 !important; line-height:1.55; }
@@ -224,8 +221,6 @@ textarea { resize:vertical; }
   .profile-details-row, .profile-details-row.with-age { grid-column:auto; grid-template-columns:1fr; padding:0; }
   .detail-group, .detail-group:first-child { padding:22px 0; }
   .detail-group + .detail-group { border-top:1px solid var(--line); }
-  .age-group { padding:22px 0; background:transparent; }
-  .age-group legend { text-align:left; }
   .review-list > div { grid-template-columns:90px 1fr 38px; gap:10px; }
   .next-steps { grid-template-columns:1fr; gap:0; }
   .footer-inner { grid-template-columns:1fr; }
