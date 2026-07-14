@@ -27,7 +27,7 @@ function toggleLimited(current: string[], value: string, limit = 3) {
   return current.length < limit ? [...current, value] : current;
 }
 
-type ProfileData={clientFirstName:string;serviceName:string;confirmedStartAt:string;status:"draft"|"submitted"|"reopened";schemaVersion:number;currentSection:number;answers:Record<string,unknown>;inspirationLink:string|null};
+type ProfileData={clientFirstName:string;serviceName:string;confirmedStartAt:string;confirmedEndAt:string;status:"draft"|"submitted"|"reopened";schemaVersion:number;currentSection:number;answers:Record<string,unknown>;inspirationLink:string|null};
 export default function StyleProfilePage(){return <StyleProfileClient/>;}
 export function StyleProfileClient({token}:{token?:string}) {
   const [step, setStep] = useState(1);
@@ -46,6 +46,7 @@ export function StyleProfileClient({token}:{token?:string}) {
   const answers=()=>({shoppingFor,goals:details,styles,inspirationLink,bodyShape,fitAreas,otherFit,sizingDepartment,comfortPreference,sizes,topFit,pantCuts,bestStyles,avoidStyles,finalNotes});
   async function save(nextStep=step){if(!token||!profile)return false;setError("");const r=await fetch(`/api/style-profile/${token}`,{method:"PUT",headers:{"content-type":"application/json"},referrerPolicy:"no-referrer",body:JSON.stringify({schemaVersion:profile.schemaVersion,currentSection:nextStep,answers:answers(),inspirationLink:inspirationLink||null})}),p=await r.json() as {data?:{savedAt:string};error?:{message?:string}};if(!r.ok){setError(p.error?.message||"Your progress could not be saved.");return false;}setSavedAt(p.data!.savedAt);return true;}
   async function submit(){if(!token)return;const didSave=await save(4);if(!didSave)return;const r=await fetch(`/api/style-profile/${token}/submit`,{method:"POST",headers:{"idempotency-key":crypto.randomUUID()},referrerPolicy:"no-referrer"}),p=await r.json() as {error?:{message?:string}};if(!r.ok){setError(p.error?.message||"Your Style Profile could not be submitted.");return;}setSubmitted(true);}
+  function googleCalendarUrl(){if(!profile)return"#";const compact=(value:string)=>new Date(value).toISOString().replace(/[-:]/g,"").replace(/\.\d{3}Z$/,"Z"),params=new URLSearchParams({action:"TEMPLATE",text:`${profile.serviceName} with Kayla`,dates:`${compact(profile.confirmedStartAt)}/${compact(profile.confirmedEndAt)}`,location:"Macy's Boise Towne Square, 370 N. Milwaukee St., Boise, ID 83704",details:"Complimentary personal styling appointment with Kayla Reynolds."});return `https://calendar.google.com/calendar/render?${params}`;}
 
   if(!token)return <div className="site-shell"><Announcement/><Header/><main className="profile-complete"><h1>Private link required.</h1><p>Please use the Style Profile link included with your confirmed appointment.</p></main><Footer/></div>;
   if(loading)return <div className="site-shell"><Announcement/><Header/><main className="profile-complete"><p>Loading your private Style Profile…</p></main><Footer/></div>;
@@ -63,7 +64,7 @@ export function StyleProfileClient({token}:{token?:string}) {
           <p className="eyebrow">YOUR STYLE PROFILE</p>
           <h1>Hi, {profile?.clientFirstName}.</h1>
           <p>Tell me what feels like you, what does not, and what would make shopping easier. Your progress is saved as you go.</p>
-          <div className="confirmed-appointment"><span>CONFIRMED APPOINTMENT</span><strong>{profile?.serviceName}</strong><p>{profile&&appointment(profile.confirmedStartAt)}<br />Macy&apos;s Boise Towne Square</p><a href="mailto:kayla.reynolds@macys.com?subject=Appointment%20Details">Need to change something?</a></div>
+          <div className="confirmed-appointment"><span>CONFIRMED APPOINTMENT</span><strong>{profile?.serviceName}</strong><p>{profile&&appointment(profile.confirmedStartAt)}<br />Macy&apos;s Boise Towne Square</p><div className="calendar-options"><a href={`/api/style-profile/${token}/calendar`}>Download calendar file</a><a href={googleCalendarUrl()} target="_blank" rel="noreferrer">Add to Google Calendar</a></div><a href="mailto:kayla.reynolds@macys.com?subject=Appointment%20Details">Need to change something?</a></div>
         </section>
 
         <section className="profile-workspace">

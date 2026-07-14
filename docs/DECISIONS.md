@@ -54,7 +54,8 @@ This log records approved product decisions that must travel with the code. The 
 - Private/admin responses use `Cache-Control: no-store`; private links use `Referrer-Policy: no-referrer`.
 - Client strings are length-limited and never rendered as raw HTML. Sensitive payloads reject unexpected keys.
 - Written booking/profile history is retained for two years after the most recent completed appointment.
-- Inspiration images are a later private-R2 feature, limited to one image, with deletion 30 days after completion or cancellation.
+- Inspiration-image uploads through private R2 are explicitly deferred for the first release. Clients use the optional inspiration-link field instead.
+- If R2 uploads are approved later, they remain limited to one private image with deletion 30 days after completion or cancellation; size and MIME policy must be approved before implementation.
 - Until a delivery provider is approved, communications are recorded as deferred; the system must not claim an email or SMS was sent.
 
 ### Integration boundaries
@@ -76,5 +77,5 @@ This log records approved product decisions that must travel with the code. The 
 ## Deferred decisions
 
 - Email/SMS delivery provider and sender identity
-- Inspiration-image size and formats (R2 phase)
+- Whether to enable R2 uploads after the first release, plus image size and formats
 - Microsoft account/calendar connection (Graph phase)
