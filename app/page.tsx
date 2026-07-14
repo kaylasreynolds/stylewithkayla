@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type Service = {
   id: string;
@@ -13,20 +13,15 @@ type Service = {
   isEvent?: boolean;
 };
 
-const services: Service[] = [
-  { id: "women-event", audience: "Women", name: "Women's Event & Occasion Styling", shortName: "Event & Occasion Styling", duration: 60, isEvent: true, description: "A focused appointment for a wedding, celebration, work event, or special occasion." },
-  { id: "women-everyday", audience: "Women", name: "Women's Everyday Styling", shortName: "Everyday Styling", duration: 90, needsAge: true, description: "Build polished outfits that feel natural for your day-to-day life." },
-  { id: "women-closet", audience: "Women", name: "Women's Full Closet Refresh", shortName: "Full Closet Refresh", duration: 180, needsAge: true, description: "A more complete wardrobe update with time to compare and build full looks." },
-  { id: "men-event", audience: "Men", name: "Men's Event & Occasion Styling", shortName: "Event & Occasion Styling", duration: 60, isEvent: true, description: "A complete event look built around the dress code, setting, and personal style." },
-  { id: "men-everyday", audience: "Men", name: "Men's Everyday Styling", shortName: "Everyday Styling", duration: 90, description: "Practical, polished outfits for work, weekends, and everything in between." },
-  { id: "men-closet", audience: "Men", name: "Men's Full Closet Refresh", shortName: "Full Closet Refresh", duration: 180, description: "A thoughtful wardrobe update with versatile pieces and complete outfits." },
+const servicePresentation: Service[] = [
+  { id: "women_event", audience: "Women", name: "Women's Event & Occasion Styling", shortName: "Event & Occasion Styling", duration: 60, isEvent: true, description: "A focused appointment for a wedding, celebration, work event, or special occasion." },
+  { id: "women_everyday", audience: "Women", name: "Women's Everyday Styling", shortName: "Everyday Styling", duration: 90, needsAge: true, description: "Build polished outfits that feel natural for your day-to-day life." },
+  { id: "women_closet", audience: "Women", name: "Women's Full Closet Refresh", shortName: "Full Closet Refresh", duration: 180, needsAge: true, description: "A more complete wardrobe update with time to compare and build full looks." },
+  { id: "men_event", audience: "Men", name: "Men's Event & Occasion Styling", shortName: "Event & Occasion Styling", duration: 60, isEvent: true, description: "A complete event look built around the dress code, setting, and personal style." },
+  { id: "men_everyday", audience: "Men", name: "Men's Everyday Styling", shortName: "Everyday Styling", duration: 90, description: "Practical, polished outfits for work, weekends, and everything in between." },
+  { id: "men_closet", audience: "Men", name: "Men's Full Closet Refresh", shortName: "Full Closet Refresh", duration: 180, description: "A thoughtful wardrobe update with versatile pieces and complete outfits." },
 ];
-
-const slotMap: Record<number, string[]> = {
-  60: ["10:30 AM", "11:30 AM", "12:30 PM", "2:30 PM", "3:30 PM", "4:30 PM"],
-  90: ["10:30 AM", "12:00 PM", "2:30 PM", "4:00 PM"],
-  180: ["10:30 AM", "2:30 PM"],
-};
+type Slot = { startsAt: string; endsAt: string; source: "routine_only" };
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -42,15 +37,22 @@ function readableDate(value: string) {
 }
 
 export default function Home() {
-  const demoToday = useMemo(() => new Date(2026, 6, 13, 12), []);
-  const maxDate = useMemo(() => new Date(2026, 8, 11, 12), []);
+  const today = useMemo(() => new Date(), []);
+  const maxDate = useMemo(() => { const value = new Date(today); value.setDate(value.getDate() + 60); return value; }, [today]);
   const [step, setStep] = useState(1);
   const [audience, setAudience] = useState<"Women" | "Men">("Women");
-  const [serviceId, setServiceId] = useState("women-everyday");
-  const [month, setMonth] = useState(new Date(2026, 6, 1));
-  const [selectedDate, setSelectedDate] = useState("2026-07-16");
-  const [selectedTime, setSelectedTime] = useState("10:30 AM");
+  const [services, setServices] = useState(servicePresentation);
+  const [serviceId, setServiceId] = useState("women_everyday");
+  const [month, setMonth] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
+  const [slotsByDate, setSlotsByDate] = useState<Record<string, Slot[]>>({});
+  const [loadingTimes, setLoadingTimes] = useState(true);
+  const [bookingError, setBookingError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [publicReference, setPublicReference] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const idempotencyKey = useRef(crypto.randomUUID());
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -68,7 +70,30 @@ export default function Home() {
 
   const selectedService = services.find((service) => service.id === serviceId) ?? services[1];
   const visibleServices = services.filter((service) => service.audience === audience);
-  const slots = slotMap[selectedService.duration];
+  const slots = slotsByDate[selectedDate] ?? [];
+
+  useEffect(() => {
+    fetch("/api/services", { cache: "no-store" }).then(async response => {
+      if (!response.ok) throw new Error();
+      const payload = await response.json() as { data: { services: Array<{ code: string; name: string; durationMinutes: number }> } };
+      setServices(servicePresentation.map(presentation => { const stored = payload.data.services.find(item => item.code === presentation.id); return stored ? { ...presentation, name: stored.name, duration: stored.durationMinutes } : presentation; }));
+    }).catch(() => setBookingError("Services could not be refreshed. Please try again."));
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const from = dateKeyInBoise(today), to = dateKeyInBoise(maxDate);
+    Promise.resolve().then(() => { setLoadingTimes(true); setBookingError(""); return fetch(`/api/availability?serviceCode=${encodeURIComponent(serviceId)}&from=${from}&to=${to}`, { cache: "no-store", signal: controller.signal }); })
+      .then(async response => { const payload = await response.json() as {data:{slots:Slot[]};error?:{message?:string}}; if (!response.ok) throw new Error(payload.error?.message || "Availability could not be loaded."); return payload.data; })
+      .then(data => {
+        const grouped = data.slots.reduce<Record<string, Slot[]>>((result, slot) => { const key = dateKeyInBoise(new Date(slot.startsAt)); (result[key] ||= []).push(slot); return result; }, {});
+        setSlotsByDate(grouped);
+        const firstDate = Object.keys(grouped).sort()[0] || "";
+        setSelectedDate(current => grouped[current]?.length ? current : firstDate);
+        setSelectedTime(current => data.slots.some(slot => slot.startsAt === current) ? current : (grouped[firstDate]?.[0]?.startsAt || ""));
+      }).catch(error => { if (error.name !== "AbortError") { setSlotsByDate({}); setSelectedDate(""); setSelectedTime(""); setBookingError(error.message); } }).finally(() => setLoadingTimes(false));
+    return () => controller.abort();
+  }, [serviceId, today, maxDate]);
 
   const calendarDays = useMemo(() => {
     const year = month.getFullYear();
@@ -89,29 +114,38 @@ export default function Home() {
       } else {
         date = new Date(year, monthIndex, dayOffset);
       }
-      const weekday = date.getDay();
-      const availableDay = weekday >= 2 && weekday <= 6;
-      const earliest = new Date(demoToday);
-      earliest.setDate(earliest.getDate() + 1);
-      earliest.setHours(0, 0, 0, 0);
-      const disabled = outside || !availableDay || date < earliest || date > maxDate;
+      const disabled = outside || !slotsByDate[keyForDate(date)]?.length;
       return { date, outside, disabled, key: keyForDate(date) };
     });
-  }, [demoToday, maxDate, month]);
+  }, [month, slotsByDate]);
 
   function chooseService(id: string) {
     const next = services.find((service) => service.id === id);
     if (!next) return;
     setServiceId(id);
-    setSelectedTime(slotMap[next.duration][0]);
+    setSelectedDate(""); setSelectedTime("");
   }
 
   function updateField(name: string, value: string | boolean) {
     setForm((current) => ({ ...current, [name]: value }));
   }
 
-  function submitRequest() {
-    setSubmitted(true);
+  async function submitRequest() {
+    if (submitting) return;
+    setSubmitting(true); setBookingError("");
+    const fit = [form.height && `Height: ${form.height}`, form.weight && `Weight: ${form.weight} lbs`].filter(Boolean).join("; ");
+    try {
+      const response = await fetch("/api/bookings", { method: "POST", headers: { "content-type": "application/json", "idempotency-key": idempotencyKey.current }, body: JSON.stringify({
+        serviceCode: serviceId, requestedStartAt: selectedTime, client: { fullName: form.name, email: form.email, phone: form.phone },
+        returningClient: form.returning === "Yes", howHeard: form.returning === "Yes" ? null : form.heard,
+        ageRange: selectedService.needsAge ? (form.age === "Under 40" ? "under_40" : form.age === "40 or older" ? "40_plus" : "manual_review") : null,
+        eventType: selectedService.isEvent ? form.eventType : null, eventDate: selectedService.isEvent ? form.eventDate : null,
+        bookingNotes: [fit, form.notes].filter(Boolean).join("\n") || null, privacy: { policyVersion: "2026-07-13", acknowledged: form.privacy },
+      }) });
+      const payload = await response.json() as {data:{publicReference:string};error?:{message?:string}}; if (!response.ok) throw new Error(payload.error?.message || "Your request could not be submitted.");
+      setPublicReference(payload.data.publicReference); setSubmitted(true);
+    } catch (error) { setBookingError(error instanceof Error ? error.message : "Your request could not be submitted."); }
+    finally { setSubmitting(false); }
   }
 
   function canContinue() {
@@ -119,7 +153,7 @@ export default function Home() {
     if (step === 2) return Boolean(selectedDate && selectedTime);
     if (step === 3) {
       const conditional = selectedService.needsAge ? Boolean(form.age) : selectedService.isEvent ? Boolean(form.eventType && form.eventDate) : true;
-      return Boolean(form.name && form.email && form.phone && form.returning && conditional && form.privacy);
+      return Boolean(form.name && form.email && form.phone && form.returning && (form.returning === "Yes" || form.heard) && conditional && form.privacy);
     }
     return true;
   }
@@ -137,13 +171,13 @@ export default function Home() {
           <div className="success-card">
             <Summary service={selectedService} selectedDate={selectedDate} selectedTime={selectedTime} compact />
           </div>
+          <p className="request-reference">Request reference: <strong>{publicReference}</strong></p>
           <div className="next-steps">
             <div><span>1</span><p><strong>Kayla reviews your request</strong><br />Your selected time is held while it is pending.</p></div>
             <div><span>2</span><p><strong>You receive confirmation</strong><br />Or an alternate time if the request needs adjusting.</p></div>
             <div><span>3</span><p><strong>Complete your Style Profile</strong><br />Your private link arrives after the appointment is confirmed.</p></div>
           </div>
           <div className="success-actions">
-            <a className="button primary-button" href="/style-profile">Preview Style Profile</a>
             <button className="button secondary-button" onClick={() => { setSubmitted(false); setStep(1); }}>Return to booking preview</button>
           </div>
         </main>
@@ -208,14 +242,14 @@ export default function Home() {
               <div className="calendar-layout">
                 <div className="calendar-panel">
                   <div className="month-control">
-                    <button aria-label="Previous month" onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))}>‹</button>
+                    <button aria-label="Previous month" disabled={month <= new Date(today.getFullYear(), today.getMonth(), 1)} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))}>‹</button>
                     <h3>{monthNames[month.getMonth()]} {month.getFullYear()}</h3>
-                    <button aria-label="Next month" onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))}>›</button>
+                    <button aria-label="Next month" disabled={month >= new Date(maxDate.getFullYear(), maxDate.getMonth(), 1)} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))}>›</button>
                   </div>
                   <div className="weekday-row">{weekdayNames.map((day) => <span key={day}>{day}</span>)}</div>
                   <div className="calendar-grid">
                     {calendarDays.map(({ date, key, outside, disabled }) => (
-                      <button key={key} disabled={disabled} className={`${outside ? "outside" : ""} ${selectedDate === key ? "selected" : ""}`} onClick={() => setSelectedDate(key)} aria-label={date.toDateString()}>
+                      <button key={key} disabled={disabled} className={`${outside ? "outside" : ""} ${selectedDate === key ? "selected" : ""}`} onClick={() => { setSelectedDate(key); setSelectedTime(slotsByDate[key]?.[0]?.startsAt || ""); }} aria-label={date.toDateString()}>
                         {date.getDate()}
                       </button>
                     ))}
@@ -226,7 +260,7 @@ export default function Home() {
                   <h3>Available times</h3>
                   <p>{readableDate(selectedDate)}</p>
                   <div className="time-list">
-                    {slots.map((slot) => <button key={slot} className={selectedTime === slot ? "selected" : ""} onClick={() => setSelectedTime(slot)}>{selectedTime === slot && <span>✓</span>}{slot}</button>)}
+                    {loadingTimes ? <p className="loading-times">Checking routine availability…</p> : slots.length ? slots.map((slot) => <button key={slot.startsAt} className={selectedTime === slot.startsAt ? "selected" : ""} onClick={() => setSelectedTime(slot.startsAt)}>{selectedTime === slot.startsAt && <span>✓</span>}{timeInBoise(slot.startsAt)}</button>) : <p className="loading-times">No routine times are available for this date.</p>}
                   </div>
                   <p className="time-contact">Don&apos;t see a time that works? <a href="mailto:kayla.reynolds@macys.com?subject=Appointment%20Time%20Request">Send me a message.</a></p>
                 </div>
@@ -268,7 +302,7 @@ export default function Home() {
               <h2>Review your request</h2>
               <div className="review-list">
                 <div><span>Service</span><strong>{selectedService.name}</strong><button type="button" onClick={() => setStep(1)}>Edit</button></div>
-                <div><span>Date & time</span><strong>{readableDate(selectedDate)}<br />{selectedTime}</strong><button type="button" onClick={() => setStep(2)}>Edit</button></div>
+                <div><span>Date & time</span><strong>{readableDate(selectedDate)}<br />{timeInBoise(selectedTime)}</strong><button type="button" onClick={() => setStep(2)}>Edit</button></div>
                 <div><span>Contact</span><strong>{form.name}<br />{form.email}<br />{form.phone}</strong><button type="button" onClick={() => setStep(3)}>Edit</button></div>
                 {(form.height || form.weight) && <div><span>Optional fit details</span><strong>{form.height && `Height: ${form.height}`}{form.height && form.weight && <br />}{form.weight && `Weight: ${form.weight} lbs`}</strong><button type="button" onClick={() => setStep(3)}>Edit</button></div>}
                 {selectedService.needsAge && <div><span>Style Profile routing</span><strong>{form.age}</strong><button type="button" onClick={() => setStep(3)}>Edit</button></div>}
@@ -277,9 +311,10 @@ export default function Home() {
             </form>
           )}
 
+          {bookingError && <p className="booking-error" role="alert">{bookingError}</p>}
           <div className="workspace-actions">
             {step > 1 ? <button className="text-button" onClick={() => setStep(step - 1)}>← Back</button> : <span />}
-            {step < 4 ? <button className="button primary-button" disabled={!canContinue()} onClick={() => setStep(step + 1)}>Continue</button> : <button className="button primary-button" type="button" onClick={submitRequest}>Submit Request</button>}
+            {step < 4 ? <button className="button primary-button" disabled={!canContinue()} onClick={() => setStep(step + 1)}>Continue</button> : <button className="button primary-button" type="button" disabled={submitting} onClick={submitRequest}>{submitting ? "Submitting…" : "Submit Request"}</button>}
           </div>
         </section>
       </main>
@@ -340,8 +375,19 @@ function Summary({ service, selectedDate, selectedTime, onChange, compact = fals
   return (
     <div className={`appointment-summary ${compact ? "compact" : ""}`}>
       <div className="summary-icon">⌑</div>
-      <div><span className="summary-audience">{service.audience.toUpperCase()}</span><h3>{service.shortName}</h3><p>{service.duration} minutes · Complimentary</p>{selectedDate && <p className="summary-date">{readableDate(selectedDate)} · {selectedTime}</p>}</div>
+      <div><span className="summary-audience">{service.audience.toUpperCase()}</span><h3>{service.shortName}</h3><p>{service.duration} minutes · Complimentary</p>{selectedDate && <p className="summary-date">{readableDate(selectedDate)} · {timeInBoise(selectedTime)}</p>}</div>
       {onChange && <button onClick={onChange}>Change service →</button>}
     </div>
   );
+}
+
+function dateKeyInBoise(value: Date) {
+  const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Boise", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(value);
+  const part = (type: string) => parts.find(item => item.type === type)?.value;
+  return `${part("year")}-${part("month")}-${part("day")}`;
+}
+
+function timeInBoise(value: string) {
+  if (!value) return "Not selected";
+  return new Intl.DateTimeFormat("en-US", { timeZone: "America/Boise", hour: "numeric", minute: "2-digit" }).format(new Date(value));
 }
