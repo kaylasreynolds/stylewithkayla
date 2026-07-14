@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 
 const steps = ["Your Goals", "Fit & Comfort", "Sizes & Silhouettes", "Final Details"];
@@ -27,9 +27,12 @@ function toggleLimited(current: string[], value: string, limit = 3) {
   return current.length < limit ? [...current, value] : current;
 }
 
-export default function StyleProfilePage() {
+type ProfileData={clientFirstName:string;serviceName:string;confirmedStartAt:string;status:"draft"|"submitted"|"reopened";schemaVersion:number;currentSection:number;answers:Record<string,unknown>;inspirationLink:string|null};
+export default function StyleProfilePage(){return <StyleProfileClient/>;}
+export function StyleProfileClient({token}:{token?:string}) {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
+  const [profile,setProfile]=useState<ProfileData|null>(null),[loading,setLoading]=useState(Boolean(token)),[error,setError]=useState(""),[savedAt,setSavedAt]=useState("");
   const [shoppingFor, setShoppingFor] = useState<string[]>(["Everyday Outfits"]);
   const [styles, setStyles] = useState<string[]>([]);
   const [bodyShape, setBodyShape] = useState("");
@@ -37,9 +40,19 @@ export default function StyleProfilePage() {
   const [otherFit, setOtherFit] = useState("");
   const [details, setDetails] = useState("");
   const [sizes, setSizes] = useState({ top: "", pant: "", dress: "", shoe: "", bra: "" });
+  const [inspirationLink,setInspirationLink]=useState(""),[sizingDepartment,setSizingDepartment]=useState(""),[comfortPreference,setComfortPreference]=useState(""),[topFit,setTopFit]=useState(""),[pantCuts,setPantCuts]=useState<string[]>([]),[bestStyles,setBestStyles]=useState(""),[avoidStyles,setAvoidStyles]=useState(""),[finalNotes,setFinalNotes]=useState("");
+
+  useEffect(()=>{if(!token)return;fetch(`/api/style-profile/${token}`,{cache:"no-store",referrerPolicy:"no-referrer"}).then(async r=>{const p=await r.json() as {data?:{profile:ProfileData};error?:{message?:string}};if(!r.ok)throw new Error(p.error?.message||"This private link is unavailable.");return p.data!.profile;}).then(p=>{setProfile(p);setStep(p.currentSection);setSubmitted(p.status==="submitted");const a=p.answers;setShoppingFor((a.shoppingFor as string[])||[]);setStyles((a.styles as string[])||[]);setDetails(String(a.goals||""));setInspirationLink(String(a.inspirationLink||p.inspirationLink||""));setBodyShape(String(a.bodyShape||""));setFitAreas((a.fitAreas as string[])||[]);setOtherFit(String(a.otherFit||""));setSizingDepartment(String(a.sizingDepartment||""));setComfortPreference(String(a.comfortPreference||""));setSizes({...{top:"",pant:"",dress:"",shoe:"",bra:""},...((a.sizes as object)||{})});setTopFit(String(a.topFit||""));setPantCuts((a.pantCuts as string[])||[]);setBestStyles(String(a.bestStyles||""));setAvoidStyles(String(a.avoidStyles||""));setFinalNotes(String(a.finalNotes||""));}).catch(e=>setError(e.message)).finally(()=>setLoading(false));},[token]);
+  const answers=()=>({shoppingFor,goals:details,styles,inspirationLink,bodyShape,fitAreas,otherFit,sizingDepartment,comfortPreference,sizes,topFit,pantCuts,bestStyles,avoidStyles,finalNotes});
+  async function save(nextStep=step){if(!token||!profile)return false;setError("");const r=await fetch(`/api/style-profile/${token}`,{method:"PUT",headers:{"content-type":"application/json"},referrerPolicy:"no-referrer",body:JSON.stringify({schemaVersion:profile.schemaVersion,currentSection:nextStep,answers:answers(),inspirationLink:inspirationLink||null})}),p=await r.json() as {data?:{savedAt:string};error?:{message?:string}};if(!r.ok){setError(p.error?.message||"Your progress could not be saved.");return false;}setSavedAt(p.data!.savedAt);return true;}
+  async function submit(){if(!token)return;const didSave=await save(4);if(!didSave)return;const r=await fetch(`/api/style-profile/${token}/submit`,{method:"POST",headers:{"idempotency-key":crypto.randomUUID()},referrerPolicy:"no-referrer"}),p=await r.json() as {error?:{message?:string}};if(!r.ok){setError(p.error?.message||"Your Style Profile could not be submitted.");return;}setSubmitted(true);}
+
+  if(!token)return <div className="site-shell"><Announcement/><Header/><main className="profile-complete"><h1>Private link required.</h1><p>Please use the Style Profile link included with your confirmed appointment.</p></main><Footer/></div>;
+  if(loading)return <div className="site-shell"><Announcement/><Header/><main className="profile-complete"><p>Loading your private Style Profile…</p></main><Footer/></div>;
+  if(error&&!profile)return <div className="site-shell"><Announcement/><Header/><main className="profile-complete"><h1>Link unavailable.</h1><p>{error}</p></main><Footer/></div>;
 
   if (submitted) {
-    return <div className="site-shell"><Announcement /><Header /><main className="profile-complete"><span className="profile-complete-mark">✓</span><p className="eyebrow">STYLE PROFILE COMPLETE</p><h1>You&apos;re all set, Jamie.</h1><p>Kayla can now review your preferences and begin preparing for your appointment.</p><div className="confirmed-appointment"><span>CONFIRMED APPOINTMENT</span><strong>Women&apos;s Everyday Styling</strong><p>Thursday, July 16, 2026 · 10:30 AM<br />Macy&apos;s Boise Towne Square</p></div><Link className="button primary-button" href="/">Return to booking preview</Link></main><Footer /></div>;
+    return <div className="site-shell"><Announcement /><Header /><main className="profile-complete"><span className="profile-complete-mark">✓</span><p className="eyebrow">STYLE PROFILE COMPLETE</p><h1>You&apos;re all set, {profile?.clientFirstName}.</h1><p>Kayla can now review your preferences and begin preparing for your appointment.</p><div className="confirmed-appointment"><span>CONFIRMED APPOINTMENT</span><strong>{profile?.serviceName}</strong><p>{profile&&appointment(profile.confirmedStartAt)}<br />Macy&apos;s Boise Towne Square</p></div><Link className="button primary-button" href="/">Return to booking</Link></main><Footer /></div>;
   }
 
   return (
@@ -48,9 +61,9 @@ export default function StyleProfilePage() {
       <main className="profile-page">
         <section className="profile-welcome">
           <p className="eyebrow">YOUR STYLE PROFILE</p>
-          <h1>Hi, Jamie.</h1>
+          <h1>Hi, {profile?.clientFirstName}.</h1>
           <p>Tell me what feels like you, what does not, and what would make shopping easier. Your progress is saved as you go.</p>
-          <div className="confirmed-appointment"><span>CONFIRMED APPOINTMENT</span><strong>Women&apos;s Everyday Styling</strong><p>Thursday, July 16, 2026 · 10:30 AM<br />Macy&apos;s Boise Towne Square</p><a href="mailto:kayla.reynolds@macys.com?subject=Appointment%20Details">Need to change something?</a></div>
+          <div className="confirmed-appointment"><span>CONFIRMED APPOINTMENT</span><strong>{profile?.serviceName}</strong><p>{profile&&appointment(profile.confirmedStartAt)}<br />Macy&apos;s Boise Towne Square</p><a href="mailto:kayla.reynolds@macys.com?subject=Appointment%20Details">Need to change something?</a></div>
         </section>
 
         <section className="profile-workspace">
@@ -67,7 +80,7 @@ export default function StyleProfilePage() {
             <Question title="Pick up to 3 styles that feel most like you." hint={`${styles.length}/3 selected`}>
               <div className="visual-answer-grid">{styleOptions.map(([name, description], index) => <button key={name} className={styles.includes(name) ? "selected" : ""} onClick={() => setStyles(toggleLimited(styles, name))}><span className={`style-swatch swatch-${index + 1}`} aria-hidden="true" /><strong>{name}</strong><small>{description}</small></button>)}</div>
             </Question>
-            <Question title="Do you have inspiration photos, a Pinterest board, or colors you want me to see?" optional><input type="url" placeholder="Paste a link" /></Question>
+            <Question title="Do you have inspiration photos, a Pinterest board, or colors you want me to see?" optional><input type="url" value={inspirationLink} onChange={e=>setInspirationLink(e.target.value)} placeholder="Paste a link" /></Question>
           </div>}
 
           {step === 2 && <div className="profile-step">
@@ -79,30 +92,31 @@ export default function StyleProfilePage() {
               <div className="answer-chips">{["Midsection", "Chest", "Hips", "Arms", "Length", "Other"].map((option) => <button key={option} className={fitAreas.includes(option) ? "selected" : ""} onClick={() => setFitAreas(toggleLimited(fitAreas, option, 6))}>{option}</button>)}</div>
               {fitAreas.includes("Other") && <input className="other-answer" aria-label="Describe another area that is difficult to fit" value={otherFit} onChange={(e) => setOtherFit(e.target.value)} placeholder="Tell me what is usually difficult to fit" autoFocus />}
             </Question>
-            <div className="two-question-grid"><Question title="Which sizing department usually works best for you?"><select defaultValue=""><option value="" disabled>Select one</option><option>Regular</option><option>Petite</option><option>Plus</option><option>Tall / Long</option><option>Not sure</option></select></Question><Question title="What tends to feel best on your body?"><select defaultValue=""><option value="" disabled>Select one</option><option>Structured</option><option>Stretchy</option><option>A mix</option><option>Not sure / open to both</option></select></Question></div>
+            <div className="two-question-grid"><Question title="Which sizing department usually works best for you?"><select value={sizingDepartment} onChange={e=>setSizingDepartment(e.target.value)}><option value="" disabled>Select one</option><option>Regular</option><option>Petite</option><option>Plus</option><option>Tall / Long</option><option>Not sure</option></select></Question><Question title="What tends to feel best on your body?"><select value={comfortPreference} onChange={e=>setComfortPreference(e.target.value)}><option value="" disabled>Select one</option><option>Structured</option><option>Stretchy</option><option>A mix</option><option>Not sure / open to both</option></select></Question></div>
           </div>}
 
           {step === 3 && <div className="profile-step">
             <p className="small-label">PART THREE OF FOUR</p><h2>Sizes and silhouettes</h2><p className="profile-step-intro">Provide your best estimate for a starting point and we&apos;ll narrow it down from there.</p>
             <div className="size-grid">{[["top","Top size"],["pant","Pant size"],["dress","Dress size"],["shoe","Shoe size"]].map(([key,label]) => <label key={key}><span>{label} *</span><input value={sizes[key as keyof typeof sizes]} onChange={(e) => setSizes({...sizes,[key]:e.target.value})} placeholder="Enter Size(s)" /></label>)}</div>
             <Question title="How do you usually like your tops to fit?">
-              <div className="fit-question-layout"><div className="fit-image-space top-fit-image" aria-label="Reserved space for a 3000 by 1500 pixel top-fit reference image"><span>Top fit reference image</span></div><div className="answer-chips">{["More fitted", "Relaxed", "Oversized", "No preference"].map((option) => <button key={option}>{option}</button>)}</div></div>
+              <div className="fit-question-layout"><div className="fit-image-space top-fit-image" aria-label="Reserved space for a 3000 by 1500 pixel top-fit reference image"><span>Top fit reference image</span></div><div className="answer-chips">{["More fitted", "Relaxed", "Oversized", "No preference"].map((option) => <button className={topFit===option?"selected":""} onClick={()=>setTopFit(option)} key={option}>{option}</button>)}</div></div>
             </Question>
             <Question title="Which pant cuts do you prefer?" hint="Choose all that apply">
-              <div className="fit-question-layout"><div className="fit-image-space pant-fit-image" aria-label="Reserved space for a 1672 by 836 pixel pant-fit reference image"><span>Pant fit reference image</span></div><div className="answer-chips">{["Skinny", "Straight", "Bootcut", "Boyfriend / Girlfriend", "Wide Leg", "Open to trying different cuts"].map((option) => <button key={option}>{option}</button>)}</div></div>
+              <div className="fit-question-layout"><div className="fit-image-space pant-fit-image" aria-label="Reserved space for a 1672 by 836 pixel pant-fit reference image"><span>Pant fit reference image</span></div><div className="answer-chips">{["Skinny", "Straight", "Bootcut", "Boyfriend / Girlfriend", "Wide Leg", "Open to trying different cuts"].map((option) => <button className={pantCuts.includes(option)?"selected":""} onClick={()=>setPantCuts(toggleLimited(pantCuts,option,6))} key={option}>{option}</button>)}</div></div>
             </Question>
             <Question title="What bra size do you usually wear, if known?" optional><input value={sizes.bra} onChange={(e) => setSizes({...sizes,bra:e.target.value})} /></Question>
           </div>}
 
           {step === 4 && <div className="profile-step">
             <p className="small-label">PART FOUR OF FOUR</p><h2>Final details</h2><p className="profile-step-intro">A last chance to share anything that will help me make the appointment feel more like you.</p>
-            <Question title="What styles, colors, or silhouettes do you feel best in?"><textarea rows={4} /></Question>
-            <Question title="Are there any styles, colors, or pieces you do not want to wear?"><textarea rows={4} placeholder="‘Nothing specific’ is a perfectly good answer." /></Question>
-            <Question title="Is there anything else you'd like me to know before our appointment?" optional><textarea rows={4} /></Question>
+            <Question title="What styles, colors, or silhouettes do you feel best in?"><textarea rows={4} value={bestStyles} onChange={e=>setBestStyles(e.target.value)} /></Question>
+            <Question title="Are there any styles, colors, or pieces you do not want to wear?"><textarea rows={4} value={avoidStyles} onChange={e=>setAvoidStyles(e.target.value)} placeholder="‘Nothing specific’ is a perfectly good answer." /></Question>
+            <Question title="Is there anything else you'd like me to know before our appointment?" optional><textarea rows={4} value={finalNotes} onChange={e=>setFinalNotes(e.target.value)} /></Question>
             <div className="profile-privacy"><strong>Your information stays private.</strong><p>It is used only to prepare for and manage your styling appointment. You can update this profile for 30 days after submitting it.</p></div>
           </div>}
 
-          <div className="profile-actions"><button className="save-later">Save &amp; finish later</button><span>Saved just now</span><div>{step > 1 && <button className="text-button" onClick={() => setStep(step - 1)}>← Back</button>}{step < 4 ? <button className="button primary-button" onClick={() => setStep(step + 1)}>Continue</button> : <button className="button primary-button" onClick={() => setSubmitted(true)}>Submit Style Profile</button>}</div></div>
+          {error&&<p className="booking-error" role="alert">{error}</p>}
+          <div className="profile-actions"><button className="save-later" onClick={()=>void save()}>Save &amp; finish later</button><span>{savedAt?"Progress saved":""}</span><div>{step > 1 && <button className="text-button" onClick={() => setStep(step - 1)}>← Back</button>}{step < 4 ? <button className="button primary-button" onClick={async()=>{const next=step+1;if(await save(next))setStep(next);}}>Continue</button> : <button className="button primary-button" onClick={()=>void submit()}>Submit Style Profile</button>}</div></div>
         </section>
       </main>
       <Footer />
@@ -117,3 +131,4 @@ function Question({ title, hint, optional, children }: { title: string; hint?: s
 function Announcement() { return <div className="announcement-bar">Complimentary Personal Styling Appointments | 20% Off For First Time Clients*</div>; }
 function Header() { return <header className="site-header"><div className="container header-inner"><Link className="site-logo" href="/" aria-label="Style with Kayla home"><img src="/images/stylewithkayla_logo.png" alt="Style with Kayla" /></Link><nav className="site-nav" aria-label="Main navigation"><Link href="/">Home</Link><Link href="/#services">Services</Link><Link href="/#events">Events</Link><Link href="/#about">About Me</Link><a href="#contact">Contact</a></nav><Link className="button header-cta" href="/">BOOK APPOINTMENT</Link></div></header>; }
 function Footer() { return <footer className="site-footer" id="contact"><div className="container footer-inner"><div className="footer-column footer-brand"><Link className="footer-logo" href="/"><img src="/images/stylewithkayla_logo.png" alt="Style with Kayla" /></Link></div><nav className="footer-column footer-links"><p className="footer-kicker">Quick Links</p><Link href="/#services">Services</Link><Link href="/#events">Events</Link><span className="footer-link--inactive">Guides</span><span className="footer-link--inactive">FAQ</span><Link href="/#about">About Me</Link></nav><div className="footer-column footer-contact"><p className="footer-kicker">Let&apos;s Connect</p><div className="footer-contact-item"><span><img src="/images/phone.png" alt="" /></span><a href="tel:+12088596427">208-859-6427</a></div><div className="footer-contact-item"><span><img src="/images/email.png" alt="" /></span><a href="mailto:kayla.reynolds@macys.com">kayla.reynolds@macys.com</a></div><div className="footer-contact-item"><span><img src="/images/location.png" alt="" /></span><p>Macy&apos;s Boise Towne Square<br />370 N. Milwaukee St.<br />Boise, ID 83704</p></div></div><div className="footer-column footer-social"><p className="footer-kicker">Follow Along</p><Link className="button button--primary" href="/">Book Appointment</Link></div></div><div className="container footer-bottom"><span>© 2026 Style with Kayla</span><span>|</span><span>Personal Stylist at Macy&apos;s</span><span>|</span><span>All Rights Reserved</span></div></footer>; }
+function appointment(value:string){return new Intl.DateTimeFormat("en-US",{timeZone:"America/Boise",weekday:"long",month:"long",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"}).format(new Date(value));}
