@@ -88,4 +88,11 @@ This log records approved product decisions that must travel with the code. The 
 - Email/SMS delivery provider and sender identity
 - Whether to enable R2 uploads after the first release, plus image size and formats
 - Microsoft account/calendar connection (Graph phase)
-- External scheduler for the protected retention-maintenance endpoint
+- GitHub Actions is the selected temporary scheduler for the protected retention-maintenance endpoint.
+
+## 2026-07-14 — Prepared GitHub Actions maintenance schedule
+
+- The scheduler is proposed in `kaylasreynolds/stylewithkayla` pull request 32 and changes only a workflow file, not public website pages or assets.
+- The prepared schedule is daily at `10:15 UTC` (3:15 AM Boise standard time; 4:15 AM Boise daylight time).
+- Calls require both the private Sites dispatch bypass token and an independent maintenance bearer secret, stored as encrypted GitHub repository secrets.
+- The schedule remains inactive until the draft pull request is merged, the matching Sites and GitHub secrets are provisioned, and a manual workflow run succeeds.
