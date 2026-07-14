@@ -54,6 +54,8 @@ This log records approved product decisions that must travel with the code. The 
 - Private/admin responses use `Cache-Control: no-store`; private links use `Referrer-Policy: no-referrer`.
 - Client strings are length-limited and never rendered as raw HTML. Sensitive payloads reject unexpected keys.
 - Written booking/profile history is retained for two years after the most recent completed appointment.
+- Retention cleanup revokes expired private links and deletes due written data only when there is no active appointment or unresolved access/correction request. Deletion anonymizes a minimal client/audit row rather than retaining booking or Profile content.
+- Client access, correction, and deletion requests are recorded and resolved in the protected admin area. Active appointments block deletion until they are cancelled or declined.
 - Inspiration-image uploads through private R2 are explicitly deferred for the first release. Clients use the optional inspiration-link field instead.
 - If R2 uploads are approved later, they remain limited to one private image with deletion 30 days after completion or cancellation; size and MIME policy must be approved before implementation.
 - Until a delivery provider is approved, communications are recorded as deferred; the system must not claim an email or SMS was sent.
@@ -86,3 +88,4 @@ This log records approved product decisions that must travel with the code. The 
 - Email/SMS delivery provider and sender identity
 - Whether to enable R2 uploads after the first release, plus image size and formats
 - Microsoft account/calendar connection (Graph phase)
+- External scheduler for the protected retention-maintenance endpoint
