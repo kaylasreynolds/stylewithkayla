@@ -360,8 +360,8 @@ function Footer() {
           <a className="button button--primary" href="mailto:kayla.reynolds@macys.com?subject=Free%20Styling%20Appointment">Book Appointment</a>
         </div>
       </div>
+      <div className="container privacy-notice" id="privacy"><p className="footer-kicker">Privacy details</p><p>Your information is used only to review, manage, and prepare for your styling appointment. A pending request holds the selected time until Kayla confirms, declines, releases, or replaces it. Confirmed clients receive a private Style Profile link that expires 30 days after issue. Written booking and profile history is retained for two years after the most recent completed appointment. Contact Kayla to request access, correction, or deletion.</p></div>
       <div className="container footer-bottom"><span>&copy; 2026 Style with Kayla</span><span aria-hidden="true">|</span><span>Personal Stylist at Macy&apos;s</span><span aria-hidden="true">|</span><span>All Rights Reserved</span></div>
-      <span id="privacy" />
     </footer>
   );
 }

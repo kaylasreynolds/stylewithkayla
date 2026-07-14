@@ -74,6 +74,13 @@ This log records approved product decisions that must travel with the code. The 
 - Expired and revoked links cannot read or modify profile data.
 - The lifetime is enforced centrally by `STYLE_PROFILE_TOKEN_TTL_MS`; changing it requires a new decision-log entry and tests.
 
+## 2026-07-14 — Alternate-time response links
+
+- Alternate-time links use the same private-token security baseline as Style Profile links.
+- They expire at the earlier of 30 days after issuance or the proposed appointment start.
+- Accepting or replacing the proposed time revokes the action link immediately.
+- Accepting creates the confirmed appointment and a separate 30-day Style Profile link.
+
 ## Deferred decisions
 
 - Email/SMS delivery provider and sender identity
