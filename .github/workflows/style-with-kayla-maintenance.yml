@@ -1,0 +1,39 @@
+name: Style With Kayla maintenance
+
+on:
+  schedule:
+    - cron: "15 10 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: style-with-kayla-maintenance
+  cancel-in-progress: false
+
+jobs:
+  run-maintenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Run protected retention maintenance
+        env:
+          TARGET_URL: https://style-with-kayla-booking-mockup.ksmoop.chatgpt.site/api/internal/maintenance
+          MAINTENANCE_SECRET: ${{ secrets.SWK_MAINTENANCE_SECRET }}
+          SITES_BYPASS_TOKEN: ${{ secrets.SWK_SITES_BYPASS_TOKEN }}
+        shell: bash
+        run: |
+          if [ -z "$MAINTENANCE_SECRET" ] || [ -z "$SITES_BYPASS_TOKEN" ]; then
+            echo "Required repository secrets are not configured."
+            exit 1
+          fi
+
+          status="$(curl --silent --show-error             --output /dev/null             --write-out "%{http_code}"             --request POST             --header "Authorization: Bearer $MAINTENANCE_SECRET"             --header "OAI-Sites-Authorization: Bearer $SITES_BYPASS_TOKEN"             "$TARGET_URL")"
+
+          if [ "$status" -lt 200 ] || [ "$status" -ge 300 ]; then
+            echo "Maintenance endpoint returned HTTP $status."
+            exit 1
+          fi
+
+          echo "Maintenance completed successfully."
