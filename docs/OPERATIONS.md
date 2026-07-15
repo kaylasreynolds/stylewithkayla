@@ -30,6 +30,81 @@ Kayla can preview the counts and run maintenance from `/admin/privacy`. The same
 
 The proposed schedule is daily at `10:15 UTC`, which runs overnight at 3:15 AM Boise standard time or 4:15 AM Boise daylight time. The trigger is not active until pull request 32 is merged, both repository secrets are provisioned, the matching maintenance secret is configured in Sites, and one manual workflow run succeeds. Run the admin operation after each release and at least monthly until activation is verified.
 
+## Cloudflare Worker preview
+
+This branch is configured only for a separate Workers preview. It must not be attached to `stylewithkayla.com`, used to modify DNS, or treated as the production marketing site.
+
+### Dashboard values
+
+| Cloudflare field | Value |
+|---|---|
+| Project type | Workers & Pages → Create application → Worker → Import a repository |
+| Repository | `kaylasreynolds/stylewithkayla` |
+| Production branch for this preview project | `recovered-private-prototype-2026-07-14` |
+| Root directory | `/` |
+| Build command | `npm ci && npm run build` |
+| Deploy command | `npx wrangler deploy --config wrangler.jsonc` |
+| Worker name | `stylewithkayla-private-preview` |
+| Worker entry point | `dist/server/index.js` |
+| Static assets directory | `dist/client` |
+| Static assets binding | `ASSETS` |
+| D1 binding name | `DB` |
+| D1 database name | `stylewithkayla-private-preview` |
+| D1 migrations directory | `migrations` |
+
+The committed `database_id` is an intentional all-zero placeholder. After manually creating a preview-only D1 database, replace that placeholder in the preview project's configuration with the actual preview database ID before deploying.
+
+### Required runtime configuration
+
+Configure these only in the Worker project under **Settings → Variables and Secrets**:
+
+- `ADMIN_EMAILS`: encrypted secret or server-side text variable containing the authorized admin email list in the format expected by the application.
+- `MAINTENANCE_SECRET`: encrypted secret used by the protected maintenance endpoint.
+
+Do not prefix either name with `NEXT_PUBLIC_`, do not place values in source control, and do not add them as client-side build variables. `.env.example` contains names only for local setup documentation.
+
+The Worker also requires these non-secret resource bindings:
+
+- D1 database binding `DB`.
+- Static asset binding `ASSETS`, provided by Wrangler from `dist/client`.
+- Cloudflare Images binding `IMAGES`, used by the vinext image optimization route.
+
+### Preview database and migrations
+
+Create a dedicated preview database manually, then update only the preview configuration:
+
+```bash
+npx wrangler d1 create stylewithkayla-private-preview
+# Copy the returned database_id into wrangler.jsonc.
+npx wrangler d1 migrations apply stylewithkayla-private-preview --remote --config wrangler.jsonc
+```
+
+The migration command can also be run as:
+
+```bash
+npm run db:migrate:preview
+```
+
+Never point the preview Worker at a production D1 database or copy production client data into it.
+
+### Local verification and deployment
+
+```bash
+npm ci
+npm run build
+npm test
+npm run validate:artifact
+npm run dev
+```
+
+Deployment is deliberately manual:
+
+```bash
+npm run deploy:preview
+```
+
+That command builds and deploys the separate Worker named `stylewithkayla-private-preview`. Do not run it until the preview D1 binding and runtime secrets have been configured.
+
 ## Release verification
 
 Before accepting a release:
