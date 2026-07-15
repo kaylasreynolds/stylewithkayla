@@ -1,0 +1,133 @@
+{
+  "_framework-CXnKph_e.js": {
+    "file": "assets/framework-CXnKph_e.js",
+    "name": "framework",
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js"
+    ]
+  },
+  "_link-BSWc2vms.js": {
+    "file": "assets/link-BSWc2vms.js",
+    "name": "link",
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "virtual:vinext-app-browser-entry",
+      "_framework-CXnKph_e.js"
+    ],
+    "dynamicImports": [
+      "node_modules/vinext/dist/shims/router.js"
+    ]
+  },
+  "_rolldown-runtime-S-ySWqyJ.js": {
+    "file": "assets/rolldown-runtime-S-ySWqyJ.js",
+    "name": "rolldown-runtime"
+  },
+  "app/admin/AdminDashboard.tsx": {
+    "file": "assets/AdminDashboard-rvcoal74.js",
+    "name": "AdminDashboard",
+    "src": "app/admin/AdminDashboard.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "_framework-CXnKph_e.js"
+    ]
+  },
+  "app/admin/availability/AdminAvailability.tsx": {
+    "file": "assets/AdminAvailability-DPf7Y8Q8.js",
+    "name": "AdminAvailability",
+    "src": "app/admin/availability/AdminAvailability.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "_framework-CXnKph_e.js"
+    ]
+  },
+  "app/admin/privacy/AdminPrivacy.tsx": {
+    "file": "assets/AdminPrivacy-CzgOTEcr.js",
+    "name": "AdminPrivacy",
+    "src": "app/admin/privacy/AdminPrivacy.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "_framework-CXnKph_e.js"
+    ]
+  },
+  "app/client-actions/page.tsx": {
+    "file": "assets/page-kOzzFiZv.js",
+    "name": "page",
+    "src": "app/client-actions/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "_framework-CXnKph_e.js",
+      "_link-BSWc2vms.js"
+    ]
+  },
+  "app/page.tsx": {
+    "file": "assets/page-Dn9cabTe.js",
+    "name": "page",
+    "src": "app/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "_framework-CXnKph_e.js"
+    ]
+  },
+  "app/style-profile/page.tsx": {
+    "file": "assets/page-B0m-hOUG.js",
+    "name": "page",
+    "src": "app/style-profile/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "_framework-CXnKph_e.js",
+      "_link-BSWc2vms.js"
+    ]
+  },
+  "node_modules/vinext/dist/shims/layout-segment-context.js": {
+    "file": "assets/layout-segment-context-DvKot9jq.js",
+    "name": "layout-segment-context",
+    "src": "node_modules/vinext/dist/shims/layout-segment-context.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "virtual:vinext-app-browser-entry",
+      "_framework-CXnKph_e.js"
+    ]
+  },
+  "node_modules/vinext/dist/shims/router.js": {
+    "file": "assets/router-427wVbXz.js",
+    "name": "router",
+    "src": "node_modules/vinext/dist/shims/router.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "virtual:vinext-app-browser-entry",
+      "_framework-CXnKph_e.js",
+      "_link-BSWc2vms.js"
+    ],
+    "dynamicImports": [
+      "_framework-CXnKph_e.js"
+    ]
+  },
+  "virtual:vinext-app-browser-entry": {
+    "file": "assets/index-Cv_ub4sI.js",
+    "name": "index",
+    "src": "virtual:vinext-app-browser-entry",
+    "isEntry": true,
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "_framework-CXnKph_e.js"
+    ],
+    "dynamicImports": [
+      "app/admin/AdminDashboard.tsx",
+      "node_modules/vinext/dist/shims/layout-segment-context.js",
+      "app/admin/availability/AdminAvailability.tsx",
+      "virtual:vinext-app-browser-entry",
+      "app/page.tsx",
+      "app/admin/privacy/AdminPrivacy.tsx",
+      "app/client-actions/page.tsx",
+      "app/style-profile/page.tsx"
+    ]
+  }
+}
