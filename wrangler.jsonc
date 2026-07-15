@@ -21,7 +21,7 @@
       "binding": "DB",
       "database_name": "stylewithkayla-private-preview",
       "database_id": "58c8baf0-d732-44f9-83e1-52e7014d5273",
-      "migrations_dir": "migrations"
+      "migrations_dir": "drizzle"
     }
   ]
 }
