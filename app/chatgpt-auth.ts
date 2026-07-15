@@ -7,10 +7,14 @@ export type ChatGPTUser = {
   fullName: string | null;
 };
 
-const USER_EMAIL_HEADER = "oai-authenticated-user-email";
-const USER_FULL_NAME_HEADER = "oai-authenticated-user-full-name";
-const USER_FULL_NAME_ENCODING_HEADER =
+const CHATGPT_USER_EMAIL_HEADER = "oai-authenticated-user-email";
+const CHATGPT_USER_FULL_NAME_HEADER = "oai-authenticated-user-full-name";
+const CHATGPT_USER_FULL_NAME_ENCODING_HEADER =
   "oai-authenticated-user-full-name-encoding";
+
+const CLOUDFLARE_ACCESS_EMAIL_HEADER =
+  "cf-access-authenticated-user-email";
+
 const PERCENT_ENCODED_UTF8 = "percent-encoded-utf-8";
 const SIGN_IN_PATH = "/signin-with-chatgpt";
 const SIGN_OUT_PATH = "/signout-with-chatgpt";
@@ -18,13 +22,27 @@ const CALLBACK_PATH = "/callback";
 
 export async function getChatGPTUser(): Promise<ChatGPTUser | null> {
   const requestHeaders = await headers();
-  const email = requestHeaders.get(USER_EMAIL_HEADER);
-  if (!email) return null;
 
-  const encodedFullName = requestHeaders.get(USER_FULL_NAME_HEADER);
+  const chatGPTEmail = requestHeaders.get(CHATGPT_USER_EMAIL_HEADER);
+  const cloudflareEmail = requestHeaders.get(
+    CLOUDFLARE_ACCESS_EMAIL_HEADER,
+  );
+
+  const email = chatGPTEmail ?? cloudflareEmail;
+
+  if (!email) {
+    return null;
+  }
+
+  const encodedFullName = requestHeaders.get(
+    CHATGPT_USER_FULL_NAME_HEADER,
+  );
+
   const fullName =
     encodedFullName &&
-    requestHeaders.get(USER_FULL_NAME_ENCODING_HEADER) === PERCENT_ENCODED_UTF8
+      requestHeaders.get(
+        CHATGPT_USER_FULL_NAME_ENCODING_HEADER,
+      ) === PERCENT_ENCODED_UTF8
       ? safeDecodeURIComponent(encodedFullName)
       : null;
 
@@ -39,9 +57,14 @@ export async function requireChatGPTUser(
   returnTo: string,
 ): Promise<ChatGPTUser> {
   const user = await getChatGPTUser();
-  if (user) return user;
 
-  redirect(chatGPTSignInPath(returnTo));
+  if (user) {
+    return user;
+  }
+
+  throw new Error(
+    "Authentication required. Protect this route with Cloudflare Access.",
+  );
 }
 
 export function chatGPTSignInPath(returnTo: string): string {
@@ -55,16 +78,25 @@ export function chatGPTSignOutPath(returnTo = "/"): string {
 }
 
 function safeRelativeReturnPath(value: string): string {
-  if (!value.startsWith("/") || value.startsWith("//")) return "/";
+  if (!value.startsWith("/") || value.startsWith("//")) {
+    return "/";
+  }
 
   let url: URL;
+
   try {
     url = new URL(value, "https://app.local");
   } catch {
     return "/";
   }
-  if (url.origin !== "https://app.local") return "/";
-  if (isReservedAuthPath(url.pathname)) return "/";
+
+  if (url.origin !== "https://app.local") {
+    return "/";
+  }
+
+  if (isReservedAuthPath(url.pathname)) {
+    return "/";
+  }
 
   return `${url.pathname}${url.search}${url.hash}`;
 }
