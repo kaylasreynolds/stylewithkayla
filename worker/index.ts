@@ -41,7 +41,11 @@ const worker = {
         },
       }, allowedWidths);
     }
+    const assetResponse = await env.ASSETS.fetch(request);
 
+    if (assetResponse.status !== 404) {
+      return assetResponse;
+    }
     return handler.fetch(request, env, ctx);
   },
 };
