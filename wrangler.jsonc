@@ -1,14 +1,12 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "stylewithkayla-private-preview",
+  "name": "stylewithkayla-combined-preview",
   "compatibility_date": "2026-07-15",
   "observability": {
     "enabled": true
   },
-  "assets": {
-    "directory": "public"
-  },
-  "compatibility_flags": [
-    "nodejs_compat"
-  ]
+ "assets": {
+  "directory": "public",
+  "binding": "ASSETS"
+}
 }

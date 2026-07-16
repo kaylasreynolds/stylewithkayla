@@ -1,0 +1,2 @@
+import{ApiError,dataResponse,withApi}from"@/lib/server/http";import{getD1}from"@/lib/server/runtime";import{calculateAvailability}from"@/lib/server/scheduling";
+export async function GET(request:Request){return withApi(async id=>{const u=new URL(request.url),s=u.searchParams.get("serviceCode"),f=u.searchParams.get("from"),t=u.searchParams.get("to");if(!s||!f||!t)throw new ApiError(422,"MISSING_QUERY","Choose a service and date range.");return dataResponse(await calculateAvailability(getD1(),s,f,t),200,id);});}
