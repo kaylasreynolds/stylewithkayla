@@ -16,7 +16,7 @@ Use this checklist for manual acceptance testing before releasing booking and St
 ## General release readiness
 
 - [ ] Confirm the test environment is running the intended release candidate.
-- [ ] Confirm test email delivery or email capture is available for client/admin notifications.
+- [ ] Confirm test email/SMS delivery providers or capture tools are available for client/admin notifications, or confirm the UI uses no-provider fallback copy instead of claiming delivery.
 - [ ] Confirm test payment, calendar, and external-service integrations are in sandbox mode, if applicable.
 - [ ] Confirm test data can be safely created, updated, exported, cancelled, declined, completed, and deleted.
 - [ ] Confirm no real client personal data is used during testing.
@@ -27,9 +27,9 @@ Use this checklist for manual acceptance testing before releasing booking and St
 - [ ] Confirm the page clearly explains the booking flow and required information.
 - [ ] Submit a valid booking request with client contact details, requested service, requested date/time, and any required notes.
 - [ ] Confirm required-field validation is shown for missing or malformed inputs.
-- [ ] Confirm the client sees a success or next-steps message after submission.
+- [ ] Confirm the client sees a success or next-steps message after submission, such as “Kayla will follow up with confirmation details,” when no delivery provider is active.
 - [ ] Confirm the booking request appears in the admin queue with the submitted details intact.
-- [ ] Confirm expected client and admin notifications are sent or captured.
+- [ ] Confirm expected client and admin notifications are sent/captured only when providers are active; otherwise confirm communication is recorded for follow-up without claiming email or SMS delivery.
 
 ## Age-based profile routing
 
@@ -74,7 +74,7 @@ Use this checklist for manual acceptance testing before releasing booking and St
 - [ ] Confirm the request using the admin action.
 - [ ] Confirm the booking status changes to confirmed.
 - [ ] Confirm any active hold is converted into the confirmed appointment/reservation.
-- [ ] Confirm the client receives clear confirmation details, including date, time, service, and next steps.
+- [ ] Confirm the client receives clear confirmation details when a provider is active; otherwise confirm the admin-facing copy says “Communication recorded for follow-up” and gives Kayla manual follow-up guidance.
 - [ ] Confirm the admin view shows an audit trail or status history for the confirmation.
 
 ## Admin alternate-time proposal
@@ -85,7 +85,7 @@ Use this checklist for manual acceptance testing before releasing booking and St
 - [ ] Confirm the request status changes to pending client acceptance or equivalent.
 - [ ] Confirm the original requested hold is released or clearly superseded according to product rules.
 - [ ] Confirm the proposed alternate time is held, reserved, or otherwise protected according to product rules.
-- [ ] Confirm the client receives a message with the proposed alternate time and clear accept/decline instructions.
+- [ ] Confirm the client receives a message with the proposed alternate time and clear accept/decline instructions when a provider is active; otherwise confirm the app records the communication for follow-up without claiming delivery.
 
 ## Client alternate-time acceptance
 
@@ -94,7 +94,7 @@ Use this checklist for manual acceptance testing before releasing booking and St
 - [ ] Accept the alternate time.
 - [ ] Confirm the request status changes to confirmed or the intended accepted state.
 - [ ] Confirm the accepted alternate time becomes the active appointment/reservation.
-- [ ] Confirm the client receives confirmation and the admin view updates without requiring a page refresh, or updates correctly after refresh.
+- [ ] Confirm the client receives confirmation when a provider is active; otherwise confirm the page says Kayla will follow up with confirmation details and the admin view updates without requiring a page refresh, or updates correctly after refresh.
 - [ ] Confirm expired, cancelled, or already-handled alternate proposals cannot be accepted.
 
 ## Private Style Profile link access
@@ -105,7 +105,7 @@ Use this checklist for manual acceptance testing before releasing booking and St
 - [ ] Open the link after signing in as another client, if applicable.
 - [ ] Confirm cross-account access is blocked or limited according to product rules.
 - [ ] Confirm expired or revoked private links no longer provide access.
-- [ ] Confirm the page copy makes privacy expectations clear without exposing sensitive tokens or internal IDs.
+- [ ] Confirm the page copy makes privacy expectations clear without exposing sensitive tokens or internal IDs, and admin copy says “Copy this private link into the client message” when no provider sends it automatically.
 
 ## Draft save and final submission
 

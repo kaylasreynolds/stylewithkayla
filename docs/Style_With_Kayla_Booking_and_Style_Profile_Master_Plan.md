@@ -34,7 +34,7 @@ This is a content and behavior plan. It should be approved before database migra
 3. Client provides contact information, requested appointment timing, and a few routing details.
 4. The request is saved as `pending`.
 5. Kayla approves, declines, or proposes a different time.
-6. When confirmed, the client receives the confirmed details, calendar options, and a private Style Profile link.
+6. When confirmed, Kayla follows up with confirmation details, calendar options, and a private Style Profile link. The app must not say an email or SMS was sent unless an active delivery provider actually sent it.
 7. The link silently loads the correct profile.
 8. The client completes the profile before the appointment.
 9. Kayla sees the booking and Style Profile together in the admin view.
@@ -65,8 +65,8 @@ The internal values can remain `under_40`, `40_plus`, and `manual_review`; the c
 | Field key | Client-facing question | Input | Requirement / behavior |
 |---|---|---|---|
 | `client_name` | Full name | Text | Required |
-| `email` | Email address | Email | Required; used for confirmation and private link |
-| `phone` | Phone number | Telephone | Required; format gently without rejecting normal punctuation |
+| `email` | Email address | Email | Required; used for follow-up and the private link; do not promise email delivery unless an email provider is active |
+| `phone` | Phone number | Telephone | Required; format gently without rejecting normal punctuation; do not promise SMS delivery unless an SMS provider is active |
 | `service_type` | Which service would you like to request? | Single select | Required; preselected when opened from a service card |
 | `requested_start_at` | What appointment date and time would you prefer? | Date and time | Required; collect exactly one preferred appointment date/time; this is a request, not a confirmed appointment; must be no more than 60 days in advance |
 | `returning_client` | Have we worked together before? | Yes / No | Required; controls returning-client questions later |
@@ -104,6 +104,19 @@ Minimum recommended values:
 - `completed` — appointment occurred
 
 Store `requested_start_at`, `proposed_start_at`, and `confirmed_start_at` separately. Do not overwrite the client's original request when Kayla proposes or confirms a different time. Alternate-time response links should let the client accept the proposed time or decline/cancel the request; the request must remain `change_proposed` until the client accepts the alternate time or the request is otherwise declined/cancelled.
+
+### Communication copy and delivery-provider rules
+
+User-facing and admin-facing copy in booking, confirmation, alternate-time, and Style Profile link flows must describe what the app actually did. Do not claim that an email, SMS, or notification has been sent unless the corresponding delivery provider is active and the send attempt succeeded or is explicitly queued by that provider.
+
+Fallback copy when no delivery provider is active:
+
+- Booking submission success: “Kayla will follow up with confirmation details.”
+- Admin confirmation or alternate-time action: “Communication recorded for follow-up.”
+- Private Style Profile link action: “Copy this private link into the client message.”
+- Admin logs/templates: record the intended communication channel and status, but avoid client-facing wording like “Email sent,” “Text sent,” or “We sent you a link” unless provider delivery is active.
+
+When provider delivery is active, copy may reference the actual channel, such as “Confirmation email sent,” only after the app has a provider response or queued status that supports that claim.
 
 ## 6. Shared Style Profile behavior
 
