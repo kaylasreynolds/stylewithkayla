@@ -1,22 +1,30 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "stylewithkayla-combined-preview",
-  "compatibility_date": "2026-07-15",
-  "observability": {
-    "enabled": true
-  },
-  "assets": {
-    "directory": "public",
-    "binding": "ASSETS"
-  },
-  "vars": {
-  "ADMIN_EMAILS": "kaylasreynolds@gmail.com"
-},
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "stylewithkayla-combined-preview",
-      "database_id": "4372f5c8-a17d-4b26-9867-98fba61fe7b9"
-    }
-  ]
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "stylewithkayla-combined-preview",
+	"main": "./dist/server/index.js",
+	"compatibility_date": "2026-07-15",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"observability": {
+		"enabled": true
+	},
+	"assets": {
+		"directory": "./public",
+		"binding": "ASSETS"
+	},
+	"images": {
+		"binding": "IMAGES"
+	},
+	"vars": {
+		"ADMIN_EMAILS": "kaylasreynolds@gmail.com"
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "stylewithkayla-combined-preview",
+			"database_id": "4dfede5d-4f59-4886-8e2b-fe87e56b29a9",
+			"migrations_dir": "./drizzle"
+		}
+	]
 }
