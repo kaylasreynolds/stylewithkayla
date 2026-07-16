@@ -1,8 +1,13 @@
 import { ApiError } from "@/lib/server/http";
-import { getAdminEmails } from "@/lib/server/runtime";
+import {
+  getAdminEmails,
+  getLocalAdminEmail,
+} from "@/lib/server/runtime";
 
 export function requireAdmin(request: Request): string {
-  const email =
+  const url = new URL(request.url);
+
+  const authenticatedEmail =
     request.headers
       .get("oai-authenticated-user-email")
       ?.trim()
@@ -11,6 +16,14 @@ export function requireAdmin(request: Request): string {
       .get("cf-access-authenticated-user-email")
       ?.trim()
       .toLowerCase();
+
+  const isLocalhost =
+    url.hostname === "127.0.0.1" ||
+    url.hostname === "localhost";
+
+  const email =
+    authenticatedEmail ??
+    (isLocalhost ? getLocalAdminEmail() : null);
 
   if (!email) {
     throw new ApiError(
