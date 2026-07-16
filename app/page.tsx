@@ -333,7 +333,7 @@ function Header() {
       <div className="container header-inner">
         <a className="site-logo" href="#top" aria-label="Style with Kayla home"><img src="/images/stylewithkayla_logo.png" alt="Style with Kayla" /></a>
         <nav className="site-nav" aria-label="Main navigation"><a href="#top">Home</a><a href="#services">Services</a><a href="#events">Events</a><a href="#about">About Me</a><a href="#contact">Contact</a></nav>
-        <a className="button header-cta" href="mailto:kayla.reynolds@macys.com?subject=Free%20Styling%20Appointment">BOOK APPOINTMENT</a>
+        <a className="button header-cta" href="/book">BOOK APPOINTMENT</a>
       </div>
     </header>
   );
@@ -357,7 +357,7 @@ function Footer() {
         <div className="footer-column footer-social">
           <p className="footer-kicker">Follow Along</p>
           <div className="footer-social-links" aria-label="Social profiles">{socialIcons.map((icon) => <span className="footer-social-icon" role="img" aria-label={icon[0].toUpperCase() + icon.slice(1)} key={icon}><img src={`/images/${icon}.png`} alt="" aria-hidden="true" /></span>)}</div>
-          <a className="button button--primary" href="mailto:kayla.reynolds@macys.com?subject=Free%20Styling%20Appointment">Book Appointment</a>
+          <a className="button button--primary" href="/book">Book Appointment</a>
         </div>
       </div>
       <div className="container privacy-notice" id="privacy"><p className="footer-kicker">Privacy details</p><p>Your information is used only to review, manage, and prepare for your styling appointment. A pending request holds the selected time until Kayla confirms, declines, releases, or replaces it. Confirmed clients receive a private Style Profile link that expires 30 days after issue. Written booking and profile history is retained for two years after the most recent completed appointment. Contact Kayla to request access, correction, or deletion.</p></div>
