@@ -45,7 +45,15 @@ delete config.legacy_env;
 
 config.assets = config.assets ?? {};
 config.assets.binding = "ASSETS";
+if (Array.isArray(config.d1_databases)) {
+  const realDb = config.d1_databases.find(
+    (database) =>
+      database.binding === "DB" &&
+      database.database_id !== "00000000-0000-4000-8000-000000000000",
+  );
 
+  config.d1_databases = realDb ? [realDb] : config.d1_databases;
+}
 fs.writeFileSync(configPath, `${JSON.stringify(config)}\n`);
 
 console.log("Generated Wrangler configuration normalized.");
