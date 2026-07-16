@@ -1,2 +1,0 @@
-# stylewithkayla
-Personal Stylist

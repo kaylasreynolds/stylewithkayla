@@ -5,3 +5,7 @@
 .env*
 !.env.example
 node_modules
+# generated/runtime files
+.sites-runtime/
+dist/
+reference-site/
