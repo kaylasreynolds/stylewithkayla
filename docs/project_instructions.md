@@ -319,53 +319,6 @@ GitHub Issues are the project backlog, not a log of every tiny edit.
 
 ---
 
-# Current Priorities
-
-## Priority 1 — Public Website
-
-- Homepage refinement
-- About page personality and copy
-- Women’s Styling
-- Men’s Styling
-- Macy’s Events
-
-## Priority 2 — Appointment Experience and Style Profiles
-
-- Your Appointment hub
-- Women’s Style Profile
-- Profile completion experience
-- Men’s Style Profile
-- Event Style Profile
-- Bra Fit Profile
-- Replace Microsoft Forms
-
-## Priority 3 — Booking Experience
-
-- Appointment selection
-- Booking flow
-- Replace Microsoft Bookings over time
-- Calendar integration
-
-## Priority 4 — Client Resources
-
-- Resource library structure
-- Color guides
-- Body shape guides
-- Style guides
-- Outfit inspiration
-- Appointment preparation resources
-
-## Priority 5 — Optimization
-
-- Photography
-- Testimonials
-- SEO
-- Accessibility review
-- Performance
-- Analytics
-
----
-
 # Working Rules for Future AI Assistance
 
 Before making recommendations or changes:
