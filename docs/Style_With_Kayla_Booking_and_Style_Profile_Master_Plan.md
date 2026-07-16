@@ -352,19 +352,28 @@ Store `requested_start_at` and `confirmed_start_at` separately. Do not overwrite
 
 ## 13. Open decisions before visual mockups
 
-- How far in advance may clients request appointments?
-- Should clients select any open date/time, submit several preferred times, or request one preferred time?
-- How should Kayla propose a different time and how does the client accept it?
-- Until what point may a client edit a submitted Style Profile?
-- Should clients be able to upload images in the first version, or begin with links only?
+The durable engineering ledger is `docs/DECISIONS.md`. Decisions already approved there should not be redefined in this planning section.
+
+### Resolved in `docs/DECISIONS.md`
+
+- Booking request horizon: resolved.
+- Requested appointment time count: resolved.
+- Kayla-proposed alternate time flow: resolved.
+- Client editing after Style Profile submission: resolved.
+- First-release inspiration image handling: resolved.
+- Written Style Profile history retention: resolved.
+- Private Style Profile link expiration: resolved.
+
+### Still open
+
 - Should bra size be omitted entirely unless the client requests bra help?
 - Should shoe-size ranges extend beyond the current form options?
-- What privacy notice and data-retention period should appear before submission?
+- What privacy notice language should appear before submission?
 - Should a repeat client receive a shorter update profile using saved prior answers in a later phase?
 
 ## 14. Recommended next sequence
 
-1. Resolve the open booking and editing decisions above.
+1. Resolve the remaining open visual-mockup decisions above.
 2. Create desktop and mobile wireframes for the booking request.
 3. Create the shared multi-step Style Profile shell and one representative profile mockup.
 4. Confirm the visual-card treatment, progress behavior, required fields, and mobile experience.
