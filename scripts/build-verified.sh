@@ -25,4 +25,30 @@ timeout \
   "${SITES_BUILD_TIMEOUT:-3m}" \
   "${vinext}" build
 
+echo "Normalizing generated Wrangler configuration..."
+
+node <<'NODE'
+const fs = require("fs");
+const path = require("path");
+
+const projectRoot = process.env.SITES_PROJECT_ROOT ?? process.cwd();
+const configPath = path.join(projectRoot, "dist", "server", "wrangler.json");
+
+if (!fs.existsSync(configPath)) {
+  console.error(`Generated Wrangler configuration not found: ${configPath}`);
+  process.exit(1);
+}
+
+const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
+
+delete config.legacy_env;
+
+config.assets = config.assets ?? {};
+config.assets.binding = "ASSETS";
+
+fs.writeFileSync(configPath, `${JSON.stringify(config)}\n`);
+
+console.log("Generated Wrangler configuration normalized.");
+NODE
+
 bash "${script_dir}/validate-artifact.sh"
