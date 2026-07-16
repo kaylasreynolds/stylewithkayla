@@ -14,6 +14,8 @@ This is a content and behavior plan. It should be approved before database migra
 
 - Clients submit a booking request before completing a Style Profile.
 - New requests begin as `pending` and are confirmed or declined by Kayla.
+- Clients may request appointments up to 60 days in advance.
+- Clients submit one preferred appointment date and time per booking request.
 - A requested appointment time and a confirmed appointment time must be stored separately because Kayla may approve the request at a different time.
 - Name, email, and phone are collected during booking and are not repeated in the Style Profile.
 - “How did you hear about me?” is collected once during booking.
@@ -66,7 +68,7 @@ The internal values can remain `under_40`, `40_plus`, and `manual_review`; the c
 | `email` | Email address | Email | Required; used for confirmation and private link |
 | `phone` | Phone number | Telephone | Required; format gently without rejecting normal punctuation |
 | `service_type` | Which service would you like to request? | Single select | Required; preselected when opened from a service card |
-| `requested_start_at` | What appointment date and time would you prefer? | Date and time | Required; this is a request, not a confirmed appointment |
+| `requested_start_at` | What appointment date and time would you prefer? | Date and time | Required; collect exactly one preferred appointment date/time; this is a request, not a confirmed appointment; must be no more than 60 days in advance |
 | `returning_client` | Have we worked together before? | Yes / No | Required; controls returning-client questions later |
 | `how_heard` | How did you hear about me? | Single select | Required for new clients; automatically “Returning Client” for returning clients |
 | `booking_notes` | Is there anything helpful for me to know about your request? | Long text | Optional |
@@ -95,13 +97,13 @@ The event type and event date should be shown later in the Style Profile as exis
 Minimum recommended values:
 
 - `pending` — submitted, awaiting Kayla's response
-- `change_proposed` — Kayla proposed a different appointment time
+- `change_proposed` — Kayla proposed one different appointment time and is awaiting the client's response
 - `confirmed` — final date and time accepted
 - `declined` — request cannot be accommodated
 - `cancelled` — a previously confirmed appointment was cancelled
 - `completed` — appointment occurred
 
-Store `requested_start_at` and `confirmed_start_at` separately. Do not overwrite the client's original request when a different time is approved.
+Store `requested_start_at`, `proposed_start_at`, and `confirmed_start_at` separately. Do not overwrite the client's original request when Kayla proposes or confirms a different time. Alternate-time response links should let the client accept the proposed time or decline/cancel the request; the request must remain `change_proposed` until the client accepts the alternate time or the request is otherwise declined/cancelled.
 
 ## 6. Shared Style Profile behavior
 
@@ -114,8 +116,10 @@ Store `requested_start_at` and `confirmed_start_at` separately. Do not overwrite
 - For required fit questions, provide “Not sure” or “Not applicable” when appropriate.
 - Enforce “choose up to 3” selections in the interface rather than relying only on instruction text.
 - Preserve useful visual answer cards. Each visual option must also have a visible text label and accessible description.
-- Use a confirmation screen after submission and let the client reopen the link to update answers until a defined cutoff.
+- Use a confirmation screen after submission. Once submitted, the profile is locked from direct client editing.
+- Kayla/admin may reopen a submitted Style Profile for a client-side correction, but reopening should be an explicit admin action that creates an auditable revision rather than silently editing the submitted record.
 - The database should store stable answer values separately from the displayed wording so copy can change later without corrupting reports.
+- Written Style Profile history should be retained for two years, including submitted revisions and admin-reopened corrections.
 
 ## 7. Profile: Women's General — Under 40
 
@@ -129,7 +133,7 @@ Store `requested_start_at` and `confirmed_start_at` separately. Do not overwrite
 | `shopping_for` | What are you shopping for? | Up to 3: Everyday Outfits, Workwear, Event, Vacation, Closet Reset, Other | Required; remove the duplicated copy at the end of the Microsoft Form |
 | `shopping_for_details` | Tell me a little more about what you need. | Long text | Required |
 | `top_styles` | Pick up to 3 styles that feel most like you. | Visual multi-select: Minimal, Statement, Sporty, Casual, Trendy, Feminine, Other | Required; enforce maximum 3 |
-| `inspiration` | Do you have inspiration photos, a Pinterest board, or colors you want me to see? | Link plus optional image upload later | Optional |
+| `inspiration` | Do you have inspiration photos, a Pinterest board, or colors you want me to see? | Inspiration link only for first release; optional image upload may be added later | Optional |
 | `feel_best_in` | What styles, colors, or silhouettes do you feel best in? | Long text | Required |
 | `avoid` | Are there any styles, colors, or pieces you do not want to wear? | Long text | Required; “Nothing specific” is a valid answer |
 | `metal_preference` | Which metal do you usually prefer? | Gold, Silver, Both, No preference | Optional |
@@ -176,7 +180,7 @@ Store `requested_start_at` and `confirmed_start_at` separately. Do not overwrite
 | `shopping_for` | What are you shopping for? | Up to 3: Everyday, Business Casual, Workwear, Date Night, Closet Update, Vacation, Other | Required; remove duplicated ending questions |
 | `shopping_for_details` | Tell me a little more about what you're looking for. | Long text | Required |
 | `top_styles` | Pick up to 3 styles that feel most like you. | Visual multi-select: Classic, Sporty, Bold, Minimal, Trendy, Athletic, Casual, Other | Required; enforce maximum 3 |
-| `inspiration` | Do you have inspiration photos, a Pinterest board, or colors you want me to see? | Link plus optional image upload later | Optional |
+| `inspiration` | Do you have inspiration photos, a Pinterest board, or colors you want me to see? | Inspiration link only for first release; optional image upload may be added later | Optional |
 | `feel_best_in` | What styles, colors, or pieces do you feel best in? | Long text | Required |
 | `avoid` | Are there any styles, colors, or pieces you do not want to wear? | Long text | Required; “Nothing specific” is valid |
 | `frustration` | What's been most frustrating about getting dressed lately? | Nothing to wear, Closet feels outdated, Struggle with fit, Don't know how to put outfits together, Size has changed, Other | Required |
@@ -233,7 +237,7 @@ Store `requested_start_at` and `confirmed_start_at` separately. Do not overwrite
 | Field key | Question | Input / choices | Requirement / behavior |
 |---|---|---|---|
 | `top_event_styles` | Pick up to 3 styles for your event look. | Visual multi-select: Classic Elegant, Romantic Feminine, Modern Minimal, Bold Statement, Trendy/Fashion Forward, Soft Glam, Polished Professional, Glam, Other | Required; enforce maximum 3 |
-| `inspiration` | Do you have inspiration photos, a Pinterest board, or colors you want me to see? | Link plus optional image upload later | Optional |
+| `inspiration` | Do you have inspiration photos, a Pinterest board, or colors you want me to see? | Inspiration link only for first release; optional image upload may be added later | Optional |
 | `feel_best_in` | What styles, colors, or silhouettes do you feel best in? | Long text | Required |
 | `avoid` | Are there any styles, colors, or pieces you do not want to wear? | Long text | Required |
 | `metal_preference` | Which metal do you usually prefer? | Gold, Silver, Both, No preference, Other | Optional |
@@ -348,11 +352,11 @@ Store `requested_start_at` and `confirmed_start_at` separately. Do not overwrite
 7. Inspiration links, bra size, and final notes should be optional despite being marked required in some current forms.
 8. Event type should be required even though the existing Microsoft Forms do not consistently mark it required.
 9. Visual choice cards are part of the intended experience and must be represented in the UX specification, not reduced to a plain database list.
-10. Private Style Profile links require secure random tokens, expiration/revocation behavior, and protected API access; a booking ID alone must never grant access.
+10. Private Style Profile links require secure random tokens, 30-day expiration from issue, revocation behavior, and protected API access; a booking ID alone must never grant access.
 
 ## 13. Open decisions before visual mockups
 
-The durable engineering ledger is `docs/DECISIONS.md`. Decisions already approved there should not be redefined in this planning section.
+The durable engineering ledger is `docs/DECISIONS.md`. Decisions already approved there should not be redefined in this planning section; this master plan should only summarize implementation implications and link back to the ledger when policy-level details change.
 
 ### Resolved in `docs/DECISIONS.md`
 
