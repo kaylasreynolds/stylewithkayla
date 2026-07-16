@@ -10,7 +10,7 @@
 		"enabled": true
 	},
 	"assets": {
-		"directory": "./public",
+		"directory": "./dist/client",
 		"binding": "ASSETS"
 	},
 	"images": {

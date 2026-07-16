@@ -41,6 +41,9 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  other: {
+  "codex-preview": "development",
+},
   icons: {
     icon: "/images/hanger-black.png",
     shortcut: "/images/hanger-black.png",
