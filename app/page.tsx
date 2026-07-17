@@ -297,74 +297,69 @@ const [serviceId, setServiceId] = useState(
             <Summary service={selectedService} selectedDate={step >= 2 ? selectedDate : ""} selectedTime={step >= 2 ? selectedTime : ""} onChange={() => setStep(1)} compact />
           </div>
 
-          {step === 1 && (
-            <div className="step-panel">
-              <div className="section-heading-row">
-                <div><p className="small-label">STEP ONE</p><h2>Select a service</h2></div>
-                <div className="audience-toggle" aria-label="Styling department">
-                  {(["Women", "Men"] as const).map((item) => (
-<button
-  key={item}
-  className={audience === item ? "active" : ""}
-  onClick={() => {
-    setAudience(item);
+{step === 1 && (
+  <div className="step-panel">
+    <div className="section-heading-row">
+      <div className="section-heading-group">
+        <p className="small-label">STEP ONE</p>
+        <h2>Select a service</h2>
 
-    chooseService(
-      item === "Women"
-        ? "women_everyday"
-        : "men_everyday"
-    );
-  }}
->
-  {item}
-</button>                  ))}
-                </div>
-              </div>
-              <div className="service-grid">
-                {visibleServices.map((service) => (
-                  <button key={service.id} className={`service-option ${serviceId === service.id ? "selected" : ""}`} onClick={() => chooseService(service.id)}>
-                    <span className="selection-dot" />
-                    <span className="service-type">{serviceTypeLines(service.shortName)?.map((line) => <span key={line}>{line}</span>)}</span>
-                    <span className="service-duration">{service.duration} minutes</span>
-                    <span className="service-description">{service.description}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+        <div
+          className="audience-toggle"
+          aria-label="Styling department"
+        >
+          {(["Women", "Men"] as const).map((item) => (
+            <button
+              type="button"
+              key={item}
+              className={audience === item ? "active" : ""}
+              onClick={() => {
+                setAudience(item);
 
-          {step === 2 && (
-            <div className="step-panel">
-              <p className="small-label">STEP TWO</p>
-              <h2>Select a date and time</h2>
-              <div className="calendar-layout">
-                <div className="calendar-panel">
-                  <div className="month-control">
-                    <button aria-label="Previous month" disabled={month <= new Date(today.getFullYear(), today.getMonth(), 1)} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))}>‹</button>
-                    <h3>{monthNames[month.getMonth()]} {month.getFullYear()}</h3>
-                    <button aria-label="Next month" disabled={month >= new Date(maxDate.getFullYear(), maxDate.getMonth(), 1)} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))}>›</button>
-                  </div>
-                  <div className="weekday-row">{weekdayNames.map((day) => <span key={day}>{day}</span>)}</div>
-                  <div className="calendar-grid">
-                    {calendarDays.map(({ date, key, outside, disabled }) => (
-                      <button key={key} disabled={disabled} className={`${outside ? "outside" : ""} ${selectedDate === key ? "selected" : ""}`} onClick={() => { setSelectedDate(key); setSelectedTime(slotsByDate[key]?.[0]?.startsAt || ""); }} aria-label={date.toDateString()}>
-                        {date.getDate()}
-                      </button>
-                    ))}
-                  </div>
-                  <p className="availability-note"><span /> Available Tuesday–Saturday, 24+ hours ahead</p>
-                </div>
-                <div className="time-panel">
-                  <h3>Available times</h3>
-                  <p>{readableDate(selectedDate)}</p>
-                  <div className="time-list">
-                    {loadingTimes ? <p className="loading-times">Checking routine availability…</p> : slots.length ? slots.map((slot) => <button key={slot.startsAt} className={selectedTime === slot.startsAt ? "selected" : ""} onClick={() => setSelectedTime(slot.startsAt)}>{selectedTime === slot.startsAt && <span>✓</span>}{timeInBoise(slot.startsAt)}</button>) : <p className="loading-times">No routine times are available for this date.</p>}
-                  </div>
-                  <p className="time-contact">Don&apos;t see a time that works? <a href="mailto:kayla.reynolds@macys.com?subject=Appointment%20Time%20Request">Send me a message.</a></p>
-                </div>
-              </div>
-            </div>
-          )}
+                chooseService(
+                  item === "Women"
+                    ? "women_everyday"
+                    : "men_everyday"
+                );
+              }}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div className="service-grid">
+      {visibleServices.map((service) => (
+        <button
+          type="button"
+          key={service.id}
+          className={`service-option ${
+            serviceId === service.id ? "selected" : ""
+          }`}
+          onClick={() => chooseService(service.id)}
+        >
+          <span className="selection-dot" />
+
+          <span className="service-type">
+            {serviceTypeLines(service.shortName)?.map((line) => (
+              <span key={line}>{line}</span>
+            ))}
+          </span>
+
+          <span className="service-duration">
+            {service.duration} minutes
+          </span>
+
+          <span className="service-description">
+            {service.description}
+          </span>
+        </button>
+      ))}
+    </div>
+  </div>
+)}
 
           {step === 3 && (
             <form className="step-panel details-form" onSubmit={(event) => event.preventDefault()}>
