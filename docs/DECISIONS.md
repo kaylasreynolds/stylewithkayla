@@ -2,6 +2,7 @@
 
 This ledger is the durable source of approved product and engineering decisions for the booking and Style Profile build. Planning documents may summarize or link back here, but this file should remain the canonical record when policy-level details change.
 
+| Public marketing website | The original kaylasreynolds/stylewithkayla main branch remains the public static marketing website. The booking application is deployed separately and linked from the marketing site. |
 ## Approved decisions
 
 | Decision | Approved answer |
