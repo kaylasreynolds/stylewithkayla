@@ -102,7 +102,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
 .summary-points li {
-  margin: 6px;
+  margin: 4px;
   font-style: italic;
   font-size: 14px;
   line-height: 1.45;
