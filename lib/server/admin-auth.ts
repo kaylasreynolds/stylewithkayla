@@ -7,15 +7,10 @@ import {
 export function requireAdmin(request: Request): string {
   const url = new URL(request.url);
 
-  const authenticatedEmail =
-    request.headers
-      .get("oai-authenticated-user-email")
-      ?.trim()
-      .toLowerCase() ??
-    request.headers
-      .get("cf-access-authenticated-user-email")
-      ?.trim()
-      .toLowerCase();
+  const authenticatedEmail = request.headers
+  .get("cf-access-authenticated-user-email")
+  ?.trim()
+  .toLowerCase();
 
   const isLocalhost =
     url.hostname === "127.0.0.1" ||

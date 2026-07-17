@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Run protected retention maintenance
         env:
-          TARGET_URL: https://style-with-kayla-booking-mockup.ksmoop.chatgpt.site/api/internal/maintenance
+          TARGET_URL: https://stylewithkayla-combined-preview.kaylasreynolds.workers.dev/api/internal/maintenance
           MAINTENANCE_SECRET: ${{ secrets.SWK_MAINTENANCE_SECRET }}
           SITES_BYPASS_TOKEN: ${{ secrets.SWK_SITES_BYPASS_TOKEN }}
         shell: bash
