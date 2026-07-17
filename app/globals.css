@@ -97,7 +97,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   color: white;
   border-radius: 6px;
 }.service-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-.service-option { min-height:260px; position:relative; display:flex; flex-direction:column; text-align:left; padding:28px 18px; border:1px solid var(--line); border-radius:7px; background:rgba(255,255,255,.72); cursor:pointer; transition:.18s ease; }
+.service-option { min-height:264px; position:relative; display:flex; flex-direction:column; text-align:left; padding:28px 18px; border:1px solid var(--line); border-radius:7px; background:rgba(255,255,255,.72); cursor:pointer; transition:.18s ease; }
 .service-option:hover { transform:translateY(-2px); border-color:#cfa7ab; }
 .service-option.selected { background:var(--blush); border-color:var(--rose); box-shadow:0 12px 30px rgba(111,69,72,.07); }
 .selection-dot { width:20px; height:20px; border:1px solid #b9adab; border-radius:50%; margin: bottom 20px;}
