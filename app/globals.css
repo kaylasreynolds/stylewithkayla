@@ -91,7 +91,27 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   cursor: pointer;
   line-height: 27px;
 }
+.summary-content {
+  min-width: 0;
+}
 
+.summary-points {
+  margin: 14px 0 0;
+  padding-left: 18px;
+  color: #615b59;
+}
+
+.summary-points li {
+  margin: 6px;
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.45;
+  list-style-type: "·";
+}
+
+.summary-points li:last-child {
+  margin-bottom: 0;
+}
 .audience-toggle button.active {
   background: var(--rose);
   color: white;
