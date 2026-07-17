@@ -399,9 +399,24 @@ function Header() {
   return (
     <header className="site-header" aria-label="Site header">
       <div className="container header-inner">
-        <a className="site-logo" href="#top" aria-label="Style with Kayla home"><img src="/images/stylewithkayla_logo.png" alt="Style with Kayla" /></a>
-        <nav className="site-nav" aria-label="Main navigation"><a href="#top">Home</a><a href="#services">Services</a><a href="#events">Events</a><a href="#about">About Me</a><a href="#contact">Contact</a></nav>
-        <a className="button header-cta" href="/book">BOOK APPOINTMENT</a>
+        <a className="site-logo" href="/" aria-label="Style with Kayla home">
+          <img
+            src="/images/stylewithkayla_logo.png"
+            alt="Style with Kayla"
+          />
+        </a>
+
+        <nav className="site-nav" aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/#services">Services</a>
+          <a href="/events">Events</a>
+          <a href="/about">About Me</a>
+          <a href="/#contact">Contact</a>
+        </nav>
+
+        <a className="button header-cta" href="/book">
+          BOOK APPOINTMENT
+        </a>
       </div>
     </header>
   );
@@ -409,27 +424,151 @@ function Header() {
 
 function Footer() {
   const socialIcons = ["instagram", "facebook", "pinterest", "linkedin"];
+
   return (
     <footer className="site-footer" id="contact">
       <div className="container footer-inner">
-        <div className="footer-column footer-brand"><a className="footer-logo" href="#top" aria-label="Style with Kayla home"><img src="/images/stylewithkayla_logo.png" alt="Style with Kayla" /></a></div>
-        <nav className="footer-column footer-links" aria-label="Footer quick links">
-          <p className="footer-kicker">Quick Links</p><a href="#services">Services</a><a href="#events">Events</a><span className="footer-link--inactive" aria-disabled="true">Guides</span><span className="footer-link--inactive" aria-disabled="true">FAQ</span><a href="#about">About Me</a><a href="#contact">Contact</a>
+        <div className="footer-column footer-brand">
+          <a
+            className="footer-logo"
+            href="/"
+            aria-label="Style with Kayla home"
+          >
+            <img
+              src="/images/stylewithkayla_logo.png"
+              alt="Style with Kayla"
+            />
+          </a>
+        </div>
+
+        <nav
+          className="footer-column footer-links"
+          aria-label="Footer quick links"
+        >
+          <p className="footer-kicker">Quick Links</p>
+
+          <a href="/#services">Services</a>
+          <a href="/events">Events</a>
+
+          <span
+            className="footer-link--inactive"
+            aria-disabled="true"
+          >
+            Guides
+          </span>
+
+          <span
+            className="footer-link--inactive"
+            aria-disabled="true"
+          >
+            FAQ
+          </span>
+
+          <a href="/about">About Me</a>
+          <a href="/#contact">Contact</a>
         </nav>
+
         <div className="footer-column footer-contact">
           <p className="footer-kicker">Let&apos;s Connect</p>
-          <div className="footer-contact-item"><span aria-hidden="true"><img src="/images/phone.png" alt="" /></span><a href="tel:+12088596427">208-859-6427</a></div>
-          <div className="footer-contact-item"><span aria-hidden="true"><img src="/images/email.png" alt="" /></span><a href="mailto:kayla.reynolds@macys.com">kayla.reynolds@macys.com</a></div>
-          <div className="footer-contact-item"><span aria-hidden="true"><img src="/images/location.png" alt="" /></span><p>Macy&apos;s Boise Towne Square<br />370 N. Milwaukee St.<br />Boise, ID 83704</p></div>
+
+          <div className="footer-contact-item">
+            <span aria-hidden="true">
+              <img src="/images/phone.png" alt="" />
+            </span>
+            <a href="tel:+12088596427">208-859-6427</a>
+          </div>
+
+          <div className="footer-contact-item">
+            <span aria-hidden="true">
+              <img src="/images/email.png" alt="" />
+            </span>
+            <a href="mailto:kayla.reynolds@macys.com">
+              kayla.reynolds@macys.com
+            </a>
+          </div>
+
+          <div className="footer-contact-item">
+            <span aria-hidden="true">
+              <img src="/images/location.png" alt="" />
+            </span>
+            <p>
+              Macy&apos;s Boise Towne Square
+              <br />
+              370 N. Milwaukee St.
+              <br />
+              Boise, ID 83704
+            </p>
+          </div>
         </div>
+
         <div className="footer-column footer-social">
           <p className="footer-kicker">Follow Along</p>
-          <div className="footer-social-links" aria-label="Social profiles">{socialIcons.map((icon) => <span className="footer-social-icon" role="img" aria-label={icon[0].toUpperCase() + icon.slice(1)} key={icon}><img src={`/images/${icon}.png`} alt="" aria-hidden="true" /></span>)}</div>
-          <a className="button button--primary" href="/book">Book Appointment</a>
+
+          <div
+            className="footer-social-links"
+            aria-label="Social profiles"
+          >
+            {socialIcons.map((icon) => (
+              <a
+                className="footer-social-icon"
+                href={
+                  icon === "instagram"
+                    ? "https://instagram.com/stylewithkayla"
+                    : icon === "facebook"
+                      ? "https://facebook.com/stylewithkayla"
+                      : icon === "pinterest"
+                        ? "https://pinterest.com/stylewithkayla"
+                        : "https://www.linkedin.com/in/kayla-reynolds/"
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={
+                  icon[0].toUpperCase() + icon.slice(1)
+                }
+                key={icon}
+              >
+                <img
+                  src={`/images/${icon}.png`}
+                  alt=""
+                  aria-hidden="true"
+                />
+              </a>
+            ))}
+          </div>
+
+          <a
+            className="button button--primary"
+            href="/book"
+          >
+            Book Appointment
+          </a>
         </div>
       </div>
-      <div className="container privacy-notice" id="privacy"><p className="footer-kicker">Privacy details</p><p>Your information is used only to review, manage, and prepare for your styling appointment. A pending request holds the selected time until Kayla confirms, declines, releases, or replaces it. Confirmed clients receive a private Style Profile link that expires 30 days after issue. Written booking and profile history is retained for two years after the most recent completed appointment. Contact Kayla to request access, correction, or deletion.</p></div>
-      <div className="container footer-bottom"><span>&copy; 2026 Style with Kayla</span><span aria-hidden="true">|</span><span>Personal Stylist at Macy&apos;s</span><span aria-hidden="true">|</span><span>All Rights Reserved</span></div>
+
+      <div
+        className="container privacy-notice"
+        id="privacy"
+      >
+        <p className="footer-kicker">Privacy details</p>
+        <p>
+          Your information is used only to review, manage, and prepare
+          for your styling appointment. A pending request holds the
+          selected time until Kayla confirms, declines, releases, or
+          replaces it. Confirmed clients receive a private Style
+          Profile link that expires 30 days after issue. Written
+          booking and profile history is retained for two years after
+          the most recent completed appointment. Contact Kayla to
+          request access, correction, or deletion.
+        </p>
+      </div>
+
+      <div className="container footer-bottom">
+        <span>&copy; 2026 Style with Kayla</span>
+        <span aria-hidden="true">|</span>
+        <span>Personal Stylist at Macy&apos;s</span>
+        <span aria-hidden="true">|</span>
+        <span>All Rights Reserved</span>
+      </div>
     </footer>
   );
 }
