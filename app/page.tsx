@@ -11,6 +11,7 @@ type Service = {
   duration: number;
   description: string;
   icon: string;
+  summaryPoints: string[];
   needsAge?: boolean;
   isEvent?: boolean;
 };
@@ -26,6 +27,11 @@ const servicePresentation: Service[] = [
     isEvent: true,
     description:
       "A focused appointment for a wedding, celebration, work event, or special occasion.",
+    summaryPoints: [
+      "Pre-selected pieces",
+      "Focused on event or occasion needs",
+      "Complete head-to-toe looks",
+    ],
   },
   {
     id: "women_everyday",
@@ -37,6 +43,11 @@ const servicePresentation: Service[] = [
     needsAge: true,
     description:
       "Build polished outfits that feel natural for your day-to-day life.",
+    summaryPoints: [
+      "Pre-selected pieces",
+      "Focused on everyday and lifestyle needs",
+      "Complete head-to-toe, realistic looks",
+    ],
   },
   {
     id: "women_closet",
@@ -48,6 +59,11 @@ const servicePresentation: Service[] = [
     needsAge: true,
     description:
       "A more complete wardrobe update with time to compare and build full looks.",
+    summaryPoints: [
+      "Pre-selected pieces",
+      "Focused on replacing and refreshing your wardrobe",
+      "Multiple complete head-to-toe looks",
+    ],
   },
   {
     id: "men_event",
@@ -59,6 +75,11 @@ const servicePresentation: Service[] = [
     isEvent: true,
     description:
       "A complete event look built around the dress code, setting, and personal style.",
+    summaryPoints: [
+      "Pre-selected pieces",
+      "Focused on event or occasion needs",
+      "Complete head-to-toe looks",
+    ],
   },
   {
     id: "men_everyday",
@@ -69,6 +90,11 @@ const servicePresentation: Service[] = [
     icon: "/images/mens-everyday.png",
     description:
       "Practical, polished outfits for work, weekends, and everything in between.",
+    summaryPoints: [
+      "Pre-selected pieces",
+      "Focused on everyday and lifestyle needs",
+      "Complete head-to-toe, realistic looks",
+    ],
   },
   {
     id: "men_closet",
@@ -79,6 +105,11 @@ const servicePresentation: Service[] = [
     icon: "/images/mens-closet.png",
     description:
       "A thoughtful wardrobe update with versatile pieces and complete outfits.",
+    summaryPoints: [
+      "Pre-selected pieces",
+      "Focused on replacing and refreshing your wardrobe",
+      "Multiple complete head-to-toe looks",
+    ],
   },
 ];
 type Slot = { startsAt: string; endsAt: string; source: "routine_only" };
@@ -603,18 +634,58 @@ function Progress({ step }: { step: number }) {
   return <div className="progress" aria-label={`Step ${step} of 4`}>{labels.map((label, index) => <div className={step === index + 1 ? "active" : step > index + 1 ? "complete" : ""} key={label}><span>{step > index + 1 ? "✓" : index + 1}</span><p>{label}</p>{index < labels.length - 1 && <i />}</div>)}</div>;
 }
 
-function Summary({ service, selectedDate, selectedTime, onChange, compact = false }: { service: Service; selectedDate: string; selectedTime: string; onChange?: () => void; compact?: boolean }) {
+function Summary({
+  service,
+  selectedDate,
+  selectedTime,
+  onChange,
+  compact = false,
+}: {
+  service: Service;
+  selectedDate: string;
+  selectedTime: string;
+  onChange?: () => void;
+  compact?: boolean;
+}) {
   return (
     <div className={`appointment-summary ${compact ? "compact" : ""}`}>
       <div className="summary-icon">
-  <img
-    src={service.icon}
-    alt=""
-    aria-hidden="true"
-  />
-</div>
-      <div><span className="summary-audience">{service.audience.toUpperCase()}</span><h3>{service.shortName}</h3><p>{service.duration} minutes · Complimentary</p>{selectedDate && <p className="summary-date">{readableDate(selectedDate)} · {timeInBoise(selectedTime)}</p>}</div>
-      {onChange && <button onClick={onChange}>Change service →</button>}
+        <img
+          src={service.icon}
+          alt=""
+          aria-hidden="true"
+        />
+      </div>
+
+      <div className="summary-content">
+        <span className="summary-audience">
+          {service.audience.toUpperCase()}
+        </span>
+
+        <h3>{service.shortName}</h3>
+
+        <p>
+          {service.duration} minutes · Complimentary
+        </p>
+
+        <ul className="summary-points">
+          {service.summaryPoints.map((point) => (
+            <li key={point}>{point}</li>
+          ))}
+        </ul>
+
+        {selectedDate && (
+          <p className="summary-date">
+            {readableDate(selectedDate)} · {timeInBoise(selectedTime)}
+          </p>
+        )}
+      </div>
+
+      {onChange && (
+        <button type="button" onClick={onChange}>
+          Change service →
+        </button>
+      )}
     </div>
   );
 }
