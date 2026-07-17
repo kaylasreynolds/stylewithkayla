@@ -9,17 +9,76 @@ type Service = {
   shortName: string;
   duration: number;
   description: string;
+  icon: string;
   needsAge?: boolean;
   isEvent?: boolean;
 };
 
 const servicePresentation: Service[] = [
-  { id: "women_event", audience: "Women", name: "Women's Event & Occasion Styling", shortName: "Event & Occasion Styling", duration: 60, isEvent: true, description: "A focused appointment for a wedding, celebration, work event, or special occasion." },
-  { id: "women_everyday", audience: "Women", name: "Women's Everyday Styling", shortName: "Everyday Styling", duration: 90, needsAge: true, description: "Build polished outfits that feel natural for your day-to-day life." },
-  { id: "women_closet", audience: "Women", name: "Women's Full Closet Refresh", shortName: "Full Closet Refresh", duration: 180, needsAge: true, description: "A more complete wardrobe update with time to compare and build full looks." },
-  { id: "men_event", audience: "Men", name: "Men's Event & Occasion Styling", shortName: "Event & Occasion Styling", duration: 60, isEvent: true, description: "A complete event look built around the dress code, setting, and personal style." },
-  { id: "men_everyday", audience: "Men", name: "Men's Everyday Styling", shortName: "Everyday Styling", duration: 90, description: "Practical, polished outfits for work, weekends, and everything in between." },
-  { id: "men_closet", audience: "Men", name: "Men's Full Closet Refresh", shortName: "Full Closet Refresh", duration: 180, description: "A thoughtful wardrobe update with versatile pieces and complete outfits." },
+  {
+    id: "women_event",
+    audience: "Women",
+    name: "Women's Event & Occasion Styling",
+    shortName: "Event & Occasion Styling",
+    duration: 60,
+    icon: "/images/womens-event.png",
+    isEvent: true,
+    description:
+      "A focused appointment for a wedding, celebration, work event, or special occasion.",
+  },
+  {
+    id: "women_everyday",
+    audience: "Women",
+    name: "Women's Everyday Styling",
+    shortName: "Everyday Styling",
+    duration: 90,
+    icon: "/images/womens-everyday.png",
+    needsAge: true,
+    description:
+      "Build polished outfits that feel natural for your day-to-day life.",
+  },
+  {
+    id: "women_closet",
+    audience: "Women",
+    name: "Women's Full Closet Refresh",
+    shortName: "Full Closet Refresh",
+    duration: 180,
+    icon: "/images/womens-closet.png",
+    needsAge: true,
+    description:
+      "A more complete wardrobe update with time to compare and build full looks.",
+  },
+  {
+    id: "men_event",
+    audience: "Men",
+    name: "Men's Event & Occasion Styling",
+    shortName: "Event & Occasion Styling",
+    duration: 60,
+    icon: "/images/mens-event.png",
+    isEvent: true,
+    description:
+      "A complete event look built around the dress code, setting, and personal style.",
+  },
+  {
+    id: "men_everyday",
+    audience: "Men",
+    name: "Men's Everyday Styling",
+    shortName: "Everyday Styling",
+    duration: 90,
+    icon: "/images/mens-everyday.png",
+    description:
+      "Practical, polished outfits for work, weekends, and everything in between.",
+  },
+  {
+    id: "men_closet",
+    audience: "Men",
+    name: "Men's Full Closet Refresh",
+    shortName: "Full Closet Refresh",
+    duration: 180,
+    icon: "/images/mens-closet.png",
+    description:
+      "A thoughtful wardrobe update with versatile pieces and complete outfits.",
+  },
 ];
 type Slot = { startsAt: string; endsAt: string; source: "routine_only" };
 
@@ -383,7 +442,13 @@ function Progress({ step }: { step: number }) {
 function Summary({ service, selectedDate, selectedTime, onChange, compact = false }: { service: Service; selectedDate: string; selectedTime: string; onChange?: () => void; compact?: boolean }) {
   return (
     <div className={`appointment-summary ${compact ? "compact" : ""}`}>
-      <div className="summary-icon">⌑</div>
+      <div className="summary-icon">
+  <img
+    src={service.icon}
+    alt=""
+    aria-hidden="true"
+  />
+</div>
       <div><span className="summary-audience">{service.audience.toUpperCase()}</span><h3>{service.shortName}</h3><p>{service.duration} minutes · Complimentary</p>{selectedDate && <p className="summary-date">{readableDate(selectedDate)} · {timeInBoise(selectedTime)}</p>}</div>
       {onChange && <button onClick={onChange}>Change service →</button>}
     </div>
