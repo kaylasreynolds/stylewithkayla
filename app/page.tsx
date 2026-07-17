@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 type Service = {
   id: string;
@@ -107,10 +108,26 @@ function readableDate(value: string) {
 export default function Home() {
   const today = useMemo(() => new Date(), []);
   const maxDate = useMemo(() => { const value = new Date(today); value.setDate(value.getDate() + 60); return value; }, [today]);
-  const [step, setStep] = useState(1);
-  const [audience, setAudience] = useState<"Women" | "Men">("Women");
-  const [services, setServices] = useState(servicePresentation);
-  const [serviceId, setServiceId] = useState("women_everyday");
+const searchParams = useSearchParams();
+
+const requestedAudience =
+  searchParams.get("audience")?.toLowerCase() === "men"
+    ? "Men"
+    : "Women";
+
+const [step, setStep] = useState(1);
+
+const [audience, setAudience] = useState<"Women" | "Men">(
+  requestedAudience
+);
+
+const [services, setServices] = useState(servicePresentation);
+
+const [serviceId, setServiceId] = useState(
+  requestedAudience === "Men"
+    ? "men_everyday"
+    : "women_everyday"
+);
   const [month, setMonth] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
@@ -286,8 +303,21 @@ export default function Home() {
                 <div><p className="small-label">STEP ONE</p><h2>Select a service</h2></div>
                 <div className="audience-toggle" aria-label="Styling department">
                   {(["Women", "Men"] as const).map((item) => (
-                    <button key={item} className={audience === item ? "active" : ""} onClick={() => { setAudience(item); chooseService(item === "Women" ? "women-everyday" : "men-everyday"); }}>{item}</button>
-                  ))}
+<button
+  key={item}
+  className={audience === item ? "active" : ""}
+  onClick={() => {
+    setAudience(item);
+
+    chooseService(
+      item === "Women"
+        ? "women_everyday"
+        : "men_everyday"
+    );
+  }}
+>
+  {item}
+</button>                  ))}
                 </div>
               </div>
               <div className="service-grid">
