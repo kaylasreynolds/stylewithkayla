@@ -21,15 +21,14 @@ jobs:
         env:
           TARGET_URL: https://stylewithkayla-combined-preview.kaylasreynolds.workers.dev/api/internal/maintenance
           MAINTENANCE_SECRET: ${{ secrets.SWK_MAINTENANCE_SECRET }}
-          SITES_BYPASS_TOKEN: ${{ secrets.SWK_SITES_BYPASS_TOKEN }}
         shell: bash
         run: |
-          if [ -z "$MAINTENANCE_SECRET" ] || [ -z "$SITES_BYPASS_TOKEN" ]; then
+          if [ -z "$MAINTENANCE_SECRET" ]; then
             echo "Required repository secrets are not configured."
             exit 1
           fi
 
-          status="$(curl --silent --show-error             --output /dev/null             --write-out "%{http_code}"             --request POST             --header "Authorization: Bearer $MAINTENANCE_SECRET"             --header "OAI-Sites-Authorization: Bearer $SITES_BYPASS_TOKEN"             "$TARGET_URL")"
+          status="$(curl --silent --show-error             --output /dev/null             --write-out "%{http_code}"             --request POST             --header "Authorization: Bearer $MAINTENANCE_SECRET"           "$TARGET_URL")"
 
           if [ "$status" -lt 200 ] || [ "$status" -ge 300 ]; then
             echo "Maintenance endpoint returned HTTP $status."
