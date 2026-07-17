@@ -30,6 +30,15 @@ function keyForDate(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
+function serviceTypeLines(shortName: string) {
+  if (shortName === "Event & Occasion Styling") 
+    return ["Event & Occasion", "Styling"];
+  if  (shortName === "Everyday Styling")
+    return ["Everyday Styling"];
+  if (shortName === "Full Closet Refresh")
+    return ["Full Closet", "Refresh"];
+}
+
 function readableDate(value: string) {
   if (!value) return "Not selected";
   const [year, month, day] = value.split("-").map(Number);
@@ -226,7 +235,7 @@ export default function Home() {
                 {visibleServices.map((service) => (
                   <button key={service.id} className={`service-option ${serviceId === service.id ? "selected" : ""}`} onClick={() => chooseService(service.id)}>
                     <span className="selection-dot" />
-                    <span className="service-type">{service.shortName}</span>
+                    <span className="service-type">{serviceTypeLines(service.shortName)?.map((line) => <span key={line}>{line}</span>)}</span>
                     <span className="service-duration">{service.duration} minutes</span>
                     <span className="service-description">{service.description}</span>
                   </button>
