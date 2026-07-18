@@ -5,43 +5,41 @@ import { useEffect } from "react";
 const privacyPath = "/Legal/privacy";
 const termsPath = "/Legal/terms";
 
-function updateFooterLinks() {
-  document.querySelectorAll<HTMLAnchorElement>('a[href="#privacy"]').forEach((link) => {
-    link.href = privacyPath;
-  });
-
-  document.querySelectorAll<HTMLElement>(".footer-bottom").forEach((footerBottom) => {
-    if (footerBottom.querySelector(".footer-legal-links")) return;
-
-    const separator = document.createElement("span");
-    separator.setAttribute("aria-hidden", "true");
-    separator.textContent = "|";
-
-    const links = document.createElement("span");
-    links.className = "footer-legal-links";
-
-    const privacyLink = document.createElement("a");
-    privacyLink.href = privacyPath;
-    privacyLink.textContent = "Privacy Policy";
-
-    const termsLink = document.createElement("a");
-    termsLink.href = termsPath;
-    termsLink.textContent = "Terms of Use";
-
-    links.append(privacyLink, document.createTextNode(" · "), termsLink);
-    footerBottom.append(separator, links);
-  });
-}
-
 export default function FooterLegalLinks() {
   useEffect(() => {
-    updateFooterLinks();
-
-    const observer = new MutationObserver(updateFooterLinks);
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    return () => observer.disconnect();
+    document.querySelectorAll<HTMLAnchorElement>('a[href="#privacy"]').forEach((link) => {
+      link.href = privacyPath;
+    });
   }, []);
 
-  return null;
+  return (
+    <nav
+      aria-label="Legal links"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexWrap: "wrap",
+        gap: "10px",
+        padding: "0 24px 22px",
+        background: "var(--color-charcoal, #1f1f1f)",
+        color: "rgba(255, 255, 255, 0.78)",
+        fontSize: "12px",
+      }}
+    >
+      <a
+        href={privacyPath}
+        style={{ color: "inherit", textDecoration: "underline", textUnderlineOffset: "4px" }}
+      >
+        Privacy Policy
+      </a>
+      <span aria-hidden="true">|</span>
+      <a
+        href={termsPath}
+        style={{ color: "inherit", textDecoration: "underline", textUnderlineOffset: "4px" }}
+      >
+        Terms of Use
+      </a>
+    </nav>
+  );
 }
