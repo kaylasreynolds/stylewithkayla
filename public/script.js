@@ -1,3 +1,97 @@
+const pageMetadata = {
+  "/": {
+    title: "Personal Stylist in Boise | Style with Kayla",
+    description: "Complimentary personal styling appointments with Kayla at Macy's Boise Towne Square, personalized around your life, needs, and budget.",
+    image: "/images/Hero-image.png",
+  },
+  "/index.html": {
+    title: "Personal Stylist in Boise | Style with Kayla",
+    description: "Complimentary personal styling appointments with Kayla at Macy's Boise Towne Square, personalized around your life, needs, and budget.",
+    image: "/images/Hero-image.png",
+  },
+  "/about": {
+    title: "About Kayla | Personal Stylist in Boise",
+    description: "Meet Kayla, a personal stylist at Macy's Boise Towne Square who offers thoughtful, complimentary styling support.",
+    image: "/images/fs.png",
+  },
+  "/about.html": {
+    title: "About Kayla | Personal Stylist in Boise",
+    description: "Meet Kayla, a personal stylist at Macy's Boise Towne Square who offers thoughtful, complimentary styling support.",
+    image: "/images/fs.png",
+  },
+  "/events": {
+    title: "Upcoming Store Events | Style with Kayla",
+    description: "Explore upcoming fashion, beauty, community, and special events at Macy's Boise Towne Square.",
+    image: "/images/Hero-image.png",
+  },
+  "/events.html": {
+    title: "Upcoming Store Events | Style with Kayla",
+    description: "Explore upcoming fashion, beauty, community, and special events at Macy's Boise Towne Square.",
+    image: "/images/Hero-image.png",
+  },
+  "/womens-styling.html": {
+    title: "Women's Styling Services | Style with Kayla",
+    description: "Complimentary women's personal styling appointments with Kayla at Macy's Boise Towne Square.",
+    image: "/images/womens-hero.jpg",
+  },
+  "/mens-styling.html": {
+    title: "Men's Styling Services | Style with Kayla",
+    description: "Complimentary men's personal styling appointments with Kayla at Macy's Boise Towne Square.",
+    image: "/images/mens-styling.png",
+  },
+  "/more-ways.html": {
+    title: "More Ways I Can Help | Style with Kayla",
+    description: "Explore group styling, store events, nonprofit partnerships, special orders, and other ways Kayla can help.",
+    image: "/images/more-ways-hero.webp",
+  },
+};
+
+function ensureMeta(selector, attributes) {
+  let element = document.head.querySelector(selector);
+  if (!element) {
+    element = document.createElement("meta");
+    document.head.append(element);
+  }
+  Object.entries(attributes).forEach(([name, value]) => element.setAttribute(name, value));
+}
+
+function ensureLink(rel, href) {
+  let element = document.head.querySelector(`link[rel="${rel}"]`);
+  if (!element) {
+    element = document.createElement("link");
+    element.setAttribute("rel", rel);
+    document.head.append(element);
+  }
+  element.setAttribute("href", href);
+}
+
+const currentMetadata = pageMetadata[window.location.pathname];
+if (currentMetadata) {
+  const canonicalPath = window.location.pathname === "/index.html" ? "/" : window.location.pathname;
+  const canonicalUrl = new URL(canonicalPath, window.location.origin).href;
+  const imageUrl = new URL(currentMetadata.image, window.location.origin).href;
+
+  document.title = currentMetadata.title;
+  ensureMeta('meta[name="description"]', { name: "description", content: currentMetadata.description });
+  ensureMeta('meta[property="og:title"]', { property: "og:title", content: currentMetadata.title });
+  ensureMeta('meta[property="og:description"]', { property: "og:description", content: currentMetadata.description });
+  ensureMeta('meta[property="og:image"]', { property: "og:image", content: imageUrl });
+  ensureMeta('meta[property="og:url"]', { property: "og:url", content: canonicalUrl });
+  ensureMeta('meta[property="og:type"]', { property: "og:type", content: "website" });
+  ensureMeta('meta[name="twitter:card"]', { name: "twitter:card", content: "summary_large_image" });
+  ensureMeta('meta[name="twitter:title"]', { name: "twitter:title", content: currentMetadata.title });
+  ensureMeta('meta[name="twitter:description"]', { name: "twitter:description", content: currentMetadata.description });
+  ensureMeta('meta[name="twitter:image"]', { name: "twitter:image", content: imageUrl });
+  ensureLink("canonical", canonicalUrl);
+}
+
+document.querySelectorAll("img").forEach((image) => {
+  if (!image.getAttribute("alt")?.trim()) {
+    image.setAttribute("alt", "");
+    image.setAttribute("aria-hidden", "true");
+  }
+});
+
 const testimonialSlider = document.querySelector('[data-testimonial-slider]');
 
 if (testimonialSlider) {
@@ -23,8 +117,8 @@ if (testimonialSlider) {
     });
   };
 
-  previousButton.addEventListener('click', () => showTestimonial(activeIndex - 1));
-  nextButton.addEventListener('click', () => showTestimonial(activeIndex + 1));
+  previousButton?.addEventListener('click', () => showTestimonial(activeIndex - 1));
+  nextButton?.addEventListener('click', () => showTestimonial(activeIndex + 1));
 
   dots.forEach((dot, index) => {
     dot.addEventListener('click', () => showTestimonial(index));
