@@ -394,11 +394,34 @@ const [serviceId, setServiceId] = useState(
                 <label><span>Email address *</span><input type="email" value={form.email} onChange={(e) => updateField("email", e.target.value)} placeholder="you@example.com" /></label>
                 <label><span>Phone number *</span><input type="tel" value={form.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="(208) 555-0123" /></label>
                 <div className="profile-details-row full">
-                  <fieldset className="choice-field detail-group"><legend>Have we worked together before? *</legend><div>{["Yes", "No"].map((value) => <button type="button" className={form.returning === value ? "selected" : ""} key={value} onClick={() => updateField("returning", value)}>{value}</button>)}</div></fieldset>
-                </div>
+  <fieldset className="choice-field detail-group">
+    <legend>Have we worked together before? *</legend>
+    <div>
+      {["Yes", "No"].map((value) => (
+        <button
+          type="button"
+          className={form.returning === value ? "selected" : ""}
+          key={value}
+          onClick={() => updateField("returning", value)}
+        >
+          {value}
+        </button>
+      ))}
+    </div>
+  </fieldset>
+
+  <label className="detail-group">
+    <span>Anything helpful for me to know?</span>
+    <textarea
+      value={form.notes}
+      onChange={(e) => updateField("notes", e.target.value)}
+      placeholder="Optional"
+      rows={3}
+    />
+  </label>
+</div>
                 {form.returning === "No" && <label className="full"><span>How did you hear about me?</span><select value={form.heard} onChange={(e) => updateField("heard", e.target.value)}><option value="">Select one</option><option>Instagram</option><option>Facebook</option><option>In-store</option><option>Referral</option><option>{"Macy's event"}</option><option>Other</option></select></label>}
                 {selectedService.isEvent && <><label><span>What type of event? *</span><select value={form.eventType} onChange={(e) => updateField("eventType", e.target.value)}><option value="">Select one</option><option>Wedding Guest</option><option>Wedding Party</option><option>Business Event</option><option>Gala or Formal Event</option><option>School Dance</option><option>Other</option></select></label><label><span>When is the event? *</span><input type="date" value={form.eventDate} onChange={(e) => updateField("eventDate", e.target.value)} /></label></>}
-                <label className="full"><span>Anything helpful for me to know?</span><textarea value={form.notes} onChange={(e) => updateField("notes", e.target.value)} placeholder="Optional" rows={3} /></label>
                 <label className="privacy-check full"><input type="checkbox" checked={form.privacy} onChange={(e) => updateField("privacy", e.target.checked)} /><span>I understand my information will be used to manage and prepare for my appointment. <a href="#privacy">Privacy details</a></span></label>
               </div>
             </form>
