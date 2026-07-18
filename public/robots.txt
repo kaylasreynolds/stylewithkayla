@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /api
+Disallow: /style-profile
+Disallow: /client-actions
 
 Sitemap: https://stylewithkayla.com/sitemap.xml
