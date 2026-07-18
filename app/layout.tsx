@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import FooterLegalLinks from "./FooterLegalLinks";
 import BookingNavLinks from "./BookingNavLinks";
+import BookingValidationErrors from "./BookingValidationErrors";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://stylewithkayla.com"),
@@ -107,6 +108,7 @@ export default function RootLayout({
       <body>
         {children}
         <BookingNavLinks />
+        <BookingValidationErrors />
         <FooterLegalLinks />
       </body>
     </html>
