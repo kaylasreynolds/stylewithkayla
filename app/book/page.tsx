@@ -9,17 +9,104 @@ type Service = {
   shortName: string;
   duration: number;
   description: string;
-  needsAge?: boolean;
+  icon: string;
+  summaryPoints: string[];
   isEvent?: boolean;
 };
 
 const servicePresentation: Service[] = [
-  { id: "women_event", audience: "Women", name: "Women's Event & Occasion Styling", shortName: "Event & Occasion Styling", duration: 60, isEvent: true, description: "A focused appointment for a wedding, celebration, work event, or special occasion." },
-  { id: "women_everyday", audience: "Women", name: "Women's Everyday Styling", shortName: "Everyday Styling", duration: 90, description: "Build polished outfits that feel natural for your day-to-day life." },
-  { id: "women_closet", audience: "Women", name: "Women's Full Closet Refresh", shortName: "Full Closet Refresh", duration: 180, description: "A more complete wardrobe update with time to compare and build full looks." },
-  { id: "men_event", audience: "Men", name: "Men's Event & Occasion Styling", shortName: "Event & Occasion Styling", duration: 60, isEvent: true, description: "A complete event look built around the dress code, setting, and personal style." },
-  { id: "men_everyday", audience: "Men", name: "Men's Everyday Styling", shortName: "Everyday Styling", duration: 90, description: "Practical, polished outfits for work, weekends, and everything in between." },
-  { id: "men_closet", audience: "Men", name: "Men's Full Closet Refresh", shortName: "Full Closet Refresh", duration: 180, description: "A thoughtful wardrobe update with versatile pieces and complete outfits." },
+  {
+    id: "women_event",
+    audience: "Women",
+    name: "Women's Event & Occasion Styling",
+    shortName: "Event & Occasion Styling",
+    duration: 60,
+    icon: "/images/womens-event.png",
+    isEvent: true,
+    description:
+      "A focused appointment for a wedding, celebration, work event, or special occasion.",
+    summaryPoints: [
+      "Pre-selected pieces",
+      "Focused on event or occasion needs",
+      "Complete head-to-toe looks",
+    ],
+  },
+  {
+    id: "women_everyday",
+    audience: "Women",
+    name: "Women's Everyday Styling",
+    shortName: "Everyday Styling",
+    duration: 90,
+    icon: "/images/womens-everyday.png",
+    description:
+      "Build polished outfits that feel natural for your day-to-day life.",
+    summaryPoints: [
+      "Pre-selected pieces",
+      "Focused on everyday and lifestyle needs",
+      "Complete head-to-toe, realistic looks",
+    ],
+  },
+  {
+    id: "women_closet",
+    audience: "Women",
+    name: "Women's Full Closet Refresh",
+    shortName: "Full Closet Refresh",
+    duration: 180,
+    icon: "/images/womens-closet.png",
+    description:
+      "A more complete wardrobe update with time to compare and build full looks.",
+    summaryPoints: [
+      "Pre-selected pieces",
+      "Focused on replacing and refreshing your wardrobe",
+      "Multiple complete head-to-toe looks",
+    ],
+  },
+  {
+    id: "men_event",
+    audience: "Men",
+    name: "Men's Event & Occasion Styling",
+    shortName: "Event & Occasion Styling",
+    duration: 60,
+    icon: "/images/mens-event.png",
+    isEvent: true,
+    description:
+      "A complete event look built around the dress code, setting, and personal style.",
+    summaryPoints: [
+      "Pre-selected pieces",
+      "Focused on event or occasion needs",
+      "Complete head-to-toe looks",
+    ],
+  },
+  {
+    id: "men_everyday",
+    audience: "Men",
+    name: "Men's Everyday Styling",
+    shortName: "Everyday Styling",
+    duration: 90,
+    icon: "/images/mens-everyday.png",
+    description:
+      "Practical, polished outfits for work, weekends, and everything in between.",
+    summaryPoints: [
+      "Pre-selected pieces",
+      "Focused on everyday and lifestyle needs",
+      "Complete head-to-toe, realistic looks",
+    ],
+  },
+  {
+    id: "men_closet",
+    audience: "Men",
+    name: "Men's Full Closet Refresh",
+    shortName: "Full Closet Refresh",
+    duration: 180,
+    icon: "/images/mens-closet.png",
+    description:
+      "A thoughtful wardrobe update with versatile pieces and complete outfits.",
+    summaryPoints: [
+      "Pre-selected pieces",
+      "Focused on replacing and refreshing your wardrobe",
+      "Multiple complete head-to-toe looks",
+    ],
+  },
 ];
 type Slot = { startsAt: string; endsAt: string; source: "routine_only" };
 
@@ -213,13 +300,13 @@ export default function Home() {
                 <div><p className="small-label">STEP ONE</p><h2>Select a service</h2></div>
                 <div className="audience-toggle" aria-label="Styling department">
                   {(["Women", "Men"] as const).map((item) => (
-                    <button key={item} className={audience === item ? "active" : ""} onClick={() => { setAudience(item); chooseService(item === "Women" ? "women-everyday" : "men-everyday"); }}>{item}</button>
+                    <button type="button" key={item} className={audience === item ? "active" : ""} onClick={() => { setAudience(item); chooseService(item === "Women" ? "women_everyday" : "men_everyday"); }}>{item}</button>
                   ))}
                 </div>
               </div>
               <div className="service-grid">
                 {visibleServices.map((service) => (
-                  <button key={service.id} className={`service-option ${serviceId === service.id ? "selected" : ""}`} onClick={() => chooseService(service.id)}>
+                  <button type="button" key={service.id} className={`service-option ${serviceId === service.id ? "selected" : ""}`} onClick={() => chooseService(service.id)}>
                     <span className="selection-dot" />
                     <span className="service-type">{service.shortName}</span>
                     <span className="service-duration">{service.duration} minutes</span>
@@ -272,11 +359,34 @@ export default function Home() {
                 <label><span>Email address *</span><input type="email" value={form.email} onChange={(e) => updateField("email", e.target.value)} placeholder="you@example.com" /></label>
                 <label><span>Phone number *</span><input type="tel" value={form.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="(208) 555-0123" /></label>
                 <div className="profile-details-row full">
-                  <fieldset className="choice-field detail-group"><legend>Have we worked together before? *</legend><div>{["Yes", "No"].map((value) => <button type="button" className={form.returning === value ? "selected" : ""} key={value} onClick={() => updateField("returning", value)}>{value}</button>)}</div></fieldset>
+                  <fieldset className="choice-field detail-group">
+                    <legend>Have we worked together before? *</legend>
+                    <div>
+                      {["Yes", "No"].map((value) => (
+                        <button
+                          type="button"
+                          className={form.returning === value ? "selected" : ""}
+                          key={value}
+                          onClick={() => updateField("returning", value)}
+                        >
+                          {value}
+                        </button>
+                      ))}
+                    </div>
+                  </fieldset>
+
+                  <label className="detail-group">
+                    <span>Anything helpful for me to know?</span>
+                    <textarea
+                      value={form.notes}
+                      onChange={(e) => updateField("notes", e.target.value)}
+                      placeholder="Optional"
+                      rows={3}
+                    />
+                  </label>
                 </div>
                 {form.returning === "No" && <label className="full"><span>How did you hear about me?</span><select value={form.heard} onChange={(e) => updateField("heard", e.target.value)}><option value="">Select one</option><option>Instagram</option><option>Facebook</option><option>In-store</option><option>Referral</option><option>{"Macy's event"}</option><option>Other</option></select></label>}
                 {selectedService.isEvent && <><label><span>What type of event? *</span><select value={form.eventType} onChange={(e) => updateField("eventType", e.target.value)}><option value="">Select one</option><option>Wedding Guest</option><option>Wedding Party</option><option>Business Event</option><option>Gala or Formal Event</option><option>School Dance</option><option>Other</option></select></label><label><span>When is the event? *</span><input type="date" value={form.eventDate} onChange={(e) => updateField("eventDate", e.target.value)} /></label></>}
-                <label className="full"><span>Anything helpful for me to know?</span><textarea value={form.notes} onChange={(e) => updateField("notes", e.target.value)} placeholder="Optional" rows={3} /></label>
                 <label className="privacy-check full"><input type="checkbox" checked={form.privacy} onChange={(e) => updateField("privacy", e.target.checked)} /><span>I understand my information will be used to manage and prepare for my appointment. <a href="#privacy">Privacy details</a></span></label>
               </div>
             </form>
@@ -355,12 +465,58 @@ function Progress({ step }: { step: number }) {
   return <div className="progress" aria-label={`Step ${step} of 4`}>{labels.map((label, index) => <div className={step === index + 1 ? "active" : step > index + 1 ? "complete" : ""} key={label}><span>{step > index + 1 ? "✓" : index + 1}</span><p>{label}</p>{index < labels.length - 1 && <i />}</div>)}</div>;
 }
 
-function Summary({ service, selectedDate, selectedTime, onChange, compact = false }: { service: Service; selectedDate: string; selectedTime: string; onChange?: () => void; compact?: boolean }) {
+function Summary({
+  service,
+  selectedDate,
+  selectedTime,
+  onChange,
+  compact = false,
+}: {
+  service: Service;
+  selectedDate: string;
+  selectedTime: string;
+  onChange?: () => void;
+  compact?: boolean;
+}) {
   return (
     <div className={`appointment-summary ${compact ? "compact" : ""}`}>
-      <div className="summary-icon">⌑</div>
-      <div><span className="summary-audience">{service.audience.toUpperCase()}</span><h3>{service.shortName}</h3><p>{service.duration} minutes · Complimentary</p>{selectedDate && <p className="summary-date">{readableDate(selectedDate)} · {timeInBoise(selectedTime)}</p>}</div>
-      {onChange && <button onClick={onChange}>Change service →</button>}
+      <div className="summary-icon">
+        <img
+          src={service.icon}
+          alt=""
+          aria-hidden="true"
+        />
+      </div>
+
+      <div className="summary-content">
+        <span className="summary-audience">
+          {service.audience.toUpperCase()}
+        </span>
+
+        <h3>{service.shortName}</h3>
+
+        <p>
+          {service.duration} minutes · Complimentary
+        </p>
+
+        <ul className="summary-points">
+          {service.summaryPoints.map((point) => (
+            <li key={point}>{point}</li>
+          ))}
+        </ul>
+
+        {selectedDate && (
+          <p className="summary-date">
+            {readableDate(selectedDate)} · {timeInBoise(selectedTime)}
+          </p>
+        )}
+      </div>
+
+      {onChange && (
+        <button type="button" onClick={onChange}>
+          Change service →
+        </button>
+      )}
     </div>
   );
 }

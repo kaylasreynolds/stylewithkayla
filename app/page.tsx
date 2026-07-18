@@ -385,6 +385,39 @@ const [serviceId, setServiceId] = useState(
   </div>
 )}
 
+          {step === 2 && (
+            <div className="step-panel">
+              <p className="small-label">STEP TWO</p>
+              <h2>Select a date and time</h2>
+              <div className="calendar-layout">
+                <div className="calendar-panel">
+                  <div className="month-control">
+                    <button aria-label="Previous month" disabled={month <= new Date(today.getFullYear(), today.getMonth(), 1)} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))}>‹</button>
+                    <h3>{monthNames[month.getMonth()]} {month.getFullYear()}</h3>
+                    <button aria-label="Next month" disabled={month >= new Date(maxDate.getFullYear(), maxDate.getMonth(), 1)} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))}>›</button>
+                  </div>
+                  <div className="weekday-row">{weekdayNames.map((day) => <span key={day}>{day}</span>)}</div>
+                  <div className="calendar-grid">
+                    {calendarDays.map(({ date, key, outside, disabled }) => (
+                      <button key={key} disabled={disabled} className={`${outside ? "outside" : ""} ${selectedDate === key ? "selected" : ""}`} onClick={() => { setSelectedDate(key); setSelectedTime(slotsByDate[key]?.[0]?.startsAt || ""); }} aria-label={date.toDateString()}>
+                        {date.getDate()}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="availability-note"><span /> Available Tuesday–Saturday, 24+ hours ahead</p>
+                </div>
+                <div className="time-panel">
+                  <h3>Available times</h3>
+                  <p>{readableDate(selectedDate)}</p>
+                  <div className="time-list">
+                    {loadingTimes ? <p className="loading-times">Checking routine availability…</p> : slots.length ? slots.map((slot) => <button key={slot.startsAt} className={selectedTime === slot.startsAt ? "selected" : ""} onClick={() => setSelectedTime(slot.startsAt)}>{selectedTime === slot.startsAt && <span>✓</span>}{timeInBoise(slot.startsAt)}</button>) : <p className="loading-times">No routine times are available for this date.</p>}
+                  </div>
+                  <p className="time-contact">Don&apos;t see a time that works? <a href="mailto:kayla.reynolds@macys.com?subject=Appointment%20Time%20Request">Send me a message.</a></p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {step === 3 && (
             <form className="step-panel details-form" onSubmit={(event) => event.preventDefault()}>
               <p className="small-label">STEP THREE</p>
