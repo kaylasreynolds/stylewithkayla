@@ -1,7 +1,10 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { isQuestionVisible, isSectionVisible } from "@/lib/profile-visibility";
-
+import {
+  isQuestionVisible,
+  isSectionVisible,
+  resetAnswersForAgeRange,
+} from "@/lib/profile-visibility";
 type Status = "pending" | "change_proposed" | "confirmed" | "declined" | "cancelled" | "completed";
 type Booking = { id: string; publicReference: string; status: string; pendingSince: string; requestedStartAt: string; proposedStartAt: string | null; clientName: string; clientEmail: string; serviceName: string; holdActive: boolean; overdue: boolean };
 type Detail = Booking & { clientPhone: string; returningClient: boolean; howHeard: string | null; ageRange: string | null; profileType: string | null; eventType: string | null; eventDate: string | null; bookingNotes: string | null; activeHoldStartsAt: string | null };
@@ -21,8 +24,18 @@ export default function AdminDashboard({ userName, signOutPath }: { userName: st
   async function reopenProfile() { if (!detail || !reason) return; setError(""); try { const r = await fetch(`/api/admin/bookings/${detail.id}/reopen-profile`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ reason }) }), p = await r.json() as { data?: { profileAccessUrl: string }; error?: { message?: string } }; if (!r.ok) throw new Error(p.error?.message); setProfileLink(p.data!.profileAccessUrl); setPrivateLinkLabel("Style Profile"); setReason(""); } catch (e) { setError(e instanceof Error ? e.message : "The profile could not be reopened."); } }
   async function selectProfileType() { if (!detail || !reason) return; setError(""); try { const r = await fetch(`/api/admin/bookings/${detail.id}/select-profile-type`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ expectedStatus: detail.status, profileType: manualProfileType, reason }) }), p = await r.json() as { error?: { message?: string } }; if (!r.ok) throw new Error(p.error?.message); setReason(""); await loadDetail(); } catch (e) { setError(e instanceof Error ? e.message : "The profile route could not be saved."); } }
   async function loadProfile() { if (!detail) return; setError(""); try { const r = await fetch(`/api/admin/bookings/${detail.id}/profile`, { cache: "no-store" }), p = await r.json() as { data?: ProfileReview; error?: { message?: string } }; if (!r.ok) throw new Error(p.error?.message); setProfileReview(p.data!); setProfileAnswers(p.data!.profile.answers); setOriginalProfileAnswers(p.data!.profile.answers); } catch (e) { setError(e instanceof Error ? e.message : "The profile could not be loaded."); } }
-  function setProfileAnswer(key: string, value: unknown) { setProfileAnswers(current => ({ ...current, [key]: value })); }
-  function toggleProfileAnswer(key: string, value: string) { const current = Array.isArray(profileAnswers[key]) ? profileAnswers[key] as string[] : []; setProfileAnswer(key, current.includes(value) ? current.filter(item => item !== value) : [...current, value]); }
+function setProfileAnswer(key: string, value: unknown) {
+  setProfileAnswers(current => {
+    if (key === "age_range" && current.age_range !== value) {
+      return resetAnswersForAgeRange(current, value);
+    }
+
+    return {
+      ...current,
+      [key]: value,
+    };
+  });
+}  function toggleProfileAnswer(key: string, value: string) { const current = Array.isArray(profileAnswers[key]) ? profileAnswers[key] as string[] : []; setProfileAnswer(key, current.includes(value) ? current.filter(item => item !== value) : [...current, value]); }
   function profileAnswerIncludes(key: string, value: string) { const answer = profileAnswers[key]; return Array.isArray(answer) && answer.includes(value); }
   async function correctProfile() { if (!detail || !reason) return; const changedKeys = Object.keys(profileAnswers).filter(key => JSON.stringify(profileAnswers[key]) !== JSON.stringify(originalProfileAnswers[key])); if (!changedKeys.length) { setError("Change at least one profile answer before saving."); return; } setError(""); try { const r = await fetch(`/api/admin/bookings/${detail.id}/profile`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ answers: profileAnswers, changedKeys, reason }) }), p = await r.json() as { error?: { message?: string } }; if (!r.ok) throw new Error(p.error?.message); setReason(""); await loadProfile(); } catch (e) { setError(e instanceof Error ? e.message : "The profile correction could not be saved."); } }
   return <main className="admin-shell">

@@ -10,3 +10,21 @@ export function isSectionVisible(section:ProfileVisibilitySection,answers:Record
  if(section.showWhen&&!section.showWhen.values.includes(String(answers[section.showWhen.key]??"")))return false;
  return true;
 }
+export function resetAnswersForAgeRange(
+  answers: Record<string, unknown>,
+  ageRange: unknown,
+): Record<string, unknown> {
+  const next: Record<string, unknown> = {
+    age_range: ageRange,
+  };
+
+  if (answers.height !== undefined) {
+    next.height = answers.height;
+  }
+
+  if (answers.weight !== undefined) {
+    next.weight = answers.weight;
+  }
+
+  return next;
+}

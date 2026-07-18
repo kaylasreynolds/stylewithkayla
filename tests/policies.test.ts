@@ -5,7 +5,10 @@ import { PROFILE_SCHEMAS, STYLE_PROFILE_TOKEN_TTL_MS, validateProfileDraft, type
 import { addDays, zonedLocalToEpoch } from "../lib/server/scheduling";
 import { validateAvailabilityRules } from "../lib/server/availability-policy";
 import { anonymizedClientEmail, isRetentionEligible } from "../lib/server/retention-policy";
-
+import {
+  isSectionVisible,
+  resetAnswersForAgeRange,
+} from "../lib/profile-visibility";
 test("booking actions accept only approved source states",()=>{const valid:Array<[AdminBookingAction,string]>=[["confirm","pending"],["confirm","change_proposed"],["decline","pending"],["release-hold","change_proposed"],["propose-time","pending"],["cancel","confirmed"],["complete","confirmed"]];for(const [action,status] of valid)assert.doesNotThrow(()=>assertAdminActionState(action,status));for(const action of ["confirm","decline","release-hold","propose-time"] as AdminBookingAction[])assert.throws(()=>assertAdminActionState(action,"confirmed"));assert.throws(()=>assertAdminActionState("complete","pending"));assert.throws(()=>assertAdminActionState("cancel","completed"));});
 test("private Style Profile links use the approved 30-day lifetime",()=>{assert.equal(STYLE_PROFILE_TOKEN_TTL_MS,30*24*60*60*1000);});
 test("written retention uses two calendar years and handles leap day",()=>{assert.equal(new Date(addCalendarYears(Date.UTC(2026,6,14),2)).toISOString(),"2028-07-14T00:00:00.000Z");assert.equal(new Date(addCalendarYears(Date.UTC(2024,1,29),2)).toISOString(),"2026-02-28T00:00:00.000Z");});
@@ -13,7 +16,51 @@ test("Boise routine windows convert correctly across daylight saving time",()=>{
 test("profile validation enforces type-specific limits and required fields",()=>{const valid={shopping_for:["Everyday Outfits"],shopping_for_details:"Work and weekends",top_styles:["Minimal"],feel_best_in:"Blue and clean lines",avoid:"Nothing specific",body_shape:"Not sure",frustration:"Nothing to wear",difficulty_fitting:["No consistent difficulty"],shop_sizing:"Regular",fabric_preference:"A mix",top_size:"M",top_fit_preference:["Relaxed"],pant_size:"8",pant_cut_preference:["Straight"],dress_size:"N/A",shoe_size:"8"};assert.deepEqual(validateProfileDraft(valid,true,"under_40"),valid);assert.throws(()=>validateProfileDraft({...valid,top_styles:["Minimal","Statement","Sporty","Casual"]},false,"under_40"));assert.throws(()=>validateProfileDraft({...valid,shoe_size:""},true,"under_40"));assert.throws(()=>validateProfileDraft({...valid,unknown:"value"},false,"under_40"));});
 test("availability rules stay within approved days and never overlap",()=>{const rules=[{weekday:2,startMinute:630,endMinute:810},{weekday:2,startMinute:870,endMinute:1050},{weekday:6,startMinute:630,endMinute:810}];assert.deepEqual(validateAvailabilityRules(rules),rules);assert.throws(()=>validateAvailabilityRules([{weekday:1,startMinute:630,endMinute:810}]));assert.throws(()=>validateAvailabilityRules([{weekday:2,startMinute:630,endMinute:810},{weekday:2,startMinute:800,endMinute:900}]));assert.throws(()=>validateAvailabilityRules([{weekday:2,startMinute:900,endMinute:800}]));});
 test("approved profile schemas remain supported and can submit",()=>{assert.deepEqual(Object.keys(PROFILE_SCHEMAS).sort(),["mens_event","mens_styling","over_40","under_40","womens_event","womens_styling"]);for(const[type,sections]of Object.entries(PROFILE_SCHEMAS)){const questions=sections.flatMap(section=>section.questions),keys=questions.map(question=>question.key);if(type!=="womens_styling")assert.equal(new Set(keys).size,keys.length,`${type} has duplicate keys`);const answers:Record<string,unknown>=type==="womens_styling"?{age_range:"Under 40"}:{};for(const section of sections.filter(section=>!section.showWhen||section.showWhen.values.includes(String(answers[section.showWhen.key]))))for(const question of section.questions.filter(question=>question.required&&!question.returningOnly))answers[question.key]??=answerFor(question);assert.doesNotThrow(()=>validateProfileDraft(answers,true,type,false),`${type} should accept its complete required answer set`);}});
+test("unified women's visible branches have unique keys", () => {
+  const ageRanges = [
+    "Under 40",
+    "40 or older",
+    "Prefer not to answer",
+  ];
 
+  for (const ageRange of ageRanges) {
+    const answers = { age_range: ageRange };
+
+    const visibleSections = PROFILE_SCHEMAS.womens_styling.filter(section =>
+      isSectionVisible(section, answers)
+    );
+
+    const keys = visibleSections.flatMap(section =>
+      section.questions.map(question => question.key)
+    );
+
+    assert.equal(
+      new Set(keys).size,
+      keys.length,
+      `${ageRange} branch contains duplicate visible keys`
+    );
+  }
+});
+
+test("changing age range clears branch answers but preserves measurements", () => {
+  const current = {
+    age_range: "Under 40",
+    height: `5'3"`,
+    weight: "145",
+    shopping_for: ["Everyday Outfits"],
+    top_styles: ["Minimal"],
+    top_size: "M",
+    frustration: "Nothing to wear",
+  };
+
+  const next = resetAnswersForAgeRange(current, "40 or older");
+
+  assert.deepEqual(next, {
+    age_range: "40 or older",
+    height: `5'3"`,
+    weight: "145",
+  });
+});
 test("unified women's styling branches by profile age range",()=>{const schema=PROFILE_SCHEMAS.womens_styling;assert.equal(schema[0].title,"About You");assert.doesNotThrow(()=>validateProfileDraft({age_range:"Under 40",height:"5'3\"",weight:"Prefer not to answer"},false,"womens_styling"));assert.throws(()=>validateProfileDraft({height:"5'3\""},true,"womens_styling"));const under={age_range:"Under 40",shopping_for:["Everyday Outfits"],shopping_for_details:"Work",top_styles:["Minimal"],feel_best_in:"Blue",avoid:"None",body_shape:"Not sure",frustration:"Nothing to wear",difficulty_fitting:["No consistent difficulty"],shop_sizing:"Regular",fabric_preference:"A mix",top_size:"M",top_fit_preference:["Relaxed"],pant_size:"8",pant_cut_preference:["Straight"],dress_size:"N/A",shoe_size:"8"};assert.doesNotThrow(()=>validateProfileDraft(under,true,"womens_styling"));assert.doesNotThrow(()=>validateProfileDraft({...under,age_range:"40 or older",frustration:undefined,shopping_for:["Everyday"],top_styles:["Classic"],top_size:"M"},true,"womens_styling"));assert.doesNotThrow(()=>validateProfileDraft({...under,age_range:"Prefer not to answer",frustration:undefined,shopping_for:["Everyday"],top_styles:["Classic"],top_size:"M"},true,"womens_styling"));assert.doesNotThrow(()=>validateProfileDraft({...under,age_range:"40 or older",top_size:"M"},false,"womens_styling"));});
 test("retention cleanup requires a due date and no active operational hold",()=>{const now=Date.UTC(2028,6,14);assert.equal(isRetentionEligible({retentionDeleteAfter:now,activeBookingCount:0,openAccessOrCorrectionCount:0},now),true);assert.equal(isRetentionEligible({retentionDeleteAfter:now+1,activeBookingCount:0,openAccessOrCorrectionCount:0},now),false);assert.equal(isRetentionEligible({retentionDeleteAfter:now,activeBookingCount:1,openAccessOrCorrectionCount:0},now),false);assert.equal(isRetentionEligible({retentionDeleteAfter:now,activeBookingCount:0,openAccessOrCorrectionCount:1},now),false);assert.equal(anonymizedClientEmail("Client_ABC"),"deleted+clientabc@invalid.local");});
 function answerFor(question:ProfileQuestion){if(question.kind==="multi"||question.kind==="visual_multi")return[question.options?.[0]||"Example"];if(question.kind==="date")return"2026-09-01";if(question.kind==="single"||question.kind==="visual_single")return question.options?.[0]||"Example";return"Example";}
