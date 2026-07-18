@@ -358,7 +358,14 @@ export default function Home() {
                 <label className="full"><span>Full name *</span><input value={form.name} onChange={(e) => updateField("name", e.target.value)} placeholder="First and last name" /></label>
                 <label><span>Email address *</span><input type="email" value={form.email} onChange={(e) => updateField("email", e.target.value)} placeholder="you@example.com" /></label>
                 <label><span>Phone number *</span><input type="tel" value={form.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="(208) 555-0123" /></label>
-                <div className="profile-details-row full">
+                <div
+                  className="profile-details-row full"
+                  style={{
+                    gridTemplateColumns: "minmax(250px, 300px) minmax(360px, 520px)",
+                    justifyContent: "start",
+                    columnGap: "30px",
+                  }}
+                >
                   <fieldset className="choice-field detail-group">
                     <legend>Have we worked together before? *</legend>
                     <div>
@@ -376,7 +383,22 @@ export default function Home() {
                   </fieldset>
 
                   <label className="detail-group">
-                    <span>Anything helpful for me to know?</span>
+                    <span style={{ display: "block", lineHeight: 1.35 }}>
+                      <span style={{ display: "block" }}>Any other notes about your appointment?</span>
+                      <small
+                        style={{
+                          display: "block",
+                          marginTop: "4px",
+                          color: "#7c7472",
+                          fontSize: "9px",
+                          fontStyle: "italic",
+                          fontWeight: 400,
+                          lineHeight: 1.45,
+                        }}
+                      >
+                        Sizes and style preferences will be requested after your appointment has been confirmed.
+                      </small>
+                    </span>
                     <textarea
                       value={form.notes}
                       onChange={(e) => updateField("notes", e.target.value)}
