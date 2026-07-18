@@ -507,7 +507,8 @@ function Summary({
 
         {selectedDate && (
           <p className="summary-date">
-            {readableDate(selectedDate)} · {timeInBoise(selectedTime)}
+            {readableDate(selectedDate)}<br />
+            {timeInBoise(selectedTime)}
           </p>
         )}
       </div>
