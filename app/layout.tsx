@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import FooterLegalLinks from "./FooterLegalLinks";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://stylewithkayla.com"),
@@ -42,8 +43,8 @@ export const metadata: Metadata = {
     follow: true,
   },
   other: {
-  "codex-preview": "development",
-},
+    "codex-preview": "development",
+  },
   icons: {
     icon: "/images/hanger-black.png",
     shortcut: "/images/hanger-black.png",
@@ -60,6 +61,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {children}
+        <FooterLegalLinks />
       </body>
     </html>
   );
