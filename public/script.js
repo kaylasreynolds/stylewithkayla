@@ -42,8 +42,6 @@ if (testimonialSlider) {
   });
 }
 
-
-
 // Service detail dialogs
 const serviceDialogTriggers = document.querySelectorAll('[data-dialog-open]');
 let lastServiceDialogTrigger = null;
@@ -73,4 +71,34 @@ document.querySelectorAll('.service-dialog').forEach((dialog) => {
       lastServiceDialogTrigger = null;
     }
   });
+});
+
+// Shared legal links for every static public page.
+document.querySelectorAll('a[href="#privacy"]').forEach((link) => {
+  link.setAttribute('href', '/Legal/privacy');
+});
+
+document.querySelectorAll('.site-footer').forEach((footer) => {
+  if (footer.nextElementSibling?.classList.contains('site-legal-links')) return;
+
+  const legalLinks = document.createElement('nav');
+  legalLinks.className = 'site-legal-links';
+  legalLinks.setAttribute('aria-label', 'Legal links');
+  legalLinks.style.cssText = [
+    'display:flex',
+    'align-items:center',
+    'justify-content:center',
+    'flex-wrap:wrap',
+    'gap:10px',
+    'margin:0',
+    'padding:8px 24px 12px',
+    'border-top:1px solid #ddd2ca',
+    'background:#fcf9f6',
+    'color:#5a5552',
+    'font-size:12px',
+    'line-height:1.4'
+  ].join(';');
+
+  legalLinks.innerHTML = '<a href="/Legal/privacy" style="color:inherit;text-decoration:underline;text-underline-offset:4px">Privacy Policy</a><span aria-hidden="true">|</span><a href="/Legal/terms" style="color:inherit;text-decoration:underline;text-underline-offset:4px">Terms of Use</a>';
+  footer.insertAdjacentElement('afterend', legalLinks);
 });
