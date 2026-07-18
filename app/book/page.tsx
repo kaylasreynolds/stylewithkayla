@@ -281,8 +281,8 @@ export default function Home() {
                   <fieldset className="measurements-group detail-group">
                     <legend>Height / Weight</legend>
                     <div className="measurement-inputs">
-                      <label><span className="sr-only">Height</span><input aria-label="Height" value={form.height} onChange={(e) => updateField("height", e.target.value)} /></label>
-                      <label><span className="sr-only">Weight</span><input aria-label="Weight" inputMode="numeric" value={form.weight} onChange={(e) => updateField("weight", e.target.value)} /></label>
+                      <label><span className="sr-only">Height</span><input aria-label="Height" placeholder="Height" value={form.height} onChange={(e) => updateField("height", e.target.value)} /></label>
+                      <label><span className="sr-only">Weight</span><input aria-label="Weight" placeholder="Weight" inputMode="numeric" value={form.weight} onChange={(e) => updateField("weight", e.target.value)} /></label>
                     </div>
                     <p className="optional-note">Optional—you don&apos;t have to share these.</p>
                   </fieldset>
