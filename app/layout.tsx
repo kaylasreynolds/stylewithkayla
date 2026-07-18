@@ -53,6 +53,43 @@ export const metadata: Metadata = {
   },
 };
 
+const performanceCss = `
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .site-logo img {
+    width: 184px;
+    height: 52px;
+    object-fit: contain;
+  }
+
+  .summary-icon img {
+    width: 38px;
+    height: 38px;
+  }
+
+  .footer-contact-item img,
+  .footer-social-icon img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+
+  .site-footer {
+    content-visibility: auto;
+    contain-intrinsic-size: 700px;
+  }
+
+  @media (max-width: 700px) {
+    .site-footer {
+      contain-intrinsic-size: 1050px;
+    }
+  }
+`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -60,6 +97,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <style dangerouslySetInnerHTML={{ __html: performanceCss }} />
+      </head>
       <body>
         {children}
         <BookingNavLinks />
