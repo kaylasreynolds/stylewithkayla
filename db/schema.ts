@@ -18,6 +18,7 @@ export type BookingStatus =
 export type ProfileType =
   | "under_40"
   | "over_40"
+  | "womens_styling"
   | "womens_event"
   | "mens_styling"
   | "mens_event";

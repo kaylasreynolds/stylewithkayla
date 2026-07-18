@@ -14,3 +14,7 @@ This ledger is the durable source of approved product and engineering decisions 
 | Inspiration assets for first release | Defer image uploads for the first release; collect inspiration links instead. |
 | Written Style Profile history retention | Retain written Style Profile history for two years. |
 | Private Style Profile link expiration | Private Style Profile links expire 30 days after they are issued unless revoked earlier. |
+
+## Unified women's styling Style Profile routing
+
+Women's Everyday Styling and Women's Full Closet Refresh now create a `womens_styling` Style Profile at booking creation instead of collecting booking-step age routing. Age range, height, and weight are collected in the first Style Profile section, and age-specific women's questions are displayed conditionally from the saved `age_range` answer. Existing `under_40`, `over_40`, `womens_event`, `mens_styling`, and `mens_event` profiles remain supported for legacy links and records.

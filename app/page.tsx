@@ -40,7 +40,6 @@ const servicePresentation: Service[] = [
     shortName: "Everyday Styling",
     duration: 90,
     icon: "/images/womens-everyday.png",
-    needsAge: true,
     description:
       "Build polished outfits that feel natural for your day-to-day life.",
     summaryPoints: [
@@ -56,7 +55,6 @@ const servicePresentation: Service[] = [
     shortName: "Full Closet Refresh",
     duration: 180,
     icon: "/images/womens-closet.png",
-    needsAge: true,
     description:
       "A more complete wardrobe update with time to compare and build full looks.",
     summaryPoints: [
@@ -175,9 +173,6 @@ const [serviceId, setServiceId] = useState(
     phone: "",
     returning: "",
     heard: "",
-    age: "",
-    height: "",
-    weight: "",
     eventType: "",
     eventDate: "",
     notes: "",
@@ -249,14 +244,12 @@ const [serviceId, setServiceId] = useState(
   async function submitRequest() {
     if (submitting) return;
     setSubmitting(true); setBookingError("");
-    const fit = [form.height && `Height: ${form.height}`, form.weight && `Weight: ${form.weight} lbs`].filter(Boolean).join("; ");
     try {
       const response = await fetch("/api/bookings", { method: "POST", headers: { "content-type": "application/json", "idempotency-key": idempotencyKey.current }, body: JSON.stringify({
         serviceCode: serviceId, requestedStartAt: selectedTime, client: { fullName: form.name, email: form.email, phone: form.phone },
         returningClient: form.returning === "Yes", howHeard: form.returning === "Yes" ? null : form.heard,
-        ageRange: selectedService.needsAge ? (form.age === "Under 40" ? "under_40" : form.age === "40 or older" ? "40_plus" : "manual_review") : null,
         eventType: selectedService.isEvent ? form.eventType : null, eventDate: selectedService.isEvent ? form.eventDate : null,
-        bookingNotes: [fit, form.notes].filter(Boolean).join("\n") || null, privacy: { policyVersion: "2026-07-13", acknowledged: form.privacy },
+        bookingNotes: form.notes || null, privacy: { policyVersion: "2026-07-13", acknowledged: form.privacy },
       }) });
       const payload = await response.json() as {data:{publicReference:string};error?:{message?:string}}; if (!response.ok) throw new Error(payload.error?.message || "Your request could not be submitted.");
       setPublicReference(payload.data.publicReference); setSubmitted(true);
@@ -268,7 +261,7 @@ const [serviceId, setServiceId] = useState(
     if (step === 1) return Boolean(serviceId);
     if (step === 2) return Boolean(selectedDate && selectedTime);
     if (step === 3) {
-      const conditional = selectedService.needsAge ? Boolean(form.age) : selectedService.isEvent ? Boolean(form.eventType && form.eventDate) : true;
+      const conditional = selectedService.isEvent ? Boolean(form.eventType && form.eventDate) : true;
       return Boolean(form.name && form.email && form.phone && form.returning && (form.returning === "Yes" || form.heard) && conditional && form.privacy);
     }
     return true;
@@ -400,17 +393,8 @@ const [serviceId, setServiceId] = useState(
                 <label className="full"><span>Full name *</span><input value={form.name} onChange={(e) => updateField("name", e.target.value)} placeholder="First and last name" /></label>
                 <label><span>Email address *</span><input type="email" value={form.email} onChange={(e) => updateField("email", e.target.value)} placeholder="you@example.com" /></label>
                 <label><span>Phone number *</span><input type="tel" value={form.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="(208) 555-0123" /></label>
-                <div className={`profile-details-row full ${selectedService.needsAge ? "with-age" : ""}`}>
+                <div className="profile-details-row full">
                   <fieldset className="choice-field detail-group"><legend>Have we worked together before? *</legend><div>{["Yes", "No"].map((value) => <button type="button" className={form.returning === value ? "selected" : ""} key={value} onClick={() => updateField("returning", value)}>{value}</button>)}</div></fieldset>
-                  <fieldset className="measurements-group detail-group">
-                    <legend>Height / Weight</legend>
-                    <div className="measurement-inputs">
-                      <label><span className="sr-only">Height</span><input aria-label="Height" value={form.height} onChange={(e) => updateField("height", e.target.value)} /></label>
-                      <label><span className="sr-only">Weight</span><input aria-label="Weight" inputMode="numeric" value={form.weight} onChange={(e) => updateField("weight", e.target.value)} /></label>
-                    </div>
-                    <p className="optional-note">Optional—you don&apos;t have to share these.</p>
-                  </fieldset>
-                  {selectedService.needsAge && <fieldset className="choice-field detail-group age-group"><legend>Age Range *</legend><div>{["Under 40", "40 or older", "Prefer not to answer"].map((value) => <button type="button" className={form.age === value ? "selected" : ""} key={value} onClick={() => updateField("age", value)}>{value}</button>)}</div></fieldset>}
                 </div>
                 {form.returning === "No" && <label className="full"><span>How did you hear about me?</span><select value={form.heard} onChange={(e) => updateField("heard", e.target.value)}><option value="">Select one</option><option>Instagram</option><option>Facebook</option><option>In-store</option><option>Referral</option><option>{"Macy's event"}</option><option>Other</option></select></label>}
                 {selectedService.isEvent && <><label><span>What type of event? *</span><select value={form.eventType} onChange={(e) => updateField("eventType", e.target.value)}><option value="">Select one</option><option>Wedding Guest</option><option>Wedding Party</option><option>Business Event</option><option>Gala or Formal Event</option><option>School Dance</option><option>Other</option></select></label><label><span>When is the event? *</span><input type="date" value={form.eventDate} onChange={(e) => updateField("eventDate", e.target.value)} /></label></>}
@@ -428,8 +412,6 @@ const [serviceId, setServiceId] = useState(
                 <div><span>Service</span><strong>{selectedService.name}</strong><button type="button" onClick={() => setStep(1)}>Edit</button></div>
                 <div><span>Date & time</span><strong>{readableDate(selectedDate)}<br />{timeInBoise(selectedTime)}</strong><button type="button" onClick={() => setStep(2)}>Edit</button></div>
                 <div><span>Contact</span><strong>{form.name}<br />{form.email}<br />{form.phone}</strong><button type="button" onClick={() => setStep(3)}>Edit</button></div>
-                {(form.height || form.weight) && <div><span>Optional fit details</span><strong>{form.height && `Height: ${form.height}`}{form.height && form.weight && <br />}{form.weight && `Weight: ${form.weight} lbs`}</strong><button type="button" onClick={() => setStep(3)}>Edit</button></div>}
-                {selectedService.needsAge && <div><span>Style Profile routing</span><strong>{form.age}</strong><button type="button" onClick={() => setStep(3)}>Edit</button></div>}
               </div>
               <div className="pending-callout"><span>i</span><p><strong>This is an appointment request.</strong><br />Your selected time will be held while Kayla reviews it. You will receive a confirmation or an alternate-time option.</p></div>
             </form>
