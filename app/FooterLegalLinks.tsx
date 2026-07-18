@@ -21,10 +21,13 @@ export default function FooterLegalLinks() {
         justifyContent: "center",
         flexWrap: "wrap",
         gap: "10px",
-        padding: "0 24px 22px",
-        background: "var(--color-charcoal, #1f1f1f)",
-        color: "rgba(255, 255, 255, 0.78)",
+        margin: 0,
+        padding: "8px 24px 12px",
+        borderTop: "1px solid var(--color-divider, #ddd2ca)",
+        background: "var(--color-ivory, #fcf9f6)",
+        color: "var(--color-gray, #5a5552)",
         fontSize: "12px",
+        lineHeight: 1.4,
       }}
     >
       <a
