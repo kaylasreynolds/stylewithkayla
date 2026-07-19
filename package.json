@@ -6,19 +6,19 @@
     "node": ">=22.13.0"
   },
   "scripts": {
-  "install:ci": "bash scripts/install-ci.sh",
-  "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vite",
-  "build": "bash scripts/build-verified.sh",
-  "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
-  "test": "npm run build && node --import tsx --test tests/*.test.mjs tests/*.test.ts",
-  "validate:artifact": "bash scripts/validate-artifact.sh",
-  "deploy:preview": "npm run build && wrangler deploy --config dist/server/wrangler.json",
-  "lint": "bash scripts/sites-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
-  "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate",
-  "db:migrate:preview": "wrangler d1 migrations apply stylewithkayla-combined-preview --remote --config wrangler.jsonc",
-  "db:local:init": "wrangler d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_silent_ser_duncan.sql",
-  "dev:worker": "wrangler dev --persist-to .wrangler/state"
-},
+    "install:ci": "bash scripts/install-ci.sh",
+    "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vite",
+    "build": "bash scripts/build-verified.sh",
+    "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
+    "test": "npm run build && node --import tsx --test tests/*.test.mjs tests/*.test.ts",
+    "validate:artifact": "bash scripts/validate-artifact.sh",
+    "deploy:preview": "npm run build && wrangler deploy --config dist/server/wrangler.json",
+    "lint": "bash scripts/sites-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
+    "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate",
+    "db:migrate:preview": "wrangler d1 migrations apply stylewithkayla-combined-preview --remote --config wrangler.jsonc",
+    "db:local:init": "wrangler d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_silent_ser_duncan.sql",
+    "dev:worker": "wrangler dev --persist-to .wrangler/state"
+  },
   "dependencies": {
     "drizzle-orm": "0.45.2",
     "next": "16.2.6",
