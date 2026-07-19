@@ -1,3 +1,4 @@
+import Link from "next/link";
 import AdminDashboard from "./AdminDashboard";
 import {
   accessSignOutPath,
@@ -20,9 +21,17 @@ export default async function AdminPage() {
   }
 
   return (
-    <AdminDashboard
-      userName={user.displayName}
-      signOutPath={accessSignOutPath()}
-    />
+    <>
+      <div className="admin-preview-shortcut">
+        <Link href="/admin/style-profile-preview">
+          Open live Style Profile preview
+        </Link>
+        <span>Review every profile route, test answers, and reset the form without changing client data.</span>
+      </div>
+      <AdminDashboard
+        userName={user.displayName}
+        signOutPath={accessSignOutPath()}
+      />
+    </>
   );
 }
