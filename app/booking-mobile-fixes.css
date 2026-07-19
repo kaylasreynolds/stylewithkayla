@@ -1,0 +1,68 @@
+/* Booking form layout corrections loaded after globals.css. */
+
+.privacy-check {
+  display: grid !important;
+  grid-template-columns: 22px minmax(0, 1fr) !important;
+  align-items: start;
+  gap: 11px !important;
+  padding: 14px 16px;
+}
+
+.privacy-check input[type="checkbox"] {
+  appearance: auto;
+  width: 20px !important;
+  min-width: 20px;
+  height: 20px !important;
+  margin: 1px 0 0 !important;
+  padding: 0 !important;
+}
+
+.privacy-check > span {
+  min-width: 0;
+  font-size: 0;
+  line-height: 1.5;
+}
+
+.privacy-check > span::before {
+  content: "I understand how my information will be used and stored. ";
+  font-size: 12px;
+}
+
+.privacy-check > span a {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .profile-details-row {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr) !important;
+    justify-content: stretch !important;
+    column-gap: 0 !important;
+  }
+
+  .profile-details-row .detail-group {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .profile-details-row .detail-group > span,
+  .profile-details-row textarea {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .profile-details-row textarea {
+    display: block;
+  }
+
+  .privacy-check {
+    grid-template-columns: 22px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    padding: 14px;
+  }
+}
