@@ -968,6 +968,11 @@ cite::before {
   .announcement-bar::after {
     display: none;
   }
+
+  .site-header {
+    position: static;
+    top: auto;
+  }
 }
 
 @media (max-width: 980px) {
