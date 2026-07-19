@@ -335,7 +335,36 @@ textarea { resize:vertical; }
   .header-inner { align-items:stretch; flex-direction:column; gap:14px; padding:16px 0; }
   .site-nav { justify-content:flex-start; gap:14px 24px; }
   .site-header .header-cta { width:100%; padding:14px 20px; font-size:.9rem; }
-  .booking-page { padding:28px 20px 50px; }
+ .booking-page,
+.booking-workspace,
+.step-panel,
+.calendar-layout,
+.calendar-panel,
+.time-panel {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.booking-page {
+  overflow-x: clip;
+}
+
+.calendar-grid,
+.weekday-row {
+  width: 100%;
+  min-width: 0;
+}
+
+.workspace-actions {
+  flex-wrap: wrap;
+}
+
+.workspace-actions .button {
+  min-width: 0;
+  flex: 1 1 140px;
+}
+   .booking-page { padding:28px 20px 50px; }
   .booking-intro { display:block; }
   .booking-intro h1 { font-size:43px; line-height:1; margin:16px 0 18px; }
   .intro-copy { font-size:14px; line-height:1.7; }
