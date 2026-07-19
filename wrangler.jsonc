@@ -1,6 +1,6 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "stylewithkayla-combined-preview",
+	"name": "stylewithkayla-production",
 	"main": "./dist/server/index.js",
 	"compatibility_date": "2026-07-15",
 	"compatibility_flags": [
@@ -22,8 +22,8 @@
 	"d1_databases": [
 		{
 			"binding": "DB",
-			"database_name": "stylewithkayla-combined-preview",
-			"database_id": "4dfede5d-4f59-4886-8e2b-fe87e56b29a9",
+			"database_name": "stylewithkayla-production",
+			"database_id": "6bb25282-11dc-45ca-a103-b75215504600",
 			"migrations_dir": "./drizzle"
 		}
 	]
