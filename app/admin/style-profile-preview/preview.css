@@ -1,0 +1,82 @@
+.profile-preview-admin {
+  width: min(1440px, calc(100% - 32px));
+}
+
+.profile-preview-toolbar {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(190px, 240px) auto;
+  gap: 16px 22px;
+  align-items: end;
+  margin: 28px 0;
+  border: 1px solid var(--line);
+}
+
+.profile-preview-toolbar h2 {
+  margin: 0 0 6px;
+  font: 500 32px/1 var(--font-heading);
+}
+
+.profile-preview-toolbar p {
+  max-width: 700px;
+  margin: 0;
+  color: var(--charcoal);
+  line-height: 1.6;
+}
+
+.profile-preview-toolbar label {
+  margin: 0;
+}
+
+.admin-preview-checkbox {
+  display: flex !important;
+  grid-column: 2;
+  align-items: center;
+  gap: 9px !important;
+}
+
+.admin-preview-checkbox input {
+  width: 18px;
+  min-height: 18px;
+  margin: 0;
+}
+
+.profile-preview-status {
+  align-self: center;
+  color: var(--rose-dark);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.profile-preview-frame {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--ivory);
+  box-shadow: 0 18px 50px rgba(31, 31, 31, .08);
+}
+
+.profile-preview-frame .site-header {
+  position: static;
+}
+
+.profile-preview-frame .site-nav span,
+.profile-preview-frame .calendar-options span,
+.profile-preview-frame .confirmed-appointment > span:last-child {
+  color: var(--rose-dark);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.profile-preview-frame .header-cta {
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .profile-preview-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-preview-checkbox {
+    grid-column: auto;
+  }
+}
