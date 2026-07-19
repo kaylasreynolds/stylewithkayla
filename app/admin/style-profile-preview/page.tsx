@@ -2,6 +2,7 @@ import { getAdminEmails } from "@/lib/server/runtime";
 import { PROFILE_SCHEMAS } from "@/lib/server/profile-policy";
 import { accessSignOutPath, requireAccessUser } from "../../cloudflare-access";
 import StyleProfilePreview from "./StyleProfilePreview";
+import "./preview.css";
 
 export const dynamic = "force-dynamic";
 
