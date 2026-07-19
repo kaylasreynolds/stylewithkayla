@@ -25,7 +25,15 @@
     .footer-social-icon { width:32px; height:32px; flex:0 0 32px; display:inline-grid; place-items:center; }
     .footer-social-icon img { width:18px; height:18px; object-fit:contain; }
     .footer-social > .button { min-width:0; padding:12px 16px; font-size:.82rem; line-height:1.2; white-space:nowrap; }
-    @media (max-width:700px) { .footer-social-links { width:auto; } }
+    .about-personal__lead--mobile { display:none; }
+    @media (max-width:700px) {
+      .footer-social-links { width:auto; }
+      .about-personal__lead--mobile {
+        display:block;
+        margin:0 0 28px;
+      }
+      .about-personal__lead--desktop { display:none; }
+    }
   </style>
 </head>
 
@@ -69,6 +77,9 @@
 
     <section class="about-personal" aria-labelledby="about-personal-title">
       <div class="container about-personal__inner">
+        <p class="about-personal__lead about-personal__lead--mobile">I love to read. I love to sew. I love to build, create, and bring ideas to
+          life with my hands. There’s nothing more satisfying than a tangible project.</p>
+
         <div class="about-collage">
           <figure class="about-collage__item about-collage__item--main">
             <img src="images/reading.png" alt="Kayla relaxing on the couch with an open book">
@@ -78,7 +89,7 @@
         <div class="about-personal__content">
           <h2 id="about-personal-title">A Little More About Me</h2>
           <span class="about-accent" aria-hidden="true"></span>
-          <p class="about-personal__lead">I love to read. I love to sew. I love to build, create, and bring ideas to
+          <p class="about-personal__lead about-personal__lead--desktop">I love to read. I love to sew. I love to build, create, and bring ideas to
             life with my hands. There’s nothing more satisfying than a tangible project.</p>
           <p>I love the quiet of the forest and the peace of a beach, but I’m also very much an <em>indoor cat.</em></p>
           <p>My life revolves around my husband, our nephews, Harry (the Maine Coon) and Fluffers (the tabby).</p>
