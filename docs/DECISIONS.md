@@ -2,7 +2,7 @@
 
 This ledger is the durable source of approved product and engineering decisions for the booking and Style Profile build. Planning documents may summarize or link back here, but this file should remain the canonical record when policy-level details change.
 
-| Public website deployment | The `main` branch is the unified production source for the public marketing website, booking application, Style Profile workflow, and administrative tools. Public marketing assets remain under `public/`, while dynamic booking and administrative routes are served through the Cloudflare Worker. Administrative routes are protected by Cloudflare Access. |
+| Public website deployment | The `Combined` branch is the source for the live Cloudflare Worker serving the public marketing website, booking application, Style Profile workflow, and administrative tools. The `main` branch remains the preserved static-site rollback source until the unified Worker deployment has completed production validation. Administrative routes are protected by Cloudflare Access. |
 
 ## Approved decisions
 
