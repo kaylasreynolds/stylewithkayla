@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "./book-overrides.css";
 
 export const metadata: Metadata = {
   title: "Book a Complimentary Styling Appointment",
