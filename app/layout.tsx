@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./booking-mobile-fixes.css";
 import FooterLegalLinks from "./FooterLegalLinks";
 import BookingNavLinks from "./BookingNavLinks";
 import BookingValidationErrors from "./BookingValidationErrors";
