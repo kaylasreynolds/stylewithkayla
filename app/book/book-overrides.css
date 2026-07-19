@@ -1,0 +1,12 @@
+.footer-social-links {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.footer-social-icon {
+  flex: 0 0 40px;
+}
+
+.privacy-notice {
+  display: none;
+}
