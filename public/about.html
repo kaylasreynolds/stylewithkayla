@@ -27,7 +27,14 @@
     .footer-social > .button { min-width:0; padding:12px 16px; font-size:.82rem; line-height:1.2; white-space:nowrap; }
     .about-personal__lead--mobile { display:none; }
     @media (max-width:700px) {
-      .footer-social-links { width:auto; }
+      .footer-inner { text-align:center; }
+      .footer-column,
+      .footer-links,
+      .footer-contact,
+      .footer-social { align-items:center; text-align:center; }
+      .footer-contact-item { justify-content:center; text-align:left; width:auto; }
+      .footer-social-links { width:auto; justify-content:center; }
+      .footer-social > .button { width:100%; max-width:330px; }
       .about-personal__lead--mobile {
         display:block;
         margin:0 0 28px;
