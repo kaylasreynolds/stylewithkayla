@@ -3432,3 +3432,35 @@ body.service-dialog-open {
     font-size: 2.25rem;
   }
 }
+
+/* Global mobile footer centering */
+@media (max-width: 700px) {
+  .footer-inner {
+    text-align: center;
+  }
+
+  .footer-column,
+  .footer-links,
+  .footer-contact,
+  .footer-social,
+  .footer-brand {
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-contact-item {
+    width: auto;
+    justify-content: center;
+    text-align: left;
+  }
+
+  .footer-social-links {
+    justify-content: center;
+  }
+
+  .footer-social .button,
+  .site-footer .footer-social .button {
+    width: 100%;
+    max-width: 330px;
+  }
+}
