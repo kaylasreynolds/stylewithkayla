@@ -22,11 +22,30 @@ export default async function AdminPage() {
 
   return (
     <>
-      <div className="admin-preview-shortcut">
-        <Link href="/admin/style-profile-preview">
-          Open live Style Profile preview
+      <div
+        style={{
+          width: "min(1240px, calc(100% - 48px))",
+          margin: "28px auto -20px",
+          padding: "16px 18px",
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "10px 20px",
+          border: "1px solid var(--rose)",
+          borderRadius: "6px",
+          background: "var(--blush)",
+        }}
+      >
+        <Link
+          href="/admin/style-profile-preview"
+          style={{ color: "var(--rose-dark)", fontWeight: 700 }}
+        >
+          Open live Style Profile preview →
         </Link>
-        <span>Review every profile route, test answers, and reset the form without changing client data.</span>
+        <span style={{ color: "var(--charcoal)", fontSize: "12px" }}>
+          Review every profile route, test answers, and reset the form without changing client data.
+        </span>
       </div>
       <AdminDashboard
         userName={user.displayName}
