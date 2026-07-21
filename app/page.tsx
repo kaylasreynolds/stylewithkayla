@@ -20,8 +20,8 @@ const servicePresentation: Service[] = [
   {
     id: "women_event",
     audience: "Women",
-    name: "Women's Event & Occasion Styling",
-    shortName: "Event & Occasion Styling",
+    name: "Occasion Styling",
+    shortName: "Occasion Styling",
     duration: 60,
     icon: "/images/womens-event.png",
     isEvent: true,
@@ -66,8 +66,8 @@ const servicePresentation: Service[] = [
   {
     id: "men_event",
     audience: "Men",
-    name: "Men's Event & Occasion Styling",
-    shortName: "Event & Occasion Styling",
+    name: "Men's Occasion Styling",
+    shortName: "ccasion Styling",
     duration: 60,
     icon: "/images/mens-event.png",
     isEvent: true,
