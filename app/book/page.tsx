@@ -65,7 +65,7 @@ const servicePresentation: Service[] = [
     id: "men_event",
     audience: "Men",
     name: "Event & Occasions",
-    shortName: "Event & Occasion Styling",
+    shortName: "Event & Occasions",
     duration: 60,
     icon: "/images/mens-event.png",
     isEvent: true,
