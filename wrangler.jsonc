@@ -6,56 +6,43 @@
   "compatibility_flags": [
     "nodejs_compat"
   ],
+
+  "workers_dev": false,
+
   "observability": {
     "enabled": true
   },
+
   "assets": {
     "directory": "./dist/client",
     "binding": "ASSETS"
   },
+
   "images": {
     "binding": "IMAGES"
   },
 
-  "env": {
-    "preview": {
-      "workers_dev": true,
-      "vars": {
-        "ADMIN_EMAILS": "kaylasreynolds@gmail.com"
-      },
-      "d1_databases": [
-        {
-          "binding": "DB",
-          "database_name": "stylewithkayla-preview",
-          "database_id": "1f8a83a9-3d05-4592-b07b-4ffee2ea7047",
-          "migrations_dir": "./drizzle"
-        }
-      ]
+  "routes": [
+    {
+      "pattern": "stylewithkayla.com",
+      "custom_domain": true
     },
-
-    "production": {
-      "workers_dev": false,
-      "routes": [
-        {
-          "pattern": "stylewithkayla.com",
-          "custom_domain": true
-        },
-        {
-          "pattern": "www.stylewithkayla.com",
-          "custom_domain": true
-        }
-      ],
-      "vars": {
-        "ADMIN_EMAILS": "kaylasreynolds@gmail.com"
-      },
-      "d1_databases": [
-        {
-          "binding": "DB",
-          "database_name": "stylewithkayla-production",
-          "database_id": "6bb25282-11dc-45ca-a103-b75215504600",
-          "migrations_dir": "./drizzle"
-        }
-      ]
+    {
+      "pattern": "www.stylewithkayla.com",
+      "custom_domain": true
     }
-  }
+  ],
+
+  "vars": {
+    "ADMIN_EMAILS": "kaylasreynolds@gmail.com"
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "stylewithkayla-production",
+      "database_id": "6bb25282-11dc-45ca-a103-b75215504600",
+      "migrations_dir": "./drizzle"
+    }
+  ]
 }

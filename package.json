@@ -15,8 +15,7 @@
     "deploy:preview": "npm run build && wrangler deploy --config dist/server/wrangler.json",
     "lint": "bash scripts/sites-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate",
-    "db:migrate:preview": "wrangler d1 migrations apply stylewithkayla-combined-preview --remote --config wrangler.jsonc",
-    "db:local:init": "wrangler d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_silent_ser_duncan.sql",
+    "db:migrate": "wrangler d1 migrations apply stylewithkayla-production --remote --config wrangler.jsonc",    "db:local:init": "wrangler d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_silent_ser_duncan.sql",
     "dev:worker": "wrangler dev --persist-to .wrangler/state"
   },
   "dependencies": {
