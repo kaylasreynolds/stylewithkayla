@@ -19,7 +19,7 @@ const servicePresentation: Service[] = [
     id: "women_event",
     audience: "Women",
     name: "Women's Event & Occasion Styling",
-    shortName: "Occasion Styling",
+    shortName: "Event & Occasions",
     duration: 60,
     icon: "/images/womens-event.png",
     isEvent: true,
@@ -34,7 +34,7 @@ const servicePresentation: Service[] = [
   {
     id: "women_everyday",
     audience: "Women",
-    name: "Women's Everyday Styling",
+    name: "Everyday Styling",
     shortName: "Everyday Styling",
     duration: 90,
     icon: "/images/womens-everyday.png",
@@ -49,8 +49,8 @@ const servicePresentation: Service[] = [
   {
     id: "women_closet",
     audience: "Women",
-    name: "Women's Full Closet Refresh",
-    shortName: "Closet Refresh",
+    name: "Closet Refresh",
+    shortName: "Full Closet Refresh",
     duration: 180,
     icon: "/images/womens-closet.png",
     description:
@@ -64,8 +64,8 @@ const servicePresentation: Service[] = [
   {
     id: "men_event",
     audience: "Men",
-    name: "Men's Event & Occasion Styling",
-    shortName: "Occasion Styling",
+    name: "Event & Occasions",
+    shortName: "Event & Occasion Styling",
     duration: 60,
     icon: "/images/mens-event.png",
     isEvent: true,
@@ -80,7 +80,7 @@ const servicePresentation: Service[] = [
   {
     id: "men_everyday",
     audience: "Men",
-    name: "Men's Everyday Styling",
+    name: "Everyday Styling",
     shortName: "Everyday Styling",
     duration: 90,
     icon: "/images/mens-everyday.png",
@@ -95,8 +95,8 @@ const servicePresentation: Service[] = [
   {
     id: "men_closet",
     audience: "Men",
-    name: "Men's Full Closet Refresh",
-    shortName: "Closet Refresh",
+    name: "Closet Refresh",
+    shortName: "Full Closet Refresh",
     duration: 180,
     icon: "/images/mens-closet.png",
     description:
