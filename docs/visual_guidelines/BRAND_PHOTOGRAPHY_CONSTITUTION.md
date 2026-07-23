@@ -50,7 +50,7 @@ Document hierarchy:
 2. Permanent Prompt Foundation
 3. Approved Scene Library
 4. Approved Wardrobe Library
-5. Photography QA Guide
+
 
 Lower-level documents may expand upon these standards but may never contradict them.
 
