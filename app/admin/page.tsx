@@ -31,20 +31,28 @@ export default async function AdminPage() {
           flexWrap: "wrap",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: "10px 20px",
+          gap: "14px 24px",
           border: "1px solid var(--rose)",
           borderRadius: "6px",
           background: "var(--blush)",
         }}
       >
-        <Link
-          href="/admin/style-profile-preview"
-          style={{ color: "var(--rose-dark)", fontWeight: 700 }}
-        >
-          Open live Style Profile preview →
-        </Link>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px 24px" }}>
+          <Link
+            href="/admin/style-profile-preview"
+            style={{ color: "var(--rose-dark)", fontWeight: 700 }}
+          >
+            Open live Style Profile preview →
+          </Link>
+          <Link
+            href="/admin/prompts"
+            style={{ color: "var(--rose-dark)", fontWeight: 700 }}
+          >
+            Open Brand Photography prompts →
+          </Link>
+        </div>
         <span style={{ color: "var(--charcoal)", fontSize: "12px" }}>
-          Review every profile route, test answers, and reset the form without changing client data.
+          Review internal tools without changing client data.
         </span>
       </div>
       <AdminDashboard
