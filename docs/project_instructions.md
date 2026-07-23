@@ -1,343 +1,230 @@
-# PROJECT_INSTRUCTIONS.md
+# project_instructions.md
 
-Version: 1.1  
-Last Updated: July 10, 2026
-
----
-
-# Purpose and Document Hierarchy
-
-Style With Kayla is the client-facing website for Kayla Reynolds, a Personal Stylist at Macy's in Boise, Idaho.
-
-This file is the primary guide for:
-
-- Business goals
-- Brand voice
-- Client experience
-- Project workflow
-- Current priorities
-- Major project decisions
-
-For visual design, layout, components, responsive behavior, and front-end standards, follow:
-
-`docs/WEBSITE_DESIGN_SYSTEM.md`
-
-If the two documents appear to conflict, this file governs brand voice, business priorities, and client experience. The design system governs visual implementation.
+**Version:** 2.0  
+**Last Updated:** July 23, 2026
 
 ---
 
-# Project Mission
+# Purpose
 
-Create a polished, approachable styling experience that feels personal, prepared, and easy to use.
+This document defines the day-to-day development standards, implementation workflow, project goals, and AI collaboration guidelines for the Style with Kayla project.
 
-Every decision should help clients feel confident, clear, and taken care of before they arrive at Macy's.
+Unlike `DECISIONS.md`, this document is expected to evolve throughout development as workflows improve, tooling changes, and new implementation standards are adopted.
 
-The website should gradually become the central client destination for:
-
-- Learning about styling services
-- Booking appointments
-- Preparing for appointments
-- Completing Style Profiles
-- Viewing appointment details and resources
-- Contacting Kayla
-- Returning for future needs
-
-The website is the client-facing experience. Clientele remains the internal CRM and relationship-management system.
+When beginning work on any feature, contributors should review this document together with the supporting documentation referenced below.
 
 ---
 
-# Brand Personality
+# Project Overview
 
-Style With Kayla should feel:
+Style with Kayla is a unified web application that combines:
 
-- Warm
-- Practical
-- Encouraging
-- Polished
-- Genuine
-- Organized
-- Calm
-- Personal
-- Fun in small, natural moments
+- Public marketing website
+- Appointment booking
+- Style Profile system
+- Client preparation workflow
+- Administrative dashboard
+- Future client resources and guides
 
-It should never feel:
-
-- Pushy
-- Sales-heavy
-- Corporate
-- Intimidating
-- Fashion-snobby
-- Overly formal
-- Generic
-
-The overall impression should be a helpful, organized friend who also happens to be a knowledgeable stylist.
+The goal is to create a cohesive experience that feels personal, approachable, and effortless while remaining technically robust and easy to maintain.
 
 ---
 
-# Writing Style
+# Documentation Hierarchy
 
-Write like Kayla speaks.
+Use the following documentation according to its area of responsibility.
 
-Prioritize:
+| Document | Purpose |
+|----------|---------|
+| `DECISIONS.md` | Approved architectural, product, and engineering decisions. |
+| `project_instructions.md` | Development workflow, implementation standards, AI collaboration, and project priorities. |
+| `WEBSITE_DESIGN_SYSTEM.md` | Website UI/UX, layout, typography, responsive behavior, accessibility, and component standards. |
+| `visual_guidelines/` | Visual identity, brand photography, prompt architecture, image quality standards, scene definitions, and asset management. |
+| `D1_SCHEMA_AND_API_CONTRACT.md` | Database schema, API contracts, persistence, and validation. |
+| `OPERATIONS.md` | Deployment, infrastructure, maintenance, backups, and recovery procedures. |
+| GitHub Issues & Milestones | Active implementation backlog, phased work, and future enhancements. |
 
-- Clear language
-- Short, useful paragraphs
-- Practical guidance
-- Confidence-building language
-- Natural warmth
-- Direct next steps
-- Light personality when appropriate
-
-Avoid:
-
-- Fashion jargon
-- Corporate language
-- Luxury buzzwords
-- Over-explaining
-- Repetitive reassurance
-- Pressure tactics
-- Long lists of examples when one clear sentence will do
-
-The client should feel like Kayla is speaking directly to them.
-
-Approved messaging includes:
-
-- “Style that feels effortless, polished, and completely you.”
-- Practical outfit ideas
-- Support built around the client’s life, needs, and budget
-- “I help women and men simplify shopping, build complete outfits, and feel more confident in what they wear.”
-- “We can narrow, compare, pause, or change direction at any point.”
-- “Already know what you need? I’ll help you get there efficiently. Not sure where to start? I’ll ask the right questions and build a direction for you.”
-
-Avoid phrases such as:
-
-- “Style words”
-- “Fashion terminology”
-- Language that implies clients must understand fashion before booking
+When documentation overlaps, contributors should reference the specialized document rather than duplicate its contents.
 
 ---
 
-# Client Experience Principles
+# Development Philosophy
 
-## Reduce Friction
+Every implementation should prioritize:
 
-Every page should answer the client’s next question before they need to ask it.
+- Simplicity
+- Reliability
+- Maintainability
+- Accessibility
+- Performance
+- Long-term consistency
 
-Common questions include:
-
-- Can Kayla help me?
-- Which appointment fits my needs?
-- What happens next?
-- Where do I go?
-- How do I contact Kayla?
-
-## One Primary Goal
-
-Every page should have one primary goal and a clearly ranked set of supporting actions.
-
-A page may include several useful actions, but the main next step should always be obvious.
-
-## Show and Explain in Balance
-
-Use photography, graphics, icons, cards, and layout to reduce unnecessary reading.
-
-Do not remove information a client needs to:
-
-- Make a decision
-- Complete a form
-- Prepare for an appointment
-- Find the location
-- Understand an offer or policy
-
-## Warm Over Clever
-
-Choose clear, human wording over clever marketing language.
-
-## Practical Over Performative
-
-The website should demonstrate care through preparation, useful details, and clear choices—not through repeated claims that the experience is personalized or pressure-free.
+Avoid unnecessary complexity when an existing system already solves the problem.
 
 ---
 
-# Page Goals
+# Visual Guidelines
 
-## Homepage
+The repository contains a dedicated `/docs/visual_guidelines/` directory that serves as the authoritative source for the Style with Kayla visual identity system.
 
-Primary question:
+This directory governs all standards related to branding imagery, whether assets are AI-generated, professionally photographed, or produced through future creative workflows.
 
-> Can Kayla help me?
+Rather than duplicating visual standards throughout the repository, contributors should reference the appropriate document within this directory when creating, reviewing, editing, or approving visual assets.
 
-The homepage should introduce the experience, create trust, and guide visitors toward services, contact, or booking.
+The directory currently contains documentation covering:
 
-It should not explain every service in full.
+- Brand photography philosophy and creative direction
+- Permanent identity preservation and prompt foundation
+- Reusable wardrobe, environment, expression, camera, lighting, and composition modules
+- Approved scene definitions and intended image usage
+- Prompt-build validation and testing
+- Asset cataloging, review standards, and quality assurance
 
-## About Page
+These documents collectively define the visual language of the Style with Kayla brand and should be treated as the single source of truth for all branding imagery.
 
-Primary question:
-
-> Do I trust and like Kayla?
-
-The page should include Kayla’s thoughtful, organized side and her fun, silly, approachable personality.
-
-## Service Pages
-
-Primary question:
-
-> Which kind of help is right for me?
-
-Service pages may explain in more detail than the homepage.
-
-## Appointment Experience
-
-Primary question:
-
-> What happens next?
-
-The appointment hub should make the next steps obvious and keep appointment information in one place.
-
-## Style Profiles
-
-Primary question:
-
-> What does Kayla need to know so she can prepare?
-
-Style Profiles should feel conversational, mobile-friendly, and visually engaging—not like paperwork.
-
-## Resource Library
-
-Primary question:
-
-> How can Kayla continue helping me?
-
-Resources should support appointments, repeat visits, and practical style decisions.
+Future additions—including brand video, illustration standards, iconography, motion guidance, and seasonal campaign direction—should also reside within this directory.
 
 ---
 
-# Client Journey
+# Development Workflow
 
-Discover  
-↓  
-Learn  
-↓  
-Book  
-↓  
-Prepare  
-↓  
-Appointment  
-↓  
-Follow Up  
-↓  
-Return
+Every significant feature should follow this workflow:
 
-Each page or feature should support at least one stage of this journey.
+1. Review existing documentation.
+2. Review applicable GitHub Issues and Milestones.
+3. Create desktop and mobile mockups when appropriate.
+4. Review UX before implementation.
+5. Implement incrementally.
+6. Test desktop and mobile behavior.
+7. Verify accessibility.
+8. Review against project standards.
+9. Commit only after approval.
 
 ---
 
-# Workflow
+# GitHub Workflow
 
-## Full Workflow: New Pages and Major Features
+GitHub serves as the project's active implementation backlog.
 
-Use the full workflow for:
+Use Issues and Milestones to organize:
 
-- New pages
-- Major sections
-- New forms or tools
-- Booking and appointment flows
-- Significant interaction changes
-- Features likely to span multiple sessions
+- Features
+- Enhancements
+- Bugs
+- Future ideas
+- Implementation phases
 
-Process:
-
-1. Create desktop and mobile mockups.
-2. Revise until the direction is approved.
-3. Build the approved design.
-4. Refine copy so it sounds like Kayla.
-5. Review UX, mobile behavior, accessibility, consistency, and performance.
-6. Ship and close the related GitHub Issue.
-
-Do not redesign the layout while coding unless a technical or accessibility issue requires it.
-
-## Lightweight Workflow: Small Changes
-
-Small maintenance edits may move directly to implementation and review.
-
-Examples:
-
-- Typos
-- Link corrections
-- Event date updates
-- Minor spacing adjustments
-- Image swaps
-- One-line CSS fixes
-- Small copy refinements
-
-These do not require a mockup or separate GitHub Issue unless tracking would be useful.
+Large features should be broken into logical milestones whenever practical.
 
 ---
 
-# GitHub Issue Guidelines
+# AI Collaboration Guidelines
 
-Create a GitHub Issue for:
+AI assistants working on this repository should:
 
-- New pages
-- New features
-- Multi-step improvements
-- Bugs that may take more than one session
-- Work that requires design, copy, and development
-- Ideas that should be saved for later
+- Review existing documentation before proposing changes.
+- Respect established architectural decisions.
+- Reuse existing systems whenever possible.
+- Prefer refinement over redesign.
+- Minimize regressions.
+- Keep documentation synchronized with implementation.
+- Clearly distinguish permanent standards from implementation suggestions.
 
-A separate issue is usually unnecessary for:
-
-- Minor copy changes
-- Small CSS corrections
-- Routine content updates
-- Broken-link fixes
-- Simple image replacements
-
-GitHub Issues are the project backlog, not a log of every tiny edit.
+AI should avoid introducing new architectural patterns without considering existing project decisions.
 
 ---
 
-# Current Design Decisions
+# UI & UX Expectations
 
-- Keep the homepage hero headline: “Style that feels effortless, polished, and completely you.”
-- Keep the section title: “A Simple, Personalized Experience.”
-- Homepage content should introduce; service pages should explain.
-- Keep the three primary service cards concise.
-- Event styling stays within the Women’s Styling and Men’s Styling pages; do not create a separate occasion styling page.
-- Add one full-width section beneath the service cards for additional ways Kayla can help.
-- Use “free styling appointment” for primary CTAs.
-- Use “complimentary” in supporting copy when appropriate.
-- Standard CTA: “Book a Free Styling Appointment.”
-- Questionnaires are called “Style Profiles.”
-- Replace Microsoft Forms as a high priority.
-- The Appointment Hub and Style Profiles should be designed as one connected experience.
-- Clientele remains the internal CRM.
-- Microsoft Bookings may be replaced later, but Style Profiles and appointment confirmation are the immediate priorities.
-- Public navigation should remain simple. Style Profiles should be introduced within the appointment journey, not as a primary navigation section.
-- Use real testimonials only. Hide placeholder testimonials.
+Interfaces should:
+
+- Minimize cognitive load.
+- Guide users naturally.
+- Reduce booking friction.
+- Maintain consistent spacing and typography.
+- Feel calm, modern, and welcoming.
+- Perform well on desktop and mobile.
+
+When evaluating UI changes, prioritize usability over visual novelty.
 
 ---
 
-# Working Rules for Future AI Assistance
+# Booking Standards
 
-Before making recommendations or changes:
+The booking experience should:
 
-1. Read this file.
-2. Read `docs/WEBSITE_DESIGN_SYSTEM.md` for visual and front-end standards.
-3. Review the existing page or code before proposing a redesign.
-4. Respect approved decisions unless there is a clear usability, accessibility, technical, or business reason to change them.
-5. Prefer refinement over reinvention.
-6. Provide the requested deliverable instead of repeatedly describing future work.
-7. Use the full mockup workflow only when the scope justifies it.
-8. Prioritize completed, useful features over additional planning documents.
-9. Use `components/site-footer.html` as the canonical footer for every public page. New pages must begin with that footer unchanged, and footer updates must be applied to the canonical component and every existing public page in the same change.
+- Require as few steps as practical.
+- Preserve user context between pages.
+- Reduce unnecessary decisions.
+- Use conversational language.
+- Reinforce trust throughout the process.
 
-When a decision is unclear, ask:
+Changes to booking should be reviewed for both usability and conversion impact before implementation.
 
-- Does this make the client experience easier?
-- Does this reduce uncertainty?
-- Does this sound like Kayla?
-- Does this support booking, preparation, trust, or repeat relationships?
+---
 
-The goal is a cohesive client experience—not a collection of disconnected pages or tools.
+# Style Profile Standards
+
+The Style Profile should function as a conversation rather than a questionnaire.
+
+Questions should:
+
+- Build naturally on previous responses.
+- Avoid unnecessary repetition.
+- Reduce decision fatigue.
+- Help Kayla prepare effectively.
+- Feel supportive rather than clinical.
+
+---
+
+# Documentation Standards
+
+When a permanent decision is made:
+
+- Update `DECISIONS.md` if the decision changes project architecture or long-term direction.
+- Update `project_instructions.md` if implementation guidance changes.
+- Update specialized documentation when changes affect a specific domain.
+- Avoid duplicating information that already exists in an authoritative document.
+
+Documentation should remain concise, maintainable, and organized by responsibility.
+
+---
+
+# Code Quality Expectations
+
+Before considering work complete, verify that:
+
+- Existing functionality is preserved.
+- Responsive layouts remain intact.
+- Accessibility has not regressed.
+- Performance is maintained.
+- Documentation reflects implementation.
+- No unnecessary complexity has been introduced.
+
+---
+
+# Current Priorities
+
+Current project priorities include:
+
+1. Completing the unified booking experience.
+2. Refining the administrative dashboard.
+3. Expanding the Style Profile workflow.
+4. Building the Resource Library.
+5. Continuing the Brand Photography System.
+6. Improving mobile usability.
+7. Optimizing performance and accessibility.
+
+---
+
+# Before Committing
+
+Before committing code:
+
+- Confirm the implementation satisfies the approved design.
+- Verify documentation is current.
+- Test desktop and mobile layouts.
+- Confirm no unrelated functionality has changed.
+- Ensure changes align with existing project architecture.
+
+When uncertain, favor incremental improvements over broad refactoring.
