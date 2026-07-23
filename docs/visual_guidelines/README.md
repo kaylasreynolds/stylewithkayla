@@ -1,66 +1,19 @@
-# Visual Guidelines
+Visual Guidelines
+updated: July 24, 2026
 
-## Purpose
+This directory contains the permanent visual standards governing all Style with Kayla imagery, whether AI-generated or professionally photographed.
 
-This directory contains the complete visual governance for the Style with Kayla brand.
+These documents define the brand’s visual identity, image quality standards, prompt architecture, wardrobe system, approved scenes, reusable creative modules, QA process, and asset management.
 
-These documents define the standards for all branding imagery, whether AI-generated or professionally photographed. They serve as the single source of truth for visual identity, photography direction, prompt architecture, quality assurance, and asset management.
+They are intended to be stable, versioned references. Changes should improve the visual system as a whole rather than solve isolated image-generation issues.
 
-Changes within this directory should improve the overall visual system rather than solve isolated image-generation issues.
+Contents include:
 
----
+* Brand Photography Constitution — brand philosophy, positioning, emotional outcomes, creative priorities, and permanent visual standards.
+* Permanent Prompt Foundation — immutable identity preservation, quality controls, camera, lighting, composition, and rendering requirements inherited by every image prompt.
+* Modular Library — reusable wardrobe, environment, expression, camera, lighting, and composition modules.
+* Scene and Asset Registry — approved scene catalog, intended uses, required emotions, composition requirements, and asset-record standards.
+* Prompt Build Test Set — manually assembled prompt builds used to validate the photography system before automation.
+* Asset Library — approved image inventory, QA status, prompt-build tracking, intended usage, and regeneration history.
 
-## Contents
-
-### Brand Photography Constitution
-
-Defines the creative philosophy, brand personality, emotional goals, realism standards, and overall visual identity.
-
-### Permanent Prompt Foundation
-
-Defines the immutable identity-preservation system inherited by every image.
-
-Includes permanent standards for:
-
-- identity
-- hair
-- engagement ring
-- camera
-- lighting
-- composition
-- rendering quality
-- commercial realism
-
-### Modular Library
-
-Defines reusable creative modules including:
-
-- wardrobe
-- environments
-- expressions
-- eye contact
-- camera profiles
-- lighting profiles
-- composition profiles
-
-### Prompt Build Test Set
-
-Contains manually assembled prompt builds used to validate the photography system before automation.
-
-### Scene and Asset Registry
-
-Defines every approved photography scene, intended use, emotional outcome, module selection, and asset-record standard.
-
-### Asset Library
-
-Tracks approved imagery, QA status, prompt builds, intended usage, regeneration history, and production readiness.
-
----
-
-## Working Principles
-
-- Maintain consistency across all imagery.
-- Preserve immutable identity standards.
-- Record recurring improvements rather than one-off prompt edits.
-- Preserve prompt reproducibility.
-- Maintain version history.
+The documents within this folder collectively govern all future branding photography and should be referenced whenever creating, editing, reviewing, or approving visual assets.
