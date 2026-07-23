@@ -16,4 +16,15 @@ Contents include:
 * Prompt Build Test Set — manually assembled prompt builds used to validate the photography system before automation.
 * Asset Library — approved image inventory, QA status, prompt-build tracking, intended usage, and regeneration history.
 
+## Authority Order
+
+When documents overlap or conflict, use the following order:
+
+1. Brand Photography Constitution
+2. Permanent Prompt Foundation
+3. Scene and Asset Registry
+4. Approved Modular Library
+5. Prompt Build Test Set
+6. Asset-specific generation and QA notes
+
 The documents within this folder collectively govern all future branding photography and should be referenced whenever creating, editing, reviewing, or approving visual assets.
