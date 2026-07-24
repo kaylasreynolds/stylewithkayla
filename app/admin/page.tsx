@@ -45,10 +45,16 @@ export default async function AdminPage() {
             Open live Style Profile preview →
           </Link>
           <Link
+            href="/admin/photography"
+            style={{ color: "var(--rose-dark)", fontWeight: 700 }}
+          >
+            Open Brand Photography Studio →
+          </Link>
+          <Link
             href="/admin/prompts"
             style={{ color: "var(--rose-dark)", fontWeight: 700 }}
           >
-            Open Brand Photography prompts →
+            Open legacy master prompt →
           </Link>
         </div>
         <span style={{ color: "var(--charcoal)", fontSize: "12px" }}>
