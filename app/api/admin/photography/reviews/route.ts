@@ -16,12 +16,14 @@ export async function POST(request: Request) {
     const whatWorks = optionalString(body.whatWorks, "whatWorks", 8000);
     const correctionsNeeded = optionalString(body.correctionsNeeded, "correctionsNeeded", 8000);
     const refinementInstruction = optionalString(body.refinementInstruction, "refinementInstruction", 12000);
+    const reviewNotes = optionalString(body.reviewNotes, "reviewNotes", 8000);
+    const savedInstruction = [refinementInstruction, reviewNotes ? `ADDITIONAL REVIEW NOTES\n${reviewNotes}` : null].filter(Boolean).join("\n\n") || null;
     const db = getD1();
     const exists = await db.prepare("SELECT id FROM photo_process_images WHERE id = ?").bind(processImageId).first();
     if (!exists) throw new ApiError(404, "PROCESS_IMAGE_NOT_FOUND", "The process image was not found.");
     await db.prepare(`INSERT INTO photo_reviews (id, process_image_id, results, what_works, corrections_needed, refinement_instruction, decision, reviewed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(process_image_id) DO UPDATE SET results=excluded.results, what_works=excluded.what_works, corrections_needed=excluded.corrections_needed, refinement_instruction=excluded.refinement_instruction, decision=excluded.decision, reviewed_by=excluded.reviewed_by, updated_at=(unixepoch() * 1000)`)
-      .bind(id, processImageId, JSON.stringify(body.results), whatWorks, correctionsNeeded, refinementInstruction, decision, email).run();
+      .bind(id, processImageId, JSON.stringify(body.results), whatWorks, correctionsNeeded, savedInstruction, decision, email).run();
     const status = decision === "final_candidate" ? "final_candidate" : decision;
     await db.prepare("UPDATE photo_process_images SET status = ? WHERE id = ?").bind(status, processImageId).run();
     return dataResponse({ processImageId, decision }, 200, requestId);
