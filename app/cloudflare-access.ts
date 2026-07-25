@@ -1,18 +1,14 @@
 import { headers } from "next/headers";
+import { getAuthenticatedAdminEmail } from "@/lib/server/access-identity";
 
 export type AccessUser = {
   displayName: string;
   email: string;
 };
 
-const ACCESS_EMAIL_HEADER = "cf-access-authenticated-user-email";
-
 export async function getAccessUser(): Promise<AccessUser | null> {
   const requestHeaders = await headers();
-  const email = requestHeaders
-    .get(ACCESS_EMAIL_HEADER)
-    ?.trim()
-    .toLowerCase();
+  const email = getAuthenticatedAdminEmail(requestHeaders);
 
   if (!email) {
     return null;

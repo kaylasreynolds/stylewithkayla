@@ -1,0 +1,3 @@
+# Required to authenticate protected admin pages and APIs during local Vite/Miniflare development.
+# This email must also be included in ADMIN_EMAILS to pass the existing admin allowlist.
+LOCAL_ADMIN_EMAIL=
