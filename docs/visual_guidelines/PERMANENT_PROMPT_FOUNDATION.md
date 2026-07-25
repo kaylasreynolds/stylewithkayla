@@ -375,6 +375,14 @@ The approved hair-up reference is the authority for the signature bun’s placem
 
 When a hairstyle reference is attached, its visible hairstyle geometry outranks conflicting geometry in the source image while the subject’s natural hairline, color identity, density at the forehead, and naturally curly hair identity remain protected.
 
+## Corrective Hair Edits
+
+The permanent hair sections define the approved hair identity and target appearance for new image generation.
+
+When correcting the hairstyle in an otherwise approved existing image, do not reuse these preservation instructions as a localized edit prompt. Use the approved Hair Up Replacement or Hair Down Replacement module instead.
+
+During a corrective hair replacement, preserve the subject’s identity, natural hairline, copper-red color identity, naturally curly hair identity, and every approved non-hair element of the source image. Do not preserve conflicting source-hairstyle geometry. The selected approved hairstyle reference becomes authoritative for the replacement hairstyle’s silhouette, placement, proportions, curl organization, volume distribution, and face-framing placement.
+
 ---
 
 # 5. Hair Up — Signature High Curly Bun
@@ -568,9 +576,9 @@ Whenever the left hand is visible, preserve the ring exactly.
 Maintain:
 
 - polished white-gold appearance
-- ornate twisted vine-style band
+- thick ornate twisted vine-style band
 - vintage-inspired detailing
-- radiant-cut center diamond
+- princess-cut center diamond
 - authentic proportions
 - authentic scale
 - authentic placement
