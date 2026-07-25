@@ -353,264 +353,203 @@ Preferred posture is:
 
 # 4. Hair Identity
 
-The subject's naturally copper-red curls are a permanent identifying feature and must be preserved with the same priority as facial identity.
+The subject’s naturally voluminous copper-red curls are a permanent identifying feature and must be preserved with the same priority as facial identity.
 
-Hair should never be interpreted as a generic curly hairstyle.
+Preserve the subject’s authentic:
 
-Instead, reproduce the authentic characteristics observed in the approved identity references.
+- copper-red color identity and natural tonal variation
+- curl pattern and mixed curl diameters
+- density and natural fullness
+- hairline, temple shape, and baby hairs
+- crown volume and natural lift
+- realistic curl grouping and strand interaction
+- natural movement, dimensional depth, and softness
+- subtle, restrained flyaways
+- naturally irregular spacing, curvature, and curl definition
 
----
+The hair must look like the subject’s own naturally curly hair photographed under professional commercial lighting. It must never be replaced with generic curls, loose waves, glamour curls, straightened sections, an influencer blowout, or an artificially uniform curl pattern.
 
-## Preserve
+The approved hair-down reference is the authority for the subject’s underlying curl identity, color, density, texture, natural variation, and movement.
 
-Maintain:
+The approved hair-up reference is the authority for the signature bun’s placement, silhouette, proportions, crown structure, curl clustering, volume distribution, and face-framing placement.
 
-- authentic curl density
-- authentic curl pattern
-- mixed curl diameters
-- natural curl grouping
-- realistic curl definition
-- authentic volume
-- crown lift
-- authentic hairline
-- natural flyaways
-- realistic texture
-- subtle irregularity
-- believable movement
-
-The hairstyle should appear naturally lived-in rather than professionally sculpted.
-
-No two curls should appear identical.
-
-Natural variation is required.
+When a hairstyle reference is attached, its visible hairstyle geometry outranks conflicting geometry in the source image while the subject’s natural hairline, color identity, density at the forehead, and naturally curly hair identity remain protected.
 
 ---
 
-## Avoid
+# 5. Hair Up — Signature High Curly Bun
 
-Never generate:
+The default hairstyle is the subject’s signature high curly bun.
 
-- identical spiral curls
-- repetitive AI ringlets
-- perfectly polished curls
-- salon-perfect symmetry
-- flattened volume
-- exaggerated volume
-- simplified waves
-- straightened sections
-- artificial curl patterns
+Construct the bun from the subject’s authentic copper-red curls rather than creating a generic curly updo. The hairstyle should appear naturally gathered, effortlessly polished, practical, and believable for a working personal stylist.
 
-Hair should feel like real hair photographed by a commercial photographer—not digitally manufactured.
+## Placement and Silhouette
 
-# 5. Signature Hairstyle Specification
+Match the approved hair-up reference:
 
-The subject's signature hairstyle is a naturally gathered high curly bun created from her authentic curls.
+- placement high on the crown
+- natural centering and balance with the head shape
+- rounded, softly elongated silhouette
+- moderate height and width
+- balanced, realistic volume
+- visible but natural crown lift
+- smooth, believable transition from the crown into the gathered bun
+- softly irregular outer edges rather than a perfect circle
+- loose, naturally gathered construction rather than a sculpted updo
 
-This hairstyle serves as the default appearance throughout the Style with Kayla photography system unless a specific approved scene requires the hair to be worn down.
+The bun should feel substantial but never oversized, spherical, excessively tall, flattened, compressed, or cloud-like.
 
-The goal is faithful reproduction of the subject's real hairstyle—not an idealized interpretation of a curly updo.
+## Curl Organization
 
----
-
-## Overall Form
-
-The signature bun should appear:
-
-- naturally gathered
-- medium-to-large in size
-- moderately full
-- slightly wider than tall
-- softly irregular
-- organically shaped
-- practical
-- effortless
-- believable for a working stylist
-
-The hairstyle should communicate confidence, warmth, and professionalism without appearing overly styled.
-
-It should resemble a hairstyle completed in a few minutes by someone with naturally curly hair rather than a sculptural salon updo.
-
----
-
-## Curl Structure
-
-The bun should retain the subject's authentic curl identity throughout.
+The bun should be formed from medium spiral curls that naturally gather into larger, softer curl clusters.
 
 Preserve:
 
-- visible individual curl groupings
-- mixed curl diameters
-- natural curl clustering
-- realistic density
-- authentic volume
-- dimensional texture
-- subtle frizz where naturally present
-- believable compression where curls are gathered
+- larger curl groupings
+- naturally irregular cluster size and spacing
+- realistic compression where the hair is gathered
+- dimensional overlap, depth, and shadow
+- authentic strand interaction
+- selective visible curl definition around the surface and edges
+- soft, lightly tousled texture
+- restrained internal curl complexity
+- realistic softness rather than sharply outlined curls
 
-Individual curls should remain identifiable.
+The bun should read primarily as gathered curl clusters, not as dozens of individually separated ringlets.
 
-The bun should never become a smooth mass of hair.
-
----
-
-## Placement
-
-The bun should sit:
-
-- high on the back of the head
-- centered naturally
-- following the subject's authentic hairline
-- balanced with the head shape
-- consistent with the approved identity references
-
-Placement should feel functional rather than exaggerated.
-
-Avoid placing the bun:
-
-- excessively high
-- unusually low
-- dramatically off-center
-- unnaturally forward
-
----
-
-## Hairline
-
-Always preserve:
-
-- authentic hairline
-- natural baby hairs
-- realistic edge texture
-- subtle irregularity
-- natural transitions around the forehead and temples
-
-Never redraw the hairline for cosmetic purposes.
-
----
+Use fewer individually visible spiral ringlets throughout the interior of the bun. Some curl identity should remain visible, but the bun must not become an intricate collection of tiny, isolated corkscrews.
 
 ## Face-Framing Hair
 
-Allow several authentic tendrils to remain visible.
+Include:
 
-These should appear naturally released during normal movement rather than intentionally styled.
+- one primary face-framing tendril on each side
+- natural origin near the temples
+- relaxed spiral shape
+- realistic weight and gravity
+- balanced length, curvature, and placement
+- slight natural asymmetry so the tendrils do not appear artificially mirrored
+- subtle baby hairs and edge texture around the hairline
 
-Preferred characteristics:
+Do not add extra forehead curls, numerous loose pieces, or excessive tendrils around the face.
 
-- soft
-- lightly curled
-- asymmetrical
-- believable
-- subtle
+## Flyaways and Finish
 
-Avoid perfectly mirrored tendrils.
+Preserve a restrained amount of natural flyaway texture so the hairstyle remains realistic.
 
----
+The hair should appear lightly polished but not slicked, lacquered, sculpted, or overly controlled. Slightly smooth the finest stray hairs while maintaining the natural texture and airy quality of the curls.
 
-## Volume
+Avoid excessive halo frizz, cotton-like texture, fuzzy edges, or uncontrolled fine strands.
 
-Volume should come from authentic curl density.
-
-Never create volume through:
-
-- oversized proportions
-- exaggerated puffiness
-- artificial expansion
-- excessive teasing
-- unrealistic lift
-
-The bun should feel substantial while remaining believable.
-
----
-
-## Texture
-
-Texture should remain highly detailed.
-
-Preserve:
-
-- individual curl definition
-- layered depth
-- natural variation
-- authentic softness
-- realistic flyaways
-
-The hairstyle should photograph like real curly hair under professional lighting.
-
----
-
-## Movement
-
-Even when stationary, the hairstyle should suggest natural movement.
-
-Avoid hair that appears:
-
-- frozen
-- sculpted
-- lacquered
-- helmet-like
-- rigid
-
-The hairstyle should retain the flexibility of real curls.
-
----
-
-## Avoid
+## Do Not Produce
 
 Do not generate:
 
-- spherical buns
-- perfectly circular buns
-- ballet buns
-- bridal updos
-- editorial sculptural buns
-- tightly wrapped buns
-- identical curl patterns
-- overly polished curls
-- influencer-style curly buns
-- stacked buns
-- excessively tall buns
-- tiny compressed buns
-- oversized cloud-like buns
-
-The hairstyle should never become the focal point of the image.
-
-It should function as an authentic identifying feature that naturally complements the subject.
+- tiny corkscrew curls throughout the bun
+- many uniformly separated ringlets
+- repetitive AI-perfect spirals
+- sharply outlined curl separation
+- an overly intricate or highly textured bun
+- a spherical or perfectly circular bun
+- a ballet bun
+- a bridal updo
+- a polished chignon
+- a messy top knot
+- a stacked bun
+- a tightly wrapped or sculptural updo
+- flattened crown volume
+- excessive or artificial volume
+- perfectly mirrored tendrils
+- numerous forehead curls
+- frizzy, cotton-like, helmet-like, or CGI-rendered hair
+- straightened, waved, or incorrectly colored sections
 
 ---
 
-# 6. Hair Down Specification
+# 6. Hair Down — Natural Copper-Red Curls
 
-When an approved scene requires the subject's hair to be worn down, preserve the exact identity established by the approved reference photography.
+Hair worn down is an approved alternative when selected for the scene.
 
-Hair worn down should maintain:
+The hair-down hairstyle must preserve the same natural curl identity shown in the approved hair-down reference. It should immediately read as the same person and the same hair, simply worn down rather than gathered into the signature bun.
+
+## Overall Shape and Volume
+
+Preserve:
 
 - authentic length
-- authentic density
-- natural crown volume
-- mixed curl pattern
-- realistic movement
-- individual curl definition
-- believable weight
-- subtle flyaways
-- authentic color variation
+- natural density and fullness
+- strong but believable crown volume
+- broad, dimensional curl distribution around the head and shoulders
+- natural asymmetry
+- realistic weight and gravity
+- authentic movement
+- softly irregular outer edges
 
-Hair should appear healthy, dimensional, and naturally maintained rather than heavily styled.
+The hair should feel full and voluminous without becoming artificially expanded, triangular, helmet-like, or cloud-shaped.
 
-Avoid:
+## Curl Pattern and Grouping
 
-- glamour curls
+Preserve:
+
+- mixed curl diameters
+- defined medium spiral ringlets
+- natural variation in tightness and curvature
+- realistic curl clustering
+- authentic separation between larger curl sections
+- dimensional layering and overlap
+- visible strand interaction
+- natural compression and expansion throughout the lengths
+- realistic depth, shadow, and highlight variation
+
+Individual curls may remain more visible when the hair is worn down than when it is gathered into the bun. However, the curls must still vary naturally and must not appear uniform, repetitive, digitally arranged, or identical.
+
+## Texture and Finish
+
+The hair should appear:
+
+- naturally maintained
+- soft and touchable
+- healthy but not artificially glossy
+- dimensional
+- lightly tousled
+- authentically curly
+- professionally photographed rather than digitally manufactured
+
+Preserve subtle flyaways and natural irregularity. Slightly control only the finest stray hairs so the hair remains polished enough for commercial branding without losing its natural texture.
+
+## Hairline and Face Framing
+
+Preserve:
+
+- the subject’s exact natural hairline
+- temple shape
+- baby hairs
+- natural density around the forehead
+- authentic curl emergence from the roots
+- natural curls framing the face without artificial placement
+
+Do not redraw, lower, raise, smooth, or cosmetically perfect the hairline.
+
+## Do Not Produce
+
+Do not generate:
+
+- loose generic waves
 - Hollywood waves
+- glamour curls
 - influencer blowouts
-- artificially uniform ringlets
-- excessive smoothing
-- exaggerated shine
+- straightened sections
+- uniformly sized ringlets
 - digitally perfect curl placement
-
-Hair down is an approved alternative, not a different hairstyle.
-
-The viewer should immediately recognize the same person regardless of whether the hair is worn up or down.
-
----
+- excessive smoothing
+- artificial shine
+- flattened roots
+- reduced density
+- exaggerated width or volume
+- frizzy cotton-like texture
+- repeated identical spirals
+- hair that appears stiff, lacquered, frozen, or wig-like
+- incorrect red, orange, brown, or burgundy hair color
 
 # 7. Signature Identifying Features
 
