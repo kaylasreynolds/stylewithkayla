@@ -15,6 +15,27 @@ const reviewAreas = [
 ] as const;
 
 type Asset = { id: string; name: string; sceneId: string; promptBuildId: string; orientation: string; approvalStatus: string; approvedUses: string[]; originalFilename: string; sizeBytes: number };
+type ReviewBlock = {
+  id: number;
+  results: Record<string, boolean>;
+  whatWorks: string;
+  correctionsNeeded: string;
+  refinementInstruction: string;
+  reviewNotes: string;
+  decision: string;
+};
+
+function createReviewBlock(id: number): ReviewBlock {
+  return {
+    id,
+    results: Object.fromEntries(reviewAreas.map(([area]) => [area, true])),
+    whatWorks: "",
+    correctionsNeeded: "",
+    refinementInstruction: "",
+    reviewNotes: "",
+    decision: "needs_refinement",
+  };
+}
 
 async function readApi(response: Response) {
   const body = await response.json();
@@ -31,12 +52,12 @@ export default function PhotographyStudio({ foundation }: { foundation: string }
   const [referencePreview, setReferencePreview] = useState("");
   const [referenceName, setReferenceName] = useState("");
   const [copied, setCopied] = useState(false);
-  const [notesCopied, setNotesCopied] = useState(false);
+  const [notesCopiedIndex, setNotesCopiedIndex] = useState<number | null>(null);
   const [promptBuildId, setPromptBuildId] = useState("");
   const [processImageId, setProcessImageId] = useState("");
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
-  const [reviewResults, setReviewResults] = useState<Record<string, boolean>>(Object.fromEntries(reviewAreas.map(([area]) => [area, true])));
+  const [reviewBlocks, setReviewBlocks] = useState<ReviewBlock[]>([createReviewBlock(1)]);
   const [assets, setAssets] = useState<Asset[]>([]);
 
   function selectScene(nextId: string) {
@@ -45,6 +66,7 @@ export default function PhotographyStudio({ foundation }: { foundation: string }
     setSelections(next.defaults);
     setPromptBuildId("");
     setProcessImageId("");
+    setReviewBlocks([createReviewBlock(1)]);
   }
 
   function selectReference(event: React.ChangeEvent<HTMLInputElement>) {
@@ -53,6 +75,14 @@ export default function PhotographyStudio({ foundation }: { foundation: string }
     if (referencePreview) URL.revokeObjectURL(referencePreview);
     setReferencePreview(URL.createObjectURL(file));
     setReferenceName(file.name);
+  }
+
+  function updateReviewBlock(id: number, changes: Partial<ReviewBlock>) {
+    setReviewBlocks((current) => current.map((block) => block.id === id ? { ...block, ...changes } : block));
+  }
+
+  function addReviewBlock() {
+    setReviewBlocks((current) => [...current, createReviewBlock(Math.max(...current.map((block) => block.id), 0) + 1)]);
   }
 
   const prompt = useMemo(() => {
@@ -66,11 +96,11 @@ export default function PhotographyStudio({ foundation }: { foundation: string }
     window.setTimeout(() => setCopied(false), 1800);
   }
 
-  async function copyNotesForRewrite(rawNotes: string) {
-    const text = `Rewrite these image-edit notes into one precise, preservation-focused editing prompt. Keep every successful part of the current image unchanged. Do not add enhancements that were not requested.\n\n${rawNotes}`;
+  async function copyNotesForRewrite(block: ReviewBlock, index: number) {
+    const text = `Rewrite these image-edit notes into one precise, preservation-focused editing prompt. Keep every successful part of the current image unchanged. Do not add enhancements that were not requested.\n\n${block.correctionsNeeded}`;
     await navigator.clipboard.writeText(text);
-    setNotesCopied(true);
-    window.setTimeout(() => setNotesCopied(false), 1800);
+    setNotesCopiedIndex(index);
+    window.setTimeout(() => setNotesCopiedIndex(null), 1800);
   }
 
   async function savePromptBuild() {
@@ -99,11 +129,12 @@ export default function PhotographyStudio({ foundation }: { foundation: string }
     event.preventDefault();
     if (!processImageId) { setStatus("Upload a process image before saving a review."); return; }
     setBusy(true); setStatus("Saving review...");
-    const form = new FormData(event.currentTarget);
     try {
-      const results = Object.fromEntries(Object.entries(reviewResults).map(([key, value]) => [key, value ? "yes" : "no"]));
-      await readApi(await fetch("/api/admin/photography/reviews", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ processImageId, results, whatWorks: form.get("whatWorks"), correctionsNeeded: form.get("correctionsNeeded"), refinementInstruction: form.get("refinementInstruction"), reviewNotes: form.get("reviewNotes"), decision: form.get("decision") }) }));
-      setStatus("Review saved successfully.");
+      const results = Object.fromEntries(reviewBlocks.flatMap((block, index) => Object.entries(block.results).map(([key, value]) => [`review_${index + 1}.${key}`, value ? "yes" : "no"])));
+      const joinBlocks = (field: keyof Pick<ReviewBlock, "whatWorks" | "correctionsNeeded" | "refinementInstruction" | "reviewNotes">) => reviewBlocks.map((block, index) => `Review ${index + 1}\n${block[field].trim() || "No entry."}`).join("\n\n");
+      const decision = reviewBlocks.at(-1)?.decision ?? "needs_refinement";
+      await readApi(await fetch("/api/admin/photography/reviews", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ processImageId, results, whatWorks: joinBlocks("whatWorks"), correctionsNeeded: joinBlocks("correctionsNeeded"), refinementInstruction: joinBlocks("refinementInstruction"), reviewNotes: joinBlocks("reviewNotes"), decision }) }));
+      setStatus(`${reviewBlocks.length} review block${reviewBlocks.length === 1 ? "" : "s"} saved successfully.`);
     } catch (error) { setStatus(error instanceof Error ? error.message : "Unable to save review."); }
     finally { setBusy(false); }
   }
@@ -158,15 +189,21 @@ export default function PhotographyStudio({ foundation }: { foundation: string }
 
       <section style={box}>
         <h2>4. Quick review</h2>
-        <form onSubmit={saveReview} style={{ display: "grid", gap: 10 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8 }}>{reviewAreas.map(([area, label]) => <label key={area} style={{ display: "flex", justifyContent: "space-between", gap: 8, border: "1px solid #ddd", padding: "8px 10px", alignItems: "center" }}><span>{label}</span><input type="checkbox" checked={reviewResults[area]} onChange={(event) => setReviewResults((current) => ({ ...current, [area]: event.target.checked }))} /></label>)}</div>
-          <label><strong>What works</strong><textarea name="whatWorks" rows={2} style={input} /></label>
-          <label><strong>My raw notes: what is wrong and what should change</strong><textarea name="correctionsNeeded" rows={3} style={input} id="raw-review-notes" /></label>
-          <button type="button" onClick={() => { const value = (document.getElementById("raw-review-notes") as HTMLTextAreaElement | null)?.value ?? ""; copyNotesForRewrite(value); }} disabled={busy}>{notesCopied ? "Copied" : "Copy notes for ChatGPT rewrite"}</button>
-          <label><strong>Refined edit instruction</strong><textarea name="refinementInstruction" rows={4} style={input} placeholder="Paste the rewritten instruction from ChatGPT here." /></label>
-          <label><strong>Additional review notes</strong><textarea name="reviewNotes" rows={2} style={input} /></label>
-          <label><strong>Decision</strong><select name="decision" defaultValue="needs_refinement" style={input}><option value="needs_refinement">Needs refinement</option><option value="rejected">Reject</option><option value="final_candidate">Final candidate</option></select></label>
-          <button disabled={busy || !processImageId}>{processImageId ? (busy ? "Saving..." : "Save Review") : "Upload a process image before saving"}</button>
+        <form onSubmit={saveReview} style={{ display: "grid", gap: 12 }}>
+          {reviewBlocks.map((block, index) => (
+            <fieldset key={block.id} style={{ border: "1px solid #d8c8c8", padding: 12, display: "grid", gap: 10 }}>
+              <legend style={{ padding: "0 6px", fontWeight: 700 }}>Review {index + 1}</legend>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8 }}>{reviewAreas.map(([area, label]) => <label key={area} style={{ display: "flex", justifyContent: "space-between", gap: 8, border: "1px solid #ddd", padding: "8px 10px", alignItems: "center" }}><span>{label}</span><input type="checkbox" checked={block.results[area]} onChange={(event) => updateReviewBlock(block.id, { results: { ...block.results, [area]: event.target.checked } })} /></label>)}</div>
+              <label><strong>What works</strong><textarea value={block.whatWorks} onChange={(event) => updateReviewBlock(block.id, { whatWorks: event.target.value })} rows={2} style={input} /></label>
+              <label><strong>My raw notes: what is wrong and what should change</strong><textarea value={block.correctionsNeeded} onChange={(event) => updateReviewBlock(block.id, { correctionsNeeded: event.target.value })} rows={3} style={input} /></label>
+              <button type="button" onClick={() => copyNotesForRewrite(block, index)} disabled={busy}>{notesCopiedIndex === index ? "Copied" : "Copy notes for ChatGPT rewrite"}</button>
+              <label><strong>Refined edit instruction</strong><textarea value={block.refinementInstruction} onChange={(event) => updateReviewBlock(block.id, { refinementInstruction: event.target.value })} rows={4} style={input} placeholder="Paste the rewritten instruction from ChatGPT here." /></label>
+              <label><strong>Additional review notes</strong><textarea value={block.reviewNotes} onChange={(event) => updateReviewBlock(block.id, { reviewNotes: event.target.value })} rows={2} style={input} /></label>
+              <label><strong>Decision</strong><select value={block.decision} onChange={(event) => updateReviewBlock(block.id, { decision: event.target.value })} style={input}><option value="needs_refinement">Needs refinement</option><option value="rejected">Reject</option><option value="final_candidate">Final candidate</option></select></label>
+            </fieldset>
+          ))}
+          <button type="button" onClick={addReviewBlock} style={{ width: 44, height: 44, borderRadius: "50%", fontSize: 26, lineHeight: 1, justifySelf: "center" }} aria-label="Add another review block" title="Add another review block">+</button>
+          <button disabled={busy || !processImageId}>{processImageId ? (busy ? "Saving..." : `Save ${reviewBlocks.length} Review${reviewBlocks.length === 1 ? "" : "s"}`) : "Upload a process image before saving"}</button>
         </form>
       </section>
 
