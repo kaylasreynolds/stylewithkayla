@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import { getLocalAdminEmail } from "@/lib/server/runtime";
 
 export type AccessUser = {
   displayName: string;
@@ -9,10 +10,21 @@ const ACCESS_EMAIL_HEADER = "cf-access-authenticated-user-email";
 
 export async function getAccessUser(): Promise<AccessUser | null> {
   const requestHeaders = await headers();
-  const email = requestHeaders
+  const authenticatedEmail = requestHeaders
     .get(ACCESS_EMAIL_HEADER)
     ?.trim()
     .toLowerCase();
+
+  const host = requestHeaders.get("host")?.toLowerCase() ?? "";
+  const isLocalhost =
+    host.startsWith("localhost:") ||
+    host === "localhost" ||
+    host.startsWith("127.0.0.1:") ||
+    host === "127.0.0.1";
+
+  const email =
+    authenticatedEmail ??
+    (isLocalhost ? getLocalAdminEmail() : null);
 
   if (!email) {
     return null;
