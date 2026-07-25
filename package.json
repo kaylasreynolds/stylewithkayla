@@ -15,7 +15,8 @@
     "deploy:preview": "npm run build && wrangler deploy --config dist/server/wrangler.json",
     "lint": "bash scripts/sites-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate",
-    "db:migrate": "wrangler d1 migrations apply stylewithkayla-production --remote --config wrangler.jsonc",    "db:local:init": "wrangler d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_silent_ser_duncan.sql",
+    "db:migrate": "wrangler d1 migrations apply stylewithkayla-production --remote --config wrangler.jsonc",
+    "db:local:init": "wrangler d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_silent_ser_duncan.sql",
     "dev:worker": "wrangler dev --persist-to .wrangler/state"
   },
   "dependencies": {
@@ -25,7 +26,7 @@
     "react-dom": "19.2.6"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "1.37.1",
+    "@cloudflare/vite-plugin": "^1.47.0",
     "@cloudflare/workers-types": "^5.20260716.1",
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "22.19.19",
@@ -41,7 +42,7 @@
     "typescript": "5.9.3",
     "vinext": "0.0.50",
     "vite": "8.0.13",
-    "wrangler": "^4.111.0"
+    "wrangler": "^4.114.0"
   },
   "type": "module",
   "displayName": "Style With Kayla Booking Flow Mockup",
@@ -52,8 +53,7 @@
     "esbuild@0.28.0": true,
     "esbuild@0.28.1": true,
     "sharp@0.34.5": true,
-    "unrs-resolver@1.11.1": true,
-    "workerd@1.20260515.1": true,
-    "workerd@1.20260710.1": true
+    "unrs-resolver@1.12.2": true,
+    "workerd@1.20260722.1": true
   }
 }
