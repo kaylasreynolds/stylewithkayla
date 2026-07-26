@@ -19,6 +19,16 @@ const pageMetadata = {
     description: "Meet Kayla, a personal stylist at Macy's Boise Towne Square who offers thoughtful, complimentary styling support.",
     image: "/images/fs.png",
   },
+  "/contact": {
+    title: "Contact Kayla | Style with Kayla",
+    description: "Contact Kayla for personal styling appointments, partnerships, events, and general questions.",
+    image: "/images/kayla-swatches.png",
+  },
+  "/contact.html": {
+    title: "Contact Kayla | Style with Kayla",
+    description: "Contact Kayla for personal styling appointments, partnerships, events, and general questions.",
+    image: "/images/kayla-swatches.png",
+  },
   "/events": {
     title: "Upcoming Store Events | Style with Kayla",
     description: "Explore upcoming fashion, beauty, community, and special events at Macy's Boise Towne Square.",
