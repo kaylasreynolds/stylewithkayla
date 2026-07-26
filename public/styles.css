@@ -55,6 +55,29 @@ img {
 .contact-options { padding: 28px 0 40px; background: linear-gradient(#fff, #fdfaf8); }
 .contact-options h2, .contact-support h2 { text-align: center; font-size: 2rem; font-weight: 500; letter-spacing: 0; margin-bottom: 30px; }
 .contact-options__grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 22px; max-width: 1050px; margin: 0 auto; }
+.contact-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 18px 0 20px;
+}
+
+.contact-divider__line {
+  width: 78px;
+  height: 1px;
+  background: rgba(207, 140, 147, 0.55);
+}
+
+.contact-divider__icon {
+  width: 18px;
+  height: 18px;
+  stroke: var(--rose);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: 0 0 auto;
+}
 .contact-form, .contact-card { border: 1px solid #e7dcd5; background: rgba(255,255,255,.65); border-radius: 6px; }
 .contact-form { padding: 28px 32px; }
 .contact-form h3, .contact-card h3 { font-size: 1.5rem; font-weight: 500; margin-bottom: 16px; }
