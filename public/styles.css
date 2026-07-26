@@ -70,13 +70,13 @@ img {
 }
 
 .contact-divider__icon {
-  width: 18px;
-  height: 18px;
-  stroke: var(--rose);
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #cf8c93;
+  font-family: Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1;
 }
 .contact-form, .contact-card { border: 1px solid #e7dcd5; background: rgba(255,255,255,.65); border-radius: 6px; }
 .contact-form { padding: 28px 32px; }
