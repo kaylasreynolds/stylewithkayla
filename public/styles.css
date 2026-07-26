@@ -52,7 +52,7 @@ img {
 .contact-hero__actions .button span { margin-right: 10px; font-size: 1rem; }
 .contact-hero__media { min-height: 420px; overflow: hidden; }
 .contact-hero__media img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
-.contact-options { padding: 2px 0 40px; background: linear-gradient(#fff, #fdfaf8); }
+.contact-options { padding: 2px 0 10px; background: linear-gradient(#fff, #fdfaf8); }
 .contact-options h2, .contact-support h2 { text-align: center; font-size: 2rem; font-weight: 500; letter-spacing: 0; margin-bottom: 30px; }
 .contact-options__grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 22px; max-width: 1050px; margin: 0 auto; }
 .contact-divider {
