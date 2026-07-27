@@ -56,9 +56,9 @@
           <span class="contact-divider__line"></span>
           <span class="contact-divider__icon">✉</span>
           <span class="contact-divider__line"></span>
-          </div>
+        </div>
         <div class="contact-options__grid">
-          <form class="contact-form" action="mailto:kayla.reynolds@macys.com" method="post" enctype="text/plain">
+          <form class="contact-form" action="/api/contact" method="post" data-contact-form>
             <h3>Send me a message</h3>
             <label for="inquiry-type">Inquiry type <span aria-hidden="true">*</span></label>
             <select id="inquiry-type" name="inquiry-type" required>
@@ -72,18 +72,18 @@
             <div class="contact-form__row">
               <div>
                 <label for="full-name">Full name <span aria-hidden="true">*</span></label>
-                <input id="full-name" name="full-name" type="text" autocomplete="name" placeholder="Your full name" required>
+                <input id="full-name" name="full-name" type="text" autocomplete="name" placeholder="Your full name" maxlength="120" required>
               </div>
               <div>
                 <label for="email">Email address <span aria-hidden="true">*</span></label>
-                <input id="email" name="email" type="email" autocomplete="email" placeholder="you@email.com" required>
+                <input id="email" name="email" type="email" autocomplete="email" placeholder="you@email.com" maxlength="254" required>
               </div>
             </div>
 
             <div class="contact-form__row">
               <div>
                 <label for="phone">Phone number <small>(optional)</small></label>
-                <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="(208) 555-1234">
+                <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="(208) 555-1234" maxlength="40">
               </div>
               <div>
                 <label for="contact-method">Preferred contact method <span aria-hidden="true">*</span></label>
@@ -96,9 +96,14 @@
             </div>
 
             <label for="message">Message <span aria-hidden="true">*</span></label>
-            <textarea id="message" name="message" rows="5" placeholder="Tell Kayla how she can help you..." required></textarea>
+            <textarea id="message" name="message" rows="5" placeholder="Tell Kayla how she can help you..." maxlength="4000" required></textarea>
+            <div class="contact-form__honeypot" aria-hidden="true">
+              <label for="website">Website</label>
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+            </div>
             <p class="contact-form__privacy"><span aria-hidden="true">♙</span> Your information is kept private and will only be used to respond to your inquiry.</p>
-            <button class="button button--primary" type="submit">Send Message</button>
+            <button class="button button--primary" type="submit" data-contact-submit>Send Message</button>
+            <p class="contact-form__status" data-contact-status role="status" aria-live="polite"></p>
           </form>
 
           <aside class="contact-details" aria-label="Contact details">
@@ -123,11 +128,11 @@
                 <a class="contact-connect-card__directions" href="https://maps.google.com/?q=Macy%27s+Boise+Towne+Square" target="_blank" rel="noopener noreferrer">Get Directions <span aria-hidden="true">→</span></a>
               </div>
               <img
-  class="contact-connect-card__decoration"
-  src="images/shopping-bag.svg"
-  alt=""
-  aria-hidden="true"
->
+                class="contact-connect-card__decoration"
+                src="images/shopping-bag.svg"
+                alt=""
+                aria-hidden="true"
+              >
               <span class="contact-connect-card__sparkle contact-connect-card__sparkle--middle" aria-hidden="true">✦</span>
               <span class="contact-connect-card__sparkle contact-connect-card__sparkle--bottom" aria-hidden="true">✧</span>
             </section>
