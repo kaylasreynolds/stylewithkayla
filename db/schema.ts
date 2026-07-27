@@ -453,15 +453,6 @@ export const events = sqliteTable("events", {
   endsAt: integer("ends_at").notNull(),
   timezone: text("timezone").notNull().default("America/Boise"),
   capacity: integer("capacity").notNull(),
-  category: text("category").notNull().default("Store Event"),
-  imageUrl: text("image_url"),
-  attendanceType: text("attendance_type").notNull().default("In person"),
-  costLabel: text("cost_label").notNull().default("Complimentary"),
-  registrationOpensAt: integer("registration_opens_at"),
-  registrationClosesAt: integer("registration_closes_at"),
-  maxGuests: integer("max_guests").notNull().default(0),
-  allowDuplicateRegistration: integer("allow_duplicate_registration", { mode: "boolean" }).notNull().default(false),
-  appointmentRequired: integer("appointment_required", { mode: "boolean" }).notNull().default(false),
   status: text("status").$type<EventStatus>().notNull().default("draft"),
   publishedAt: integer("published_at"),
   archivedAt: integer("archived_at"),
@@ -469,6 +460,19 @@ export const events = sqliteTable("events", {
   createdAt: createdAt(),
   updatedAt: integer("updated_at").notNull().default(sql`(unixepoch() * 1000)`),
 }, (table) => [index("events_status_starts_idx").on(table.status, table.startsAt)]);
+
+/** Server-inspected uploads. The owner column prevents one administrator replacing an image with another account's asset. */
+export const eventImageAssets = sqliteTable("event_image_assets", {
+  id: text("id").primaryKey(),
+  storageKey: text("storage_key").notNull(),
+  ownerEmail: text("owner_email").notNull(),
+  mimeType: text("mime_type").notNull(),
+  extension: text("extension").notNull(),
+  sizeBytes: integer("size_bytes").notNull(),
+  width: integer("width").notNull(),
+  height: integer("height").notNull(),
+  createdAt: createdAt(),
+}, (table) => [uniqueIndex("event_image_assets_storage_key_unique").on(table.storageKey), index("event_image_assets_owner_idx").on(table.ownerEmail)]);
 
 export const eventRsvps = sqliteTable("event_rsvps", {
   id: text("id").primaryKey(),
