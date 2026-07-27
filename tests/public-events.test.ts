@@ -4,8 +4,8 @@ import test from "node:test";
 import { assertRegistrationOpen, parsePublicRsvp, PUBLIC_EVENT_FIELDS } from "../lib/server/public-events.ts";
 
 test("public event projection excludes private and lifecycle fields", () => {
-  for (const field of ["created_by", "created_at", "updated_at", "capacity", "allow_duplicate_registration"]) assert.equal(PUBLIC_EVENT_FIELDS.includes(field), false);
-  for (const field of ["title", "description", "location", "category", "image_url", "attendance_type", "cost_label"]) assert.equal(PUBLIC_EVENT_FIELDS.includes(field), true);
+  for (const field of ["created_by", "created_at", "updated_at", "capacity", "allow_duplicate_registration", "published_at", "archived_at"]) assert.equal(PUBLIC_EVENT_FIELDS.includes(field), false);
+  for (const field of ["title", "short_description", "location", "category", "image_asset_id", "attendance_type", "cost_label"]) assert.equal(PUBLIC_EVENT_FIELDS.includes(field), true);
 });
 
 test("public listing statically requires published, non-archived future events", async () => {
