@@ -1,0 +1,10 @@
+ALTER TABLE `events` ADD COLUMN `category` text DEFAULT 'Store Event' NOT NULL;
+ALTER TABLE `events` ADD COLUMN `image_url` text;
+ALTER TABLE `events` ADD COLUMN `attendance_type` text DEFAULT 'In person' NOT NULL;
+ALTER TABLE `events` ADD COLUMN `cost_label` text DEFAULT 'Complimentary' NOT NULL;
+ALTER TABLE `events` ADD COLUMN `registration_opens_at` integer;
+ALTER TABLE `events` ADD COLUMN `registration_closes_at` integer;
+ALTER TABLE `events` ADD COLUMN `max_guests` integer DEFAULT 0 NOT NULL CHECK (`max_guests` >= 0 AND `max_guests` <= 20);
+ALTER TABLE `events` ADD COLUMN `allow_duplicate_registration` integer DEFAULT 0 NOT NULL;
+ALTER TABLE `events` ADD COLUMN `appointment_required` integer DEFAULT 0 NOT NULL;
+CREATE TABLE `event_rsvp_idempotency` (`key_hash` text PRIMARY KEY NOT NULL,`payload_hash` text NOT NULL,`rsvp_id` text NOT NULL REFERENCES `event_rsvps`(`id`) ON DELETE cascade,`created_at` integer DEFAULT (unixepoch() * 1000) NOT NULL);

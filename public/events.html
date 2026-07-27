@@ -24,6 +24,7 @@
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="events.js" defer></script>
 </head>
 
 <body>
@@ -63,7 +64,9 @@
           <h2 class="section-heading" id="upcoming-events-title">What’s coming up.</h2>
         </div>
 
-        <div class="events-empty-state">
+        <div id="events-status" class="events-load-status" role="status">Loading upcoming events…</div>
+        <div id="events-list" class="events-list" aria-live="polite"></div>
+        <div id="events-empty" class="events-empty-state" hidden>
           <div class="events-empty-state__icon" aria-hidden="true">+</div>
           <h3>New events are coming soon.</h3>
           <p class="body-copy">There are no upcoming dates posted yet. Check back for new in-store experiences, or email
@@ -71,6 +74,24 @@
           <a class="button button--primary" href="mailto:kayla.reynolds@macys.com?subject=Upcoming%20Store%20Events">Ask
             About Upcoming Events</a>
         </div>
+        <dialog class="rsvp-dialog" id="rsvp-dialog" aria-labelledby="rsvp-title">
+          <form class="rsvp-form" id="rsvp-form">
+            <button class="rsvp-dialog__close" type="button" aria-label="Close registration form">×</button>
+            <p class="section-label">Event registration</p>
+            <h3 id="rsvp-title">Save My Spot</h3>
+            <input type="hidden" name="eventId">
+            <div class="rsvp-form__fields">
+              <label>Full name <span aria-hidden="true">*</span><input name="name" autocomplete="name" required maxlength="120"></label>
+              <label>Email <span aria-hidden="true">*</span><input name="email" type="email" autocomplete="email" required maxlength="254"></label>
+              <label>Phone (optional)<input name="phone" type="tel" autocomplete="tel" maxlength="40"></label>
+              <label id="appointment-field" hidden>Appointment time <span aria-hidden="true">*</span><select name="appointmentSlotId"></select></label>
+              <label id="guests-field" hidden>Guest names (one per line)<textarea name="guestNames" rows="3"></textarea><small></small></label>
+              <label>Notes (optional)<textarea name="notes" rows="3" maxlength="1000"></textarea></label>
+            </div>
+            <p class="rsvp-form__message" id="rsvp-message" role="status"></p>
+            <button class="button button--primary" type="submit">Complete Registration</button>
+          </form>
+        </dialog>
       </div>
     </section>
 
