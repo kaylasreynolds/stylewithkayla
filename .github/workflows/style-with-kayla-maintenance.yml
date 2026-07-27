@@ -22,27 +22,37 @@ jobs:
         env:
           TARGET_URL: https://stylewithkayla.com/api/internal/maintenance
           MAINTENANCE_SECRET: ${{ secrets.SWK_MAINTENANCE_SECRET }}
+          ACCESS_CLIENT_ID: ${{ secrets.SWK_ACCESS_CLIENT_ID }}
+          ACCESS_CLIENT_SECRET: ${{ secrets.SWK_ACCESS_CLIENT_SECRET }}
 
         shell: bash
 
         run: |
-          if [ -z "$MAINTENANCE_SECRET" ]; then
+          if [ -z "$MAINTENANCE_SECRET" ] \
+            || [ -z "$ACCESS_CLIENT_ID" ] \
+            || [ -z "$ACCESS_CLIENT_SECRET" ]; then
             echo "Required repository secrets are not configured."
             exit 1
           fi
 
+          response_file="$(mktemp)"
+
           status="$(curl \
             --silent \
             --show-error \
-            --output /dev/null \
+            --output "$response_file" \
             --write-out "%{http_code}" \
             --request POST \
             --header "Authorization: Bearer $MAINTENANCE_SECRET" \
+            --header "CF-Access-Client-Id: $ACCESS_CLIENT_ID" \
+            --header "CF-Access-Client-Secret: $ACCESS_CLIENT_SECRET" \
             "$TARGET_URL")"
 
           if [ "$status" -lt 200 ] || [ "$status" -ge 300 ]; then
             echo "Maintenance endpoint returned HTTP $status."
+            cat "$response_file"
             exit 1
           fi
 
           echo "Maintenance completed successfully."
+          cat "$response_file"
