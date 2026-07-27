@@ -16,7 +16,7 @@ export function instant(value: unknown, field: string) {
   return Date.parse(value);
 }
 export function parseEvent(value: Record<string, unknown>, partial = false) {
-  rejectUnexpectedKeys(value, ["title", "description", "location", "startsAt", "endsAt", "timezone", "capacity", "imageAssetId", "imageAlt"]);
+  rejectUnexpectedKeys(value, ["title", "description", "location", "startsAt", "endsAt", "timezone", "capacity"]);
   const output: Record<string, unknown> = {};
   const take = (key: string, fn: (v: unknown) => unknown) => { if (!partial || key in value) output[key] = fn(value[key]); };
   take("title", v => requiredString(v, "title", 160));
@@ -24,11 +24,6 @@ export function parseEvent(value: Record<string, unknown>, partial = false) {
   take("location", v => requiredString(v, "location", 300));
   take("startsAt", v => instant(v, "startsAt")); take("endsAt", v => instant(v, "endsAt"));
   take("timezone", v => requiredString(v, "timezone", 64)); take("capacity", v => positiveInteger(v, "capacity", 10000));
-  if ("imageAssetId" in value) {
-    if (value.imageAssetId === null || value.imageAssetId === "") { output.imageAssetId = null; output.imageAlt = ""; }
-    else { output.imageAssetId = requiredString(value.imageAssetId, "imageAssetId", 64); output.imageAlt = meaningfulAlt(value.imageAlt); }
-  } else if ("imageAlt" in value) output.imageAlt = meaningfulAlt(value.imageAlt);
-  else if (!partial) { output.imageAssetId = null; output.imageAlt = ""; }
   if (output.startsAt !== undefined && output.endsAt !== undefined && (output.endsAt as number) <= (output.startsAt as number)) throw validation("endsAt", "End time must be after start time.");
   if (partial && !Object.keys(output).length) throw new ApiError(400, "EMPTY_UPDATE", "Provide at least one field to update.");
   return output;
