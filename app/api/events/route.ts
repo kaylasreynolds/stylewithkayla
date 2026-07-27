@@ -15,7 +15,7 @@ export async function GET() {
         .prepare(`
           SELECT
             ${PUBLIC_EVENT_FIELDS},
-            e.capacity - COALESCE(
+            CASE WHEN e.unlimited_capacity=1 THEN 999999 ELSE e.capacity - COALESCE(
               (
                 SELECT SUM(r.party_size)
                 FROM event_rsvps r
@@ -23,7 +23,7 @@ export async function GET() {
                   AND r.status='confirmed'
               ),
               0
-            ) AS spotsRemaining
+            ) END AS spotsRemaining
           FROM events e
           WHERE e.status='published'
             AND e.archived_at IS NULL
