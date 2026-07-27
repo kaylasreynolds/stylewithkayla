@@ -1,0 +1,10 @@
+ALTER TABLE `events` ADD `image_asset_id` text;
+ALTER TABLE `events` ADD `image_storage_key` text;
+ALTER TABLE `events` ADD `image_mime_type` text;
+ALTER TABLE `events` ADD `image_size_bytes` integer;
+ALTER TABLE `events` ADD `image_width` integer;
+ALTER TABLE `events` ADD `image_height` integer;
+ALTER TABLE `events` ADD `image_alt` text NOT NULL DEFAULT '';
+CREATE TABLE `event_image_assets` (`id` text PRIMARY KEY NOT NULL, `storage_key` text NOT NULL, `owner_email` text NOT NULL, `mime_type` text NOT NULL, `extension` text NOT NULL, `size_bytes` integer NOT NULL, `width` integer NOT NULL, `height` integer NOT NULL, `created_at` integer DEFAULT (unixepoch() * 1000) NOT NULL);
+CREATE UNIQUE INDEX `event_image_assets_storage_key_unique` ON `event_image_assets` (`storage_key`);
+CREATE INDEX `event_image_assets_owner_idx` ON `event_image_assets` (`owner_email`);

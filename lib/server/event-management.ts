@@ -1,4 +1,5 @@
 import { ApiError, optionalString, rejectUnexpectedKeys, requiredString, validation } from "./http";
+import { meaningfulAlt } from "./event-images";
 
 export const eventStatuses = ["draft", "published", "archived"] as const;
 export const rsvpStatuses = ["confirmed", "waitlisted", "cancelled", "declined"] as const;
@@ -15,7 +16,7 @@ export function instant(value: unknown, field: string) {
   return Date.parse(value);
 }
 export function parseEvent(value: Record<string, unknown>, partial = false) {
-  rejectUnexpectedKeys(value, ["title", "description", "location", "startsAt", "endsAt", "timezone", "capacity"]);
+  rejectUnexpectedKeys(value, ["title", "description", "location", "startsAt", "endsAt", "timezone", "capacity", "imageAssetId", "imageAlt"]);
   const output: Record<string, unknown> = {};
   const take = (key: string, fn: (v: unknown) => unknown) => { if (!partial || key in value) output[key] = fn(value[key]); };
   take("title", v => requiredString(v, "title", 160));
@@ -23,12 +24,20 @@ export function parseEvent(value: Record<string, unknown>, partial = false) {
   take("location", v => requiredString(v, "location", 300));
   take("startsAt", v => instant(v, "startsAt")); take("endsAt", v => instant(v, "endsAt"));
   take("timezone", v => requiredString(v, "timezone", 64)); take("capacity", v => positiveInteger(v, "capacity", 10000));
+  if ("imageAssetId" in value) {
+    if (value.imageAssetId === null || value.imageAssetId === "") { output.imageAssetId = null; output.imageAlt = ""; }
+    else { output.imageAssetId = requiredString(value.imageAssetId, "imageAssetId", 64); output.imageAlt = meaningfulAlt(value.imageAlt); }
+  } else if ("imageAlt" in value) output.imageAlt = meaningfulAlt(value.imageAlt);
+  else if (!partial) { output.imageAssetId = null; output.imageAlt = ""; }
   if (output.startsAt !== undefined && output.endsAt !== undefined && (output.endsAt as number) <= (output.startsAt as number)) throw validation("endsAt", "End time must be after start time.");
   if (partial && !Object.keys(output).length) throw new ApiError(400, "EMPTY_UPDATE", "Provide at least one field to update.");
   return output;
 }
 export const iso = (value: number | null) => value == null ? null : new Date(value).toISOString();
-export function eventJson(row: Record<string, unknown>) { return { ...row, startsAt: iso(row.startsAt as number), endsAt: iso(row.endsAt as number), publishedAt: iso(row.publishedAt as number | null), archivedAt: iso(row.archivedAt as number | null), createdAt: iso(row.createdAt as number), updatedAt: iso(row.updatedAt as number) }; }
+export function eventJson(row: Record<string, unknown>) { const value=(camel:string,snake:string)=>row[camel]??row[snake];return { ...row, id:row.id,title:row.title,description:row.description,location:row.location,timezone:row.timezone,capacity:row.capacity,status:row.status,startsAt:iso(value("startsAt","starts_at") as number),endsAt:iso(value("endsAt","ends_at") as number),publishedAt:iso(value("publishedAt","published_at") as number|null),archivedAt:iso(value("archivedAt","archived_at") as number|null),createdAt:iso(value("createdAt","created_at") as number),updatedAt:iso(value("updatedAt","updated_at") as number),imageAssetId:value("imageAssetId","image_asset_id")??null,imageMimeType:value("imageMimeType","image_mime_type")??null,imageSizeBytes:value("imageSizeBytes","image_size_bytes")??null,imageWidth:value("imageWidth","image_width")??null,imageHeight:value("imageHeight","image_height")??null,imageAlt:value("imageAlt","image_alt")??"" }; }
+export function publicEventJson(row: Record<string, unknown>) {
+  return { id: row.id, title: row.title, description: row.description, location: row.location, startsAt: iso(row.startsAt as number), endsAt: iso(row.endsAt as number), timezone: row.timezone, image: row.imageAssetId ? { url: `/api/events/assets/${row.imageAssetId}`, alt: row.imageAlt, width: row.imageWidth, height: row.imageHeight, mimeType: row.imageMimeType } : null };
+}
 export function csvCell(value: unknown) { const s = String(value ?? ""); return /[",\r\n]/.test(s) ? `"${s.replaceAll('"', '""')}"` : s; }
 export function canTransitionEvent(from: string, to: string) { return (from === "draft" && to === "published") || ((from === "draft" || from === "published") && to === "archived"); }
 export function capacityAvailable(capacity: number, confirmed: number, requested: number) { return Number.isInteger(requested) && requested > 0 && confirmed + requested <= capacity; }
