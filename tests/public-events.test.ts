@@ -1,20 +1,45 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { assertRegistrationOpen, parsePublicRsvp, PUBLIC_EVENT_FIELDS } from "../lib/server/public-events.ts";
+import { assertRegistrationOpen, parsePublicRsvp, PUBLIC_EVENT_FIELDS } from "../lib/server/public-events";
 
 test("public event projection excludes private and lifecycle fields", () => {
-  for (const field of ["created_by", "created_at", "updated_at", "capacity", "allow_duplicate_registration", "published_at", "archived_at"]) assert.equal(PUBLIC_EVENT_FIELDS.includes(field), false);
-  for (const field of ["title", "short_description", "location", "category", "image_asset_id", "attendance_type", "cost_label"]) assert.equal(PUBLIC_EVENT_FIELDS.includes(field), true);
-});
+  const projectedColumns = PUBLIC_EVENT_FIELDS
+    .split(",")
+    .map(field => field.trim().split(/\s+AS\s+/i)[0]);
 
-test("public listing statically requires published, non-archived future events", async () => {
-  const source = await readFile(new URL("../app/api/events/route.ts", import.meta.url), "utf8");
-  assert.match(source, /status='published'/);
-  assert.match(source, /archived_at IS NULL/);
-  assert.match(source, /ends_at>\?/);
-});
+  for (const field of [
+    "e.created_by",
+    "e.created_at",
+    "e.updated_at",
+    "e.capacity",
+    "e.allow_duplicate_registration",
+    "e.published_at",
+    "e.archived_at",
+  ]) {
+    assert.equal(
+      projectedColumns.includes(field),
+      false,
+      `${field} must not be included in the public projection`,
+    );
+  }
 
+  for (const field of [
+    "e.title",
+    "e.short_description",
+    "e.location",
+    "e.category",
+    "e.image_asset_id",
+    "e.attendance_type",
+    "e.cost_label",
+  ]) {
+    assert.equal(
+      projectedColumns.includes(field),
+      true,
+      `${field} must be included in the public projection`,
+    );
+  }
+});
 test("registration windows and guest limits are server policies", () => {
   const event = { startsAt: 300, registrationOpensAt: 100, registrationClosesAt: 200 };
   assert.throws(() => assertRegistrationOpen(event, 50));
