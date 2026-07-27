@@ -8,6 +8,13 @@
   "observability": { "enabled": true },
   "assets": { "directory": "./dist/client", "binding": "ASSETS" },
   "images": { "binding": "IMAGES" },
+  "send_email": [
+    {
+      "name": "CONTACT_EMAIL",
+      "destination_address": "kayla@stylewithkayla.com",
+      "allowed_sender_addresses": ["kayla@stylewithkayla.com"]
+    }
+  ],
   "r2_buckets": [
     {
       "binding": "PHOTO_ASSETS",
