@@ -26,6 +26,8 @@ export type ProfileType =
 export type ProfileStatus = "draft" | "submitted" | "reopened";
 export type ActorType = "client" | "admin" | "system";
 export type JsonRecord = Record<string, unknown>;
+export type EventStatus = "draft" | "published" | "archived";
+export type RsvpStatus = "confirmed" | "waitlisted" | "cancelled" | "declined";
 
 const createdAt = () =>
   integer("created_at")
@@ -440,3 +442,71 @@ export const dataRequests = sqliteTable(
   },
   (table) => [index("data_requests_status_idx").on(table.status, table.requestedAt)],
 );
+
+/** Event records use opaque internal ids. Only rsvps.publicToken is suitable for guests. */
+export const events = sqliteTable("events", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull().default(""),
+  location: text("location").notNull(),
+  startsAt: integer("starts_at").notNull(),
+  endsAt: integer("ends_at").notNull(),
+  timezone: text("timezone").notNull().default("America/Boise"),
+  capacity: integer("capacity").notNull(),
+  status: text("status").$type<EventStatus>().notNull().default("draft"),
+  publishedAt: integer("published_at"),
+  archivedAt: integer("archived_at"),
+  createdBy: text("created_by").notNull(),
+  createdAt: createdAt(),
+  updatedAt: integer("updated_at").notNull().default(sql`(unixepoch() * 1000)`),
+}, (table) => [index("events_status_starts_idx").on(table.status, table.startsAt)]);
+
+export const eventRsvps = sqliteTable("event_rsvps", {
+  id: text("id").primaryKey(),
+  eventId: text("event_id").notNull().references(() => events.id, { onDelete: "cascade" }),
+  publicToken: text("public_token").notNull(),
+  status: text("status").$type<RsvpStatus>().notNull().default("confirmed"),
+  primaryGuestName: text("primary_guest_name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone"),
+  partySize: integer("party_size").notNull().default(1),
+  notes: text("notes"),
+  checkedInAt: integer("checked_in_at"),
+  noShowAt: integer("no_show_at"),
+  createdAt: createdAt(),
+  updatedAt: integer("updated_at").notNull().default(sql`(unixepoch() * 1000)`),
+}, (table) => [
+  uniqueIndex("event_rsvps_public_token_unique").on(table.publicToken),
+  index("event_rsvps_event_status_idx").on(table.eventId, table.status),
+]);
+
+export const eventGuests = sqliteTable("event_guests", {
+  id: text("id").primaryKey(),
+  rsvpId: text("rsvp_id").notNull().references(() => eventRsvps.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  checkedInAt: integer("checked_in_at"),
+  createdAt: createdAt(),
+}, (table) => [index("event_guests_rsvp_idx").on(table.rsvpId)]);
+
+export const eventAppointmentSlots = sqliteTable("event_appointment_slots", {
+  id: text("id").primaryKey(),
+  eventId: text("event_id").notNull().references(() => events.id, { onDelete: "cascade" }),
+  rsvpId: text("rsvp_id").references(() => eventRsvps.id, { onDelete: "set null" }),
+  startsAt: integer("starts_at").notNull(),
+  endsAt: integer("ends_at").notNull(),
+  label: text("label"),
+  createdAt: createdAt(),
+}, (table) => [
+  uniqueIndex("event_appointment_slots_event_start_unique").on(table.eventId, table.startsAt),
+  index("event_appointment_slots_event_range_idx").on(table.eventId, table.startsAt, table.endsAt),
+]);
+
+export const eventCheckIns = sqliteTable("event_check_ins", {
+  id: text("id").primaryKey(),
+  eventId: text("event_id").notNull().references(() => events.id, { onDelete: "cascade" }),
+  rsvpId: text("rsvp_id").notNull().references(() => eventRsvps.id, { onDelete: "cascade" }),
+  guestId: text("guest_id").references(() => eventGuests.id, { onDelete: "cascade" }),
+  action: text("action").$type<"checked_in" | "no_show" | "undo">().notNull(),
+  actorEmail: text("actor_email").notNull(),
+  createdAt: createdAt(),
+}, (table) => [index("event_check_ins_event_idx").on(table.eventId, table.createdAt)]);
