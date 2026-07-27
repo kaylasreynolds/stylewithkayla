@@ -1,0 +1,1 @@
+import{requireAccessUser}from"../../cloudflare-access";import{EventList}from"./EventConsole";export const dynamic="force-dynamic";export default async function Page(){await requireAccessUser();return <EventList/>}

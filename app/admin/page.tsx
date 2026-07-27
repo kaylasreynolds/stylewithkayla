@@ -39,6 +39,12 @@ export default async function AdminPage() {
       >
         <div style={{ display: "flex", flexWrap: "wrap", gap: "10px 24px" }}>
           <Link
+            href="/admin/events"
+            style={{ color: "var(--rose-dark)", fontWeight: 700 }}
+          >
+            Manage events & RSVPs →
+          </Link>
+          <Link
             href="/admin/style-profile-preview"
             style={{ color: "var(--rose-dark)", fontWeight: 700 }}
           >
