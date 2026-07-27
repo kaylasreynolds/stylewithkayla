@@ -40,7 +40,7 @@ if (!fs.existsSync(configPath)) {
 }
 
 const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
-
+config.name = "stylewithkayla-production";
 delete config.legacy_env;
 
 config.assets = config.assets ?? {};
