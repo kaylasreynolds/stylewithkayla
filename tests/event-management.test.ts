@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { capacityAvailable, canTransitionEvent, csvCell, publicEventJson, rangesOverlap } from "../lib/server/event-management.ts";
-import { requireAdmin } from "../lib/server/admin-auth.ts";
-import { EVENT_IMAGE_MAX_BYTES, eventAssetOwnedBy, inspectEventImage, meaningfulAlt } from "../lib/server/event-images.ts";
+import { capacityAvailable, canTransitionEvent, csvCell, publicEventJson, rangesOverlap } from "../lib/server/event-management";
+import { requireAdmin } from "../lib/server/admin-auth";
+import { EVENT_IMAGE_MAX_BYTES, eventAssetOwnedBy, inspectEventImage, meaningfulAlt } from "../lib/server/event-images";
 
 test("event state transitions only move forward", () => {
   assert.equal(canTransitionEvent("draft", "published"), true);
