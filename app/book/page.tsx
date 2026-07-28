@@ -280,7 +280,7 @@ export default function Home() {
           <p className="intro-copy">
             {step === 1 && "Select the service that best matches what you need. Every appointment is complimentary and personalized."}
             {step === 2 && "Choose an available date and time. Your appointment will be held as pending until I review your request."}
-            {step === 3 && "A few details help me confirm your request and send the correct Style Profile after approval."}
+            {step === 3 && "A few details help me confirm your request and personalize your Style Profile after approval."}
             {step === 4 && "Make sure everything looks right before submitting. Your selected time will be held while I review it."}
           </p>
           <div className="desktop-summary">
