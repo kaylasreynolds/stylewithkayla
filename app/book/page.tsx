@@ -336,7 +336,6 @@ export default function Home() {
                       </button>
                     ))}
                   </div>
-                  <p className="availability-note"><span /> Available Tuesday–Saturday, 24+ hours ahead</p>
                 </div>
                 <div className="time-panel">
                   <h3>Available times</h3>
