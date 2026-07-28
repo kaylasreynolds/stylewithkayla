@@ -1,10 +1,16 @@
 "use client";
 import Link from "next/link";import{useEffect,useState}from"react";
+import { formatEventSchedule } from "@/lib/event-date-time";
 type EventRow = {
   id: string;
   title: string;
   location: string;
   startsAt: string;
+  eventDate: string;
+  startTime: string;
+  endTime: string;
+  allDay: boolean;
+  timezone: string;
   status: string;
   capacity: number | null;
   confirmed_count?: number;
@@ -64,7 +70,7 @@ async function api<T>(
   }
 
   return json.data;
-}export function EventList(){const[events,setEvents]=useState<EventRow[]>([]),[error,setError]=useState('');useEffect(()=>{api<EventListResponse>("/api/admin/events").then(data=>setEvents(data.events)).catch(e=>setError(e.message))},[]);return <Shell title="Events" actions={<Link className="event-button" href="/admin/events/new">Create event</Link>}>{error&&<p className="event-alert">{error}</p>}<div className="event-grid">{events.map(e=><Link className="event-card" href={`/admin/events/${e.id}`} key={e.id}><span className={`event-status event-status--${e.status}`}>{e.status}</span><h2>{e.title}</h2><p>{new Date(e.startsAt).toLocaleString()} · {e.location}</p><strong>{e.confirmed_count??0} / {e.capacity} attending</strong></Link>)}{!events.length&&!error&&<div className="event-empty"><h2>No events yet</h2><p>Create an event to begin collecting RSVPs.</p></div>}</div></Shell>}
+}export function EventList(){const[events,setEvents]=useState<EventRow[]>([]),[error,setError]=useState('');useEffect(()=>{api<EventListResponse>("/api/admin/events").then(data=>setEvents(data.events)).catch(e=>setError(e.message))},[]);return <Shell title="Events" actions={<Link className="event-button" href="/admin/events/new">Create event</Link>}>{error&&<p className="event-alert">{error}</p>}<div className="event-grid">{events.map(e=><Link className="event-card" href={`/admin/events/${e.id}`} key={e.id}><span className={`event-status event-status--${e.status}`}>{e.status}</span><h2>{e.title}</h2><p>{formatEventSchedule(e)} · {e.location}</p><strong>{e.confirmed_count??0} / {e.capacity} attending</strong></Link>)}{!events.length&&!error&&<div className="event-empty"><h2>No events yet</h2><p>Create an event to begin collecting RSVPs.</p></div>}</div></Shell>}
 const labels=["Appointment","RSVP","Drop-In","Open House","Workshop","Styling Event","Brand Event","Community Event","Limited Spots","Presell","Special Event","Custom"];
 const attendance=[['appointment_required','Appointment required'],['appointment_recommended','Appointment recommended'],['general_rsvp','General RSVP'],['drop_in','Drop-in'],['open_attendance','Open attendance'],['invitation_only','Invitation only'],['interest_list','Interest list'],['information_only','Information only']];
 const actions=[['registration','Event registration form'],['appointment','Appointment selection'],['interest_list','Interest-list form'],['external_url','External URL'],['email','Email'],['phone','Phone'],['information','Information-only detail view'],['none','No CTA']];
@@ -228,8 +234,10 @@ async function submit(publish = false) {
   </p>
 
   <div className="event-form-grid">
-    {field("eventDate", "Event date", {
-      type: "date",
+    {field("eventDate", "Event date (MM/DD/YY)", {
+      placeholder: "09/27/26",
+      inputMode: "numeric",
+      maxLength: 8,
     })}
 
     {check("allDay", "All-day event")}
