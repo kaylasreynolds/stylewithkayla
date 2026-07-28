@@ -14,6 +14,7 @@ import {
   validateForPublish,
   zonedInstant,
 } from "../lib/server/event-management";
+import { formatEventSchedule } from "../lib/event-date-time";
 
 import {
   instant,
@@ -37,7 +38,7 @@ const complete = {
   offer: "Gift with purchase",
   offerDetails: "While supplies last",
   offerTerms: "Terms",
-  eventDate: "2026-09-27",
+  eventDate: "09/27/26",
   startTime: "6:00 PM",
   endTime: "8:00 PM",
   allDay: false,
@@ -50,9 +51,9 @@ const complete = {
   unlimitedCapacity: false,
   maxGuests: 2,
   allowGuestNames: true,
-  registrationOpensDate: "2026-09-01",
+  registrationOpensDate: "09/01/26",
   registrationOpensTime: "9:00 AM",
-  registrationClosesDate: "2026-09-27",
+  registrationClosesDate: "09/27/26",
   registrationClosesTime: "5:00 PM",
   allowDuplicateRegistration: false,
   appointmentRequired: false,
@@ -72,12 +73,16 @@ const complete = {
 test("drafts may be incomplete",()=>{const draft=parseEvent({title:"Idea"});assert.equal(draft.title,"Idea");assert.equal(draft.eventDate,"");});
 test("calendar date and writable time parsing rejects invalid input", () => {
   assert.throws(() =>
-    parseDate("2026-02-30", "eventDate"),
+    parseDate("02/30/26", "eventDate"),
   );
 
   assert.doesNotThrow(() =>
-    parseDate("2026-02-20", "eventDate"),
+    parseDate("02/20/26", "eventDate"),
   );
+
+  assert.throws(() => parseDate("2026-02-20", "eventDate"));
+  assert.doesNotThrow(() => parseDate("02/29/28", "eventDate"));
+  assert.throws(() => parseDate("02/29/27", "eventDate"));
 
   assert.throws(() =>
     parseTime("25:00", "startTime"),
@@ -88,11 +93,11 @@ test("calendar date and writable time parsing rejects invalid input", () => {
     21,
   );
 });
-test("Boise conversion observes daylight saving boundaries",()=>{const winter=zonedInstant(parseDate("2026-01-15","eventDate"),{hour:12,minute:0});const summer=zonedInstant(parseDate("2026-07-15","eventDate"),{hour:12,minute:0});assert.equal(new Date(winter).toISOString(),"2026-01-15T19:00:00.000Z");assert.equal(new Date(summer).toISOString(),"2026-07-15T18:00:00.000Z");assert.throws(()=>zonedInstant(parseDate("2026-03-08","eventDate"),{hour:2,minute:30}));});
+test("Boise conversion observes daylight saving boundaries",()=>{const winter=zonedInstant(parseDate("01/15/26","eventDate"),{hour:12,minute:0});const summer=zonedInstant(parseDate("07/15/26","eventDate"),{hour:12,minute:0});assert.equal(new Date(winter).toISOString(),"2026-01-15T19:00:00.000Z");assert.equal(new Date(summer).toISOString(),"2026-07-15T18:00:00.000Z");assert.throws(()=>zonedInstant(parseDate("03/08/26","eventDate"),{hour:2,minute:30}));});
 test("all-day convention is local midnight through next local midnight", () => {
   const t = materializeTimes({
     ...complete,
-    eventDate: "2026-03-08",
+    eventDate: "03/08/26",
     allDay: true,
     startTime: "",
     endTime: "",
@@ -107,7 +112,8 @@ test("all-day convention is local midnight through next local midnight", () => {
     23 * 60 * 60 * 1000,
   );
 });
-test("all-day convention is local midnight through next local midnight",()=>{const t=materializeTimes({...complete,eventDate:"2026-03-08",allDay:true,startTime:"",endTime:"",registrationOpensDate:"",registrationOpensTime:"",registrationClosesDate:"",registrationClosesTime:""});assert.equal(t.endsAt-t.startsAt,23*60*60*1000);});
+test("saved timed values normalize in Boise and retain their display fields",()=>{const event={...complete,startTime:"6:05 pm",endTime:"8:30 pm"};const times=materializeTimes(event);assert.equal(new Date(times.startsAt).toISOString(),"2026-09-28T00:05:00.000Z");assert.equal(new Date(times.endsAt).toISOString(),"2026-09-28T02:30:00.000Z");assert.equal(event.startTime,"6:05 PM");assert.equal(event.endTime,"8:30 PM");});
+test("admin and public cards can share timed and all-day labels",()=>{assert.equal(formatEventSchedule(complete),"September 27, 2026 · 6:00 PM–8:00 PM");assert.equal(formatEventSchedule({...complete,allDay:true}),"September 27, 2026 · All day");});
 test("attendance, appointment, guest, cost, CTA, and custom-label dependencies",()=>{assert.throws(()=>parseEvent({...complete,attendanceType:"appointment_required",appointmentRequired:false,ctaAction:"appointment"}));assert.throws(()=>parseEvent({...complete,maxGuests:21}));assert.throws(()=>parseEvent({...complete,eventLabel:"Custom",customLabel:""}));assert.throws(()=>parseEvent({...complete,ctaAction:"external_url",ctaUrl:"javascript:bad"}));assert.throws(()=>parseEvent({...complete,attendanceType:"information_only",ctaAction:"registration"}));assert.equal(parseEvent({...complete,costType:"custom",costLabel:"Purchase required"}).costLabel,"Purchase required");});
 test("legacy management helpers remain stable",()=>{assert.equal(capacityAvailable(10,8,2),true);assert.equal(canTransitionEvent("draft","published"),true);assert.equal(rangesOverlap(1,3,2,4),true);assert.equal(csvCell('a,b'),'"a,b"');});
 test("event edits retain RSVP and appointment records",async()=>{const source=await readFile(new URL("../app/api/admin/events/[eventId]/route.ts",import.meta.url),"utf8");assert.doesNotMatch(source,/DELETE FROM event_(rsvps|appointment_slots)/);assert.match(source,/UPDATE events SET/);});
