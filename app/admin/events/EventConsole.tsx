@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";import{useEffect,useState}from"react";
-import { formatEventSchedule } from "@/lib/event-date-time";
+import { formatEventSchedule, isValidEventDate } from "@/lib/event-date-time";
 type EventRow = {
   id: string;
   title: string;
@@ -220,7 +220,7 @@ async function submit(publish = false) {
     setSaving(false);
   }
 } if(!loaded)return <Shell title="Edit event"><p role="status">Loading…</p></Shell>;
- const registration=!['drop_in','open_attendance','invitation_only','information_only',''].includes(String(form.attendanceType));const imageAlt=String(form.imageAlt??'');const share=`Look at this event happening over at Macy’s:\n\n${form.title||'[Event Title]'}\n${form.eventDate||'[MM/DD/YY]'}\n\n${form.shortDescription||'[Short Event Description]'}\n\n[Event Link]`;const checklist=[['Image',!!asset],['Image alt text',imageAlt.trim().length>=8],['Title',!!form.title],['Short description',!!form.shortDescription],['Event label',!!form.eventLabel],['Valid date',/^\d{2}\/\d{2}\/\d{2}$/.test(String(form.eventDate))],['Time or all day',!!form.allDay||!!form.startTime&&!!form.endTime],['Location',!!form.location],['Attendance type',!!form.attendanceType],['Cost label',!!form.costLabel],['CTA configuration',form.ctaAction==='none'||!!form.ctaAction&&!!form.ctaLabel]] as const;
+ const registration=!['drop_in','open_attendance','invitation_only','information_only',''].includes(String(form.attendanceType));const imageAlt=String(form.imageAlt??'');const share=`Look at this event happening over at Macy’s:\n\n${form.title||'[Event Title]'}\n${form.eventDate||'[MM/DD/YY]'}\n\n${form.shortDescription||'[Short Event Description]'}\n\n[Event Link]`;const checklist=[['Image',!!asset],['Image alt text',imageAlt.trim().length>=8],['Title',!!form.title],['Short description',!!form.shortDescription],['Event label',!!form.eventLabel],['Valid date',isValidEventDate(form.eventDate)],['Time or all day',!!form.allDay||!!form.startTime&&!!form.endTime],['Location',!!form.location],['Attendance type',!!form.attendanceType],['Cost label',!!form.costLabel],['CTA configuration',form.ctaAction==='none'||!!form.ctaAction&&!!form.ctaLabel]] as const;
  return <Shell title={eventId?'Edit event':'Create event'} actions={<Link href="/admin/events" className="event-button event-button--secondary">Return to Events</Link>}>
   {error&&<p className="event-alert" role="alert">{error}</p>}<form className="event-form event-editor" onSubmit={e=>{e.preventDefault();submit(false)}} noValidate>
   <fieldset><legend>1. Event Basics</legend><p className="event-section-help">Introduce the event on its public card and detail experience.</p><div className="event-form-grid">{field('title','Event title',{maxLength:160})}<label>Event label/type<select value={String(form.eventLabel)} onChange={e=>set('eventLabel',e.target.value)} aria-invalid={!!errors.eventLabel}><option value="">Choose a label</option>{labels.map(x=><option key={x}>{x}</option>)}</select>{errors.eventLabel&&<small className="event-field-error">{errors.eventLabel}</small>}</label>{form.eventLabel==='Custom'&&field('customLabel','Custom label',{maxLength:80,required:true})}<div className="event-span">{text('shortDescription','Short card description',3,320)}</div><div className="event-span">{text('description','Full event description',7,5000)}</div>{field('offer','Optional offer or promotion',{maxLength:180})}<div className="event-span">{text('offerDetails','Optional offer details',3,1000)}{text('offerTerms','Optional offer terms',3,1000)}</div></div></fieldset>
@@ -320,22 +320,7 @@ async function submit(publish = false) {
         </h2>
 
         <p>
-          {form.eventDate
-            ? new Intl.DateTimeFormat("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-                timeZone: "America/Boise",
-              }).format(
-                new Date(`${String(form.eventDate)}T12:00:00`),
-              )
-            : "Event date"}
-          {" · "}
-          {Boolean(form.allDay)
-            ? "All day"
-            : `${String(form.startTime || "Start")}–${String(
-                form.endTime || "End",
-              )}`}
+          {formatEventSchedule(form)}
         </p>
 
         <p>
