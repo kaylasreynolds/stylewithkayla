@@ -1,6 +1,7 @@
 import { ApiError, validation } from "./http";
+import { EVENT_IMAGE_MAX_BYTES, EVENT_IMAGE_TOO_LARGE_MESSAGE } from "../event-editor-client";
 
-export const EVENT_IMAGE_MAX_BYTES = 5 * 1024 * 1024;
+export { EVENT_IMAGE_MAX_BYTES } from "../event-editor-client";
 export const EVENT_IMAGE_MIN_DIMENSION = 600;
 export const EVENT_IMAGE_MAX_DIMENSION = 4000;
 export const EVENT_IMAGE_ALT_MAX = 240;
@@ -13,7 +14,7 @@ const u32be = (b: Uint8Array, n: number) => ((b[n] << 24) | (b[n + 1] << 16) | (
 
 export function inspectEventImage(bytes: Uint8Array): InspectedImage {
   if (!bytes.length) fail("The image is empty.");
-  if (bytes.length > EVENT_IMAGE_MAX_BYTES) fail("Event images must be 5 MB or smaller.");
+  if (bytes.length > EVENT_IMAGE_MAX_BYTES) fail(EVENT_IMAGE_TOO_LARGE_MESSAGE);
   let mimeType: InspectedImage["mimeType"], extension: InspectedImage["extension"], width = 0, height = 0;
   if (bytes.length >= 24 && bytes.slice(0, 8).every((v, i) => v === [137,80,78,71,13,10,26,10][i])) {
     mimeType = "image/png"; extension = "png"; width = u32be(bytes, 16); height = u32be(bytes, 20);
