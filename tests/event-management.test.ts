@@ -14,7 +14,7 @@ import {
   validateForPublish,
   zonedInstant,
 } from "../lib/server/event-management";
-import { formatEventSchedule, isValidEventDate } from "../lib/event-date-time";
+import { eventDateToPickerValue, formatEventSchedule, isValidEventDate, pickerValueToEventDate } from "../lib/event-date-time";
 
 import {
   instant,
@@ -127,6 +127,17 @@ test("event schedule formatting tolerates progressive and impossible dates", () 
   assert.equal(isValidEventDate("02/29/28"), true);
 });
 
+test("typed and picked event dates synchronize only when complete and valid", () => {
+  for (const partial of ["0", "08", "08/", "08/1", "08/15", "02/30/26"]) {
+    assert.equal(eventDateToPickerValue(partial), null);
+  }
+  assert.equal(eventDateToPickerValue("08/15/26"), "2026-08-15");
+  assert.equal(pickerValueToEventDate("2026-08-15"), "08/15/26");
+  assert.equal(eventDateToPickerValue("02/29/28"), "2028-02-29");
+  assert.equal(pickerValueToEventDate("2028-02-29"), "02/29/28");
+  assert.equal(pickerValueToEventDate("2027-02-29"), null);
+});
+
 test("event schedule formatting tolerates missing and partial times", () => {
   const eventDate = "08/15/26";
   assert.equal(formatEventSchedule({ eventDate, startTime: "", endTime: "" }), "August 15, 2026");
@@ -142,5 +153,14 @@ test("event schedule formatting safely follows all-day state changes", () => {
   assert.equal(formatEventSchedule({ ...form, eventDate: "08/", allDay: true }), "Date not set · All day");
 });
 test("attendance, appointment, guest, cost, CTA, and custom-label dependencies",()=>{assert.throws(()=>parseEvent({...complete,attendanceType:"appointment_required",appointmentRequired:false,ctaAction:"appointment"}));assert.throws(()=>parseEvent({...complete,maxGuests:21}));assert.throws(()=>parseEvent({...complete,eventLabel:"Custom",customLabel:""}));assert.throws(()=>parseEvent({...complete,ctaAction:"external_url",ctaUrl:"javascript:bad"}));assert.throws(()=>parseEvent({...complete,attendanceType:"information_only",ctaAction:"registration"}));assert.equal(parseEvent({...complete,costType:"custom",costLabel:"Purchase required"}).costLabel,"Purchase required");});
+test("progressive cost types use semantic defaults and require paid or custom wording",()=>{
+  assert.equal(parseEvent({...complete,costType:"complimentary",costLabel:""}).costLabel,"Complimentary");
+  assert.equal(parseEvent({...complete,costType:"purchase_required",costLabel:""}).costLabel,"Purchase required");
+  assert.equal(parseEvent({...complete,costType:"free_with_rsvp",costLabel:""}).costLabel,"Free with RSVP");
+  assert.equal(parseEvent({...complete,costType:"not_applicable",costLabel:""}).costLabel,"Not applicable");
+  assert.throws(()=>parseEvent({...complete,costType:"paid",costLabel:""}));
+  assert.throws(()=>parseEvent({...complete,costType:"custom",costLabel:""}));
+  assert.equal(parseEvent({...complete,costType:"paid",costLabel:"$25 per guest"}).costLabel,"$25 per guest");
+});
 test("legacy management helpers remain stable",()=>{assert.equal(capacityAvailable(10,8,2),true);assert.equal(canTransitionEvent("draft","published"),true);assert.equal(rangesOverlap(1,3,2,4),true);assert.equal(csvCell('a,b'),'"a,b"');});
 test("event edits retain RSVP and appointment records",async()=>{const source=await readFile(new URL("../app/api/admin/events/[eventId]/route.ts",import.meta.url),"utf8");assert.doesNotMatch(source,/DELETE FROM event_(rsvps|appointment_slots)/);assert.match(source,/UPDATE events SET/);});

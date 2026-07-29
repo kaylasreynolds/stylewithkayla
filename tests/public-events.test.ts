@@ -32,6 +32,7 @@ test("public event projection excludes private and lifecycle fields", () => {
     "e.image_asset_id",
     "e.attendance_type",
     "e.cost_label",
+    "e.cost_type",
   ]) {
     assert.equal(
       projectedColumns.includes(field),

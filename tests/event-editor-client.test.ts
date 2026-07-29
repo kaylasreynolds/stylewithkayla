@@ -6,8 +6,21 @@ import {
   EVENT_IMAGE_TOO_LARGE_MESSAGE,
   EventSubmissionGuard,
   eventImageFileError,
+  defaultEventCostLabel,
+  hasEventOffer,
   readUploadResponse,
+  withoutEventOffer,
 } from "../lib/event-editor-client.ts";
+
+test("editor cost defaults and explicit offer removal preserve the approved model", () => {
+  assert.equal(defaultEventCostLabel("complimentary"), "Complimentary");
+  assert.equal(defaultEventCostLabel("free_with_rsvp"), "Free with RSVP");
+  assert.equal(defaultEventCostLabel("paid"), "");
+  const event = { title: "Open House", offer: "Gift", offerDetails: "Details", offerTerms: "Terms" };
+  assert.equal(hasEventOffer(event), true);
+  assert.deepEqual(withoutEventOffer(event), { title: "Open House", offer: "", offerDetails: "", offerTerms: "" });
+  assert.equal(hasEventOffer(withoutEventOffer(event)), false);
+});
 
 test("upload responses safely handle JSON, text, HTML, empty bodies, and upstream 413s", () => {
   const asset = { id: "asset-1", previewUrl: "/asset-1", width: 800, height: 600, sizeBytes: 100 };

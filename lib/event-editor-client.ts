@@ -1,6 +1,25 @@
 export const EVENT_IMAGE_MAX_BYTES = 5 * 1024 * 1024;
 export const EVENT_IMAGE_TOO_LARGE_MESSAGE = "Event images must be 5 MiB or smaller.";
 
+export const EVENT_COST_DEFAULTS = {
+  complimentary: "Complimentary",
+  purchase_required: "Purchase required",
+  free_with_rsvp: "Free with RSVP",
+  not_applicable: "Not applicable",
+} as const;
+
+export function defaultEventCostLabel(costType: string): string {
+  return EVENT_COST_DEFAULTS[costType as keyof typeof EVENT_COST_DEFAULTS] ?? "";
+}
+
+export function hasEventOffer(value: Record<string, unknown>): boolean {
+  return ["offer", "offerDetails", "offerTerms"].some(key => String(value[key] ?? "").trim().length > 0);
+}
+
+export function withoutEventOffer<T extends Record<string, unknown>>(value: T): T {
+  return { ...value, offer: "", offerDetails: "", offerTerms: "" };
+}
+
 type UploadAsset = {
   id: string;
   previewUrl: string;

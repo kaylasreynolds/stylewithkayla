@@ -8,6 +8,7 @@ export type EventSchedule = {
 };
 
 const inputDatePattern = /^(\d{2})\/(\d{2})\/(\d{2})$/;
+const pickerDatePattern = /^(\d{4})-(\d{2})-(\d{2})$/;
 
 export function isValidEventDate(value: unknown) {
   const match = String(value ?? "").match(inputDatePattern);
@@ -21,6 +22,23 @@ export function isValidEventDate(value: unknown) {
   return date.getUTCFullYear() === year
     && date.getUTCMonth() === month - 1
     && date.getUTCDate() === day;
+}
+
+/** Returns a native date-input value only when the visible date is complete and valid. */
+export function eventDateToPickerValue(value: unknown): string | null {
+  const input = String(value ?? "");
+  const match = input.match(inputDatePattern);
+  if (!match || !isValidEventDate(input)) return null;
+  return `20${match[3]}-${match[1]}-${match[2]}`;
+}
+
+/** Converts a native date-input value without using the browser's local time zone. */
+export function pickerValueToEventDate(value: unknown): string | null {
+  const input = String(value ?? "");
+  const match = input.match(pickerDatePattern);
+  if (!match || !match[1].startsWith("20")) return null;
+  const visible = `${match[2]}/${match[3]}/${match[1].slice(2)}`;
+  return isValidEventDate(visible) ? visible : null;
 }
 
 function longDate(event: EventSchedule) {
