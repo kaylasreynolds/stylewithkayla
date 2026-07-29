@@ -1,0 +1,29 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "stylewithkayla-pr-preview",
+  "main": "./dist/server/index.js",
+  "compatibility_date": "2026-07-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "observability": { "enabled": true },
+  "assets": { "directory": "./dist/client", "binding": "ASSETS" },
+  "images": { "binding": "IMAGES" },
+  "r2_buckets": [
+    {
+      "binding": "PHOTO_ASSETS",
+      "bucket_name": "stylewithkayla-photo-assets-preview"
+    }
+  ],
+  "vars": {
+    "ADMIN_EMAILS": "kaylasreynolds@gmail.com",
+    "APP_ENV": "preview"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "stylewithkayla-preview",
+      "database_id": "1f8a83a9-3d05-4592-b07b-4ffee2ea7047",
+      "migrations_dir": "./drizzle"
+    }
+  ]
+}
