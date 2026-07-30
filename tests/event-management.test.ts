@@ -34,7 +34,7 @@ import {
 
 const complete = {
   title: "Fall styling",
-  eventLabel: "Styling Event",
+  eventLabel: "Workshop",
   customLabel: "",
   shortDescription: "An evening of personal styling.",
   description: "Full details",
@@ -240,3 +240,13 @@ test("progressive cost types use semantic defaults and require paid or custom wo
 });
 test("legacy management helpers remain stable",()=>{assert.equal(capacityAvailable(10,8,2),true);assert.equal(canTransitionEvent("draft","published"),true);assert.equal(rangesOverlap(1,3,2,4),true);assert.equal(csvCell('a,b'),'"a,b"');});
 test("event edits retain RSVP and appointment records",async()=>{const source=await readFile(new URL("../app/api/admin/events/[eventId]/route.ts",import.meta.url),"utf8");assert.doesNotMatch(source,/DELETE FROM event_(rsvps|appointment_slots)/);assert.match(source,/UPDATE events SET/);});
+
+test("only current event and attendance values may be published while legacy drafts are preserved", async () => {
+  const management = await import("../lib/server/event-management");
+  assert.deepEqual([...management.eventLabels], ["Open House", "Workshop", "Community Event", "Presell", "Special Event", "Custom"]);
+  assert.deepEqual([...management.attendanceTypes], ["open_attendance", "appointment_required", "appointment_recommended", "general_rsvp", "information_only"]);
+  assert.equal(parseEventDraft({ eventLabel: "Styling Event" }).eventLabel, "Styling Event");
+  assert.equal(parseEventDraft({ attendanceType: "invitation_only" }).attendanceType, "invitation_only");
+  assert.throws(() => validateForPublish({ ...complete, eventLabel: "Styling Event" }, 0), (error: any) => Boolean(error.fieldErrors?.eventLabel));
+  assert.throws(() => validateForPublish({ ...complete, attendanceType: "invitation_only" }, 0), (error: any) => Boolean(error.fieldErrors?.attendanceType));
+});
