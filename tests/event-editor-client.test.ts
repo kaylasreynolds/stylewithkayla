@@ -1,8 +1,11 @@
 import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
+  buildEventPayload,
+  EDITABLE_EVENT_FIELDS,
   EVENT_IMAGE_TOO_LARGE_MESSAGE,
   EventSubmissionGuard,
   eventImageFileError,
@@ -11,6 +14,28 @@ import {
   readUploadResponse,
   withoutEventOffer,
 } from "../lib/event-editor-client.ts";
+
+test("loaded events produce an allowlisted POST and PATCH payload", () => {
+  const approved = Object.fromEntries(EDITABLE_EVENT_FIELDS.map((field, index) => [field, `${field}-${index}`]));
+  const serverOwned = {
+    id: "original-event-id", status: "draft", startsAt: "derived", endsAt: "derived",
+    publishedAt: null, archivedAt: null, createdAt: "derived", updatedAt: "derived",
+    imageMimeType: "image/webp", imageSizeBytes: 123, imageWidth: 800, imageHeight: 600,
+    confirmed_count: 12, confirmedCount: 12, rsvpCount: 12, appointmentSlots: [], spotsRemaining: 8,
+    apiOnlyFutureValue: "must not leak",
+  };
+
+  const payload = buildEventPayload({ ...approved, ...serverOwned });
+  assert.deepEqual(payload, approved);
+  for (const field of Object.keys(serverOwned)) assert.equal(Object.hasOwn(payload, field), false, field);
+  assert.equal(payload.imageAssetId, approved.imageAssetId);
+});
+
+test("the PATCH route sanitizes the loaded event before strict merge validation", async () => {
+  const source = await readFile(new URL("../app/api/admin/events/[eventId]/route.ts", import.meta.url), "utf8");
+  assert.match(source, /buildEventPayload\(eventJson\(current\)\)/);
+  assert.doesNotMatch(source, /parseEvent\(\{\.\.\.eventJson\(current\)/);
+});
 
 test("editor cost defaults and explicit offer removal preserve the approved model", () => {
   assert.equal(defaultEventCostLabel("complimentary"), "Complimentary");
@@ -63,4 +88,23 @@ test("create then edit saves exactly one event record and switches to PATCH", ()
   const saved = db.prepare("SELECT COUNT(*) count, MAX(title) title FROM events").get() as { count: number; title: string };
   assert.equal(saved.count, 1);
   assert.equal(saved.title, "Edited title");
+});
+
+test("Save Draft, Save Changes, and save-before-publish preserve the authoritative ID", () => {
+  for (const path of ["Save Draft", "Save Changes", "save-before-publish"]) {
+    const db = new DatabaseSync(":memory:");
+    db.exec("CREATE TABLE events (id TEXT PRIMARY KEY, title TEXT NOT NULL)");
+    db.prepare("INSERT INTO events(id,title) VALUES(?,?)").run("original-id", "Loaded draft");
+    const guard = new EventSubmissionGuard("original-id");
+    const target = guard.begin();
+    assert.deepEqual(target, { eventId: "original-id", method: "PATCH", url: "/api/admin/events/original-id" }, path);
+    const payload = buildEventPayload({ id: "original-id", title: `${path} title`, status: "draft" });
+    db.prepare("UPDATE events SET title=? WHERE id=?").run(payload.title, target?.eventId);
+    guard.captureEventId("original-id");
+    guard.finish();
+    const rows = db.prepare("SELECT id,title FROM events").all() as Array<{ id: string; title: string }>;
+    assert.equal(rows.length, 1, path);
+    assert.equal(rows[0].id, "original-id", path);
+    assert.equal(rows[0].title, `${path} title`, path);
+  }
 });
