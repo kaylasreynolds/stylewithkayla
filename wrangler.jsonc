@@ -1,37 +1,60 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "stylewithkayla-production",
-  "main": "./dist/server/index.js",
-  "compatibility_date": "2026-07-15",
-  "compatibility_flags": ["nodejs_compat"],
-  "workers_dev": false,
-  "observability": { "enabled": true },
-  "assets": { "directory": "./dist/client", "binding": "ASSETS" },
-  "images": { "binding": "IMAGES" },
-  "send_email": [
-    {
-      "name": "CONTACT_EMAIL",
-      "destination_address": "kayla@stylewithkayla.com",
-      "allowed_sender_addresses": ["kayla@stylewithkayla.com"]
-    }
-  ],
-  "r2_buckets": [
-    {
-      "binding": "PHOTO_ASSETS",
-      "bucket_name": "stylewithkayla-photo-assets"
-    }
-  ],
-  "routes": [
-    { "pattern": "stylewithkayla.com", "custom_domain": true },
-    { "pattern": "www.stylewithkayla.com", "custom_domain": true }
-  ],
-  "vars": { "ADMIN_EMAILS": "kaylasreynolds@gmail.com" },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "stylewithkayla-production",
-      "database_id": "6bb25282-11dc-45ca-a103-b75215504600",
-      "migrations_dir": "./drizzle"
-    }
-  ]
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "stylewithkayla-production",
+	"main": "./dist/server/index.js",
+	"compatibility_date": "2026-07-15",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"workers_dev": false,
+	"observability": {
+		"enabled": true
+	},
+	"assets": {
+		"directory": "./dist/client",
+		"binding": "ASSETS"
+	},
+	"images": {
+		"binding": "IMAGES"
+	},
+	"send_email": [
+		{
+			"name": "CONTACT_EMAIL",
+			"destination_address": "kayla@stylewithkayla.com",
+			"allowed_sender_addresses": [
+				"kayla@stylewithkayla.com"
+			]
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "PHOTO_ASSETS",
+			"bucket_name": "stylewithkayla-photo-assets"
+		},
+		{
+			"bucket_name": "stylewithkayla-photo-assets-preview",
+			"binding": "stylewithkayla_photo_assets_preview"
+		}
+	],
+	"routes": [
+		{
+			"pattern": "stylewithkayla.com",
+			"custom_domain": true
+		},
+		{
+			"pattern": "www.stylewithkayla.com",
+			"custom_domain": true
+		}
+	],
+	"vars": {
+		"ADMIN_EMAILS": "kaylasreynolds@gmail.com"
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "stylewithkayla-production",
+			"database_id": "6bb25282-11dc-45ca-a103-b75215504600",
+			"migrations_dir": "./drizzle"
+		}
+	]
 }
