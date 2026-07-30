@@ -58,6 +58,11 @@ test("upload responses safely handle JSON, text, HTML, empty bodies, and upstrea
   assert.throws(() => readUploadResponse(413, "text/plain", "Payload Too Large"), new RegExp(EVENT_IMAGE_TOO_LARGE_MESSAGE));
 });
 
+test("event image upload still uses the safe response parser", async () => {
+  const source = await readFile(new URL("../app/admin/events/EventConsole.tsx", import.meta.url), "utf8");
+  assert.match(source, /readUploadResponse\(xhr\.status,xhr\.getResponseHeader\('content-type'\),xhr\.responseText\)/);
+});
+
 test("oversized files are rejected before an upload request is needed", () => {
   assert.equal(eventImageFileError(5 * 1024 * 1024), null);
   assert.equal(eventImageFileError(5 * 1024 * 1024 + 1), EVENT_IMAGE_TOO_LARGE_MESSAGE);
