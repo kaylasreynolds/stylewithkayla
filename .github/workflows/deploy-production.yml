@@ -37,5 +37,8 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Apply production D1 migrations
+        run: npx wrangler d1 migrations apply stylewithkayla-production --remote --config wrangler.jsonc
+
       - name: Deploy production Worker
         run: npx wrangler deploy

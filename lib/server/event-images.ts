@@ -33,13 +33,18 @@ export function inspectEventImage(bytes: Uint8Array): InspectedImage {
 }
 
 /** Decode multipart first so request headers and multipart overhead cannot count as image bytes. */
-export async function readEventImageUpload(request: Request) {
-  const form = await request.formData(), file = form.get("file");
+export async function readEventImageUpload(request: Request, setStage: (stage: string) => void = () => {}) {
+  setStage("multipart_parse");
+  const form = await request.formData();
+  setStage("file_field");
+  const file = form.get("file");
   if (!(file instanceof File)) throw new ApiError(422, "FILE_REQUIRED", "Choose a JPG, PNG, or WebP image.");
+  setStage("size_validation");
   if (file.size > EVENT_IMAGE_MAX_BYTES) throw new ApiError(413, "EVENT_IMAGE_TOO_LARGE", EVENT_IMAGE_TOO_LARGE_MESSAGE);
   // Detection is exclusively from bytes: file.name and file.type are deliberately ignored.
   const bytes = new Uint8Array(await file.arrayBuffer());
   if (bytes.byteLength !== file.size) throw new ApiError(422, "INVALID_EVENT_IMAGE", "The uploaded image could not be read completely.");
+  setStage("mime_signature_dimension_validation");
   return { file, bytes, inspected: inspectEventImage(bytes) };
 }
 
