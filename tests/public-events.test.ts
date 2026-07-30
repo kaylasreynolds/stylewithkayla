@@ -58,3 +58,22 @@ test("events HTML retains empty state and accessible registration controls", asy
   assert.match(html, /id="rsvp-message" role="status"/);
   assert.match(html, /name="email" type="email"[^>]*required/);
 });
+
+test("public Events and editor preview share the authoritative card and formatting", async () => {
+  const page = await readFile(new URL("../app/events/page.tsx", import.meta.url), "utf8");
+  const editor = await readFile(new URL("../app/admin/events/EventConsole.tsx", import.meta.url), "utf8");
+  const card = await readFile(new URL("../components/PublicEventCard.tsx", import.meta.url), "utf8");
+  assert.match(page, /<PublicEventCard event=\{e\}/);
+  assert.match(editor, /<PublicEventCard event=\{form\}/);
+  assert.match(card, /publicEventView\(event\)/);
+  assert.match(card, /public-event-card/);
+  assert.match(card, /event\.shortDescription \|\| event\.description/);
+});
+
+test("public presentation uses approved attendance wording and general RSVP semantics", async () => {
+  const { CURRENT_ATTENDANCE_OPTIONS, attendanceText, publicEventView } = await import("../lib/event-presentation");
+  assert.deepEqual(CURRENT_ATTENDANCE_OPTIONS.map(([, label]) => label), ["Open Attendance", "Appointment Required", "Appointment Recommended", "RSVP Required", "Information Only"]);
+  assert.equal(attendanceText("general_rsvp"), "RSVP Required");
+  assert.equal(publicEventView({ attendanceType: "general_rsvp", ctaAction: "registration", ctaLabel: "Register" }).ctaVisible, true);
+  assert.doesNotThrow(() => publicEventView({}));
+});

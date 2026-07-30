@@ -123,3 +123,15 @@ test("Save Draft, Save Changes, and save-before-publish preserve the authoritati
     assert.equal(rows[0].title, `${path} title`, path);
   }
 });
+
+test("Event Editor uses corrected copy, current choices, a shared card, and a synchronous navigation guard", async () => {
+  const source = await readFile(new URL("../app/admin/events/EventConsole.tsx", import.meta.url), "utf8");
+  assert.match(source, /<label>Alt text<textarea/);
+  assert.doesNotMatch(source, /Meaningful alternative text|Briefly describe the image for someone who cannot see it|The uploaded image is displayed in full/);
+  assert.match(source, /const labels=CURRENT_EVENT_LABELS/);
+  assert.match(source, /const attendance=CURRENT_ATTENDANCE_OPTIONS/);
+  assert.match(source, /<PublicEventCard event=\{form\}/);
+  assert.match(source, /if\(dirtyRef\.current\)/);
+  assert.match(source, /dirtyRef\.current = false;\s*setDirty\(false\);\s*location\.href/);
+  assert.ok(source.indexOf("dirtyRef.current = false") > source.indexOf("if (publish)"), "publish failures must retain the guard");
+});
