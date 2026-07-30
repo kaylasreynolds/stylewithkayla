@@ -6,9 +6,12 @@ import {
   capacityAvailable,
   canTransitionEvent,
   csvCell,
+  eventJson,
   materializeTimes,
+  materializeDraftTimes,
   parseDate,
   parseEvent,
+  parseEventDraft,
   parseTime,
   rangesOverlap,
   validateForPublish,
@@ -70,7 +73,80 @@ const complete = {
   imageAssetId: "asset-1",
   imageAlt: "Kayla welcoming guests at a styling event",
 };
-test("drafts may be incomplete",()=>{const draft=parseEvent({title:"Idea"});assert.equal(draft.title,"Idea");assert.equal(draft.eventDate,"");});
+test("brand-new blank and incomplete event drafts retain safe raw values",()=>{
+  const blank=parseEventDraft({});
+  assert.equal(blank.title,"");
+  const cases=[
+    {title:""},
+    {eventDate:"08/"},
+    {eventDate:"08/15/26",startTime:"",endTime:""},
+    {eventDate:"08/15/26",startTime:"6:",endTime:""},
+    {costType:"paid",costLabel:""},
+    {eventLabel:"Custom",customLabel:""},
+    {attendanceType:"general_rsvp",capacity:null},
+    {ctaAction:"external_url",ctaUrl:"https://"},
+    {registrationOpensDate:"08/",registrationOpensTime:""},
+    {imageAlt:"x",offer:"Buy",offerDetails:"unfinished",offerTerms:""},
+  ];
+  for(const input of cases)assert.deepEqual(parseEventDraft(input),{...blank,...input});
+  assert.throws(()=>parseEventDraft({unknown:true}),/unexpected field/i);
+  assert.throws(()=>parseEventDraft({title:42}),/highlighted fields/i);
+  assert.throws(()=>parseEventDraft({title:"x".repeat(161)}),/highlighted fields/i);
+});
+
+test("draft timing materialization never parses unfinished text and clears stale derived values",()=>{
+  for(const timing of [
+    {eventDate:"08/",startTime:"",endTime:""},
+    {eventDate:"08/15/26",startTime:"",endTime:""},
+    {eventDate:"08/15/26",startTime:"6:00 PM",endTime:""},
+  ])assert.deepEqual(materializeDraftTimes({...parseEventDraft({}),...timing}),{startsAt:0,endsAt:1,registrationOpensAt:null,registrationClosesAt:null});
+  const raw={...complete,startTime:"6:05 pm",endTime:"8:30 pm"};
+  const times=materializeDraftTimes(raw);
+  assert.equal(new Date(times.startsAt).toISOString(),"2026-09-28T00:05:00.000Z");
+  assert.equal(raw.startTime,"6:05 pm");
+  const incompleteWindow=materializeDraftTimes({...complete,registrationOpensDate:"08/",registrationOpensTime:""});
+  assert.notEqual(incompleteWindow.startsAt,0);
+  assert.equal(incompleteWindow.registrationOpensAt,null);
+});
+
+test("unfinished draft fields survive database-shaped reloads without inventing capacity",()=>{
+  const reloaded=eventJson({
+    id:"draft-1",status:"draft",title:"Idea",event_date:"08/",start_time:"6:",end_time:"",
+    cost_type:"paid",cost_label:"",category:"Custom",custom_label:"",attendance_type:"general_rsvp",
+    capacity:0,cta_action:"external_url",cta_url:"https://",registration_opens_date:"08/",
+    starts_at:0,ends_at:1,created_at:0,updated_at:0,
+  });
+  assert.equal(reloaded.eventDate,"08/");
+  assert.equal(reloaded.startTime,"6:");
+  assert.equal(reloaded.costLabel,"");
+  assert.equal(reloaded.customLabel,"");
+  assert.equal(reloaded.capacity,null);
+  assert.equal(reloaded.ctaUrl,"https://");
+  assert.equal(reloaded.registrationOpensDate,"08/");
+});
+
+test("publish rejects every draft-incomplete state with a field-specific error",()=>{
+  const cases:[Record<string,unknown>,string][]=[
+    [{title:""},"title"],
+    [{eventDate:"08/"},"eventDate"],
+    [{startTime:"",endTime:""},"startTime"],
+    [{startTime:"6:00 PM",endTime:""},"endTime"],
+    [{costType:"paid",costLabel:""},"costLabel"],
+    [{eventLabel:"Custom",customLabel:""},"customLabel"],
+    [{attendanceType:"general_rsvp",capacity:null,unlimitedCapacity:false},"capacity"],
+    [{ctaAction:"external_url",ctaUrl:""},"ctaUrl"],
+    [{registrationOpensDate:"08/01/26",registrationOpensTime:""},"registrationOpensTime"],
+    [{imageAlt:""},"imageAlt"],
+  ];
+  for(const [change,field] of cases)assert.throws(
+    ()=>validateForPublish({...complete,...change},0),
+    (error:unknown)=>Boolean(error&&typeof error==="object"&&"fieldErrors" in error&&(error as {fieldErrors?:Record<string,string>}).fieldErrors?.[field]),
+    field,
+  );
+  const completedLater={...complete,eventDate:"08/"};
+  completedLater.eventDate="09/27/26";
+  assert.doesNotThrow(()=>validateForPublish(completedLater,0));
+});
 test("calendar date and writable time parsing rejects invalid input", () => {
   assert.throws(() =>
     parseDate("02/30/26", "eventDate"),
