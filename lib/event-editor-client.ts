@@ -20,6 +20,25 @@ export function withoutEventOffer<T extends Record<string, unknown>>(value: T): 
   return { ...value, offer: "", offerDetails: "", offerTerms: "" };
 }
 
+/** Fields an event editor is allowed to send to the create and update APIs. */
+export const EDITABLE_EVENT_FIELDS = [
+  "title", "eventLabel", "customLabel", "shortDescription", "description",
+  "offer", "offerDetails", "offerTerms", "eventDate", "startTime", "endTime",
+  "allDay", "timezone", "location", "locationDetails", "directionsUrl",
+  "attendanceType", "capacity", "unlimitedCapacity", "maxGuests", "allowGuestNames",
+  "registrationOpensDate", "registrationOpensTime", "registrationClosesDate",
+  "registrationClosesTime", "allowDuplicateRegistration", "appointmentRequired",
+  "appointmentRecommended", "costType", "costLabel", "ctaLabel", "ctaAction",
+  "ctaUrl", "ctaEmail", "ctaPhone", "sharingEnabled", "shareMessage",
+  "imageAssetId", "imageAlt",
+] as const;
+
+export function buildEventPayload(value: Record<string, unknown>): Record<string, unknown> {
+  return Object.fromEntries(
+    EDITABLE_EVENT_FIELDS.filter(field => Object.hasOwn(value, field)).map(field => [field, value[field]]),
+  );
+}
+
 type UploadAsset = {
   id: string;
   previewUrl: string;

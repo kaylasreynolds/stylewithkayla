@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";import{useEffect,useRef,useState}from"react";
 import { eventDateToPickerValue, formatEventSchedule, isValidEventDate, pickerValueToEventDate } from "@/lib/event-date-time";
-import { defaultEventCostLabel, EventSubmissionGuard, eventImageFileError, hasEventOffer, readUploadResponse, withoutEventOffer } from "@/lib/event-editor-client";
+import { buildEventPayload, defaultEventCostLabel, EventSubmissionGuard, eventImageFileError, hasEventOffer, readUploadResponse, withoutEventOffer } from "@/lib/event-editor-client";
 type EventRow = {
   id: string;
   title: string;
@@ -136,27 +136,10 @@ async function submit(publish = false) {
   setErrors({});
 
   try {
-    const payload: Record<string, unknown> = {
+    const payload = buildEventPayload({
       ...form,
       imageAssetId: asset?.id ?? null,
-    };
-
-    for (const key of [
-      "status",
-      "startsAt",
-      "endsAt",
-      "publishedAt",
-      "archivedAt",
-      "createdAt",
-      "updatedAt",
-      "imageMimeType",
-      "imageSizeBytes",
-      "imageWidth",
-      "imageHeight",
-      "id",
-    ]) {
-      delete payload[key];
-    }
+    });
 
     const response = await fetch(
       target.url,
