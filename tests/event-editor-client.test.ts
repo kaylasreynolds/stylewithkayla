@@ -11,6 +11,7 @@ import {
   eventImageFileError,
   defaultEventCostLabel,
   hasEventOffer,
+  isUploadedEventImage,
   readUploadResponse,
   withoutEventOffer,
 } from "../lib/event-editor-client.ts";
@@ -56,6 +57,15 @@ test("upload responses safely handle JSON, text, HTML, empty bodies, and upstrea
   assert.throws(() => readUploadResponse(500, null, ""), /could not be uploaded/);
   assert.throws(() => readUploadResponse(500, "application/json", "not json"), /could not be uploaded/);
   assert.throws(() => readUploadResponse(413, "text/plain", "Payload Too Large"), new RegExp(EVENT_IMAGE_TOO_LARGE_MESSAGE));
+  assert.throws(() => readUploadResponse(201, "application/json", JSON.stringify({ data: { asset: { id: "asset-1" } } })), /could not be uploaded/);
+});
+
+test("only a validated server asset matching imageAssetId completes the image requirement", () => {
+  const asset = { id: "asset-1", previewUrl: "/asset-1", width: 800, height: 600, sizeBytes: 100 };
+  assert.equal(isUploadedEventImage(null, null), false, "an optimized local preview has no server asset");
+  assert.equal(isUploadedEventImage(asset, null), false, "asset and form state must both be established");
+  assert.equal(isUploadedEventImage(asset, "different-asset"), false);
+  assert.equal(isUploadedEventImage(asset, "asset-1"), true);
 });
 
 test("event image upload still uses the safe response parser", async () => {
