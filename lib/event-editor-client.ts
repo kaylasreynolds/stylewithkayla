@@ -39,7 +39,7 @@ export function buildEventPayload(value: Record<string, unknown>): Record<string
   );
 }
 
-type UploadAsset = {
+export type UploadAsset = {
   id: string;
   previewUrl: string;
   width: number;
@@ -53,6 +53,18 @@ type UploadPayload = {
 };
 
 const genericUploadMessage = "The image could not be uploaded. Please try again.";
+
+export function isUploadedEventImage(asset: UploadAsset | null, imageAssetId: unknown): asset is UploadAsset {
+  return Boolean(
+    asset
+    && typeof asset.id === "string" && asset.id.trim()
+    && imageAssetId === asset.id
+    && typeof asset.previewUrl === "string" && asset.previewUrl.trim()
+    && Number.isFinite(asset.width) && asset.width > 0
+    && Number.isFinite(asset.height) && asset.height > 0
+    && Number.isFinite(asset.sizeBytes) && asset.sizeBytes > 0,
+  );
+}
 
 export function eventImageFileError(sizeBytes: number): string | null {
   return sizeBytes > EVENT_IMAGE_MAX_BYTES ? EVENT_IMAGE_TOO_LARGE_MESSAGE : null;
@@ -76,8 +88,9 @@ export function readUploadResponse(status: number, contentType: string | null, b
     throw new Error(payload?.error?.message || (!isHtml && trimmed ? trimmed : genericUploadMessage));
   }
 
-  if (!payload?.data?.asset) throw new Error(genericUploadMessage);
-  return payload.data.asset;
+  const asset = payload?.data?.asset;
+  if (!asset || !isUploadedEventImage(asset, asset.id)) throw new Error(genericUploadMessage);
+  return asset;
 }
 
 export type EventSubmissionTarget = {
