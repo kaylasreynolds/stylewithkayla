@@ -42,3 +42,40 @@ test("multipart overhead and Content-Length are not treated as image bytes", asy
   assert.equal(received.file.size, file.size);
   assert.equal(received.inspected.sizeBytes, file.size);
 });
+
+import { EventImageUploadFailure, uploadEventImageAsset } from "../lib/server/event-image-upload";
+
+function storage(overrides: { put?: () => unknown; insert?: () => unknown; delete?: () => unknown } = {}) {
+  const objects = new Map<string, Uint8Array>();
+  let inserted: unknown[] | null = null;
+  const bucket = {
+    async put(key: string, value: Uint8Array) { if (overrides.put) await overrides.put(); objects.set(key, value); },
+    async delete(key: string) { if (overrides.delete) await overrides.delete(); objects.delete(key); },
+  };
+  const db = { prepare() { return { bind(...values: unknown[]) { return { async run() { if (overrides.insert) await overrides.insert(); inserted = values; } }; } }; } };
+  return { bucket, db, objects, inserted: () => inserted };
+}
+
+test("under-5-MiB multipart upload stores the optimized bytes and returns a complete asset", async () => {
+  const file = png(1_583_350, "optimized-event.png"), fake = storage();
+  const asset = await uploadEventImageAsset(request(file), "admin@example.com", "IMG-ABC123", fake.bucket as never, fake.db as never);
+  assert.match(asset.id, /^[0-9a-f-]{36}$/i);
+  assert.equal(asset.previewUrl, `/api/admin/events/assets/${asset.id}`);
+  assert.equal(asset.mimeType, "image/png");
+  assert.equal(asset.width, 1200); assert.equal(asset.height, 800); assert.equal(asset.sizeBytes, file.size);
+  assert.equal([...fake.objects.values()][0].byteLength, file.size);
+  assert.equal(fake.inserted()?.[5], file.size);
+});
+
+test("R2 failures are categorized with a safe reference", async () => {
+  const fake = storage({ put: () => { throw new Error("secret bucket detail"); } });
+  await assert.rejects(() => uploadEventImageAsset(request(png(1024)), "admin@example.com", "IMG-ABC123", fake.bucket as never, fake.db as never),
+    (error: unknown) => error instanceof EventImageUploadFailure && error.code === "EVENT_IMAGE_UPLOAD_FAILED" && error.diagnostic.reference === "IMG-ABC123" && error.diagnostic.category === "R2_PUT");
+  assert.equal(fake.objects.size, 0);
+});
+
+test("D1 failure removes the newly written R2 object", async () => {
+  const fake = storage({ insert: () => { throw new Error("private SQL detail"); } });
+  await assert.rejects(() => uploadEventImageAsset(request(png(1024)), "admin@example.com", "IMG-DEF456", fake.bucket as never, fake.db as never), EventImageUploadFailure);
+  assert.equal(fake.objects.size, 0);
+});

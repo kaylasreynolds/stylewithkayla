@@ -57,6 +57,7 @@ test("upload responses safely handle JSON, text, HTML, empty bodies, and upstrea
   assert.throws(() => readUploadResponse(502, "text/html", "<html>Bad gateway</html>"), /could not be uploaded/);
   assert.throws(() => readUploadResponse(500, null, ""), /could not be uploaded/);
   assert.throws(() => readUploadResponse(500, "application/json", "not json"), /could not be uploaded/);
+  assert.throws(() => readUploadResponse(500, "application/json", JSON.stringify({ error: { code: "EVENT_IMAGE_UPLOAD_FAILED", message: "This image could not be uploaded. Please try again." }, requestId: "IMG-ABC123" })), /Reference: IMG-ABC123/);
   assert.throws(() => readUploadResponse(413, "text/plain", "Payload Too Large"), /could not be uploaded/);
   assert.throws(() => readUploadResponse(413, "application/json", JSON.stringify({ error: { message: EVENT_IMAGE_TOO_LARGE_MESSAGE } })), new RegExp(EVENT_IMAGE_TOO_LARGE_MESSAGE));
   assert.throws(() => readUploadResponse(201, "application/json", JSON.stringify({ data: { asset: { id: "asset-1" } } })), /could not be uploaded/);

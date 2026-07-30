@@ -49,7 +49,8 @@ export type UploadAsset = {
 
 type UploadPayload = {
   data?: { asset?: UploadAsset };
-  error?: { message?: string };
+  error?: { message?: string; code?: string };
+  requestId?: string;
 };
 
 const genericUploadMessage = "The image could not be uploaded. Please try again.";
@@ -91,7 +92,9 @@ export function readUploadResponse(status: number, contentType: string | null, b
   if (status < 200 || status >= 300) {
     const isHtml = contentType?.toLowerCase().includes("html") || /^\s*</.test(trimmed);
     // Only our structured file validation may claim that the image itself is too large.
-    throw new Error(payload?.error?.message || (!isHtml && status !== 413 && trimmed ? trimmed : genericUploadMessage));
+    const message = payload?.error?.message || (!isHtml && status !== 413 && trimmed ? trimmed : genericUploadMessage);
+    const reference = payload?.error?.code === "EVENT_IMAGE_UPLOAD_FAILED" && /^IMG-[A-Z0-9]{6}$/.test(payload.requestId ?? "") ? ` Reference: ${payload!.requestId}` : "";
+    throw new Error(`${message}${reference}`);
   }
 
   const asset = payload?.data?.asset;
