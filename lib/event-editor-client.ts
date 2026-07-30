@@ -70,9 +70,14 @@ export function eventImageFileError(sizeBytes: number): string | null {
   return sizeBytes > EVENT_IMAGE_MAX_BYTES ? EVENT_IMAGE_TOO_LARGE_MESSAGE : null;
 }
 
-export function readUploadResponse(status: number, contentType: string | null, body: string): UploadAsset {
-  if (status === 413) throw new Error(EVENT_IMAGE_TOO_LARGE_MESSAGE);
+/** Keep the File used for the size display identical to the multipart file part. */
+export function eventImageUploadForm(file: File): FormData {
+  const form = new FormData();
+  form.set("file", file);
+  return form;
+}
 
+export function readUploadResponse(status: number, contentType: string | null, body: string): UploadAsset {
   const trimmed = body.trim();
   let payload: UploadPayload | null = null;
   if (trimmed && contentType?.toLowerCase().includes("json")) {
@@ -85,7 +90,8 @@ export function readUploadResponse(status: number, contentType: string | null, b
 
   if (status < 200 || status >= 300) {
     const isHtml = contentType?.toLowerCase().includes("html") || /^\s*</.test(trimmed);
-    throw new Error(payload?.error?.message || (!isHtml && trimmed ? trimmed : genericUploadMessage));
+    // Only our structured file validation may claim that the image itself is too large.
+    throw new Error(payload?.error?.message || (!isHtml && status !== 413 && trimmed ? trimmed : genericUploadMessage));
   }
 
   const asset = payload?.data?.asset;

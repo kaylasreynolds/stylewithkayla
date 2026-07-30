@@ -9,6 +9,7 @@ import {
   EVENT_IMAGE_TOO_LARGE_MESSAGE,
   EventSubmissionGuard,
   eventImageFileError,
+  eventImageUploadForm,
   defaultEventCostLabel,
   hasEventOffer,
   isUploadedEventImage,
@@ -56,7 +57,8 @@ test("upload responses safely handle JSON, text, HTML, empty bodies, and upstrea
   assert.throws(() => readUploadResponse(502, "text/html", "<html>Bad gateway</html>"), /could not be uploaded/);
   assert.throws(() => readUploadResponse(500, null, ""), /could not be uploaded/);
   assert.throws(() => readUploadResponse(500, "application/json", "not json"), /could not be uploaded/);
-  assert.throws(() => readUploadResponse(413, "text/plain", "Payload Too Large"), new RegExp(EVENT_IMAGE_TOO_LARGE_MESSAGE));
+  assert.throws(() => readUploadResponse(413, "text/plain", "Payload Too Large"), /could not be uploaded/);
+  assert.throws(() => readUploadResponse(413, "application/json", JSON.stringify({ error: { message: EVENT_IMAGE_TOO_LARGE_MESSAGE } })), new RegExp(EVENT_IMAGE_TOO_LARGE_MESSAGE));
   assert.throws(() => readUploadResponse(201, "application/json", JSON.stringify({ data: { asset: { id: "asset-1" } } })), /could not be uploaded/);
 });
 
@@ -134,4 +136,14 @@ test("Event Editor uses corrected copy, current choices, a shared card, and a sy
   assert.match(source, /if\(dirtyRef\.current\)/);
   assert.match(source, /dirtyRef\.current = false;\s*setDirty\(false\);\s*location\.href/);
   assert.ok(source.indexOf("dirtyRef.current = false") > source.indexOf("if (publish)"), "publish failures must retain the guard");
+});
+
+test("the displayed optimized File is the exact multipart File", () => {
+  const optimized = new File([new Uint8Array(1_583_350)], "event.webp", { type: "image/webp" });
+  const form = eventImageUploadForm(optimized);
+  const uploaded = form.get("file");
+  assert.equal(uploaded, optimized);
+  assert.equal((uploaded as File).name, "event.webp");
+  assert.equal((uploaded as File).type, "image/webp");
+  assert.equal((uploaded as File).size, 1_583_350);
 });

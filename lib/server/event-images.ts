@@ -32,6 +32,17 @@ export function inspectEventImage(bytes: Uint8Array): InspectedImage {
   return { mimeType: mimeType!, extension: extension!, width, height, sizeBytes: bytes.length };
 }
 
+/** Decode multipart first so request headers and multipart overhead cannot count as image bytes. */
+export async function readEventImageUpload(request: Request) {
+  const form = await request.formData(), file = form.get("file");
+  if (!(file instanceof File)) throw new ApiError(422, "FILE_REQUIRED", "Choose a JPG, PNG, or WebP image.");
+  if (file.size > EVENT_IMAGE_MAX_BYTES) throw new ApiError(413, "EVENT_IMAGE_TOO_LARGE", EVENT_IMAGE_TOO_LARGE_MESSAGE);
+  // Detection is exclusively from bytes: file.name and file.type are deliberately ignored.
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  if (bytes.byteLength !== file.size) throw new ApiError(422, "INVALID_EVENT_IMAGE", "The uploaded image could not be read completely.");
+  return { file, bytes, inspected: inspectEventImage(bytes) };
+}
+
 export function meaningfulAlt(value: unknown) {
   if (typeof value !== "string") throw validation("imageAlt", "Describe the image for visitors using assistive technology.");
   const alt = value.trim().replace(/\s+/g, " ");
