@@ -59,6 +59,20 @@ test("events HTML retains empty state and accessible registration controls", asy
   assert.match(html, /name="email" type="email"[^>]*required/);
 });
 
+test("static event cards use the approved public hierarchy", async () => {
+  const script = await readFile(new URL("../public/events.js", import.meta.url), "utf8");
+  const styles = await readFile(new URL("../public/styles.css", import.meta.url), "utf8");
+
+  assert.match(script, /events\.length === 2 \? \[updatesCard\(\)\]/);
+  assert.match(script, /More events coming soon/);
+  assert.match(script, /Request Event Updates/);
+  assert.match(script, /class="event-card__offer"/);
+  assert.doesNotMatch(script, /<dt>Cost<\/dt>/);
+  assert.match(styles, /\.events-list \{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
+  assert.match(styles, /\.event-date \{[^}]*bottom: 18px;[^}]*left: 18px;/);
+  assert.match(styles, /\.event-card__content > \.button \{[^}]*width: 100%;[^}]*min-height: 52px;/);
+});
+
 test("public Events and editor preview share the authoritative card and formatting", async () => {
   const page = await readFile(new URL("../app/events/page.tsx", import.meta.url), "utf8");
   const editor = await readFile(new URL("../app/admin/events/EventConsole.tsx", import.meta.url), "utf8");
