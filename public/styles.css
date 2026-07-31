@@ -2892,6 +2892,9 @@ cite::before {
 
 
 /* Store Events page */
+.event-fact-line {
+  display: block;
+}
 .events-page-hero {
   padding: 110px 0;
   background:

@@ -78,7 +78,7 @@ async function api<T>(
 const labels=CURRENT_EVENT_LABELS;
 const attendance=CURRENT_ATTENDANCE_OPTIONS;
 const actions=[['registration','Event registration form'],['appointment','Appointment selection'],['interest_list','Interest-list form'],['external_url','External URL'],['email','Email'],['phone','Phone'],['information','Information-only detail view'],['add_to_calendar','Add to calendar'],['none','No CTA']];
-const blank:Record<string,unknown>={title:'',eventLabel:'',customLabel:'',shortDescription:'',description:'',offer:'',offerDetails:'',offerTerms:'',eventDate:'',startTime:'',endTime:'',allDay:false,timezone:'America/Boise',location:'',locationDetails:'',directionsUrl:'',attendanceType:'',capacity:null,unlimitedCapacity:false,maxGuests:0,allowGuestNames:false,registrationOpensDate:'',registrationOpensTime:'',registrationClosesDate:'',registrationClosesTime:'',allowDuplicateRegistration:false,appointmentRequired:false,appointmentRecommended:false,costType:'complimentary',costLabel:'Complimentary',ctaLabel:'',ctaAction:'',ctaUrl:'',ctaEmail:'',ctaPhone:'',sharingEnabled:true,shareMessage:'',imageAssetId:null,imageAlt:'',status:'draft'};
+const blank:Record<string,unknown>={title:'',eventLabel:'',customLabel:'',shortDescription:'',description:'',offer:'',offerDetails:'',offerTerms:'',eventDate:'',startTime:'',endTime:'',allDay:false,timezone:'America/Boise',location:'',locationDetails:'',directionsUrl:'',attendanceType:'',capacity:null,unlimitedCapacity:false,maxGuests:0,allowGuestNames:false,registrationOpensDate:'',registrationOpensTime:'',registrationClosesDate:'',registrationClosesTime:'',allowDuplicateRegistration:false,appointmentRequired:false,appointmentRecommended:false,costType:'complimentary',costLabel:'',ctaLabel:'',ctaAction:'',ctaUrl:'',ctaEmail:'',ctaPhone:'',sharingEnabled:true,shareMessage:'',imageAssetId:null,imageAlt:'',status:'draft'};
 export function EventEditor({eventId}:{eventId?:string}){
  const[form,setForm]=useState<Record<string,unknown>>(blank),[loaded,setLoaded]=useState(!eventId),[dirty,setDirty]=useState(false),[error,setError]=useState(''),[errors,setErrors]=useState<Record<string,string>>({}),[progress,setProgress]=useState<number|null>(null),[imageStatus,setImageStatus]=useState<'idle'|'optimizing'|'uploading'|'uploaded'|'failed'>('idle'),[imageError,setImageError]=useState(''),[imageSizes,setImageSizes]=useState<{original:number;optimized:number}|null>(null),[localPreview,setLocalPreview]=useState(''),[asset,setAsset]=useState<{id:string;previewUrl:string;width:number;height:number;sizeBytes:number}|null>(null),[saving,setSaving]=useState(false),[pickerDate,setPickerDate]=useState(''),[offerOpen,setOfferOpen]=useState(false);
  const pickerRef=useRef<HTMLInputElement|null>(null),costLabels=useRef<Record<string,string>>({complimentary:'Complimentary'}),uploadSequence=useRef(0);
@@ -127,7 +127,31 @@ useEffect(() => {
  const set=(key:string,value:unknown)=>{setForm(f=>({...f,[key]:value}));markDirty();setErrors(e=>{const n={...e};delete n[key];return n})};
  const setEventDate=(value:string)=>{set("eventDate",value);const synchronized=eventDateToPickerValue(value);if(synchronized)setPickerDate(synchronized)};
  const selectPickerDate=(value:string)=>{const visible=pickerValueToEventDate(value);if(!visible)return;setPickerDate(value);set("eventDate",visible)};
- const selectCostType=(next:string)=>{const current=String(form.costType??"");if(current)costLabels.current[current]=String(form.costLabel??"");const nextLabel=costLabels.current[next]??defaultEventCostLabel(next);set("costType",next);set("costLabel",nextLabel)};
+ const selectCostType = (next: string) => {
+  const current = String(form.costType ?? "");
+
+  if (current) {
+    costLabels.current[current] = String(
+      form.costLabel ?? "",
+    );
+  }
+
+  const requiresCustomWording = [
+    "paid",
+    "custom",
+  ].includes(next);
+
+  const rememberedLabel =
+    costLabels.current[next];
+
+  const nextLabel = requiresCustomWording
+    ? rememberedLabel ??
+      defaultEventCostLabel(next)
+    : rememberedLabel ?? "";
+
+  set("costType", next);
+  set("costLabel", nextLabel);
+};
  const setCostLabel=(value:string)=>{const type=String(form.costType??"");if(type)costLabels.current[type]=value;set("costLabel",value)};
  const field=(name:string,label:string,props:React.InputHTMLAttributes<HTMLInputElement>={})=><label>{label}<input {...props} name={name} value={String(form[name]??'')} onChange={e=>set(name,props.type==='number'?(e.target.value===''?null:Number(e.target.value)):e.target.value)} aria-invalid={!!errors[name]}/>{errors[name]&&<small className="event-field-error">{errors[name]}</small>}</label>;
  const text=(name:string,label:string,rows=4,maxLength=1000)=><label>{label}<textarea name={name} rows={rows} maxLength={maxLength} value={String(form[name]??'')} onChange={e=>set(name,e.target.value)} aria-invalid={!!errors[name]}/>{errors[name]&&<small className="event-field-error">{errors[name]}</small>}</label>;
@@ -219,7 +243,17 @@ async function submit(publish = false) {
     setSaving(false);
   }
 } if(!loaded)return <Shell title="Edit event"><p role="status">Loading…</p></Shell>;
- const registration=!['drop_in','open_attendance','invitation_only','information_only',''].includes(String(form.attendanceType));const imageAlt=String(form.imageAlt??'');const imageUploaded=isUploadedEventImage(asset,form.imageAssetId);const share=`Look at this event happening over at Macy’s:\n\n${form.title||'[Event Title]'}\n${form.eventDate||'[MM/DD/YY]'}\n\n${form.shortDescription||'[Short Event Description]'}\n\n[Event Link]`;const checklist=[['Image',imageUploaded],['Image alt text',imageAlt.trim().length>=8],['Title',!!form.title],['Short description',!!form.shortDescription],['Event label',labels.includes(form.eventLabel as typeof labels[number])],['Valid date',isValidEventDate(form.eventDate)],['Time or all day',!!form.allDay||!!form.startTime&&!!form.endTime],['Location',!!form.location],['Attendance type',attendance.some(([v])=>v===form.attendanceType)],['Cost',form.costType==='not_applicable'||!!form.costLabel],['CTA configuration',form.ctaAction==='none'||!!form.ctaAction&&!!form.ctaLabel]] as const;
+ const registration=!['drop_in','open_attendance','invitation_only','information_only',''].includes(String(form.attendanceType));const imageAlt=String(form.imageAlt??'');const imageUploaded=isUploadedEventImage(asset,form.imageAssetId);const share=`Look at this event happening over at Macy’s:\n\n${form.title||'[Event Title]'}\n${form.eventDate||'[MM/DD/YY]'}\n\n${form.shortDescription||'[Short Event Description]'}\n\n[Event Link]`;const checklist=[['Image',imageUploaded],['Image alt text',imageAlt.trim().length>=8],['Title',!!form.title],['Short description',!!form.shortDescription],['Event label',labels.includes(form.eventLabel as typeof labels[number])],['Valid date',isValidEventDate(form.eventDate)],['Time or all day',!!form.allDay||!!form.startTime&&!!form.endTime],['Location',!!form.location],['Attendance type',attendance.some(([v])=>v===form.attendanceType)],
+ [
+  "Cost",
+  Boolean(form.costType) &&
+    (
+      !["paid", "custom"].includes(String(form.costType),) ||
+      Boolean(String(form.costLabel ?? "").trim(),
+    )
+    ),
+],
+['CTA configuration',form.ctaAction==='none'||!!form.ctaAction&&!!form.ctaLabel]] as const;
  return <Shell title={eventId?'Edit event':'Create event'} actions={<Link href="/admin/events" className="event-button event-button--secondary">Return to Events</Link>}>
   {error&&<p className="event-alert" role="alert">{error}</p>}<form className="event-form event-editor" onSubmit={e=>{e.preventDefault();submit(false)}} noValidate>
   <fieldset><legend>1. Event Basics</legend><p className="event-section-help">Introduce the event on its public card and detail experience.</p><div className="event-form-grid">{field('title','Event title',{maxLength:160})}<label>Event label/type<select value={String(form.eventLabel)} onChange={e=>set('eventLabel',e.target.value)} aria-invalid={!!errors.eventLabel}><option value="">Choose a label</option>{Boolean(form.eventLabel)&&!labels.includes(form.eventLabel as typeof labels[number])&&<option value={String(form.eventLabel)} disabled>Legacy: {String(form.eventLabel)} — choose a current label</option>}{labels.map(x=><option key={x}>{x}</option>)}</select>{errors.eventLabel&&<small className="event-field-error">{errors.eventLabel}</small>}</label>{form.eventLabel==='Custom'&&field('customLabel','Custom label',{maxLength:80,required:true})}<div className="event-span">{text('shortDescription','Short card description',3,320)}</div><div className="event-span">{text('description','Full event description',7,5000)}</div></div></fieldset>
@@ -276,8 +310,102 @@ async function submit(publish = false) {
     </div>
   </div>
 </fieldset>  <fieldset><legend>4. Attendance &amp; Registration</legend><div className="event-form-grid"><label>Attendance type<select value={String(form.attendanceType)} onChange={e=>{const v=e.target.value;set('attendanceType',v);set('appointmentRequired',v==='appointment_required');set('appointmentRecommended',v==='appointment_recommended')}}><option value="">Choose attendance</option>{Boolean(form.attendanceType)&&!attendance.some(([v])=>v===form.attendanceType)&&<option value={String(form.attendanceType)} disabled>Legacy attendance — choose a current option</option>}{attendance.map(([v,l])=><option value={v} key={v}>{l}</option>)}</select>{errors.attendanceType&&<small className="event-field-error">{errors.attendanceType}</small>}</label>{form.attendanceType==='invitation_only'&&<p className="event-note">Invitation-only events are not generally registerable. Use the CTA to explain how invited guests respond.</p>}{registration&&<>{check('unlimitedCapacity','Unlimited capacity')}{!form.unlimitedCapacity&&field('capacity','Capacity',{type:'number',min:1,max:10000})}{field('maxGuests','Maximum guests per registration',{type:'number',min:0,max:20})}{check('allowGuestNames','Collect guest names')}{check('allowDuplicateRegistration','Allow duplicate registration')}<div className="event-window"><h3>Registration opens (optional)</h3>{field('registrationOpensDate','Date',{placeholder:'09/01/26'})}{field('registrationOpensTime','Time',{placeholder:'9:00 AM'})}</div><div className="event-window"><h3>Registration closes (optional)</h3>{field('registrationClosesDate','Date',{placeholder:'09/26/26'})}{field('registrationClosesTime','Time',{placeholder:'5:00 PM'})}</div></>}{form.attendanceType==='appointment_required'&&<p className="event-note">Guests must select an available appointment slot to complete RSVP.</p>}{form.attendanceType==='appointment_recommended'&&<p className="event-note">Guests may RSVP without choosing an appointment slot.</p>}{form.attendanceType==='interest_list'&&<p className="event-note">Submissions collect interest and do not confirm attendance.</p>}</div></fieldset>
-  <fieldset><legend>5. Cost</legend><div className="event-cost-controls"><label>Cost type<select value={String(form.costType)} onChange={e=>selectCostType(e.target.value)}><option value="complimentary">Complimentary</option><option value="paid">Paid</option><option value="purchase_required">Purchase required</option><option value="free_with_rsvp">Free with RSVP</option><option value="not_applicable">Not applicable</option><option value="custom">Custom</option></select></label>{form.costType!=="not_applicable"&&<label>{["paid","custom"].includes(String(form.costType))?"Display wording":"Optional display wording override"}<input value={String(form.costLabel??"")} maxLength={120} placeholder={defaultEventCostLabel(String(form.costType))||"Example: $25 per guest"} onChange={e=>setCostLabel(e.target.value)} aria-invalid={!!errors.costLabel}/>{errors.costLabel&&<small className="event-field-error">{errors.costLabel}</small>}</label>}<p className="event-note">Use display wording such as “$25 per guest”; the current data model does not store a numeric price.</p></div></fieldset>
-  <fieldset className="event-offer-section"><legend>Offer</legend><button type="button" className="event-disclosure-button" aria-expanded={offerOpen} aria-controls="event-offer-fields" onClick={()=>setOfferOpen(open=>!open)}>Add an offer or promotion <span aria-hidden="true">{offerOpen?"−":"+"}</span></button>{offerOpen&&<div id="event-offer-fields" className="event-form-grid">{field('offer','Offer label',{maxLength:180})}<div className="event-span">{text('offerDetails','Offer details',3,1000)}{text('offerTerms','Offer terms',3,1000)}</div>{hasEventOffer(form)&&<button type="button" className="event-link-button event-remove-offer" onClick={()=>{setForm(current=>withoutEventOffer(current));markDirty();setOfferOpen(false)}}>Remove offer</button>}</div>}</fieldset>
+<fieldset>
+  <legend>5. Cost</legend>
+
+  <div className="event-cost-controls">
+    <label>
+      Cost type
+
+      <select
+        value={String(form.costType)}
+        onChange={event =>
+          selectCostType(event.target.value)
+        }
+      >
+        <option value="complimentary">
+          Complimentary
+        </option>
+
+        <option value="paid">
+          Paid
+        </option>
+
+        <option value="purchase_required">
+          Purchase required
+        </option>
+
+        <option value="free_with_rsvp">
+          Free with RSVP
+        </option>
+
+        <option value="not_applicable">
+          Not applicable
+        </option>
+
+        <option value="custom">
+          Custom
+        </option>
+      </select>
+    </label>
+
+    {form.costType !== "not_applicable" && (
+      <label>
+        {["paid", "custom"].includes(
+          String(form.costType),
+        )
+          ? "Display wording"
+          : "Display wording override (optional)"}
+
+        <input
+          value={String(form.costLabel ?? "")}
+          maxLength={120}
+          required={["paid", "custom"].includes(
+            String(form.costType),
+          )}
+          placeholder={
+            ["paid", "custom"].includes(
+              String(form.costType),
+            )
+              ? "Example: $25 per guest"
+              : defaultEventCostLabel(
+                  String(form.costType),
+                )
+          }
+          onChange={event =>
+            setCostLabel(event.target.value)
+          }
+          aria-invalid={!!errors.costLabel}
+        />
+
+        {!["paid", "custom"].includes(
+          String(form.costType),
+        ) && (
+          <small>
+            Leave blank to use “
+            {defaultEventCostLabel(
+              String(form.costType),
+            )}
+            .”
+          </small>
+        )}
+
+        {errors.costLabel && (
+          <small className="event-field-error">
+            {errors.costLabel}
+          </small>
+        )}
+      </label>
+    )}
+
+    <p className="event-note">
+      Paid and custom cost types require display
+      wording, such as “$25 per guest.” Standard
+      cost types can use their automatic wording.
+    </p>
+  </div>
+</fieldset>  
+<fieldset className="event-offer-section"><legend>Offer</legend><button type="button" className="event-disclosure-button" aria-expanded={offerOpen} aria-controls="event-offer-fields" onClick={()=>setOfferOpen(open=>!open)}>Add an offer or promotion <span aria-hidden="true">{offerOpen?"−":"+"}</span></button>{offerOpen&&<div id="event-offer-fields" className="event-form-grid">{field('offer','Offer label',{maxLength:180})}<div className="event-span">{text('offerDetails','Offer details',3,1000)}{text('offerTerms','Offer terms',3,1000)}</div>{hasEventOffer(form)&&<button type="button" className="event-link-button event-remove-offer" onClick={()=>{setForm(current=>withoutEventOffer(current));markDirty();setOfferOpen(false)}}>Remove offer</button>}</div>}</fieldset>
   <fieldset><legend>6. Call to Action</legend><div className="event-form-grid">{field('ctaLabel','CTA label',{placeholder:'Save My Spot',maxLength:100})}<label>CTA action<select value={String(form.ctaAction)} onChange={e=>set('ctaAction',e.target.value)}><option value="">Choose an action</option>{actions.map(([v,l])=><option value={v} key={v}>{l}</option>)}</select>{errors.ctaAction&&<small className="event-field-error">{errors.ctaAction}</small>}</label>{form.ctaAction==='external_url'&&field('ctaUrl','Destination URL',{type:'url',placeholder:'https://…'})}{form.ctaAction==='email'&&field('ctaEmail','Destination email',{type:'email'})}{form.ctaAction==='phone'&&field('ctaPhone','Destination phone',{type:'tel'})}</div></fieldset>
 <fieldset>
   <legend>7. Sharing</legend>
