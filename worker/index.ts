@@ -1,10 +1,12 @@
 /** Cloudflare Worker entry point for the vinext-starter template. */
+import { handleEventImageUploadRequest } from "../lib/server/event-image-route";
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
 
 interface Env {
   ASSETS: Fetcher;
   DB: D1Database;
+  PHOTO_ASSETS: R2Bucket;
   ADMIN_EMAILS: string;
   MAINTENANCE_SECRET: string;
   IMAGES: {
@@ -30,6 +32,16 @@ interface ExecutionContext {
 const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
+
+    // Handle multipart image uploads before vinext. Production evidence showed
+    // vinext returning 413 for a 1.51 MiB multipart body before the App Router
+    // handler executed, even though Workers permit much larger request bodies.
+    if (
+      request.method === "POST" &&
+      url.pathname === "/api/admin/events/assets"
+    ) {
+      return handleEventImageUploadRequest(request, env);
+    }
 
     if (url.pathname === "/_vinext/image") {
       const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
