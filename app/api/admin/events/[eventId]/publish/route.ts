@@ -42,9 +42,7 @@ export async function POST(
     const eventId = (await params).eventId;
 
     const row = await getD1()
-      .prepare(
-        "SELECT * FROM events WHERE id=?",
-      )
+      .prepare("SELECT * FROM events WHERE id=?")
       .bind(eventId)
       .first<Record<string, unknown>>();
 
@@ -76,11 +74,7 @@ export async function POST(
       .prepare(
         "UPDATE events SET status='published',published_at=?,updated_at=? WHERE id=?",
       )
-      .bind(
-        now,
-        now,
-        eventId,
-      )
+      .bind(now, now, eventId)
       .run();
 
     return dataResponse(
