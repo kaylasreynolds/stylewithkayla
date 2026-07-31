@@ -163,7 +163,10 @@
 
       status.hidden = true;
       empty.hidden = events.length !== 0;
-      list.innerHTML = events.map(card).join("");
+      list.innerHTML = [
+        ...events.map(card),
+        ...(events.length === 2 ? [updatesCard()] : []),
+      ].join("");
     } catch (error) {
       console.error(error);
 
@@ -198,16 +201,6 @@
           : event.ctaAction === "phone"
             ? `tel:${event.ctaPhone}`
             : null;
-
-    const cost =
-      event.costType === "not_applicable"
-        ? ""
-        : `
-          <div>
-            <dt>Cost</dt>
-            <dd>${escape(event.costLabel)}</dd>
-          </div>
-        `;
 
     const availability = registerable
       ? `
@@ -292,14 +285,6 @@
         </div>
 
         <div class="event-card__content">
-          <p class="event-card__category">
-            ${escape(
-              event.category === "Custom"
-                ? event.customLabel
-                : event.category,
-            )}
-          </p>
-
           <h3>${escape(event.title)}</h3>
 
           <p class="event-card__description">
@@ -342,14 +327,12 @@
                 )}
               </dd>
             </div>
-
-            ${cost}
           </dl>
 
           ${
             event.offer
               ? `
-                <p>
+                <p class="event-card__offer">
                   <strong>${escape(event.offer)}</strong>
                 </p>
               `
@@ -358,6 +341,26 @@
 
           ${availability}
           ${cta}
+        </div>
+      </article>
+    `;
+  }
+
+  function updatesCard() {
+    return `
+      <article class="event-card event-card--updates">
+        <div class="event-card__media event-card__updates-media" aria-hidden="true">
+          <span class="event-card__updates-mark">SK</span>
+        </div>
+        <div class="event-card__content">
+          <h3>More events coming soon</h3>
+          <p class="event-card__description">
+            Request updates and be the first to hear about new in-store events and styling experiences.
+          </p>
+          <a
+            class="button button--primary event-card__cta"
+            href="mailto:kayla.reynolds@macys.com?subject=Request%20Event%20Updates"
+          >Request Event Updates</a>
         </div>
       </article>
     `;
