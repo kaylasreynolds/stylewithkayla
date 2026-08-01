@@ -91,18 +91,14 @@ assert.match(sharedEventButtonRule[1], /box-shadow:\s*none/);
   assert.match(styles, /@media \(max-width: 1020px\)[^{]*\{[\s\S]*?\.events-list \{ grid-template-columns: repeat\(2/);
 });
 
-test("static event calendar CTAs open a populated Google Calendar event", async () => {
+test("static event calendar CTAs use the server-generated calendar download", async () => {
   const script = await readFile(new URL("../public/events.js", import.meta.url), "utf8");
-  const html = await readFile(new URL("../public/events.html", import.meta.url), "utf8");
 
   assert.match(
     script,
-    /https:\/\/calendar\.google\.com\/calendar\/render\?/,
+    /`\/api\/events\/\$\{encodeURIComponent\(event\.id\)\}\/calendar`/,
   );
-  assert.match(script, /action: "TEMPLATE"/);
-  assert.match(script, /target="_blank" rel="noopener noreferrer"/);
   assert.doesNotMatch(script, /new Blob|URL\.createObjectURL|event-calendar/);
-  assert.match(html, /src="events\.js\?v=[^"]*google-calendar"/);
 });
 
 test("public Events and editor preview share the authoritative card and formatting", async () => {
