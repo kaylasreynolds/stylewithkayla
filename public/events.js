@@ -82,6 +82,26 @@
     )}–${formatter.format(new Date(event.endsAt))}`;
   };
 
+  const googleCalendarDate = (value, allDay) => {
+    const date = new Date(value);
+
+    return allDay
+      ? date.toISOString().slice(0, 10).replace(/-/g, "")
+      : date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+  };
+
+  const googleCalendarUrl = event => {
+    const parameters = new URLSearchParams({
+      action: "TEMPLATE",
+      text: event.title || "Style with Kayla event",
+      dates: `${googleCalendarDate(event.startsAt, event.allDay)}/${googleCalendarDate(event.endsAt, event.allDay)}`,
+      details: event.description || event.shortDescription || "",
+      location: [event.location, event.locationDetails].filter(Boolean).join(", "),
+    });
+
+    return `https://calendar.google.com/calendar/render?${parameters}`;
+  };
+
   async function load() {
     try {
       const response = await fetch("/api/events", {
@@ -145,7 +165,7 @@
           : event.ctaAction === "phone"
             ? `tel:${event.ctaPhone}`
             : event.ctaAction === "add_to_calendar"
-              ? `/api/events/${encodeURIComponent(event.id)}/calendar`
+              ? googleCalendarUrl(event)
               : null;
 
     const availabilityText = registrationClosed
