@@ -58,7 +58,12 @@
     </section>
 
     <section class="upcoming-events section" aria-label="Upcoming events">
-      <div class="container">
+      <div class="container events-container">
+        <div class="section-intro upcoming-events__intro">
+          <p class="section-label">What’s Coming Up</p>
+          <h2 class="section-heading">Upcoming In-Store Events</h2>
+          <p class="body-copy">Discover upcoming styling events, seasonal shopping experiences, and personalized ways to shop with Kayla.</p>
+        </div>
         <div id="events-status" class="events-load-status" role="status">Loading upcoming events…</div>
         <div id="events-list" class="events-list" aria-live="polite"></div>
         <div id="events-empty" class="events-empty-state" hidden>
@@ -90,42 +95,29 @@
       </div>
     </section>
 
-    <section class="event-types section" aria-labelledby="event-types-title">
+    <section class="event-pathways section" aria-labelledby="event-pathways-title">
       <div class="container">
-        <div class="section-intro event-types__intro">
-          <p class="section-label">What You’ll Find</p>
-          <h2 class="section-heading" id="event-types-title">More reasons to visit in store.</h2>
+        <div class="section-intro event-pathways__intro">
+          <p class="section-label">More Ways to Shop &amp; Connect</p>
+          <h2 class="section-heading" id="event-pathways-title">Make the most of your visit to Macy’s.</h2>
         </div>
-
-        <div class="event-types-grid">
-          <article>
-            <span aria-hidden="true">1</span>
-            <h3>Fashion & Styling</h3>
-            <p class="body-copy">Seasonal previews, styling experiences, trunk shows, and special shopping events.</p>
-          </article>
-          <article>
-            <span aria-hidden="true">2</span>
-            <h3>Beauty & Fragrance</h3>
-            <p class="body-copy">Brand events, artistry appointments, demonstrations, and new-product experiences.</p>
-          </article>
-          <article>
-            <span aria-hidden="true">3</span>
-            <h3>Community Events</h3>
-            <p class="body-copy">Local partnerships, charitable events, group experiences, and community celebrations.
-            </p>
-          </article>
+        <div class="event-pathways__list">
+          <a class="event-pathway" href="/more-ways">
+            <span class="event-pathway__icon" aria-hidden="true"><img src="images/group.png" alt=""></span>
+            <span class="event-pathway__copy"><strong>Plan a Group Styling Experience</strong><span>Personalized styling for friends, teams, organizations, and special groups.</span></span>
+            <span class="event-pathway__arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="event-pathway" href="/more-ways">
+            <span class="event-pathway__icon" aria-hidden="true"><img src="images/special-orders.png" alt=""></span>
+            <span class="event-pathway__copy"><strong>Shop Upcoming Promotions</strong><span>Get personalized support for seasonal offers, presell events, and special shopping opportunities.</span></span>
+            <span class="event-pathway__arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="event-pathway" href="mailto:kayla.reynolds@macys.com?subject=Store%20Event%20or%20Community%20Partnership">
+            <span class="event-pathway__icon" aria-hidden="true"><img src="images/business.png" alt=""></span>
+            <span class="event-pathway__copy"><strong>Explore Business &amp; Community Partnerships</strong><span>Create a styling experience for your business, nonprofit, or community audience.</span></span>
+            <span class="event-pathway__arrow" aria-hidden="true">→</span>
+          </a>
         </div>
-      </div>
-    </section>
-
-    <section class="event-contact-cta" aria-labelledby="event-contact-title">
-      <div class="container event-contact-cta__inner">
-        <p class="section-label">Plan Something Together</p>
-        <h2 class="section-heading" id="event-contact-title">Interested in a group visit or community partnership?</h2>
-        <p class="body-copy">Reach out to discuss a styling experience, organization visit, or in-store collaboration.
-        </p>
-        <a class="button button--primary"
-          href="mailto:kayla.reynolds@macys.com?subject=Store%20Event%20or%20Community%20Partnership">Contact Kayla</a>
       </div>
     </section>
   </main>
