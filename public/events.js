@@ -57,13 +57,18 @@
     return labels[value] ?? String(value ?? "");
   };
 
-  const eventDay = event =>
-    new Intl.DateTimeFormat("en-US", {
+  const eventDay = event => {
+    const parts = new Intl.DateTimeFormat("en-US", {
       weekday: "long",
-      month: "long",
+      month: "numeric",
       day: "numeric",
+      year: "2-digit",
       timeZone: event.timezone || "America/Boise",
-    }).format(new Date(event.startsAt));
+    }).formatToParts(new Date(event.startsAt));
+    const value = type => parts.find(part => part.type === type)?.value || "";
+
+    return `${value("weekday")} ${value("month")}/${value("day")}/${value("year")}`;
+  };
 
   const eventTime = event => {
     const formatter = new Intl.DateTimeFormat("en-US", {
@@ -186,7 +191,6 @@
     const full =
       !event.unlimitedCapacity &&
       Number(event.spotsRemaining) < 1;
-
     const isCalendar =
       event.ctaAction === "add_to_calendar";
 
@@ -196,6 +200,16 @@
       "general_rsvp",
       "interest_list",
     ].includes(event.attendanceType);
+    const registrationClosed =
+      registerable &&
+      event.registrationClosesAt &&
+      new Date(event.registrationClosesAt).getTime() <= Date.now();
+    const limited =
+      registerable &&
+      !full &&
+      !registrationClosed &&
+      !event.unlimitedCapacity &&
+      Number(event.spotsRemaining) <= 5;
 
     const destination =
       event.ctaAction === "external_url"
@@ -206,17 +220,20 @@
             ? `tel:${event.ctaPhone}`
             : null;
 
-    const availabilityText = registerable
-      ? full
+    const availabilityText = registrationClosed
+      ? "Registration closed"
+      : full
         ? "Event full"
-        : event.unlimitedCapacity
-          ? "Space available"
-          : `${event.spotsRemaining} spot${event.spotsRemaining === 1 ? "" : "s"} available`
-      : "";
-    const urgentAvailability = full
+        : limited
+          ? `${event.spotsRemaining} spot${event.spotsRemaining === 1 ? "" : "s"} remaining`
+          : "";
+    const urgentAvailability = full || registrationClosed
       ? `
-        <p class="event-card__availability"><span aria-hidden="true">●</span> ${availabilityText}</p>
+        <p class="event-card__availability event-card__availability--urgent"><span aria-hidden="true">●</span> ${availabilityText}</p>
       `
+      : "";
+    const limitedAvailability = limited
+      ? `<p class="event-card__availability"><span aria-hidden="true">●</span> ${availabilityText}</p>`
       : "";
 
     let cta = "";
@@ -320,7 +337,7 @@
                   attendanceLabel(
                     event.attendanceType,
                   ),
-                )}${availabilityText && !full ? ` <span class="event-fact__availability">· ${escape(availabilityText)}</span>` : ""}
+                )}
               </dd>
             </div>
           </dl>
@@ -335,6 +352,7 @@
               : ""
           }
 
+          ${limitedAvailability}
           ${urgentAvailability}
           ${cta}
         </div>
