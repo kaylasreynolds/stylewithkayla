@@ -172,6 +172,7 @@
           <a
             class="button button--primary"
             href="${escape(destination)}"
+            ${event.ctaAction === "add_to_calendar" ? "download" : ""}
           >
             ${escape(
               event.ctaLabel ||
