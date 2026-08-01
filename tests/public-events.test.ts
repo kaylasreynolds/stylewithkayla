@@ -72,7 +72,9 @@ test("static event cards use the approved public hierarchy", async () => {
   assert.match(styles, /\.event-date \{[^}]*bottom: 16px;[^}]*left: 16px;/);
   assert.match(styles, /\.event-card__content > \.button \{[^}]*width: 100%;[^}]*min-height: 52px;/);
   assert.match(script, /class="sr-only">Time/);
-  assert.match(script, /event-fact__availability/);
+  assert.doesNotMatch(script, /Space available/);
+  assert.match(script, /Registration closed/);
+  assert.match(script, /month: "numeric"/);
   assert.match(script, /upcoming in-store events and styling experiences/);
   assert.match(styles, /@media \(max-width: 1020px\)[^{]*\{[\s\S]*?\.events-list \{ grid-template-columns: repeat\(2/);
 });
