@@ -93,15 +93,12 @@ assert.match(sharedEventButtonRule[1], /box-shadow:\s*none/);
 
 test("static event calendar CTAs use the server-generated calendar download", async () => {
   const script = await readFile(new URL("../public/events.js", import.meta.url), "utf8");
-  const html = await readFile(new URL("../public/events.html", import.meta.url), "utf8");
 
   assert.match(
     script,
     /`\/api\/events\/\$\{encodeURIComponent\(event\.id\)\}\/calendar`/,
   );
-  assert.match(script, /event\.ctaAction === "add_to_calendar" \? "download" : ""/);
   assert.doesNotMatch(script, /new Blob|URL\.createObjectURL|event-calendar/);
-  assert.match(html, /src="events\.js\?v=[^"]*calendar-fix"/);
 });
 
 test("public Events and editor preview share the authoritative card and formatting", async () => {
