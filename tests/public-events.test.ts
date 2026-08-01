@@ -69,8 +69,12 @@ test("static event cards use the approved public hierarchy", async () => {
   assert.match(script, /class="event-card__offer"/);
   assert.doesNotMatch(script, /<dt>Cost<\/dt>/);
   assert.match(styles, /\.events-list \{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
-  assert.match(styles, /\.event-date \{[^}]*bottom: 18px;[^}]*left: 18px;/);
+  assert.match(styles, /\.event-date \{[^}]*bottom: 16px;[^}]*left: 16px;/);
   assert.match(styles, /\.event-card__content > \.button \{[^}]*width: 100%;[^}]*min-height: 52px;/);
+  assert.match(script, /class="sr-only">Time/);
+  assert.match(script, /event-fact__availability/);
+  assert.match(script, /upcoming in-store events and styling experiences/);
+  assert.match(styles, /@media \(max-width: 1020px\)[^{]*\{[\s\S]*?\.events-list \{ grid-template-columns: repeat\(2/);
 });
 
 test("public Events and editor preview share the authoritative card and formatting", async () => {

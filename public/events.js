@@ -35,22 +35,26 @@
         day: "numeric",
         timeZone: "America/Boise",
       }).format(date),
+      weekday: new Intl.DateTimeFormat("en-US", {
+        weekday: "short",
+        timeZone: "America/Boise",
+      }).format(date),
     };
   };
 
   const attendanceLabel = value => {
     const labels = {
-      open_attendance: "Stop By Anytime",
-      appointment_required: "Appointment Required",
-      appointment_recommended: "Appointment Recommended",
+      open_attendance: "Stop by anytime",
+      appointment_required: "Appointment required",
+      appointment_recommended: "Appointment recommended",
       general_rsvp: "RSVP",
-      interest_list: "Join the Interest List",
-      invitation_only: "Invitation Only",
-      information_only: "Information Only",
-      drop_in: "Stop By Anytime",
+      interest_list: "Join the interest list",
+      invitation_only: "Invitation only",
+      information_only: "Information only",
+      drop_in: "Stop by anytime",
     };
 
-    return labels[value] ?? String(value ?? "").replaceAll("_", " ");
+    return labels[value] ?? String(value ?? "");
   };
 
   const eventDay = event =>
@@ -202,20 +206,16 @@
             ? `tel:${event.ctaPhone}`
             : null;
 
-    const availability = registerable
+    const availabilityText = registerable
+      ? full
+        ? "Event full"
+        : event.unlimitedCapacity
+          ? "Space available"
+          : `${event.spotsRemaining} spot${event.spotsRemaining === 1 ? "" : "s"} available`
+      : "";
+    const urgentAvailability = full
       ? `
-        <p class="event-card__availability">
-          <span aria-hidden="true">${full ? "●" : "✓"}</span>
-          ${
-            full
-              ? "Event full"
-              : event.unlimitedCapacity
-                ? "Space available"
-                : `${event.spotsRemaining} spot${
-                    event.spotsRemaining === 1 ? "" : "s"
-                  } available`
-          }
-        </p>
+        <p class="event-card__availability"><span aria-hidden="true">●</span> ${availabilityText}</p>
       `
       : "";
 
@@ -281,6 +281,7 @@
           <div class="event-date">
             <span>${escape(date.month)}</span>
             <strong>${escape(date.day)}</strong>
+            <span>${escape(date.weekday)}</span>
           </div>
         </div>
 
@@ -295,36 +296,31 @@
           </p>
 
           <dl class="event-facts">
-            <div>
-              <dt>Time</dt>
+            <div class="event-fact">
+              <dt class="sr-only">Time</dt>
+              <span class="event-fact__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span>
               <dd>
-                <span class="event-fact-line">
-                  ${escape(eventDay(event))}
-                </span>
-
-                <span class="event-fact-line">
-                  ${escape(
+                ${escape(eventDay(event))} · ${escape(
                     event.allDay
                       ? "All day"
                       : eventTime(event),
                   )}
-                </span>
               </dd>
             </div>
-
-            <div>
-              <dt>Location</dt>
+            <div class="event-fact">
+              <dt class="sr-only">Location</dt>
+              <span class="event-fact__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.3"/></svg></span>
               <dd>${escape(event.location)}</dd>
             </div>
-
-            <div>
-              <dt>Attendance</dt>
+            <div class="event-fact">
+              <dt class="sr-only">Attendance</dt>
+              <span class="event-fact__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M6.5 20v-2a5.5 5.5 0 0 1 11 0v2"/></svg></span>
               <dd>
                 ${escape(
                   attendanceLabel(
                     event.attendanceType,
                   ),
-                )}
+                )}${availabilityText && !full ? ` <span class="event-fact__availability">· ${escape(availabilityText)}</span>` : ""}
               </dd>
             </div>
           </dl>
@@ -339,7 +335,7 @@
               : ""
           }
 
-          ${availability}
+          ${urgentAvailability}
           ${cta}
         </div>
       </article>
@@ -350,12 +346,12 @@
     return `
       <article class="event-card event-card--updates">
         <div class="event-card__media event-card__updates-media" aria-hidden="true">
-          <span class="event-card__updates-mark">SK</span>
+          <span class="event-card__updates-mark"><svg viewBox="0 0 72 72"><rect x="14" y="18" width="44" height="40" rx="5"/><path d="M23 12v12M49 12v12M14 30h44"/><path d="M36 49s-10-5.7-10-12a5.5 5.5 0 0 1 10-3.5A5.5 5.5 0 0 1 46 37c0 6.3-10 12-10 12Z"/></svg></span>
         </div>
         <div class="event-card__content">
           <h3>More events coming soon</h3>
           <p class="event-card__description">
-            Request updates and be the first to hear about new in-store events and styling experiences.
+            Request updates and be the first to hear about upcoming in-store events and styling experiences.
           </p>
           <a
             class="button button--primary event-card__cta"
