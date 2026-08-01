@@ -69,9 +69,19 @@ export function PublicEventCard({ event, previewImage }: { event: PublicEventPre
   const image = event.image as { url?: string; alt?: string; width?: number; height?: number } | null | undefined;
   const imageUrl = previewImage || image?.url || (event.imageAssetId ? `/api/events/assets/${String(event.imageAssetId)}` : "");
   const isCalendarAction = String(event.ctaAction ?? "") === "add_to_calendar";
+  const previewImageStyle = previewImage
+    ? {
+        height: "auto",
+        minHeight: 0,
+        aspectRatio: "4 / 3",
+        objectFit: "contain" as const,
+        alignSelf: "start",
+        background: "#f7f1ed",
+      }
+    : undefined;
 
   return <article className="public-event-card">
-    {imageUrl ? <img src={imageUrl} alt={String(event.imageAlt ?? image?.alt ?? "")} width={Number(event.imageWidth ?? image?.width) || undefined} height={Number(event.imageHeight ?? image?.height) || undefined}/> : <div className="public-event-card__placeholder" aria-hidden="true"/>}
+    {imageUrl ? <img src={imageUrl} alt={String(event.imageAlt ?? image?.alt ?? "")} width={Number(event.imageWidth ?? image?.width) || undefined} height={Number(event.imageHeight ?? image?.height) || undefined} style={previewImageStyle}/> : <div className="public-event-card__placeholder" aria-hidden="true"/>}
     <div>
       <p className="public-event-card__label">{view.label}</p>
       <time>{view.schedule}</time>
