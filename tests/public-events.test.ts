@@ -70,7 +70,19 @@ test("static event cards use the approved public hierarchy", async () => {
   assert.doesNotMatch(script, /<dt>Cost<\/dt>/);
   assert.match(styles, /\.events-list \{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
   assert.match(styles, /\.event-date \{[^}]*bottom: 16px;[^}]*left: 16px;/);
-  assert.match(styles, /\.event-card__content > \.button \{[^}]*width: 100%;[^}]*min-height: 52px;/);
+  const sharedEventButtonRule = styles.match(
+  /\.event-card__content > \.button\s*,\s*\.event-card__cta\s*\{([^}]*)\}/,
+);
+
+assert.ok(
+  sharedEventButtonRule,
+  "event card CTAs should share one CSS rule",
+);
+
+assert.match(sharedEventButtonRule[1], /width:\s*100%/);
+assert.match(sharedEventButtonRule[1], /min-height:\s*52px/);
+assert.match(sharedEventButtonRule[1], /border-radius:\s*8px/);
+assert.match(sharedEventButtonRule[1], /box-shadow:\s*none/);
   assert.match(script, /class="sr-only">Time/);
   assert.doesNotMatch(script, /Space available/);
   assert.match(script, /Registration closed/);
