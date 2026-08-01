@@ -82,77 +82,6 @@
     )}–${formatter.format(new Date(event.endsAt))}`;
   };
 
-  const calendarEscape = value =>
-    String(value ?? "")
-      .replace(/\\/g, "\\\\")
-      .replace(/\r?\n/g, "\\n")
-      .replace(/,/g, "\\,")
-      .replace(/;/g, "\\;");
-
-  const calendarDate = value =>
-    new Date(value)
-      .toISOString()
-      .replace(/[-:]/g, "")
-      .replace(/\.\d{3}Z$/, "Z");
-
-  const safeCalendarFilename = title => {
-    const filename = String(title || "event")
-      .replace(/[<>:"/\\|?*\u0000-\u001f]/g, "")
-      .trim();
-
-    return `${filename || "event"}.ics`;
-  };
-
-  function downloadCalendar(event) {
-    const description =
-      event.description || event.shortDescription || "";
-
-    const location = [
-      event.location,
-      event.locationDetails,
-    ]
-      .filter(Boolean)
-      .join(", ");
-
-    const ics = [
-      "BEGIN:VCALENDAR",
-      "VERSION:2.0",
-      "CALSCALE:GREGORIAN",
-      "METHOD:PUBLISH",
-      "PRODID:-//Style with Kayla//Events//EN",
-      "BEGIN:VEVENT",
-      `UID:${calendarEscape(event.id)}@stylewithkayla.com`,
-      `DTSTAMP:${calendarDate(new Date())}`,
-      `DTSTART:${calendarDate(event.startsAt)}`,
-      `DTEND:${calendarDate(event.endsAt)}`,
-      `SUMMARY:${calendarEscape(event.title)}`,
-      `DESCRIPTION:${calendarEscape(description)}`,
-      `LOCATION:${calendarEscape(location)}`,
-      "STATUS:CONFIRMED",
-      "END:VEVENT",
-      "END:VCALENDAR",
-      "",
-    ].join("\r\n");
-
-    const blob = new Blob([ics], {
-      type: "text/calendar;charset=utf-8",
-    });
-
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-
-    link.href = url;
-    link.download = safeCalendarFilename(event.title);
-
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    window.setTimeout(() => {
-      URL.revokeObjectURL(url);
-    }, 1000);
-  }
-
   async function load() {
     try {
       const response = await fetch("/api/events", {
@@ -191,9 +120,6 @@
     const full =
       !event.unlimitedCapacity &&
       Number(event.spotsRemaining) < 1;
-    const isCalendar =
-      event.ctaAction === "add_to_calendar";
-
     const registerable = [
       "appointment_required",
       "appointment_recommended",
@@ -218,7 +144,9 @@
           ? `mailto:${event.ctaEmail}`
           : event.ctaAction === "phone"
             ? `tel:${event.ctaPhone}`
-            : null;
+            : event.ctaAction === "add_to_calendar"
+              ? `/api/events/${encodeURIComponent(event.id)}/calendar`
+              : null;
 
     const availabilityText = registrationClosed
       ? "Registration closed"
@@ -245,23 +173,21 @@
             class="button button--primary"
             href="${escape(destination)}"
           >
-            ${escape(event.ctaLabel || "Learn More")}
+            ${escape(
+              event.ctaLabel ||
+                (event.ctaAction === "add_to_calendar"
+                  ? "Save to Calendar"
+                  : "Learn More"),
+            )}
           </a>
         `;
       } else {
-        const buttonClass = registerable
-          ? "event-rsvp"
-          : isCalendar
-            ? "event-calendar"
-            : "";
+        const buttonClass = registerable ? "event-rsvp" : "";
 
         const buttonLabel =
           registerable && full
             ? "Event Full"
-            : event.ctaLabel ||
-              (isCalendar
-                ? "Save to Calendar"
-                : "Learn More");
+            : event.ctaLabel || "Learn More";
 
         cta = `
           <button
@@ -379,28 +305,6 @@
       </article>
     `;
   }
-
-  list.addEventListener("click", event => {
-    const button =
-      event.target.closest(".event-calendar");
-
-    if (!button) return;
-
-    const item = events.find(
-      eventItem =>
-        String(eventItem.id) ===
-        String(button.dataset.eventId),
-    );
-
-    if (!item) {
-      console.error(
-        "The selected event could not be found.",
-      );
-      return;
-    }
-
-    downloadCalendar(item);
-  });
 
   list.addEventListener("click", async event => {
     const button =
