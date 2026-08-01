@@ -91,6 +91,16 @@ assert.match(sharedEventButtonRule[1], /box-shadow:\s*none/);
   assert.match(styles, /@media \(max-width: 1020px\)[^{]*\{[\s\S]*?\.events-list \{ grid-template-columns: repeat\(2/);
 });
 
+test("static event calendar CTAs use the server-generated calendar download", async () => {
+  const script = await readFile(new URL("../public/events.js", import.meta.url), "utf8");
+
+  assert.match(
+    script,
+    /`\/api\/events\/\$\{encodeURIComponent\(event\.id\)\}\/calendar`/,
+  );
+  assert.doesNotMatch(script, /new Blob|URL\.createObjectURL|event-calendar/);
+});
+
 test("public Events and editor preview share the authoritative card and formatting", async () => {
   const page = await readFile(new URL("../app/events/page.tsx", import.meta.url), "utf8");
   const editor = await readFile(new URL("../app/admin/events/EventConsole.tsx", import.meta.url), "utf8");
