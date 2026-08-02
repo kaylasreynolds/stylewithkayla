@@ -1,6 +1,7 @@
 "use client";
 
 import { publicEventView, type PublicEventPresentation } from "@/lib/event-presentation";
+import Image from "next/image";
 
 export function PublicEventCard({ event, previewImage }: { event: PublicEventPresentation; previewImage?: string }) {
   const view = publicEventView(event);
@@ -18,7 +19,22 @@ export function PublicEventCard({ event, previewImage }: { event: PublicEventPre
     : undefined;
 
   return <article className="public-event-card">
-    {imageUrl ? <img src={imageUrl} alt={String(event.imageAlt ?? image?.alt ?? "")} width={Number(event.imageWidth ?? image?.width) || undefined} height={Number(event.imageHeight ?? image?.height) || undefined} style={previewImageStyle}/> : <div className="public-event-card__placeholder" aria-hidden="true"/>}
+{imageUrl ? (
+  <Image
+    src={imageUrl}
+    alt={String(event.imageAlt ?? image?.alt ?? "")}
+    width={Number(event.imageWidth ?? image?.width) || 1200}
+    height={Number(event.imageHeight ?? image?.height) || 900}
+    style={previewImageStyle}
+    sizes="(max-width: 768px) 100vw, 50vw"
+    unoptimized
+  />
+) : (
+  <div
+    className="public-event-card__placeholder"
+    aria-hidden="true"
+  />
+)}
     <div className="public-event-card__body">
       <p className="public-event-card__label">{view.label}</p>
       <time>{view.schedule}</time>
