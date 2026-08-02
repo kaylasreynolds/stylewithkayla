@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import {
   isQuestionVisible,
@@ -198,7 +199,7 @@ export default function StyleProfilePreview({
         <header className="site-header">
           <div className="container header-inner">
             <Link className="site-logo" href="/" aria-label="Style with Kayla home">
-              <img src="/images/stylewithkayla_logo.png" alt="Style with Kayla" />
+              <Image src="/images/stylewithkayla_logo.png" alt="Style with Kayla" width={3266} height={1241} loading="eager" />
             </Link>
             <nav className="site-nav" aria-label="Preview navigation">
               <span>Home</span>
