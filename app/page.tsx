@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 type Service = {
   id: string;
@@ -501,16 +502,16 @@ function Header() {
         </a>
 
         <nav className="site-nav" aria-label="Main navigation">
-          <a href="/">Home</a>
-          <a href="/#services">Services</a>
-          <a href="/events">Events</a>
-          <a href="/about">About Me</a>
-          <a href="/#contact">Contact</a>
+       <Link href="/">...</Link>
+<Link href="/#services">Services</Link>
+<Link href="/events">Events</Link>
+<Link href="/about">About</Link>
+<Link href="/#contact">Contact</Link>
         </nav>
 
-        <a className="button header-cta" href="/book">
+        <Link className="button header-cta" href="/book">
           BOOK APPOINTMENT
-        </a>
+        </Link>
       </div>
     </header>
   );

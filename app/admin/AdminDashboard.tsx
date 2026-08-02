@@ -55,7 +55,9 @@ export default function AdminDashboard({ userName, signOutPath }: { userName: st
   }, [selected]);
 
   useEffect(() => { void Promise.resolve().then(loadList); }, [loadList]);
-  useEffect(() => { void Promise.resolve().then(loadDetail); }, [loadDetail]);
+  useEffect(() => {
+  void Promise.resolve().then(loadDetail);
+}, [loadDetail]);
 
   function selectRequest(id: string) {
     setSelected(id);
