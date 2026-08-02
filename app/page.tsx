@@ -494,12 +494,12 @@ function Header() {
   return (
     <header className="site-header" aria-label="Site header">
       <div className="container header-inner">
-        <a className="site-logo" href="/" aria-label="Style with Kayla home">
+        <Link className="site-logo" href="/" aria-label="Style with Kayla home">
           <img
             src="/images/stylewithkayla_logo.png"
             alt="Style with Kayla"
           />
-        </a>
+        </Link>
 
         <nav className="site-nav" aria-label="Main navigation">
        <Link href="/">...</Link>
@@ -524,7 +524,7 @@ function Footer() {
     <footer className="site-footer" id="contact">
       <div className="container footer-inner">
         <div className="footer-column footer-brand">
-          <a
+          <Link
             className="footer-logo"
             href="/"
             aria-label="Style with Kayla home"
@@ -533,7 +533,7 @@ function Footer() {
               src="/images/stylewithkayla_logo.png"
               alt="Style with Kayla"
             />
-          </a>
+          </Link>
         </div>
 
         <nav
@@ -542,8 +542,8 @@ function Footer() {
         >
           <p className="footer-kicker">Quick Links</p>
 
-          <a href="/#services">Services</a>
-          <a href="/events">Events</a>
+          <Link href="/#services">Services</Link>
+          <Link href="/events">Events</Link>
 
           <span
             className="footer-link--inactive"
@@ -559,8 +559,8 @@ function Footer() {
             FAQ
           </span>
 
-          <a href="/about">About Me</a>
-          <a href="/#contact">Contact</a>
+          <Link href="/about">About Me</Link>
+          <Link href="/#contact">Contact</Link>
         </nav>
 
         <div className="footer-column footer-contact">
