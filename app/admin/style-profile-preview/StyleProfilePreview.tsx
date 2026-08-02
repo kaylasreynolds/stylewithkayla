@@ -49,37 +49,46 @@ export default function StyleProfilePreview({
   const [hydrated, setHydrated] = useState(false);
 
   const storageKey = `${STORAGE_PREFIX}${profileType}`;
-  const schema = schemas[profileType] || [];
   const visibleSections = useMemo(
-    () => schema.filter(section => isSectionVisible(section, answers)),
-    [schema, answers],
+    () => (schemas[profileType] || []).filter(section => isSectionVisible(section, answers)),
+    [schemas, profileType, answers],
   );
   const safeStep = Math.min(Math.max(step, 1), visibleSections.length || 1);
   const section = visibleSections[safeStep - 1];
 
   useEffect(() => {
-    setHydrated(false);
-    const raw = window.localStorage.getItem(storageKey);
+    let cancelled = false;
 
-    if (raw) {
-      try {
-        const saved = JSON.parse(raw) as PreviewState;
-        setAnswers(saved.answers || {});
-        setStep(saved.currentSection || 1);
-        setReturningClient(Boolean(saved.returningClient));
-      } catch {
+    void Promise.resolve().then(() => {
+      if (cancelled) return;
+
+      setHydrated(false);
+      const raw = window.localStorage.getItem(storageKey);
+
+      if (raw) {
+        try {
+          const saved = JSON.parse(raw) as PreviewState;
+          setAnswers(saved.answers || {});
+          setStep(saved.currentSection || 1);
+          setReturningClient(Boolean(saved.returningClient));
+        } catch {
+          setAnswers({});
+          setStep(1);
+          setReturningClient(false);
+        }
+      } else {
         setAnswers({});
         setStep(1);
         setReturningClient(false);
       }
-    } else {
-      setAnswers({});
-      setStep(1);
-      setReturningClient(false);
-    }
 
-    setSavedAt("");
-    setHydrated(true);
+      setSavedAt("");
+      setHydrated(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, [storageKey]);
 
   useEffect(() => {
