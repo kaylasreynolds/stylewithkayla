@@ -5,6 +5,19 @@ import { getD1, getPhotoAssetsBucket } from "@/lib/server/runtime";
 const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
 const orientations = new Set(["landscape", "portrait", "square", "vertical"]);
 
+type PhotoAssetRow = {
+  id: string;
+  name: string;
+  sceneId: string;
+  promptBuildId: string;
+  orientation: string;
+  approvalStatus: string;
+  approvedUses: string | null;
+  originalFilename: string;
+  sizeBytes: number;
+  createdAt: string;
+};
+
 export async function POST(request: Request) {
   return withApi(async (requestId) => {
     const email = requireAdmin(request);
@@ -37,7 +50,7 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   return withApi(async (requestId) => {
     requireAdmin(request);
-    const rows = (await getD1().prepare(`SELECT id, name, scene_id AS sceneId, prompt_build_id AS promptBuildId, orientation, approval_status AS approvalStatus, approved_uses AS approvedUses, original_filename AS originalFilename, size_bytes AS sizeBytes, created_at AS createdAt FROM photo_assets ORDER BY created_at DESC LIMIT 100`).all()).results;
-    return dataResponse({ assets: rows.map((row: any) => ({ ...row, approvedUses: JSON.parse(row.approvedUses || "[]") })) }, 200, requestId);
+    const rows = (await getD1().prepare(`SELECT id, name, scene_id AS sceneId, prompt_build_id AS promptBuildId, orientation, approval_status AS approvalStatus, approved_uses AS approvedUses, original_filename AS originalFilename, size_bytes AS sizeBytes, created_at AS createdAt FROM photo_assets ORDER BY created_at DESC LIMIT 100`).all<PhotoAssetRow>()).results;
+    return dataResponse({ assets: rows.map((row) => ({ ...row, approvedUses: JSON.parse(row.approvedUses || "[]") as string[] })) }, 200, requestId);
   });
 }
