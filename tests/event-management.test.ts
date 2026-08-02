@@ -247,6 +247,24 @@ test("only current event and attendance values may be published while legacy dra
   assert.deepEqual([...management.attendanceTypes], ["open_attendance", "appointment_required", "appointment_recommended", "general_rsvp", "information_only"]);
   assert.equal(parseEventDraft({ eventLabel: "Styling Event" }).eventLabel, "Styling Event");
   assert.equal(parseEventDraft({ attendanceType: "invitation_only" }).attendanceType, "invitation_only");
-  assert.throws(() => validateForPublish({ ...complete, eventLabel: "Styling Event" }, 0), (error: any) => Boolean(error.fieldErrors?.eventLabel));
-  assert.throws(() => validateForPublish({ ...complete, attendanceType: "invitation_only" }, 0), (error: any) => Boolean(error.fieldErrors?.attendanceType));
+  assert.throws(
+    () => validateForPublish({ ...complete, eventLabel: "Styling Event" }, 0),
+    (error: unknown) =>
+      Boolean(
+        error &&
+          typeof error === "object" &&
+          "fieldErrors" in error &&
+          (error as { fieldErrors?: Record<string, string> }).fieldErrors?.eventLabel,
+      ),
+  );
+  assert.throws(
+    () => validateForPublish({ ...complete, attendanceType: "invitation_only" }, 0),
+    (error: unknown) =>
+      Boolean(
+        error &&
+          typeof error === "object" &&
+          "fieldErrors" in error &&
+          (error as { fieldErrors?: Record<string, string> }).fieldErrors?.attendanceType,
+      ),
+  );
 });
