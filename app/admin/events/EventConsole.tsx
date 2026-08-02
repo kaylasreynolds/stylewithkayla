@@ -1,5 +1,11 @@
 "use client";
-import Link from "next/link";import{useEffect,useRef,useState}from"react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import Link from "next/link";
 import { eventDateToPickerValue, formatEventSchedule, isValidEventDate, pickerValueToEventDate } from "@/lib/event-date-time";
 import { buildEventPayload, defaultEventCostLabel, EventSubmissionGuard, eventImageFileError, eventImageUploadForm, hasEventOffer, isUploadedEventImage, readUploadResponse, withoutEventOffer } from "@/lib/event-editor-client";
 import { formatImageBytes, optimizeEventImage } from "@/lib/event-image-optimizer";
@@ -854,16 +860,17 @@ export function CheckIn({
 }) {
   const [rows, setRows] = useState<Rsvp[]>([]);
 
-  const load = () =>
-    api<{ rsvps: Rsvp[] }>(
-      `/api/admin/events/${eventId}/rsvps?status=confirmed`,
-    ).then(data => {
-      setRows(data.rsvps);
-    });
+  const load = useCallback(() => {
+  return api<{ rsvps: Rsvp[] }>(
+    `/api/admin/events/${eventId}/rsvps?status=confirmed`,
+  ).then(data => {
+    setRows(data.rsvps);
+  });
+}, [eventId]);
 
   useEffect(() => {
-    void load();
-  }, [eventId]);
+  void load();
+}, [load]);
 
   async function mark(
     rsvpId: string,
