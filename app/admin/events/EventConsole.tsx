@@ -59,20 +59,6 @@ type EventInputProps = Omit<
   "ref" | "name" | "value" | "onChange"
 >;
 
-type RsvpListResponse = {
-  rsvps: Rsvp[];
-};
-
-type UploadResponse = ApiResponse<{
-  asset: {
-    id: string;
-    previewUrl: string;
-    width: number;
-    height: number;
-    sizeBytes: number;
-  };
-}>;
-
 async function api<T>(
   url: string,
   init?: RequestInit,
