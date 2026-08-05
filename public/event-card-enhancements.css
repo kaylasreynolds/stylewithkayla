@@ -1,0 +1,120 @@
+/* Compact event-card offer and expandable detail treatment */
+.event-card__offer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  padding: 8px 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-rose-hover);
+  font-size: .9rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.event-card__offer::before,
+.event-card__offer::after {
+  content: "";
+  height: 1px;
+  flex: 1 1 34px;
+  max-width: 74px;
+  background: color-mix(in srgb, var(--color-rose) 65%, transparent);
+}
+
+.event-card__offer strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 600;
+}
+
+.event-card__offer strong::before {
+  content: "◇";
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.event-card__details-toggle {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin: 0 0 16px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-rose-hover);
+  font: inherit;
+  font-size: .9rem;
+  font-weight: 600;
+  line-height: 1.35;
+  cursor: pointer;
+}
+
+.event-card__details-toggle:hover {
+  background: color-mix(in srgb, var(--color-blush) 58%, transparent);
+}
+
+.event-card__details-toggle:focus-visible {
+  outline: 3px solid rgba(207, 140, 147, .35);
+  outline-offset: 2px;
+}
+
+.event-card__details-symbol {
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.event-card__details {
+  margin: 0 0 16px;
+  padding: 14px 0 2px;
+  border-top: 1px solid var(--color-divider);
+  color: #514a47;
+}
+
+.event-card__details[hidden] {
+  display: none;
+}
+
+.event-card__details p {
+  margin: 0 0 12px;
+  font-size: .9rem;
+  line-height: 1.6;
+}
+
+.event-card__details p:last-child {
+  margin-bottom: 0;
+}
+
+.event-card__details-label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--color-rose-hover);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.event-card__content > .button,
+.event-card__cta {
+  margin-top: auto;
+}
+
+@media (max-width: 430px) {
+  .event-card__offer {
+    font-size: .85rem;
+  }
+
+  .event-card__offer::before,
+  .event-card__offer::after {
+    max-width: 44px;
+  }
+}
