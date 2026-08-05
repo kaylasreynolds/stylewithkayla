@@ -15,7 +15,7 @@ import {
   isUploadedEventImage,
   readUploadResponse,
   withoutEventOffer,
-} from "../lib/event-editor-client.ts";
+} from "../lib/event-editor-client";
 
 test("loaded events produce an allowlisted POST and PATCH payload", () => {
   const approved = Object.fromEntries(EDITABLE_EVENT_FIELDS.map((field, index) => [field, `${field}-${index}`]));
@@ -117,7 +117,12 @@ test("Save Draft, Save Changes, and save-before-publish preserve the authoritati
     const target = guard.begin();
     assert.deepEqual(target, { eventId: "original-id", method: "PATCH", url: "/api/admin/events/original-id" }, path);
     const payload = buildEventPayload({ id: "original-id", title: `${path} title`, status: "draft" });
-    db.prepare("UPDATE events SET title=? WHERE id=?").run(payload.title, target?.eventId);
+assert.ok(target);
+
+db.prepare("UPDATE events SET title=? WHERE id=?").run(
+  String(payload.title),
+  target.eventId,
+);
     guard.captureEventId("original-id");
     guard.finish();
     const rows = db.prepare("SELECT id,title FROM events").all() as Array<{ id: string; title: string }>;
@@ -134,9 +139,12 @@ test("Event Editor uses corrected copy, current choices, a shared card, and a sy
   assert.match(source, /const labels=CURRENT_EVENT_LABELS/);
   assert.match(source, /const attendance=CURRENT_ATTENDANCE_OPTIONS/);
   assert.match(source, /<PublicEventCard event=\{form\}/);
-  assert.match(source, /if\(dirtyRef\.current\)/);
-  assert.match(source, /dirtyRef\.current = false;\s*setDirty\(false\);\s*location\.href/);
-  assert.ok(source.indexOf("dirtyRef.current = false") > source.indexOf("if (publish)"), "publish failures must retain the guard");
+  assert.match(source, /if\s*\(!dirty\)\s*return/);
+assert.match(
+  source,
+  /setDirty\(false\);\s*location\.href/,
+);
+  assert.ok(source.indexOf("setDirty(false)") > source.indexOf("if (publish)"), "publish failures must retain the guard");
 });
 
 test("the displayed optimized File is the exact multipart File", () => {

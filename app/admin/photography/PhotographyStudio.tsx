@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import { PHOTOGRAPHY_MODULES, PHOTOGRAPHY_SCENES, type PhotographyModule } from "@/lib/brand-photography/studio-data";
 
 const moduleTypes: PhotographyModule["type"][] = ["wardrobe", "location", "eyeContact", "expression", "camera", "lighting", "composition", "hair"];
@@ -176,7 +177,7 @@ export default function PhotographyStudio({ foundation }: { foundation: string }
       <section style={box}>
         <h2>2. Reference image and combined prompt</h2>
         <div style={{ display: "grid", gridTemplateColumns: "minmax(180px, 280px) minmax(0, 1fr)", gap: 16, alignItems: "start" }}>
-          <div><label><strong>Reference image to attach in ChatGPT</strong><input type="file" accept="image/jpeg,image/png,image/webp" onChange={selectReference} style={{ display: "block", marginTop: 8 }} /></label>{referencePreview ? <img src={referencePreview} alt="Selected prompt reference" style={{ display: "block", width: "100%", maxHeight: 320, objectFit: "contain", marginTop: 10, border: "1px solid #ddd" }} /> : <p>No reference selected.</p>}<p style={{ fontSize: 12 }}>This preview reminds you which image to attach. The prompt copy button copies text only.</p></div>
+          <div><label><strong>Reference image to attach in ChatGPT</strong><input type="file" accept="image/jpeg,image/png,image/webp" onChange={selectReference} style={{ display: "block", marginTop: 8 }} /></label>{referencePreview ? <Image src={referencePreview} alt="Selected prompt reference" width={280} height={320} loading="eager" unoptimized style={{ display: "block", width: "100%", height: "auto", maxHeight: 320, objectFit: "contain", marginTop: 10, border: "1px solid #ddd" }} /> : <p>No reference selected.</p>}<p style={{ fontSize: 12 }}>This preview reminds you which image to attach. The prompt copy button copies text only.</p></div>
           <div><div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}><h3 style={{ margin: 0 }}>Combined prompt</h3><div style={{ display: "flex", gap: 8 }}><button type="button" onClick={savePromptBuild} disabled={busy}>{promptBuildId ? `Saved: ${promptBuildId}` : "Save Prompt Build"}</button><button type="button" className="button-primary" onClick={copyPrompt}>{copied ? "Copied" : "Copy Prompt"}</button></div></div><textarea readOnly value={prompt} rows={20} style={{ ...input, fontFamily: "monospace", fontSize: 12 }} /></div>
         </div>
       </section>

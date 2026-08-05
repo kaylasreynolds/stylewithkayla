@@ -55,7 +55,24 @@ export default function AdminDashboard({ userName, signOutPath }: { userName: st
   }, [selected]);
 
   useEffect(() => { void Promise.resolve().then(loadList); }, [loadList]);
-  useEffect(() => { void Promise.resolve().then(loadDetail); setAction(null); setReason(""); }, [loadDetail]);
+  useEffect(() => {
+  void Promise.resolve().then(loadDetail);
+}, [loadDetail]);
+
+  function selectRequest(id: string) {
+    setSelected(id);
+    setAction(null);
+    setReason("");
+    setProfileReview(null);
+    setProfileLink("");
+  }
+
+  function selectStatus(nextStatus: Status) {
+    setStatus(nextStatus);
+    setSelected("");
+    setAction(null);
+    setReason("");
+  }
 
   async function mutate(name: "confirm" | "decline" | "release-hold" | "propose-time" | "cancel" | "complete", proposal?: ProposalRequest) {
     if (!detail) return;
@@ -106,10 +123,10 @@ export default function AdminDashboard({ userName, signOutPath }: { userName: st
 
   return <main className="admin-shell">
     <header className="admin-header"><div><p className="eyebrow">STYLE WITH KAYLA</p><h1>Appointment requests</h1><p>Signed in as {userName}</p></div><div className="admin-header-links"><a href="/admin/availability">Manage availability</a><a href="/admin/privacy">Privacy operations</a><a href={signOutPath}>Sign out</a></div></header>
-    <nav className="admin-tabs">{tabs.map(tab => <button key={tab.value} className={status === tab.value ? "active" : ""} onClick={() => { setStatus(tab.value); setSelected(""); }}>{tab.label}</button>)}</nav>
+    <nav className="admin-tabs">{tabs.map(tab => <button key={tab.value} className={status === tab.value ? "active" : ""} onClick={() => selectStatus(tab.value)}>{tab.label}</button>)}</nav>
     {error && <p className="booking-error" role="alert">{error}</p>}
     <div className="admin-layout">
-      <section className="request-list" aria-label="Appointment requests">{loading ? <p>Loading requests…</p> : bookings.length ? bookings.map(booking => <button key={booking.id} className={selected === booking.id ? "selected" : ""} onClick={() => { setSelected(booking.id); setProfileReview(null); setProfileLink(""); }}><span><strong>{booking.clientName}</strong>{booking.overdue && <i>Overdue</i>}</span><span>{booking.serviceName}</span><span>{fmt(booking.proposedStartAt || booking.requestedStartAt)}</span><small>{booking.publicReference} · {booking.holdActive ? "Time held" : "No active hold"}</small></button>) : <p>No {status.replace("_", " ")} requests.</p>}</section>
+      <section className="request-list" aria-label="Appointment requests">{loading ? <p>Loading requests…</p> : bookings.length ? bookings.map(booking => <button key={booking.id} className={selected === booking.id ? "selected" : ""} onClick={() => selectRequest(booking.id)}><span><strong>{booking.clientName}</strong>{booking.overdue && <i>Overdue</i>}</span><span>{booking.serviceName}</span><span>{fmt(booking.proposedStartAt || booking.requestedStartAt)}</span><small>{booking.publicReference} · {booking.holdActive ? "Time held" : "No active hold"}</small></button>) : <p>No {status.replace("_", " ")} requests.</p>}</section>
       <section className="request-detail">{detail ? <>
         <div className="detail-heading"><div><p className="small-label">{detail.publicReference}</p><h2>{detail.clientName}</h2><p>{detail.serviceName}</p></div><span className={`status-pill ${detail.status}`}>{detail.status.replace("_", " ")}</span></div>
         <dl><div><dt>Requested time</dt><dd>{fmt(detail.requestedStartAt)}</dd></div><div><dt>Active hold</dt><dd>{fmt(detail.activeHoldStartsAt)}</dd></div><div><dt>Contact</dt><dd><a href={`mailto:${detail.clientEmail}`}>{detail.clientEmail}</a><br />{detail.clientPhone}</dd></div><div><dt>Client</dt><dd>{detail.returningClient ? "Returning client" : `New client · ${detail.howHeard || "source not provided"}`}</dd></div>{detail.profileType && <div><dt>Profile route</dt><dd>{profileTypeLabel(detail.profileType)}</dd></div>}{detail.eventType && <div><dt>Event</dt><dd>{detail.eventType} · {detail.eventDate}</dd></div>}{detail.bookingNotes && <div className="wide"><dt>Notes</dt><dd>{detail.bookingNotes}</dd></div>}</dl>

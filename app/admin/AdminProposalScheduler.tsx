@@ -68,29 +68,65 @@ export default function AdminProposalScheduler({ serviceCode, reason, setReason,
   const [currentTime] = useState(() => Date.now());
 
   useEffect(() => {
-    if (!date || !serviceCode) return;
-    const controller = new AbortController();
+  if (!date || !serviceCode) return;
 
-    void Promise.resolve().then(async () => {
-      setLoading(true);
-      setLoadError("");
-      setSlots([]);
+  const controller = new AbortController();
 
-      try {
-        const response = await fetch(`/api/availability?serviceCode=${encodeURIComponent(serviceCode)}&from=${date}&to=${date}`, { cache: "no-store", signal: controller.signal });
-        const payload = await response.json() as { data?: { slots?: Slot[] }; error?: { message?: string } };
-        if (!response.ok) throw new Error(payload.error?.message || "Availability could not be loaded.");
-        setSlots((payload.data?.slots ?? []).filter(slot => quarterHours.has(Number(boiseTimeValue(slot.startsAt).split(":")[1]))));
-      } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") return;
-        setLoadError(error instanceof Error ? error.message : "Availability could not be loaded.");
-      } finally {
-        if (!controller.signal.aborted) setLoading(false);
+  void Promise.resolve().then(async () => {
+    setLoading(true);
+    setLoadError("");
+    setSlots([]);
+
+    try {
+      const response = await fetch(
+        `/api/availability?serviceCode=${encodeURIComponent(
+          serviceCode,
+        )}&from=${date}&to=${date}`,
+        {
+          cache: "no-store",
+          signal: controller.signal,
+        },
+      );
+
+      const payload = (await response.json()) as {
+        data?: { slots?: Slot[] };
+        error?: { message?: string };
+      };
+
+      if (!response.ok) {
+        throw new Error(
+          payload.error?.message || "Availability could not be loaded.",
+        );
       }
-    });
 
-    return () => controller.abort();
-  }, [date, serviceCode]);
+      if (!controller.signal.aborted) {
+        setSlots(
+          (payload.data?.slots ?? []).filter(slot =>
+            quarterHours.has(
+              Number(boiseTimeValue(slot.startsAt).split(":")[1]),
+            ),
+          ),
+        );
+      }
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return;
+
+      if (!controller.signal.aborted) {
+        setLoadError(
+          error instanceof Error
+            ? error.message
+            : "Availability could not be loaded.",
+        );
+      }
+    } finally {
+      if (!controller.signal.aborted) {
+        setLoading(false);
+      }
+    }
+  });
+
+  return () => controller.abort();
+}, [date, serviceCode]);
 
   const requestedStartAt = useMemo(() => date && time && isQuarterHour(time) ? boiseLocalToIso(date, time) : "", [date, time]);
   const isSuggestion = Boolean(requestedStartAt && slots.some(slot => slot.startsAt === requestedStartAt));

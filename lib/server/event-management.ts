@@ -1,4 +1,4 @@
-import { ApiError, optionalString, rejectUnexpectedKeys, requiredString, validation } from "./http";
+import { optionalString, rejectUnexpectedKeys, requiredString, validation } from "./http";
 import { instant, publicEventJson } from "./event-management-core";
 
 export const eventStatuses = ["draft", "published", "archived"] as const;

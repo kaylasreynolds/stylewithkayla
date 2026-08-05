@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 
 type Service = {
   id: string;
@@ -493,24 +495,27 @@ function Header() {
   return (
     <header className="site-header" aria-label="Site header">
       <div className="container header-inner">
-        <a className="site-logo" href="/" aria-label="Style with Kayla home">
-          <img
+        <Link className="site-logo" href="/" aria-label="Style with Kayla home">
+          <Image
             src="/images/stylewithkayla_logo.png"
             alt="Style with Kayla"
+            width={3266}
+            height={1241}
+            priority
           />
-        </a>
+        </Link>
 
         <nav className="site-nav" aria-label="Main navigation">
-          <a href="/">Home</a>
-          <a href="/#services">Services</a>
-          <a href="/events">Events</a>
-          <a href="/about">About Me</a>
-          <a href="/#contact">Contact</a>
+       <Link href="/">...</Link>
+<Link href="/#services">Services</Link>
+<Link href="/events">Events</Link>
+<Link href="/about">About</Link>
+<Link href="/#contact">Contact</Link>
         </nav>
 
-        <a className="button header-cta" href="/book">
+        <Link className="button header-cta" href="/book">
           BOOK APPOINTMENT
-        </a>
+        </Link>
       </div>
     </header>
   );
@@ -523,16 +528,19 @@ function Footer() {
     <footer className="site-footer" id="contact">
       <div className="container footer-inner">
         <div className="footer-column footer-brand">
-          <a
+          <Link
             className="footer-logo"
             href="/"
             aria-label="Style with Kayla home"
           >
-            <img
+            <Image
               src="/images/stylewithkayla_logo.png"
               alt="Style with Kayla"
+              width={3266}
+              height={1241}
+              loading="eager"
             />
-          </a>
+          </Link>
         </div>
 
         <nav
@@ -541,8 +549,8 @@ function Footer() {
         >
           <p className="footer-kicker">Quick Links</p>
 
-          <a href="/#services">Services</a>
-          <a href="/events">Events</a>
+          <Link href="/#services">Services</Link>
+          <Link href="/events">Events</Link>
 
           <span
             className="footer-link--inactive"
@@ -558,8 +566,8 @@ function Footer() {
             FAQ
           </span>
 
-          <a href="/about">About Me</a>
-          <a href="/#contact">Contact</a>
+          <Link href="/about">About Me</Link>
+          <Link href="/#contact">Contact</Link>
         </nav>
 
         <div className="footer-column footer-contact">
@@ -567,14 +575,14 @@ function Footer() {
 
           <div className="footer-contact-item">
             <span aria-hidden="true">
-              <img src="/images/phone.png" alt="" />
+              <Image src="/images/phone.png" alt="" width={512} height={512} loading="eager" unoptimized />
             </span>
             <a href="tel:+12088596427">208-859-6427</a>
           </div>
 
           <div className="footer-contact-item">
             <span aria-hidden="true">
-              <img src="/images/email.png" alt="" />
+              <Image src="/images/email.png" alt="" width={512} height={512} loading="eager" unoptimized />
             </span>
             <a href="mailto:kayla.reynolds@macys.com">
               kayla.reynolds@macys.com
@@ -583,7 +591,7 @@ function Footer() {
 
           <div className="footer-contact-item">
             <span aria-hidden="true">
-              <img src="/images/location.png" alt="" />
+              <Image src="/images/location.png" alt="" width={512} height={512} loading="eager" unoptimized />
             </span>
             <p>
               Macy&apos;s Boise Towne Square
@@ -621,10 +629,14 @@ function Footer() {
                 }
                 key={icon}
               >
-                <img
+                <Image
                   src={`/images/${icon}.png`}
                   alt=""
                   aria-hidden="true"
+                  width={512}
+                  height={512}
+                  loading="eager"
+                  unoptimized
                 />
               </a>
             ))}
@@ -688,10 +700,14 @@ function Summary({
   return (
     <div className={`appointment-summary ${compact ? "compact" : ""}`}>
       <div className="summary-icon">
-        <img
+        <Image
           src={service.icon}
           alt=""
           aria-hidden="true"
+          width={512}
+          height={512}
+          loading="eager"
+          unoptimized
         />
       </div>
 

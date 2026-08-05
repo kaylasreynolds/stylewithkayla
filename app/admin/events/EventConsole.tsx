@@ -1,5 +1,12 @@
 "use client";
-import Link from "next/link";import{useEffect,useRef,useState}from"react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { eventDateToPickerValue, formatEventSchedule, isValidEventDate, pickerValueToEventDate } from "@/lib/event-date-time";
 import { buildEventPayload, defaultEventCostLabel, EventSubmissionGuard, eventImageFileError, eventImageUploadForm, hasEventOffer, isUploadedEventImage, readUploadResponse, withoutEventOffer } from "@/lib/event-editor-client";
 import { formatImageBytes, optimizeEventImage } from "@/lib/event-image-optimizer";
@@ -48,19 +55,10 @@ type EventListResponse = {
   events: EventRow[];
 };
 
-type RsvpListResponse = {
-  rsvps: Rsvp[];
-};
-
-type UploadResponse = ApiResponse<{
-  asset: {
-    id: string;
-    previewUrl: string;
-    width: number;
-    height: number;
-    sizeBytes: number;
-  };
-}>;
+type EventInputProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "ref" | "name" | "value" | "onChange"
+>;
 
 async function api<T>(
   url: string,
@@ -82,8 +80,7 @@ const blank:Record<string,unknown>={title:'',eventLabel:'',customLabel:'',shortD
 export function EventEditor({eventId}:{eventId?:string}){
  const[form,setForm]=useState<Record<string,unknown>>(blank),[loaded,setLoaded]=useState(!eventId),[dirty,setDirty]=useState(false),[error,setError]=useState(''),[errors,setErrors]=useState<Record<string,string>>({}),[progress,setProgress]=useState<number|null>(null),[imageStatus,setImageStatus]=useState<'idle'|'optimizing'|'uploading'|'uploaded'|'failed'>('idle'),[imageError,setImageError]=useState(''),[imageSizes,setImageSizes]=useState<{original:number;optimized:number}|null>(null),[localPreview,setLocalPreview]=useState(''),[asset,setAsset]=useState<{id:string;previewUrl:string;width:number;height:number;sizeBytes:number}|null>(null),[saving,setSaving]=useState(false),[pickerDate,setPickerDate]=useState(''),[offerOpen,setOfferOpen]=useState(false);
  const pickerRef=useRef<HTMLInputElement|null>(null),costLabels=useRef<Record<string,string>>({complimentary:'Complimentary'}),uploadSequence=useRef(0);
- const dirtyRef=useRef(false);
- const submissionGuard=useRef<EventSubmissionGuard|null>(null);if(!submissionGuard.current)submissionGuard.current=new EventSubmissionGuard(eventId);
+ const [submissionGuard] = useState(() => new EventSubmissionGuard(eventId));
 useEffect(() => {
   if (!eventId) return;
 
@@ -122,9 +119,25 @@ useEffect(() => {
       );
     });
 }, [eventId]);
- useEffect(()=>{const warn=(e:BeforeUnloadEvent)=>{if(dirtyRef.current){e.preventDefault();e.returnValue=''}};addEventListener('beforeunload',warn);return()=>removeEventListener('beforeunload',warn)},[]);
- const markDirty=()=>{dirtyRef.current=true;setDirty(true)};
- const set=(key:string,value:unknown)=>{setForm(f=>({...f,[key]:value}));markDirty();setErrors(e=>{const n={...e};delete n[key];return n})};
+useEffect(() => {
+  const warn = (event: BeforeUnloadEvent) => {
+    if (!dirty) return;
+
+    event.preventDefault();
+    event.returnValue = "";
+  };
+
+  window.addEventListener("beforeunload", warn);
+
+  return () => {
+    window.removeEventListener("beforeunload", warn);
+  };
+}, [dirty]);
+
+const markDirty = () => {
+  setDirty(true);
+};
+const set=(key:string,value:unknown)=>{setForm(f=>({...f,[key]:value}));markDirty();setErrors(e=>{const n={...e};delete n[key];return n})};
  const setEventDate=(value:string)=>{set("eventDate",value);const synchronized=eventDateToPickerValue(value);if(synchronized)setPickerDate(synchronized)};
  const selectPickerDate=(value:string)=>{const visible=pickerValueToEventDate(value);if(!visible)return;setPickerDate(value);set("eventDate",visible)};
  const selectCostType = (next: string) => {
@@ -153,12 +166,48 @@ useEffect(() => {
   set("costLabel", nextLabel);
 };
  const setCostLabel=(value:string)=>{const type=String(form.costType??"");if(type)costLabels.current[type]=value;set("costLabel",value)};
- const field=(name:string,label:string,props:React.InputHTMLAttributes<HTMLInputElement>={})=><label>{label}<input {...props} name={name} value={String(form[name]??'')} onChange={e=>set(name,props.type==='number'?(e.target.value===''?null:Number(e.target.value)):e.target.value)} aria-invalid={!!errors[name]}/>{errors[name]&&<small className="event-field-error">{errors[name]}</small>}</label>;
+ const field = (
+  name: string,
+  label: string,
+  props: EventInputProps = {},
+) => {
+  const { type, ...inputProps } = props;
+
+  return (
+    <label>
+      {label}
+
+      <input
+        {...inputProps}
+        type={type}
+        name={name}
+        value={String(form[name] ?? "")}
+        onChange={event =>
+          set(
+            name,
+            type === "number"
+              ? event.target.value === ""
+                ? null
+                : Number(event.target.value)
+              : event.target.value,
+          )
+        }
+        aria-invalid={!!errors[name]}
+      />
+
+      {errors[name] && (
+        <small className="event-field-error">
+          {errors[name]}
+        </small>
+      )}
+    </label>
+  );
+};
  const text=(name:string,label:string,rows=4,maxLength=1000)=><label>{label}<textarea name={name} rows={rows} maxLength={maxLength} value={String(form[name]??'')} onChange={e=>set(name,e.target.value)} aria-invalid={!!errors[name]}/>{errors[name]&&<small className="event-field-error">{errors[name]}</small>}</label>;
  const check=(name:string,label:string)=><label className="event-check"><input type="checkbox" checked={Boolean(form[name])} onChange={e=>set(name,e.target.checked)}/><span>{label}</span></label>;
  async function upload(file:File){const sequence=++uploadSequence.current;setError('');setImageError('');setProgress(null);setAsset(null);set('imageAssetId',null);setImageStatus('optimizing');try{const result=await optimizeEventImage(file);if(sequence!==uploadSequence.current)return;const uploadFile=result.file,fileError=eventImageFileError(uploadFile.size);if(fileError)throw new Error(fileError);setImageSizes({original:result.originalBytes,optimized:uploadFile.size});if(localPreview)URL.revokeObjectURL(localPreview);setLocalPreview(URL.createObjectURL(uploadFile));setImageStatus('uploading');setProgress(0);const xhr=new XMLHttpRequest(),data=eventImageUploadForm(uploadFile);xhr.upload.onprogress=e=>sequence===uploadSequence.current&&e.lengthComputable&&setProgress(Math.round(e.loaded/e.total*100));const fail=(message:string)=>{if(sequence!==uploadSequence.current)return;setAsset(null);set('imageAssetId',null);setImageError(message);setProgress(null);setImageStatus('failed')};xhr.onerror=()=>fail('Upload failed. Check your connection and try again.');xhr.onabort=()=>fail('Upload failed because it was cancelled. Please try again.');xhr.onload=()=>{if(sequence!==uploadSequence.current)return;setProgress(null);try{const uploaded=readUploadResponse(xhr.status,xhr.getResponseHeader('content-type'),xhr.responseText);setAsset(uploaded);set('imageAssetId',uploaded.id);setImageStatus('uploaded')}catch(e){fail(e instanceof Error?e.message:'The image could not be uploaded. Please try again.')}};xhr.open('POST','/api/admin/events/assets');xhr.send(data)}catch(e){if(sequence!==uploadSequence.current)return;setProgress(null);setImageStatus('failed');setImageError(e instanceof Error?e.message:"We couldn't optimize this image. Please choose another image and try again.")}}
 async function submit(publish = false) {
-  const target = submissionGuard.current!.begin();
+  const target = submissionGuard.begin();
   if (!target) return;
   setSaving(true);
   setError("");
@@ -198,7 +247,7 @@ async function submit(publish = false) {
     }
 
     const id = json.data.event.id;
-    submissionGuard.current!.captureEventId(id);
+    submissionGuard.captureEventId(id);
 
     if (publish) {
       const publishResponse = await fetch(
@@ -227,13 +276,11 @@ async function submit(publish = false) {
             "Publish failed",
         );
       }
-    }
-
-    dirtyRef.current = false;
+    };
     setDirty(false);
     location.href = `/admin/events/${id}`;
   } catch (error) {
-    submissionGuard.current!.finish();
+    submissionGuard.finish();
     setError(
       error instanceof Error
         ? error.message
@@ -257,7 +304,16 @@ async function submit(publish = false) {
  return <Shell title={eventId?'Edit event':'Create event'} actions={<Link href="/admin/events" className="event-button event-button--secondary">Return to Events</Link>}>
   {error&&<p className="event-alert" role="alert">{error}</p>}<form className="event-form event-editor" onSubmit={e=>{e.preventDefault();submit(false)}} noValidate>
   <fieldset><legend>1. Event Basics</legend><p className="event-section-help">Introduce the event on its public card and detail experience.</p><div className="event-form-grid">{field('title','Event title',{maxLength:160})}<label>Event label/type<select value={String(form.eventLabel)} onChange={e=>set('eventLabel',e.target.value)} aria-invalid={!!errors.eventLabel}><option value="">Choose a label</option>{Boolean(form.eventLabel)&&!labels.includes(form.eventLabel as typeof labels[number])&&<option value={String(form.eventLabel)} disabled>Legacy: {String(form.eventLabel)} — choose a current label</option>}{labels.map(x=><option key={x}>{x}</option>)}</select>{errors.eventLabel&&<small className="event-field-error">{errors.eventLabel}</small>}</label>{form.eventLabel==='Custom'&&field('customLabel','Custom label',{maxLength:80,required:true})}<div className="event-span">{text('shortDescription','Short card description',3,320)}</div><div className="event-span">{text('description','Full event description',7,5000)}</div></div></fieldset>
-  <fieldset className="event-image-field"><legend>2. Event Image</legend><p>JPG, PNG, or WebP. Images are resized without cropping and must be no more than 5 MiB after optimization.</p>{(localPreview||asset)&&<img src={localPreview||asset?.previewUrl} alt={imageAlt||'Selected event image preview'}/>}<div><label className="event-button event-button--secondary">{asset?'Replace image':'Upload image'}<input type="file" accept=".jpg,.jpeg,.png,.webp" onChange={e=>e.target.files?.[0]&&upload(e.target.files[0])}/></label>{(localPreview||asset)&&<button type="button" className="event-link-button" onClick={()=>{uploadSequence.current++;if(localPreview)URL.revokeObjectURL(localPreview);setLocalPreview('');setImageSizes(null);setImageStatus('idle');setImageError('');setAsset(null);set('imageAssetId',null);set('imageAlt','')}}>Remove image</button>}</div><span aria-live="polite">{imageStatus==='optimizing'?'Optimizing image…':imageStatus==='uploading'?'Uploading image…':imageStatus==='uploaded'?'Image uploaded':imageStatus==='failed'?'Upload failed':''}</span>{imageError&&<p className="event-alert" role="alert">{imageError}</p>}{imageSizes&&<p>Original: <strong>{formatImageBytes(imageSizes.original)}</strong> · Optimized: <strong>{formatImageBytes(imageSizes.optimized)}</strong></p>}{progress!==null&&<><progress value={progress} max="100"/><span aria-live="polite">Uploading: {progress}%</span></>}{(localPreview||asset)&&<label>Alt text<textarea value={imageAlt} onChange={e=>set('imageAlt',e.target.value)} maxLength={240} aria-invalid={!!errors.imageAlt}/><small>{imageAlt.length} / 240 characters</small>{errors.imageAlt&&<small className="event-field-error">{errors.imageAlt}</small>}</label>}</fieldset>
+  <fieldset className="event-image-field"><legend>2. Event Image</legend><p>JPG, PNG, or WebP. Images are resized without cropping and must be no more than 5 MiB after optimization.</p>{(localPreview || asset) && (
+  <Image
+    src={localPreview || asset?.previewUrl || ""}
+    alt={imageAlt || "Selected event image preview"}
+    width={asset?.width || 1200}
+    height={asset?.height || 900}
+    sizes="(max-width: 768px) 100vw, 720px"
+    unoptimized
+  />
+)}<div><label className="event-button event-button--secondary">{asset?'Replace image':'Upload image'}<input type="file" accept=".jpg,.jpeg,.png,.webp" onChange={e=>e.target.files?.[0]&&upload(e.target.files[0])}/></label>{(localPreview||asset)&&<button type="button" className="event-link-button" onClick={()=>{uploadSequence.current++;if(localPreview)URL.revokeObjectURL(localPreview);setLocalPreview('');setImageSizes(null);setImageStatus('idle');setImageError('');setAsset(null);set('imageAssetId',null);set('imageAlt','')}}>Remove image</button>}</div><span aria-live="polite">{imageStatus==='optimizing'?'Optimizing image…':imageStatus==='uploading'?'Uploading image…':imageStatus==='uploaded'?'Image uploaded':imageStatus==='failed'?'Upload failed':''}</span>{imageError&&<p className="event-alert" role="alert">{imageError}</p>}{imageSizes&&<p>Original: <strong>{formatImageBytes(imageSizes.original)}</strong> · Optimized: <strong>{formatImageBytes(imageSizes.optimized)}</strong></p>}{progress!==null&&<><progress value={progress} max="100"/><span aria-live="polite">Uploading: {progress}%</span></>}{(localPreview||asset)&&<label>Alt text<textarea value={imageAlt} onChange={e=>set('imageAlt',e.target.value)} maxLength={240} aria-invalid={!!errors.imageAlt}/><small>{imageAlt.length} / 240 characters</small>{errors.imageAlt&&<small className="event-field-error">{errors.imageAlt}</small>}</label>}</fieldset>
 <fieldset>
   <legend>3. Date, Time &amp; Location</legend>
 
@@ -800,16 +856,17 @@ export function CheckIn({
 }) {
   const [rows, setRows] = useState<Rsvp[]>([]);
 
-  const load = () =>
-    api<{ rsvps: Rsvp[] }>(
-      `/api/admin/events/${eventId}/rsvps?status=confirmed`,
-    ).then(data => {
-      setRows(data.rsvps);
-    });
+  const load = useCallback(() => {
+  return api<{ rsvps: Rsvp[] }>(
+    `/api/admin/events/${eventId}/rsvps?status=confirmed`,
+  ).then(data => {
+    setRows(data.rsvps);
+  });
+}, [eventId]);
 
   useEffect(() => {
-    void load();
-  }, [eventId]);
+  void load();
+}, [load]);
 
   async function mark(
     rsvpId: string,

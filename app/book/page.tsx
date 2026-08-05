@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 
 type Service = {
   id: string;
@@ -446,7 +447,7 @@ function Header() {
   return (
     <header className="site-header" aria-label="Site header">
       <div className="container header-inner">
-        <a className="site-logo" href="#top" aria-label="Style with Kayla home"><img src="/images/stylewithkayla_logo.png" alt="Style with Kayla" /></a>
+        <a className="site-logo" href="#top" aria-label="Style with Kayla home"><Image src="/images/stylewithkayla_logo.png" alt="Style with Kayla" width={3266} height={1241} priority /></a>
         <nav className="site-nav" aria-label="Main navigation"><a href="#top">Home</a><a href="#services">Services</a><a href="#events">Events</a><a href="#about">About Me</a><a href="#contact">Contact</a></nav>
         <a className="button header-cta" href="/book">BOOK APPOINTMENT</a>
       </div>
@@ -459,19 +460,19 @@ function Footer() {
   return (
     <footer className="site-footer" id="contact">
       <div className="container footer-inner">
-        <div className="footer-column footer-brand"><a className="footer-logo" href="#top" aria-label="Style with Kayla home"><img src="/images/stylewithkayla_logo.png" alt="Style with Kayla" /></a></div>
+        <div className="footer-column footer-brand"><a className="footer-logo" href="#top" aria-label="Style with Kayla home"><Image src="/images/stylewithkayla_logo.png" alt="Style with Kayla" width={3266} height={1241} loading="eager" /></a></div>
         <nav className="footer-column footer-links" aria-label="Footer quick links">
           <p className="footer-kicker">Quick Links</p><a href="#services">Services</a><a href="#events">Events</a><span className="footer-link--inactive" aria-disabled="true">Guides</span><span className="footer-link--inactive" aria-disabled="true">FAQ</span><a href="#about">About Me</a><a href="#contact">Contact</a>
         </nav>
         <div className="footer-column footer-contact">
           <p className="footer-kicker">Let&apos;s Connect</p>
-          <div className="footer-contact-item"><span aria-hidden="true"><img src="/images/phone.png" alt="" /></span><a href="tel:+12088596427">208-859-6427</a></div>
-          <div className="footer-contact-item"><span aria-hidden="true"><img src="/images/email.png" alt="" /></span><a href="mailto:kayla.reynolds@macys.com">kayla.reynolds@macys.com</a></div>
-          <div className="footer-contact-item"><span aria-hidden="true"><img src="/images/location.png" alt="" /></span><p>Macy&apos;s Boise Towne Square<br />370 N. Milwaukee St.<br />Boise, ID 83704</p></div>
+          <div className="footer-contact-item"><span aria-hidden="true"><Image src="/images/phone.png" alt="" width={512} height={512} loading="eager" unoptimized /></span><a href="tel:+12088596427">208-859-6427</a></div>
+          <div className="footer-contact-item"><span aria-hidden="true"><Image src="/images/email.png" alt="" width={512} height={512} loading="eager" unoptimized /></span><a href="mailto:kayla.reynolds@macys.com">kayla.reynolds@macys.com</a></div>
+          <div className="footer-contact-item"><span aria-hidden="true"><Image src="/images/location.png" alt="" width={512} height={512} loading="eager" unoptimized /></span><p>Macy&apos;s Boise Towne Square<br />370 N. Milwaukee St.<br />Boise, ID 83704</p></div>
         </div>
         <div className="footer-column footer-social">
           <p className="footer-kicker">Follow Along</p>
-          <div className="footer-social-links" aria-label="Social profiles">{socialIcons.map((icon) => <span className="footer-social-icon" role="img" aria-label={icon[0].toUpperCase() + icon.slice(1)} key={icon}><img src={`/images/${icon}.png`} alt="" aria-hidden="true" /></span>)}</div>
+          <div className="footer-social-links" aria-label="Social profiles">{socialIcons.map((icon) => <span className="footer-social-icon" role="img" aria-label={icon[0].toUpperCase() + icon.slice(1)} key={icon}><Image src={`/images/${icon}.png`} alt="" aria-hidden="true" width={512} height={512} loading="eager" unoptimized /></span>)}</div>
           <a className="button button--primary" href="/book">Book Appointment</a>
         </div>
       </div>
@@ -502,10 +503,14 @@ function Summary({
   return (
     <div className={`appointment-summary ${compact ? "compact" : ""}`}>
       <div className="summary-icon">
-        <img
+        <Image
           src={service.icon}
           alt=""
           aria-hidden="true"
+          width={512}
+          height={512}
+          loading="eager"
+          unoptimized
         />
       </div>
 
