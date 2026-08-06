@@ -1,6 +1,6 @@
 /* Public event appointment and RSVP form */
 .rsvp-dialog {
-  width: min(720px, calc(100% - 32px));
+  width: min(760px, calc(100% - 32px));
   max-height: calc(100dvh - 32px);
   padding: 0;
   border: 0;
@@ -67,12 +67,14 @@
 }
 
 .rsvp-form h3 {
+  max-width: calc(100% - 48px);
   margin: 0 48px 26px 0;
   color: var(--color-charcoal);
   font-family: var(--font-heading);
-  font-size: clamp(2.15rem, 5vw, 3rem);
+  font-size: clamp(1.9rem, 4vw, 2.7rem);
   font-weight: 600;
-  line-height: 1.02;
+  line-height: 1.05;
+  white-space: nowrap;
 }
 
 .rsvp-form__fields {
@@ -96,10 +98,14 @@
   line-height: 1.35;
 }
 
+.rsvp-form label:has(input[name="phone"]),
+#guests-field {
+  display: none !important;
+}
+
 .rsvp-form label:has(textarea),
 .rsvp-form label:has(select),
-#appointment-field,
-#guests-field {
+#appointment-field {
   grid-column: 1 / -1;
 }
 
@@ -190,6 +196,12 @@
   opacity: .58;
 }
 
+@media (max-width: 760px) {
+  .rsvp-form h3 {
+    white-space: normal;
+  }
+}
+
 @media (max-width: 620px) {
   .rsvp-dialog {
     width: calc(100% - 20px);
@@ -203,7 +215,7 @@
 
   .rsvp-form h3 {
     margin-right: 38px;
-    font-size: 2.1rem;
+    font-size: 2rem;
   }
 
   .rsvp-form__fields {
@@ -215,8 +227,7 @@
   .rsvp-form label,
   .rsvp-form label:has(textarea),
   .rsvp-form label:has(select),
-  #appointment-field,
-  #guests-field {
+  #appointment-field {
     grid-column: 1;
   }
 }
