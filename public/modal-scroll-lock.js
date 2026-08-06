@@ -8,7 +8,12 @@
     if (document.body.classList.contains("modal-scroll-locked")) return;
 
     lockedScrollY = window.scrollY || window.pageYOffset || 0;
+    document.body.style.position = "fixed";
     document.body.style.top = `-${lockedScrollY}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
     document.body.classList.add("modal-scroll-locked");
   };
 
@@ -16,7 +21,12 @@
     if (!document.body.classList.contains("modal-scroll-locked")) return;
 
     document.body.classList.remove("modal-scroll-locked");
+    document.body.style.position = "";
     document.body.style.top = "";
+    document.body.style.left = "";
+    document.body.style.right = "";
+    document.body.style.width = "";
+    document.body.style.overflow = "";
     window.scrollTo(0, lockedScrollY);
   };
 
