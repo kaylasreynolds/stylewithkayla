@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Event Confirmation Email Preview | Style with Kayla</title>
+  <meta name="robots" content="noindex,nofollow">
+  <style>
+    :root {
+      color-scheme: light;
+      --ivory: #fffdfb;
+      --blush: #f8efec;
+      --rose: #a85f68;
+      --charcoal: #3d3531;
+      --muted: #655a55;
+      --line: #ded2ca;
+      --page: #f7f2ee;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--charcoal);
+      font-family: Arial, sans-serif;
+    }
+    .preview-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 253, 251, .96);
+      backdrop-filter: blur(8px);
+    }
+    .preview-toolbar strong {
+      font-family: Georgia, serif;
+      font-size: 20px;
+    }
+    .preview-toolbar span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .email-shell {
+      width: 100%;
+      padding: 28px 14px 48px;
+    }
+    .email-card {
+      width: 100%;
+      max-width: 620px;
+      margin: 0 auto;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--ivory);
+      box-shadow: 0 18px 50px rgba(61, 53, 49, .10);
+    }
+    .email-header {
+      padding: 34px 34px 14px;
+    }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--rose);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0;
+      font-family: Georgia, serif;
+      font-size: 34px;
+      line-height: 1.1;
+      color: var(--charcoal);
+    }
+    .intro {
+      padding: 10px 34px 22px;
+    }
+    .intro p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.65;
+    }
+    .details-wrap {
+      padding: 0 34px 24px;
+    }
+    .details {
+      padding: 18px 20px;
+      border-radius: 12px;
+      background: var(--blush);
+    }
+    .details-label,
+    .notes-label {
+      margin: 0 0 8px;
+      color: var(--rose);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .event-title {
+      margin: 0 0 12px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .detail-row {
+      margin: 0 0 8px;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .detail-row:last-child { margin-bottom: 0; }
+    .notes {
+      padding: 0 34px 22px;
+    }
+    .notes p:last-child {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .calendar-note {
+      padding: 0 34px 28px;
+    }
+    .calendar-note p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+    .email-footer {
+      padding: 22px 34px;
+      background: var(--charcoal);
+      color: white;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .email-footer a { color: white; }
+    .attachment {
+      max-width: 620px;
+      margin: 14px auto 0;
+      padding: 12px 14px;
+      border: 1px dashed #c9b8ae;
+      border-radius: 10px;
+      background: rgba(255,255,255,.55);
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    @media (max-width: 520px) {
+      .preview-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .email-shell { padding: 18px 10px 36px; }
+      .email-header { padding: 28px 22px 12px; }
+      .intro { padding: 8px 22px 20px; }
+      .details-wrap { padding: 0 22px 22px; }
+      .notes { padding: 0 22px 20px; }
+      .calendar-note { padding: 0 22px 24px; }
+      .email-footer { padding: 20px 22px; }
+      h1 { font-size: 29px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-toolbar">
+    <strong>Confirmation Email Preview</strong>
+    <span>Sample customer: Jamie · Iberjoya Trunk Show</span>
+  </div>
+
+  <main class="email-shell">
+    <article class="email-card" aria-label="Sample confirmation email">
+      <header class="email-header">
+        <p class="eyebrow">Appointment confirmed</p>
+        <h1>Thanks for booking, Jamie!</h1>
+      </header>
+
+      <section class="intro">
+        <p>Your spot for <strong>Iberjoya Trunk Show</strong> has been saved. I can’t wait to see you there!</p>
+      </section>
+
+      <section class="details-wrap">
+        <div class="details">
+          <p class="details-label">Event</p>
+          <p class="event-title">Iberjoya Trunk Show</p>
+          <p class="detail-row"><strong>Date:</strong> Thursday, September 17, 2026</p>
+          <p class="detail-row"><strong>Time:</strong> 1:00 PM–1:30 PM</p>
+          <p class="detail-row"><strong>Location:</strong> Macy’s Boise Towne Square · Fine Jewelry, 1st Floor</p>
+        </div>
+      </section>
+
+      <section class="notes">
+        <p class="notes-label">Your notes</p>
+        <p>I’d love to look at tennis bracelets and anniversary gift ideas.</p>
+      </section>
+
+      <section class="calendar-note">
+        <p>A calendar file is attached to this email. Open it to add the appointment to your calendar and receive calendar reminders.</p>
+      </section>
+
+      <footer class="email-footer">
+        Questions or changes? Reply to this email or contact Kayla at
+        <a href="mailto:kayla@stylewithkayla.com">kayla@stylewithkayla.com</a>.
+      </footer>
+    </article>
+
+    <div class="attachment">Attachment: style-with-kayla-appointment.ics</div>
+  </main>
+</body>
+</html>
