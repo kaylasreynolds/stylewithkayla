@@ -16,6 +16,52 @@
         })[character],
     );
 
+  const formatDateTime = event => {
+    if (!event?.startsAt) return "";
+
+    const timezone = event.timezone || "America/Boise";
+    const date = new Intl.DateTimeFormat("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      timeZone: timezone,
+    }).format(new Date(event.startsAt));
+
+    if (event.allDay) return `${date} · All day`;
+
+    const time = value =>
+      new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        timeZone: timezone,
+      }).format(new Date(value));
+
+    return `${date} · ${time(event.startsAt)}–${time(event.endsAt)}`;
+  };
+
+  const attendanceLabel = value => {
+    const labels = {
+      open_attendance: "Stop by anytime",
+      appointment_required: "Appointment required",
+      appointment_recommended: "Appointment recommended",
+      general_rsvp: "RSVP required",
+      interest_list: "Join the interest list",
+      invitation_only: "Invitation only",
+      information_only: "Information only",
+      drop_in: "Stop by anytime",
+    };
+
+    return labels[value] || "";
+  };
+
+  const paragraphMarkup = value =>
+    String(value || "")
+      .trim()
+      .split(/\n\s*\n/)
+      .map(paragraph => `<p>${escape(paragraph.trim()).replace(/\n/g, "<br>")}</p>`)
+      .join("");
+
   let eventData = null;
   let enhancementPending = false;
 
@@ -40,19 +86,44 @@
   const detailsMarkup = event => {
     const fullDescription = String(event?.description || "").trim();
     const shortDescription = String(event?.shortDescription || "").trim();
-    const locationDetails = String(event?.locationDetails || "").trim();
     const detailDescription =
       fullDescription && fullDescription !== shortDescription
         ? fullDescription
-        : "";
+        : shortDescription;
+    const location = [event?.location, event?.locationDetails]
+      .filter(Boolean)
+      .join(" · ");
+    const attendance = attendanceLabel(event?.attendanceType);
+    const dateTime = formatDateTime(event);
 
-    if (!detailDescription && !locationDetails) return "";
+    if (!detailDescription && !location && !dateTime) return "";
 
     return `
-      ${detailDescription ? `<p>${escape(detailDescription)}</p>` : ""}
+      <div class="event-details-dialog__facts">
+        ${
+          dateTime
+            ? `<div class="event-details-dialog__fact"><span class="event-details-dialog__fact-icon" aria-hidden="true">◷</span><span>${escape(dateTime)}</span></div>`
+            : ""
+        }
+        ${
+          location
+            ? `<div class="event-details-dialog__fact"><span class="event-details-dialog__fact-icon" aria-hidden="true">⌖</span><span>${escape(location)}</span></div>`
+            : ""
+        }
+        ${
+          attendance
+            ? `<div class="event-details-dialog__fact"><span class="event-details-dialog__fact-icon" aria-hidden="true">○</span><span>${escape(attendance)}</span></div>`
+            : ""
+        }
+      </div>
       ${
-        locationDetails
-          ? `<div class="event-details-dialog__section"><span class="event-details-dialog__label">Location details</span><p>${escape(locationDetails)}</p></div>`
+        event?.offer
+          ? `<div class="event-details-dialog__offer"><span>Special offer</span><strong>${escape(event.offer)}</strong></div>`
+          : ""
+      }
+      ${
+        detailDescription
+          ? `<section class="event-details-dialog__section"><h3>About this event</h3>${paragraphMarkup(detailDescription)}</section>`
           : ""
       }
     `;
@@ -63,23 +134,24 @@
   dialog.innerHTML = `
     <div class="event-details-dialog__panel">
       <button class="event-details-dialog__close" type="button" aria-label="Close event details">×</button>
-      <p class="event-details-dialog__eyebrow">Event details</p>
+      <p class="event-details-dialog__eyebrow">Upcoming event</p>
       <h2 class="event-details-dialog__title"></h2>
       <div class="event-details-dialog__body"></div>
+      <button class="event-details-dialog__done" type="button">Close</button>
     </div>
   `;
   document.body.append(dialog);
 
   const closeButton = dialog.querySelector(".event-details-dialog__close");
+  const doneButton = dialog.querySelector(".event-details-dialog__done");
   const title = dialog.querySelector(".event-details-dialog__title");
   const body = dialog.querySelector(".event-details-dialog__body");
   let lastTrigger = null;
 
-  const closeDialog = () => {
-    dialog.close();
-  };
+  const closeDialog = () => dialog.close();
 
   closeButton.addEventListener("click", closeDialog);
+  doneButton.addEventListener("click", closeDialog);
 
   dialog.addEventListener("click", event => {
     if (event.target === dialog) closeDialog();
