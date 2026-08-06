@@ -1,0 +1,222 @@
+/* Public event appointment and RSVP form */
+.rsvp-dialog {
+  width: min(720px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  color: var(--color-charcoal);
+  box-shadow: 0 24px 70px rgba(52, 39, 34, .24);
+}
+
+.rsvp-dialog::backdrop {
+  background: rgba(36, 27, 24, .62);
+  backdrop-filter: blur(2px);
+}
+
+.rsvp-form {
+  position: relative;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  padding: clamp(30px, 5vw, 46px);
+  border: 1px solid var(--color-divider);
+  border-radius: 16px;
+  background: var(--color-ivory);
+}
+
+.rsvp-dialog__close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-charcoal);
+  font: inherit;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.rsvp-dialog__close:hover {
+  background: var(--color-blush);
+}
+
+.rsvp-dialog__close:focus-visible,
+.rsvp-form input:focus-visible,
+.rsvp-form textarea:focus-visible,
+.rsvp-form select:focus-visible,
+.rsvp-form button:focus-visible {
+  outline: 3px solid rgba(207, 140, 147, .4);
+  outline-offset: 2px;
+}
+
+.rsvp-form > .section-label {
+  margin: 0 48px 8px 0;
+  color: var(--color-rose-hover);
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.rsvp-form h3 {
+  margin: 0 48px 26px 0;
+  color: var(--color-charcoal);
+  font-family: var(--font-heading);
+  font-size: clamp(2.15rem, 5vw, 3rem);
+  font-weight: 600;
+  line-height: 1.02;
+}
+
+.rsvp-form__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  padding: 22px;
+  border: 1px solid var(--color-divider);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .62);
+}
+
+.rsvp-form label {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-width: 0;
+  color: var(--color-charcoal);
+  font-size: .82rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.rsvp-form label:has(textarea),
+.rsvp-form label:has(select),
+#appointment-field,
+#guests-field {
+  grid-column: 1 / -1;
+}
+
+.rsvp-form label > span[aria-hidden="true"] {
+  color: var(--color-rose-hover);
+}
+
+.rsvp-form input,
+.rsvp-form textarea,
+.rsvp-form select {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid #b9aaa4;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--color-charcoal);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.4;
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.rsvp-form textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.rsvp-form input:hover,
+.rsvp-form textarea:hover,
+.rsvp-form select:hover {
+  border-color: var(--color-rose);
+}
+
+.rsvp-form input:focus,
+.rsvp-form textarea:focus,
+.rsvp-form select:focus {
+  border-color: var(--color-rose-hover);
+  box-shadow: 0 0 0 3px rgba(207, 140, 147, .14);
+}
+
+.rsvp-form small {
+  color: var(--color-gray);
+  font-size: .75rem;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.rsvp-form__message {
+  min-height: 0;
+  margin: 18px 0 0;
+  padding: 0;
+  color: #a9444d;
+  font-size: .86rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.rsvp-form__message:empty {
+  display: none;
+}
+
+.rsvp-form > .button[type="submit"] {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 22px;
+  padding: 14px 20px;
+  border: 1px solid var(--color-rose);
+  border-radius: 8px;
+  background: var(--color-rose);
+  color: var(--color-white);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.rsvp-form > .button[type="submit"]:hover {
+  border-color: var(--color-rose-hover);
+  background: var(--color-rose-hover);
+}
+
+.rsvp-form > .button[type="submit"]:disabled {
+  cursor: not-allowed;
+  opacity: .58;
+}
+
+@media (max-width: 620px) {
+  .rsvp-dialog {
+    width: calc(100% - 20px);
+    max-height: calc(100dvh - 20px);
+  }
+
+  .rsvp-form {
+    max-height: calc(100dvh - 20px);
+    padding: 28px 20px 22px;
+  }
+
+  .rsvp-form h3 {
+    margin-right: 38px;
+    font-size: 2.1rem;
+  }
+
+  .rsvp-form__fields {
+    grid-template-columns: 1fr;
+    gap: 17px;
+    padding: 18px;
+  }
+
+  .rsvp-form label,
+  .rsvp-form label:has(textarea),
+  .rsvp-form label:has(select),
+  #appointment-field,
+  #guests-field {
+    grid-column: 1;
+  }
+}
