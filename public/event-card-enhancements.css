@@ -82,11 +82,11 @@ body.event-details-open {
 }
 
 .event-details-dialog {
-  width: min(620px, calc(100% - 32px));
+  width: min(680px, calc(100% - 32px));
   max-height: calc(100dvh - 32px);
   padding: 0;
   border: 0;
-  border-radius: 14px;
+  border-radius: 16px;
   background: transparent;
   color: var(--color-charcoal);
   box-shadow: 0 24px 70px rgba(52, 39, 34, .24);
@@ -101,9 +101,9 @@ body.event-details-open {
   position: relative;
   max-height: calc(100dvh - 32px);
   overflow-y: auto;
-  padding: clamp(28px, 5vw, 44px);
+  padding: clamp(30px, 5vw, 46px);
   border: 1px solid var(--color-divider);
-  border-radius: 14px;
+  border-radius: 16px;
   background: var(--color-ivory);
 }
 
@@ -130,13 +130,14 @@ body.event-details-open {
   background: var(--color-blush);
 }
 
-.event-details-dialog__close:focus-visible {
+.event-details-dialog__close:focus-visible,
+.event-details-dialog__done:focus-visible {
   outline: 3px solid rgba(207, 140, 147, .4);
   outline-offset: 2px;
 }
 
 .event-details-dialog__eyebrow {
-  margin: 0 48px 10px 0;
+  margin: 0 48px 8px 0;
   color: var(--color-rose-hover);
   font-size: .74rem;
   font-weight: 700;
@@ -145,39 +146,107 @@ body.event-details-open {
 }
 
 .event-details-dialog__title {
-  margin: 0 48px 22px 0;
+  margin: 0 48px 24px 0;
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-size: clamp(2.2rem, 5vw, 3rem);
   font-weight: 600;
-  line-height: 1.05;
+  line-height: 1.02;
 }
 
 .event-details-dialog__body {
   color: #514a47;
 }
 
-.event-details-dialog__body > p,
+.event-details-dialog__facts {
+  display: grid;
+  gap: 12px;
+  padding: 18px 20px;
+  border: 1px solid var(--color-divider);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .65);
+}
+
+.event-details-dialog__fact {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  font-size: .94rem;
+  line-height: 1.5;
+}
+
+.event-details-dialog__fact-icon {
+  color: var(--color-rose-hover);
+  font-size: 1.05rem;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.event-details-dialog__offer {
+  display: grid;
+  gap: 4px;
+  margin-top: 18px;
+  padding: 16px 18px;
+  border-left: 4px solid var(--color-rose);
+  border-radius: 8px;
+  background: var(--color-blush);
+  color: var(--color-charcoal);
+}
+
+.event-details-dialog__offer span {
+  color: var(--color-rose-hover);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.event-details-dialog__offer strong {
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.event-details-dialog__section {
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--color-divider);
+}
+
+.event-details-dialog__section h3 {
+  margin: 0 0 12px;
+  color: var(--color-charcoal);
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
 .event-details-dialog__section p {
-  margin: 0;
-  white-space: pre-line;
+  margin: 0 0 14px;
   font-size: .98rem;
   line-height: 1.7;
 }
 
-.event-details-dialog__section {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid var(--color-divider);
+.event-details-dialog__section p:last-child {
+  margin-bottom: 0;
 }
 
-.event-details-dialog__label {
-  display: block;
-  margin-bottom: 7px;
-  color: var(--color-rose-hover);
-  font-size: .74rem;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
+.event-details-dialog__done {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 28px;
+  padding: 12px 18px;
+  border: 1px solid var(--color-rose);
+  border-radius: 8px;
+  background: var(--color-rose);
+  color: var(--color-white);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.event-details-dialog__done:hover {
+  background: var(--color-rose-hover);
 }
 
 @media (max-width: 430px) {
@@ -197,11 +266,15 @@ body.event-details-open {
 
   .event-details-dialog__panel {
     max-height: calc(100dvh - 20px);
-    padding: 28px 22px;
+    padding: 28px 20px 22px;
   }
 
   .event-details-dialog__title {
     margin-right: 38px;
-    font-size: 2rem;
+    font-size: 2.1rem;
+  }
+
+  .event-details-dialog__facts {
+    padding: 16px;
   }
 }
