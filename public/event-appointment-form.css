@@ -98,7 +98,6 @@
   line-height: 1.35;
 }
 
-.rsvp-form label:has(input[name="phone"]),
 #guests-field {
   display: none !important;
 }
