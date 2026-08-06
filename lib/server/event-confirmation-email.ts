@@ -98,28 +98,28 @@ const buildEmailHtml = (input: ConfirmationEmailInput) => {
   <body style="margin:0;background:#f7f2ee;color:#3d3531;font-family:Arial,sans-serif;">
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f7f2ee;padding:28px 14px;">
       <tr><td align="center">
-        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:620px;background:#fffdfb;border:1px solid #ded2ca;border-radius:16px;overflow:hidden;">
-          <tr><td style="padding:34px 34px 14px;">
-            <p style="margin:0 0 8px;color:#a85f68;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;">Appointment confirmed</p>
-            <h1 style="margin:0;font-family:Georgia,serif;font-size:34px;line-height:1.1;color:#3d3531;">Thanks for booking, ${htmlEscape(input.guestName)}!</h1>
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:620px;background:#fffdfb;border:1px solid #ded2ca;border-radius:16px;overflow:hidden;text-align:center;">
+          <tr><td align="center" style="padding:34px 34px 14px;text-align:center;">
+            <p style="margin:0 0 8px;color:#a85f68;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-align:center;">Appointment confirmed</p>
+            <h1 style="margin:0;font-family:Georgia,serif;font-size:34px;line-height:1.1;color:#3d3531;text-align:center;">Thanks for booking, ${htmlEscape(input.guestName)}!</h1>
           </td></tr>
-          <tr><td style="padding:10px 34px 22px;">
-            <p style="margin:0;font-size:16px;line-height:1.65;">Your spot for <strong>${htmlEscape(input.eventTitle)}</strong> has been saved. I can’t wait to see you there!</p>
+          <tr><td align="center" style="padding:10px 34px 22px;text-align:center;">
+            <p style="margin:0;font-size:16px;line-height:1.65;text-align:center;">Your spot for <strong>${htmlEscape(input.eventTitle)}</strong> has been saved. I can’t wait to see you there!</p>
           </td></tr>
-          <tr><td style="padding:0 34px 24px;">
-            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f8efec;border-radius:12px;padding:4px 0;">
-              <tr><td style="padding:18px 20px 8px;color:#a85f68;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">Event</td></tr>
-              <tr><td style="padding:0 20px 12px;font-size:17px;font-weight:700;">${htmlEscape(input.eventTitle)}</td></tr>
-              <tr><td style="padding:0 20px 8px;font-size:14px;line-height:1.55;"><strong>Date:</strong> ${htmlEscape(date)}</td></tr>
-              <tr><td style="padding:0 20px 8px;font-size:14px;line-height:1.55;"><strong>Time:</strong> ${htmlEscape(appointmentText)}</td></tr>
-              <tr><td style="padding:0 20px 18px;font-size:14px;line-height:1.55;"><strong>Location:</strong> ${htmlEscape(input.location)}</td></tr>
+          <tr><td align="center" style="padding:0 34px 24px;text-align:center;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f8efec;border-radius:12px;padding:4px 0;text-align:center;">
+              <tr><td align="center" style="padding:18px 20px 8px;color:#a85f68;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;text-align:center;">Event</td></tr>
+              <tr><td align="center" style="padding:0 20px 12px;font-size:17px;font-weight:700;text-align:center;">${htmlEscape(input.eventTitle)}</td></tr>
+              <tr><td align="center" style="padding:0 20px 8px;font-size:14px;line-height:1.55;text-align:center;"><strong>Date:</strong> ${htmlEscape(date)}</td></tr>
+              <tr><td align="center" style="padding:0 20px 8px;font-size:14px;line-height:1.55;text-align:center;"><strong>Time:</strong> ${htmlEscape(appointmentText)}</td></tr>
+              <tr><td align="center" style="padding:0 20px 18px;font-size:14px;line-height:1.55;text-align:center;"><strong>Location:</strong> ${htmlEscape(input.location)}</td></tr>
             </table>
           </td></tr>
-          ${input.notes ? `<tr><td style="padding:0 34px 22px;"><p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#a85f68;text-transform:uppercase;letter-spacing:.08em;">Your notes</p><p style="margin:0;font-size:14px;line-height:1.6;">${htmlEscape(input.notes)}</p></td></tr>` : ""}
-          <tr><td style="padding:0 34px 28px;">
-            <p style="margin:0;font-size:14px;line-height:1.65;color:#655a55;">A calendar file is attached to this email. Open it to add the appointment to your calendar and receive calendar reminders.</p>
+          ${input.notes ? `<tr><td align="center" style="padding:0 34px 22px;text-align:center;"><p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#a85f68;text-transform:uppercase;letter-spacing:.08em;text-align:center;">Your notes</p><p style="margin:0;font-size:14px;line-height:1.6;text-align:center;">${htmlEscape(input.notes)}</p></td></tr>` : ""}
+          <tr><td align="center" style="padding:0 34px 28px;text-align:center;">
+            <p style="margin:0;font-size:14px;line-height:1.65;color:#655a55;text-align:center;">A calendar file is attached to this email. Open it to add the appointment to your calendar and receive calendar reminders.</p>
           </td></tr>
-          <tr><td style="padding:22px 34px;background:#3d3531;color:#fff;font-size:13px;line-height:1.6;">
+          <tr><td align="center" style="padding:22px 34px;background:#3d3531;color:#fff;font-size:13px;line-height:1.6;text-align:center;">
             Questions or changes? Reply to this email or contact Kayla at <a href="mailto:kayla@stylewithkayla.com" style="color:#fff;">kayla@stylewithkayla.com</a>.
           </td></tr>
         </table>
