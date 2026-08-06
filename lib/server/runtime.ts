@@ -6,6 +6,9 @@ type RuntimeEnv = {
   ADMIN_EMAILS?: string;
   LOCAL_ADMIN_EMAIL?: string;
   MAINTENANCE_SECRET?: string;
+  RESEND_API_KEY?: string;
+  EVENT_EMAIL_FROM?: string;
+  EVENT_EMAIL_REPLY_TO?: string;
 };
 
 export function getD1() {
@@ -34,4 +37,17 @@ export function getLocalAdminEmail() {
 
 export function getMaintenanceSecret() {
   return (env as unknown as RuntimeEnv).MAINTENANCE_SECRET?.trim() ?? "";
+}
+
+export function getEventEmailConfig() {
+  const runtime = env as unknown as RuntimeEnv;
+  const apiKey = runtime.RESEND_API_KEY?.trim() ?? "";
+
+  if (!apiKey) return null;
+
+  return {
+    apiKey,
+    from: runtime.EVENT_EMAIL_FROM?.trim() || "Style with Kayla <appointments@stylewithkayla.com>",
+    replyTo: runtime.EVENT_EMAIL_REPLY_TO?.trim() || "kayla@stylewithkayla.com",
+  };
 }
