@@ -49,17 +49,58 @@
     if (!detailDescription && !locationDetails) return "";
 
     return `
-      ${
-        detailDescription
-          ? `<p>${escape(detailDescription)}</p>`
-          : ""
-      }
+      ${detailDescription ? `<p>${escape(detailDescription)}</p>` : ""}
       ${
         locationDetails
-          ? `<p><span class="event-card__details-label">Location details</span>${escape(locationDetails)}</p>`
+          ? `<div class="event-details-dialog__section"><span class="event-details-dialog__label">Location details</span><p>${escape(locationDetails)}</p></div>`
           : ""
       }
     `;
+  };
+
+  const dialog = document.createElement("dialog");
+  dialog.className = "event-details-dialog";
+  dialog.innerHTML = `
+    <div class="event-details-dialog__panel">
+      <button class="event-details-dialog__close" type="button" aria-label="Close event details">×</button>
+      <p class="event-details-dialog__eyebrow">Event details</p>
+      <h2 class="event-details-dialog__title"></h2>
+      <div class="event-details-dialog__body"></div>
+    </div>
+  `;
+  document.body.append(dialog);
+
+  const closeButton = dialog.querySelector(".event-details-dialog__close");
+  const title = dialog.querySelector(".event-details-dialog__title");
+  const body = dialog.querySelector(".event-details-dialog__body");
+  let lastTrigger = null;
+
+  const closeDialog = () => {
+    dialog.close();
+  };
+
+  closeButton.addEventListener("click", closeDialog);
+
+  dialog.addEventListener("click", event => {
+    if (event.target === dialog) closeDialog();
+  });
+
+  dialog.addEventListener("close", () => {
+    document.body.classList.remove("event-details-open");
+    lastTrigger?.focus();
+    lastTrigger = null;
+  });
+
+  const openDialog = (event, trigger) => {
+    const details = detailsMarkup(event);
+    if (!details) return;
+
+    lastTrigger = trigger;
+    title.textContent = event?.title || "Event details";
+    body.innerHTML = details;
+    document.body.classList.add("event-details-open");
+    dialog.showModal();
+    closeButton.focus();
   };
 
   const enhanceCards = async () => {
@@ -82,35 +123,18 @@
         return;
       }
 
-      const detailsId = `event-details-${escape(event?.id || index)}`;
-      const panel = document.createElement("div");
-      panel.className = "event-card__details";
-      panel.id = detailsId;
-      panel.hidden = true;
-      panel.innerHTML = details;
-
       const toggle = document.createElement("button");
       toggle.type = "button";
       toggle.className = "event-card__details-toggle";
-      toggle.setAttribute("aria-expanded", "false");
-      toggle.setAttribute("aria-controls", detailsId);
+      toggle.setAttribute("aria-haspopup", "dialog");
       toggle.innerHTML = `
-        <span class="event-card__details-text">Event details</span>
+        <span>Event details</span>
         <span class="event-card__details-symbol" aria-hidden="true">+</span>
       `;
 
-      toggle.addEventListener("click", () => {
-        const expanded = toggle.getAttribute("aria-expanded") === "true";
-        toggle.setAttribute("aria-expanded", String(!expanded));
-        panel.hidden = expanded;
-        toggle.querySelector(".event-card__details-text").textContent =
-          expanded ? "Event details" : "Less details";
-        toggle.querySelector(".event-card__details-symbol").textContent =
-          expanded ? "+" : "−";
-      });
+      toggle.addEventListener("click", () => openDialog(event, toggle));
 
-      content.insertBefore(panel, primaryAction);
-      content.insertBefore(toggle, panel);
+      content.insertBefore(toggle, primaryAction);
       card.dataset.detailsEnhanced = "true";
     });
 
