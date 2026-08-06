@@ -186,11 +186,29 @@
       const appointmentField = rsvpForm.querySelector("#appointment-field");
       const appointmentSelect = rsvpForm.elements.appointmentSlotId;
       const appointmentRecommended = item.attendanceType === "appointment_recommended";
-      const showAppointments = item.appointmentRequired || appointmentRecommended;
+      const showAppointments = Boolean(item.appointmentRequired || appointmentRecommended);
+      const appointmentSlots = Array.isArray(item.appointmentSlots) ? item.appointmentSlots : [];
 
       if (appointmentField && appointmentSelect) {
         appointmentField.hidden = !showAppointments;
         appointmentSelect.required = Boolean(item.appointmentRequired);
+
+        if (showAppointments) {
+          appointmentSelect.innerHTML = `
+            <option value="">${item.appointmentRequired ? "Choose a time" : "Choose a time (optional)"}</option>
+            ${appointmentSlots.map(slot => `
+              <option value="${escape(slot.id)}">
+                ${escape(
+                  slot.label ||
+                    new Date(slot.startsAt).toLocaleTimeString([], {
+                      hour: "numeric",
+                      minute: "2-digit",
+                    }),
+                )}
+              </option>
+            `).join("")}
+          `;
+        }
       }
     } catch {
       // The primary RSVP script continues to handle loading and submission errors.
