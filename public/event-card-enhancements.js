@@ -165,4 +165,35 @@
 
   new MutationObserver(() => void enhanceCards()).observe(list, { childList: true });
   void enhanceCards();
+
+  const rsvpDialog = document.querySelector("#rsvp-dialog");
+  const rsvpForm = document.querySelector("#rsvp-form");
+
+  list.addEventListener("click", async event => {
+    const trigger = event.target.closest(".event-rsvp");
+    if (!trigger || !rsvpDialog || !rsvpForm) return;
+
+    try {
+      const response = await fetch(`/api/events/${encodeURIComponent(trigger.dataset.eventId)}`);
+      if (!response.ok) return;
+      const payload = await response.json();
+      const item = payload.data?.event;
+      if (!item) return;
+
+      const title = rsvpForm.querySelector("#rsvp-title");
+      if (title) title.textContent = `Save My Spot - ${item.title}`;
+
+      const appointmentField = rsvpForm.querySelector("#appointment-field");
+      const appointmentSelect = rsvpForm.elements.appointmentSlotId;
+      const appointmentRecommended = item.attendanceType === "appointment_recommended";
+      const showAppointments = item.appointmentRequired || appointmentRecommended;
+
+      if (appointmentField && appointmentSelect) {
+        appointmentField.hidden = !showAppointments;
+        appointmentSelect.required = Boolean(item.appointmentRequired);
+      }
+    } catch {
+      // The primary RSVP script continues to handle loading and submission errors.
+    }
+  });
 })();
