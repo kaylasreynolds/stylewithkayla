@@ -9,6 +9,8 @@ type Context = { params: Promise<{ eventId: string }> };
 type EventRow = {
   title: string;
   description: string;
+  offer: string | null;
+  offerDetails: string | null;
   location: string;
   locationDetails: string | null;
   startsAt: number;
@@ -37,6 +39,8 @@ export async function POST(request: Request, { params }: Context) {
         SELECT
           title,
           description,
+          offer,
+          offer_details AS offerDetails,
           location,
           location_details AS locationDetails,
           starts_at AS startsAt,
@@ -299,6 +303,7 @@ export async function POST(request: Request, { params }: Context) {
           eventEndsAt: event.endsAt,
           timezone: event.timezone,
           location: [event.location, event.locationDetails].filter(Boolean).join(", "),
+          eventOffer: [event.offer, event.offerDetails].filter(Boolean).join(" — ") || null,
           appointmentStartsAt: appointment?.startsAt,
           appointmentEndsAt: appointment?.endsAt,
           appointmentLabel: appointment?.label,
