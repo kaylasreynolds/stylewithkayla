@@ -18,7 +18,8 @@ type EventRow = {
   timezone: string;
   registrationOpensAt: number | null;
   registrationClosesAt: number | null;
-  capacity: number;
+  capacity: number | null;
+  unlimitedCapacity: number;
   maxGuests: number;
   allowDuplicateRegistration: number;
   appointmentRequired: number;
@@ -49,6 +50,7 @@ export async function POST(request: Request, { params }: Context) {
           registration_opens_at AS registrationOpensAt,
           registration_closes_at AS registrationClosesAt,
           capacity,
+          unlimited_capacity AS unlimitedCapacity,
           max_guests AS maxGuests,
           allow_duplicate_registration AS allowDuplicateRegistration,
           appointment_required AS appointmentRequired
@@ -149,26 +151,34 @@ export async function POST(request: Request, { params }: Context) {
       }
     }
 
-    const used = await db
-      .prepare(`
-        SELECT COALESCE(SUM(party_size),0) n
-        FROM event_rsvps
-        WHERE event_id=? AND status='confirmed'
-      `)
-      .bind(eventId)
-      .first<{ n: number }>();
+    const isUnlimited = Boolean(event.unlimitedCapacity);
 
-    if ((used?.n ?? 0) + input.partySize > event.capacity) {
-      throw new ApiError(
-        409,
-        "EVENT_FULL",
-        "There are not enough spots remaining for this party.",
-      );
+    if (!isUnlimited) {
+      const used = await db
+        .prepare(`
+          SELECT COALESCE(SUM(party_size),0) n
+          FROM event_rsvps
+          WHERE event_id=? AND status='confirmed'
+        `)
+        .bind(eventId)
+        .first<{ n: number }>();
+
+      if ((used?.n ?? 0) + input.partySize > (event.capacity ?? 0)) {
+        throw new ApiError(
+          409,
+          "EVENT_FULL",
+          "There are not enough spots remaining for this party.",
+        );
+      }
     }
 
     const rsvpId = crypto.randomUUID();
     const publicToken = crypto.randomUUID();
     const now = Date.now();
+    const capacityCondition = isUnlimited
+      ? ""
+      : `AND (\n        SELECT COALESCE(SUM(party_size),0)\n        FROM event_rsvps\n        WHERE event_id=e.id AND status='confirmed'\n      )+?<=e.capacity`;
+
     const conditions = `
       e.id=?
       AND e.status='published'
@@ -176,11 +186,7 @@ export async function POST(request: Request, { params }: Context) {
       AND e.starts_at>?
       AND (e.registration_opens_at IS NULL OR e.registration_opens_at<=?)
       AND (e.registration_closes_at IS NULL OR e.registration_closes_at>=?)
-      AND (
-        SELECT COALESCE(SUM(party_size),0)
-        FROM event_rsvps
-        WHERE event_id=e.id AND status='confirmed'
-      )+?<=e.capacity
+      ${capacityCondition}
       ${
         event.allowDuplicateRegistration
           ? ""
@@ -208,9 +214,9 @@ export async function POST(request: Request, { params }: Context) {
       now,
       now,
       now,
-      input.partySize,
     ];
 
+    if (!isUnlimited) binds.push(input.partySize);
     if (!event.allowDuplicateRegistration) binds.push(input.email);
     if (input.appointmentSlotId) binds.push(input.appointmentSlotId, now);
 
