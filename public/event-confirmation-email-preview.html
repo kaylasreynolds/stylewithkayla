@@ -20,7 +20,7 @@
       --ink: #181615;
       --muted: #6f6661;
       --line: #e4d9d2;
-      --signature-font: "WindSong", "Snell Roundhand", "Segoe Script", "Brush Script MT", cursive;
+      --signature-font: "WindSong", "Corinthia", "Engagement", "Birthstone Bounce", cursive;
     }
 
     * { box-sizing: border-box; }
@@ -102,13 +102,6 @@
       line-height: 1;
       letter-spacing: -.035em;
       color: #111;
-    }
-
-    .heart {
-      margin: 12px 0 14px;
-      color: var(--rose);
-      font-size: 27px;
-      line-height: 1;
     }
 
     .status {
@@ -348,11 +341,6 @@
   </style>
 </head>
 <body>
-  <div class="preview-toolbar">
-    <strong>Confirmation Email Preview</strong>
-    <span>Sample customer: Jamie · Iberjoya Trunk Show</span>
-  </div>
-
   <main class="email-shell">
     <article class="email-card" aria-label="Sample confirmation email">
       <div class="brand-bar">
@@ -361,7 +349,6 @@
 
       <header class="hero">
         <h1 class="thank-you">Thank you!</h1>
-        <div class="heart" aria-hidden="true">♡</div>
         <p class="status">Your appointment is confirmed</p>
       </header>
 
@@ -414,9 +401,8 @@
 
       <section class="closing">
         <p>We’ll see you there!</p>
-        <p class="signature">xo, Kayla ♡</p>
-        <p class="signature-note">WindSong preview · falls back to a system script font if the webfont is unavailable.</p>
-      </section>
+        <p class="signature">xo, Kayla</p>
+        </section>
 
       <div class="help-strip">
         Questions or changes? Reply to this email or contact Kayla at
@@ -433,9 +419,6 @@
         </div>
       </footer>
     </article>
-
-    <div class="attachment">Attachment: style-with-kayla-appointment.ics</div>
-    <p class="preview-note">This page is only the visual preview. The live email can use the same hierarchy while keeping the actual event data, appointment state, and calendar attachment dynamic.</p>
   </main>
 </body>
 </html>
