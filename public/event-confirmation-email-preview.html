@@ -55,27 +55,27 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 92px;
-      padding: 18px 28px;
+      min-height: 58px;
+      padding: 8px 24px;
       border-bottom: 1px solid #242424;
       background: #111;
     }
 
     .brand-logo {
       display: block;
-      width: 250px;
-      max-width: 72%;
+      width: 205px;
+      max-width: 68%;
       height: auto;
       margin: 0 auto;
     }
 
     .hero {
-      padding: 38px 42px 16px;
+      padding: 42px 42px 22px;
     }
 
     .thank-you {
       margin: 0;
-      padding-bottom: 40px;
+      padding-bottom: 34px;
       color: #111;
       font-family: var(--thank-you-font);
       font-size: 64px;
@@ -97,7 +97,7 @@
     .intro {
       max-width: 500px;
       margin: 0 auto;
-      padding: 16px 36px 31px;
+      padding: 20px 36px 38px;
     }
 
     .intro-line {
@@ -109,7 +109,7 @@
     }
 
     .intro-event-title {
-      margin: 12px 0 13px;
+      margin: 15px 0 16px;
       color: var(--ink);
       font-family: var(--heading-font);
       font-size: 27px;
@@ -118,7 +118,7 @@
     }
 
     .details-wrap {
-      padding: 0 34px 22px;
+      padding: 0 34px 32px;
     }
 
     .details {
@@ -135,7 +135,7 @@
       grid-template-columns: 28px minmax(0, 1fr);
       gap: 14px;
       align-items: start;
-      padding: 15px 18px;
+      padding: 17px 18px;
       border-bottom: 1px solid #eadfd9;
     }
 
@@ -147,7 +147,7 @@
       height: 28px;
       align-items: center;
       justify-content: center;
-      margin-top: 1px;
+      margin-top: 3px;
       color: var(--rose-deep);
       font-family: var(--body-font);
       font-size: 17px;
@@ -156,7 +156,7 @@
 
     .detail-label {
       display: block;
-      margin-bottom: 3px;
+      margin-bottom: 5px;
       color: var(--rose-deep);
       font-family: var(--body-font);
       font-size: 10px;
@@ -165,24 +165,20 @@
       text-transform: uppercase;
     }
 
-    .detail-value {
-      display: block;
+    .detail-value,
+    .detail-value strong,
+    .event-row .detail-value strong,
+    .appointment-row .detail-value strong,
+    .location-row .detail-value strong {
       color: #2b2623;
-      font-family: var(--body-font);
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .detail-value strong {
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-    .event-row .detail-value strong {
       font-family: var(--heading-font);
       font-size: 22px;
       font-weight: 600;
-      line-height: 1.08;
+      line-height: 1.18;
+    }
+
+    .detail-value {
+      display: block;
     }
 
     .appointment-row {
@@ -191,87 +187,86 @@
 
     .appointment-row .detail-value strong {
       color: var(--rose-deep);
-      font-family: var(--heading-font);
-      font-size: 22px;
-      font-weight: 600;
-      line-height: 1.1;
     }
 
     .location-row .detail-value strong {
-      display: inline-block;
-      margin-bottom: 2px;
-      font-family: var(--heading-font);
-      font-size: 19px;
-      font-weight: 600;
-      line-height: 1.12;
+      display: inline;
+      margin: 0;
     }
 
     .event-note {
-      margin: 0 34px 24px;
-      padding: 15px 18px;
-      border-left: 3px solid var(--rose);
-      background: #fff9f7;
-      color: #4b423e;
+      margin: 0 34px 34px;
+      padding: 18px 20px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--rose);
+      color: white;
       font-family: var(--body-font);
       font-size: 13px;
-      line-height: 1.55;
+      line-height: 1.6;
       text-align: left;
     }
 
+    .event-note strong {
+      color: white;
+    }
+
     .calendar-area {
-      padding: 0 34px 26px;
+      padding: 10px 34px 38px;
     }
 
     .calendar-button {
       display: inline-block;
-      min-width: 250px;
-      padding: 16px 24px;
+      min-width: 285px;
+      margin: 12px 0 14px;
+      padding: 18px 32px;
       border: 1px solid #111;
       background: #111;
       color: white;
       font-family: var(--body-font);
-      font-size: 12px;
+      font-size: 15px;
       font-weight: 700;
-      letter-spacing: .18em;
+      letter-spacing: .14em;
       text-decoration: none;
       text-transform: uppercase;
     }
 
     .calendar-help {
-      margin: 11px 0 0;
+      margin: 0 auto;
+      max-width: 390px;
       color: var(--muted);
       font-family: var(--body-font);
-      font-size: 12px;
+      font-size: 9px;
       line-height: 1.55;
     }
 
     .closing {
-      padding: 2px 34px 31px;
+      padding: 10px 34px 40px;
     }
 
     .closing p:not(.signature) {
-      margin: 0 0 7px;
+      margin: 0;
       font-family: var(--body-font);
       font-size: 15px;
     }
 
     .closing .signature {
-      margin: 0;
+      margin: 20px 0 0;
       color: var(--rose);
       font-family: var(--signature-font);
-      font-size: 40px;
+      font-size: 56px;
       font-weight: 700;
-      line-height: 1.15;
+      line-height: 1.05;
     }
 
     .help-strip {
-      padding: 16px 28px;
+      padding: 24px 30px;
       border-top: 1px solid var(--line);
       background: var(--blush);
       color: #4f4541;
       font-family: var(--body-font);
-      font-size: 12px;
-      line-height: 1.55;
+      font-size: 13px;
+      line-height: 1.7;
     }
 
     .help-strip a {
@@ -281,16 +276,16 @@
     }
 
     .email-footer {
-      padding: 20px 28px 22px;
+      padding: 24px 28px 26px;
       background: #111;
       color: white;
       font-family: var(--body-font);
     }
 
     .footer-label {
-      margin: 0 0 12px;
+      margin: 0 0 15px;
       color: #d7d2cf;
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: .2em;
       text-transform: uppercase;
     }
@@ -298,8 +293,8 @@
     .footer-links {
       display: flex;
       justify-content: center;
-      gap: 22px;
-      font-size: 12px;
+      gap: 24px;
+      font-size: 13px;
     }
 
     .footer-links a {
@@ -309,25 +304,29 @@
 
     @media (max-width: 520px) {
       .email-shell { padding: 18px 10px 36px; }
-      .brand-bar { min-height: 80px; padding: 16px 18px; }
-      .brand-logo { width: 220px; max-width: 78%; }
-      .hero { padding: 31px 22px 14px; }
-      .thank-you { font-size: 52px; }
-      .intro { padding: 14px 22px 27px; }
-      .intro-event-title { margin: 11px 0 12px; font-size: 25px; }
-      .details-wrap { padding: 0 18px 20px; }
-      .detail-row { grid-template-columns: 24px minmax(0, 1fr); padding: 14px 14px; gap: 11px; }
+      .brand-bar { min-height: 52px; padding: 7px 16px; }
+      .brand-logo { width: 185px; max-width: 72%; }
+      .hero { padding: 34px 22px 18px; }
+      .thank-you { font-size: 52px; padding-bottom: 30px; }
+      .intro { padding: 18px 22px 32px; }
+      .intro-event-title { margin: 14px 0 15px; font-size: 25px; }
+      .details-wrap { padding: 0 18px 28px; }
+      .detail-row { grid-template-columns: 24px minmax(0, 1fr); padding: 16px 14px; gap: 11px; }
       .detail-icon { width: 24px; height: 24px; font-size: 15px; }
+      .detail-value,
+      .detail-value strong,
       .event-row .detail-value strong,
-      .appointment-row .detail-value strong { font-size: 20px; }
-      .location-row .detail-value strong { font-size: 18px; }
-      .event-note { margin: 0 18px 22px; }
-      .calendar-area { padding: 0 18px 24px; }
-      .calendar-button { width: 100%; min-width: 0; }
-      .closing { padding: 2px 20px 28px; }
-      .closing .signature { font-size: 40px; }
-      .help-strip { padding: 15px 18px; }
-      .footer-links { gap: 16px; flex-wrap: wrap; }
+      .appointment-row .detail-value strong,
+      .location-row .detail-value strong { font-size: 20px; }
+      .event-note { margin: 0 18px 30px; padding: 17px 18px; }
+      .calendar-area { padding: 8px 18px 34px; }
+      .calendar-button { width: 100%; min-width: 0; margin: 10px 0 13px; font-size: 14px; }
+      .calendar-help { font-size: 9px; }
+      .closing { padding: 8px 20px 34px; }
+      .closing .signature { margin-top: 18px; font-size: 52px; }
+      .help-strip { padding: 22px 20px; font-size: 13px; }
+      .email-footer { padding: 22px 20px 24px; }
+      .footer-links { gap: 18px; flex-wrap: wrap; font-size: 13px; }
     }
   </style>
 </head>
