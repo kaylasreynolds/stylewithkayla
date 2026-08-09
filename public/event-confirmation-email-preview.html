@@ -7,7 +7,7 @@
   <meta name="robots" content="noindex,nofollow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=WindSong:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Corinthia:wght@400;700&family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=WindSong:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
       color-scheme: light;
@@ -20,7 +20,10 @@
       --ink: #181615;
       --muted: #6f6661;
       --line: #e4d9d2;
-      --signature-font: "WindSong", "Corinthia", "Engagement", "Birthstone Bounce", cursive;
+      --body-font: "Inter", Arial, Helvetica, sans-serif;
+      --heading-font: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+      --thank-you-font: "WindSong", "Snell Roundhand", "Segoe Script", cursive;
+      --signature-font: "Corinthia", "Snell Roundhand", "Segoe Script", cursive;
     }
 
     * { box-sizing: border-box; }
@@ -29,31 +32,7 @@
       margin: 0;
       background: var(--page);
       color: var(--ink);
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .preview-toolbar {
-      position: sticky;
-      top: 0;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(255, 253, 251, .96);
-      backdrop-filter: blur(8px);
-    }
-
-    .preview-toolbar strong {
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 20px;
-    }
-
-    .preview-toolbar span {
-      color: var(--muted);
-      font-size: 13px;
+      font-family: var(--body-font);
     }
 
     .email-shell {
@@ -78,7 +57,7 @@
       justify-content: center;
       min-height: 92px;
       padding: 18px 28px;
-      border-bottom: 1px solid var(--line);
+      border-bottom: 1px solid #242424;
       background: #111;
     }
 
@@ -96,18 +75,19 @@
 
     .thank-you {
       margin: 0;
-      font-family: var(--signature-font);
+      padding-bottom: 40px;
+      color: #111;
+      font-family: var(--thank-you-font);
       font-size: 64px;
       font-weight: 500;
       line-height: 1;
       letter-spacing: -.035em;
-      color: #111;
-      padding-bottom: 40px;
     }
 
     .status {
       margin: 0;
       color: var(--rose);
+      font-family: var(--body-font);
       font-size: 14px;
       font-weight: 700;
       letter-spacing: .12em;
@@ -115,15 +95,26 @@
     }
 
     .intro {
-      max-width: 460px;
+      max-width: 500px;
       margin: 0 auto;
-      padding: 14px 36px 27px;
+      padding: 16px 36px 31px;
     }
 
-    .intro p {
+    .intro-line {
       margin: 0;
+      color: var(--ink);
+      font-family: var(--body-font);
       font-size: 16px;
-      line-height: 1.65;
+      line-height: 1.6;
+    }
+
+    .intro-event-title {
+      margin: 12px 0 13px;
+      color: var(--ink);
+      font-family: var(--heading-font);
+      font-size: 27px;
+      font-weight: 600;
+      line-height: 1.15;
     }
 
     .details-wrap {
@@ -158,6 +149,7 @@
       border-radius: 50%;
       background: rgba(255, 255, 255, .6);
       color: var(--rose-deep);
+      font-family: var(--body-font);
       font-size: 18px;
       line-height: 1;
     }
@@ -166,6 +158,7 @@
       display: block;
       margin-bottom: 4px;
       color: var(--rose-deep);
+      font-family: var(--body-font);
       font-size: 11px;
       font-weight: 700;
       letter-spacing: .09em;
@@ -175,6 +168,7 @@
     .detail-value {
       display: block;
       color: #26211f;
+      font-family: var(--body-font);
       font-size: 14px;
       line-height: 1.48;
     }
@@ -199,6 +193,7 @@
       border-left: 3px solid var(--rose);
       background: #fff9f7;
       color: #4b423e;
+      font-family: var(--body-font);
       font-size: 13px;
       line-height: 1.55;
       text-align: left;
@@ -215,6 +210,7 @@
       border: 1px solid #111;
       background: #111;
       color: white;
+      font-family: var(--body-font);
       font-size: 12px;
       font-weight: 700;
       letter-spacing: .18em;
@@ -225,6 +221,7 @@
     .calendar-help {
       margin: 11px 0 0;
       color: var(--muted);
+      font-family: var(--body-font);
       font-size: 12px;
       line-height: 1.55;
     }
@@ -233,25 +230,19 @@
       padding: 2px 34px 31px;
     }
 
-    .closing p {
+    .closing p:not(.signature) {
       margin: 0 0 7px;
+      font-family: var(--body-font);
       font-size: 15px;
     }
 
     .closing .signature {
       margin: 0;
       color: var(--rose);
-      font-family: var(Corinthia)
+      font-family: var(--signature-font);
       font-size: 40px;
-      font-weight: 500;
+      font-weight: 700;
       line-height: 1.15;
-    }
-
-    .signature-note {
-      margin: 10px 0 0;
-      color: #9b8f89;
-      font-size: 10px;
-      letter-spacing: .04em;
     }
 
     .help-strip {
@@ -259,6 +250,7 @@
       border-top: 1px solid var(--line);
       background: var(--blush);
       color: #4f4541;
+      font-family: var(--body-font);
       font-size: 12px;
       line-height: 1.55;
     }
@@ -273,6 +265,7 @@
       padding: 20px 28px 22px;
       background: #111;
       color: white;
+      font-family: var(--body-font);
     }
 
     .footer-label {
@@ -295,39 +288,14 @@
       text-decoration: none;
     }
 
-    .attachment {
-      max-width: 620px;
-      margin: 14px auto 0;
-      padding: 12px 14px;
-      border: 1px dashed #c9b8ae;
-      border-radius: 10px;
-      background: rgba(255,255,255,.55);
-      color: var(--muted);
-      font-size: 13px;
-      text-align: center;
-    }
-
-    .preview-note {
-      max-width: 620px;
-      margin: 12px auto 0;
-      color: #7b706a;
-      font-size: 12px;
-      line-height: 1.55;
-      text-align: center;
-    }
-
     @media (max-width: 520px) {
-      .preview-toolbar {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
       .email-shell { padding: 18px 10px 36px; }
       .brand-bar { min-height: 80px; padding: 16px 18px; }
       .brand-logo { width: 220px; max-width: 78%; }
       .hero { padding: 31px 22px 14px; }
       .thank-you { font-size: 52px; }
-      .intro { padding: 12px 22px 23px; }
+      .intro { padding: 14px 22px 27px; }
+      .intro-event-title { margin: 11px 0 12px; font-size: 25px; }
       .details-wrap { padding: 0 18px 20px; }
       .detail-row { grid-template-columns: 42px minmax(0, 1fr); padding: 14px 15px; gap: 10px; }
       .detail-icon { width: 34px; height: 34px; font-size: 16px; }
@@ -354,7 +322,9 @@
       </header>
 
       <section class="intro">
-        <p>I’m so excited you’ll be joining me for the <br> <strong>Iberjoya Trunk Show</strong><br> <pr> </pr>Your appointment is set, and all of the details are right here.</p>
+        <p class="intro-line">I’m so excited you’ll be joining me for the</p>
+        <p class="intro-event-title">Iberjoya Trunk Show</p>
+        <p class="intro-line">Your appointment is set, and all of the details are right here.</p>
       </section>
 
       <section class="details-wrap">
@@ -403,7 +373,7 @@
       <section class="closing">
         <p>I’ll see you there!</p>
         <p class="signature">xo, Kayla</p>
-        </section>
+      </section>
 
       <div class="help-strip">
         Questions or changes? Reply to this email or contact me at
