@@ -29,6 +29,7 @@
   position: absolute;
   top: 14px;
   right: 16px;
+  z-index: 5;
   width: 40px;
   height: 40px;
   display: grid;
@@ -195,6 +196,254 @@
   opacity: .58;
 }
 
+/* Branded success state */
+.rsvp-confirmation {
+  margin: calc(clamp(30px, 5vw, 46px) * -1);
+  background: #fffdfb;
+  color: #151312;
+  text-align: center;
+}
+
+.rsvp-confirmation__brand {
+  padding: 8px 20px;
+  background: #111;
+}
+
+.rsvp-confirmation__brand img {
+  display: block;
+  width: 190px;
+  max-width: 72%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.rsvp-confirmation__hero {
+  padding: 34px 24px 12px;
+}
+
+.rsvp-confirmation__thank-you {
+  margin: 0 0 18px;
+  color: #111;
+  font-family: "WindSong", "Snell Roundhand", "Segoe Script", cursive;
+  font-size: clamp(3.4rem, 9vw, 5.1rem);
+  line-height: 1;
+}
+
+.rsvp-confirmation__status {
+  margin: 0;
+  color: #cf647e;
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.rsvp-confirmation__intro {
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 22px 28px 26px;
+}
+
+.rsvp-confirmation__intro p {
+  margin: 0;
+  font-size: .95rem;
+  line-height: 1.65;
+}
+
+.rsvp-confirmation__intro h3 {
+  max-width: none;
+  margin: 10px 0;
+  color: #251f1c;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  white-space: normal;
+}
+
+.rsvp-confirmation__ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(250px, 62%);
+  margin: 0 auto 24px;
+}
+
+.rsvp-confirmation__ornament span {
+  height: 1px;
+  flex: 1;
+  background: #edc9d2;
+}
+
+.rsvp-confirmation__ornament i {
+  width: 10px;
+  height: 10px;
+  margin: 0 10px;
+  border: 1px solid #e6a7b7;
+  transform: rotate(45deg);
+}
+
+.rsvp-confirmation__details {
+  margin: 0 28px 26px;
+  overflow: hidden;
+  border: 1px solid #eaded8;
+  border-radius: 14px;
+  background: #fffaf8;
+  text-align: left;
+}
+
+.rsvp-confirmation__row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  align-items: center;
+  min-height: 78px;
+  border-bottom: 1px solid #eaded8;
+}
+
+.rsvp-confirmation__row:last-child {
+  border-bottom: 0;
+}
+
+.rsvp-confirmation__row > span {
+  padding: 18px 20px;
+  color: #b94d68;
+  font-size: .63rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.rsvp-confirmation__row > strong {
+  padding: 18px 20px 18px 24px;
+  border-left: 1px solid #eaded8;
+  color: #251f1c;
+  font-family: var(--font-heading);
+  font-size: 1.34rem;
+  font-weight: 600;
+  line-height: 1.28;
+}
+
+.rsvp-confirmation__row--appointment > strong {
+  color: #cf647e;
+}
+
+.rsvp-confirmation__perk {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  align-items: center;
+  margin: 0 28px 28px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: #f7e7e5;
+  text-align: left;
+}
+
+.rsvp-confirmation__perk-icon {
+  padding-right: 18px;
+  border-right: 1px solid #e9cfd5;
+  color: #cf647e;
+  font-size: 2.2rem;
+}
+
+.rsvp-confirmation__perk > div:last-child {
+  padding-left: 22px;
+}
+
+.rsvp-confirmation__perk span {
+  color: #b94d68;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.rsvp-confirmation__perk p {
+  margin: 7px 0 0;
+  font-size: .9rem;
+  line-height: 1.55;
+}
+
+.rsvp-confirmation__email-note {
+  margin: 0 28px 26px;
+  padding: 20px 22px;
+  background: #111;
+  color: #fff;
+}
+
+.rsvp-confirmation__email-note strong {
+  display: block;
+  font-size: .9rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.rsvp-confirmation__email-note p {
+  margin: 8px 0 0;
+  color: #eee7e3;
+  font-size: .76rem;
+  line-height: 1.55;
+}
+
+.rsvp-confirmation__closing {
+  padding: 0 24px 30px;
+}
+
+.rsvp-confirmation__closing p {
+  margin: 0 0 10px;
+  font-size: .95rem;
+}
+
+.rsvp-confirmation__closing img {
+  display: block;
+  width: 270px;
+  max-width: 78%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.rsvp-confirmation__help {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 28px;
+  border-top: 1px solid #eaded8;
+  background: #fbf3ef;
+  text-align: left;
+}
+
+.rsvp-confirmation__help > span {
+  color: #cf647e;
+  font-size: 1.5rem;
+}
+
+.rsvp-confirmation__help p {
+  margin: 0;
+  font-size: .8rem;
+  line-height: 1.55;
+}
+
+.rsvp-confirmation__help a {
+  color: #b94d68;
+  font-weight: 700;
+}
+
+.rsvp-confirmation__done {
+  width: calc(100% - 56px);
+  margin: 24px 28px 28px;
+  padding: 15px 20px;
+  border: 1px solid #cf8c93;
+  border-radius: 8px;
+  background: #cf8c93;
+  color: #fff;
+  font-size: .95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.rsvp-confirmation__done:hover {
+  background: #be747e;
+  border-color: #be747e;
+}
+
 @media (max-width: 760px) {
   .rsvp-form h3 {
     white-space: normal;
@@ -228,5 +477,90 @@
   .rsvp-form label:has(select),
   #appointment-field {
     grid-column: 1;
+  }
+
+  .rsvp-confirmation {
+    margin: -28px -20px -22px;
+  }
+
+  .rsvp-confirmation__brand {
+    padding: 6px 16px;
+  }
+
+  .rsvp-confirmation__brand img {
+    width: 174px;
+  }
+
+  .rsvp-confirmation__hero {
+    padding: 28px 18px 8px;
+  }
+
+  .rsvp-confirmation__thank-you {
+    font-size: 3.55rem;
+  }
+
+  .rsvp-confirmation__status {
+    font-size: .66rem;
+  }
+
+  .rsvp-confirmation__intro {
+    padding: 22px 20px;
+  }
+
+  .rsvp-confirmation__intro h3 {
+    margin: 10px 0;
+    font-size: 1.65rem;
+  }
+
+  .rsvp-confirmation__details {
+    margin: 0 14px 22px;
+  }
+
+  .rsvp-confirmation__row {
+    grid-template-columns: 108px minmax(0, 1fr);
+    min-height: 70px;
+  }
+
+  .rsvp-confirmation__row > span {
+    padding: 14px;
+    font-size: .56rem;
+  }
+
+  .rsvp-confirmation__row > strong {
+    padding: 14px 14px 14px 16px;
+    font-size: 1.08rem;
+  }
+
+  .rsvp-confirmation__perk {
+    grid-template-columns: 58px minmax(0, 1fr);
+    margin: 0 14px 22px;
+    padding: 15px 14px;
+  }
+
+  .rsvp-confirmation__perk-icon {
+    padding-right: 12px;
+    font-size: 1.8rem;
+  }
+
+  .rsvp-confirmation__perk > div:last-child {
+    padding-left: 14px;
+  }
+
+  .rsvp-confirmation__email-note {
+    margin: 0 14px 22px;
+  }
+
+  .rsvp-confirmation__closing img {
+    width: 235px;
+  }
+
+  .rsvp-confirmation__help {
+    grid-template-columns: 42px 1fr;
+    padding: 18px;
+  }
+
+  .rsvp-confirmation__done {
+    width: calc(100% - 28px);
+    margin: 20px 14px 22px;
   }
 }
