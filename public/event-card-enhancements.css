@@ -44,14 +44,48 @@
   vertical-align: -0.125em;
 }
 
-/* Replace the generated Coming Soon calendar icon with the branded image asset. */
-.event-card__updates-media {
-  background: url("/images/coming-soon.png") center / cover no-repeat;
+/* Coming Soon card: one continuous card with the branded line-art asset in the middle. */
+.event-card--updates {
+  grid-template-rows: 1fr;
 }
 
-.event-card__updates-media::before,
-.event-card__updates-mark {
+.event-card--updates .event-card__updates-media {
   display: none;
+}
+
+.event-card--updates .event-card__content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 40px 42px 36px;
+  text-align: left;
+}
+
+.event-card--updates .event-card__content h3 {
+  margin: 0 0 18px;
+}
+
+.event-card--updates .event-card__description {
+  margin: 0;
+}
+
+.event-card--updates .event-card__description::after {
+  content: "";
+  display: block;
+  width: min(100%, 390px);
+  height: clamp(220px, 24vw, 300px);
+  margin: 30px auto 26px;
+  background: var(--color-rose);
+  -webkit-mask: url("/images/coming-soon.svg") center / contain no-repeat;
+  mask: url("/images/coming-soon.svg") center / contain no-repeat;
+}
+
+.event-card--updates .event-card__cta {
+  width: 100%;
+  min-height: 68px;
+  margin-top: auto;
+  border-radius: 12px;
+  font-size: 1rem;
 }
 
 .event-card__details-toggle {
@@ -302,6 +336,21 @@ body.event-details-open {
   .event-card__offer::before,
   .event-card__offer::after {
     max-width: 44px;
+  }
+
+  .event-card--updates .event-card__content {
+    padding: 28px 24px 24px;
+  }
+
+  .event-card--updates .event-card__description::after {
+    width: min(100%, 300px);
+    height: 190px;
+    margin: 24px auto 22px;
+  }
+
+  .event-card--updates .event-card__cta {
+    min-height: 58px;
+    font-size: .95rem;
   }
 
   .event-details-dialog {
