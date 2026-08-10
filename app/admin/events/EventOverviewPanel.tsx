@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { buildEventPayload } from "@/lib/event-editor-client";
 import styles from "./EventOverviewPanel.module.css";
 
 type EventData = {
@@ -34,8 +35,8 @@ type Slot = {
 
 type ApiResponse<T> = { data: T; error?: { message?: string } };
 
-async function api<T>(url: string): Promise<T> {
-  const response = await fetch(url);
+async function api<T>(url: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(url, init);
   const body = (await response.json()) as ApiResponse<T>;
   if (!response.ok) throw new Error(body.error?.message || "Request failed");
   return body.data;
@@ -64,6 +65,7 @@ export default function EventOverviewPanel({ eventId }: { eventId: string }) {
   const [rsvps, setRsvps] = useState<Rsvp[]>([]);
   const [slots, setSlots] = useState<Slot[]>([]);
   const [error, setError] = useState("");
+  const [duplicating, setDuplicating] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -79,6 +81,26 @@ export default function EventOverviewPanel({ eventId }: { eventId: string }) {
       .catch(error => setError(error instanceof Error ? error.message : "Unable to load overview."));
   }, [eventId]);
 
+  async function duplicateEvent() {
+    if (duplicating) return;
+    setDuplicating(true);
+    setError("");
+
+    try {
+      const source = await api<{ event: Record<string, unknown> }>(`/api/admin/events/${eventId}`);
+      const created = await api<{ event: { id: string } }>("/api/admin/events", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(buildEventPayload(source.event)),
+      });
+
+      location.href = `/admin/events/${created.event.id}/edit`;
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Unable to duplicate event.");
+      setDuplicating(false);
+    }
+  }
+
   const confirmed = rsvps.filter(row => row.status === "confirmed");
   const confirmedGuests = confirmed.reduce((sum, row) => sum + Number(row.partySize || 0), 0);
   const bookedSlots = slots.filter(slot => Boolean(slot.guestName));
@@ -88,7 +110,7 @@ export default function EventOverviewPanel({ eventId }: { eventId: string }) {
     [bookedSlots],
   );
 
-  if (error) return <main className="event-admin"><p className="event-alert">{error}</p></main>;
+  if (error && !event) return <main className="event-admin"><p className="event-alert">{error}</p></main>;
   if (!event) return <main className="event-admin"><p>Loading…</p></main>;
 
   return (
@@ -98,8 +120,17 @@ export default function EventOverviewPanel({ eventId }: { eventId: string }) {
           <Link href="/admin/events">Events</Link>
           <h1>{event.title}</h1>
         </div>
-        <Link className="event-button event-button--secondary" href={`/admin/events/${eventId}/edit`}>Edit</Link>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap", justifyContent: "flex-end" }}>
+          {event.status === "archived" && (
+            <button className="event-button" type="button" onClick={duplicateEvent} disabled={duplicating}>
+              {duplicating ? "Duplicating…" : "Duplicate Event"}
+            </button>
+          )}
+          <Link className="event-button event-button--secondary" href={`/admin/events/${eventId}/edit`}>Edit</Link>
+        </div>
       </header>
+
+      {error && <p className="event-alert">{error}</p>}
 
       <section className={styles.hero}>
         <div>
