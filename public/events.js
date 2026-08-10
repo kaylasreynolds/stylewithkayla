@@ -262,7 +262,7 @@
           <dl class="event-facts">
             <div class="event-fact">
               <dt class="sr-only">Time</dt>
-              <span class="event-fact__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span>
+              <span class="event-fact__icon" aria-hidden="true"><img src="/images/store-event.png" alt="Time" /></span>
               <dd>
                 ${escape(eventDay(event))} · ${escape(
                     event.allDay
@@ -273,12 +273,12 @@
             </div>
             <div class="event-fact">
               <dt class="sr-only">Location</dt>
-              <span class="event-fact__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.3"/></svg></span>
+              <span class="event-fact__icon" aria-hidden="true"><img src="/images/store-location.png" alt="Location" /></span>
               <dd>${escape(event.location)}</dd>
             </div>
             <div class="event-fact">
               <dt class="sr-only">Attendance</dt>
-              <span class="event-fact__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M6.5 20v-2a5.5 5.5 0 0 1 11 0v2"/></svg></span>
+              <span class="event-fact__icon" aria-hidden="true"><img src="/images/style-together.png" alt="Attendance" /></span>
               <dd>
                 ${escape(
                   attendanceLabel(
