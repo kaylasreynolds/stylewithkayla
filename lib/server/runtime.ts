@@ -6,8 +6,10 @@ type RuntimeEnv = {
   ADMIN_EMAILS?: string;
   LOCAL_ADMIN_EMAIL?: string;
   MAINTENANCE_SECRET?: string;
-  RESEND_API_KEY?: string;
-  EVENT_EMAIL_FROM?: string;
+  MICROSOFT_TENANT_ID?: string;
+  MICROSOFT_CLIENT_ID?: string;
+  MICROSOFT_CLIENT_SECRET?: string;
+  MICROSOFT_EVENT_MAILBOX?: string;
   EVENT_EMAIL_REPLY_TO?: string;
 };
 
@@ -41,13 +43,17 @@ export function getMaintenanceSecret() {
 
 export function getEventEmailConfig() {
   const runtime = env as unknown as RuntimeEnv;
-  const apiKey = runtime.RESEND_API_KEY?.trim() ?? "";
+  const tenantId = runtime.MICROSOFT_TENANT_ID?.trim() ?? "";
+  const clientId = runtime.MICROSOFT_CLIENT_ID?.trim() ?? "";
+  const clientSecret = runtime.MICROSOFT_CLIENT_SECRET?.trim() ?? "";
 
-  if (!apiKey) return null;
+  if (!tenantId || !clientId || !clientSecret) return null;
 
   return {
-    apiKey,
-    from: runtime.EVENT_EMAIL_FROM?.trim() || "Style with Kayla <appointments@stylewithkayla.com>",
+    tenantId,
+    clientId,
+    clientSecret,
+    mailbox: runtime.MICROSOFT_EVENT_MAILBOX?.trim() || "kayla@stylewithkayla.com",
     replyTo: runtime.EVENT_EMAIL_REPLY_TO?.trim() || "kayla@stylewithkayla.com",
   };
 }
