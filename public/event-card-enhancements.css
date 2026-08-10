@@ -33,8 +33,13 @@
 }
 
 .event-card__offer strong::before {
-  content: img src="images/stars.png" alt="Stars";
-  display: inline-flex;
+  content: "";
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  flex: 0 0 1em;
+  background: url("/images/stars.png") center / contain no-repeat;
+  vertical-align: -0.125em;
 }
 
 .event-card__details-toggle {
