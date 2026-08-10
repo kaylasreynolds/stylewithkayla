@@ -33,9 +33,7 @@
 }
 
 .event-card__offer strong::before {
-  content: "◇";
-  font-size: 1rem;
-  line-height: 1;
+  content: img-url("images/stars.png");
 }
 
 .event-card__details-toggle {
