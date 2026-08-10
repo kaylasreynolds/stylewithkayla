@@ -163,8 +163,12 @@ export const buildEventConfirmationEmailHtml = (input: ConfirmationEmailInput) =
 
         <tr><td align="center" class="footer" style="padding:20px 22px 22px;background:#111;color:#fff;">
           <p style="margin:0 0 12px;color:#e4dfdc;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;">Connect with me</p>
-          <p class="footer-links" style="margin:0;color:#fff;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;">Instagram &nbsp;|&nbsp; Facebook &nbsp;|&nbsp; <a href="mailto:kayla@stylewithkayla.com" style="color:#fff;text-decoration:none;">Email</a> &nbsp;|&nbsp; <a href="https://stylewithkayla.com" style="color:#fff;text-decoration:none;">Style with Kayla</a></p>
-        </td></tr>
+          <p class="footer-links" style="margin:0;color:#fff;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;">
+		        <a href="https://instagram.com/stylewithkayla" style="color:#fff;text-decoration:none;">Instagram</a> &nbsp;|&nbsp;
+		        <a href="https://facebook.com/stylewithkayla" style="color:#fff;text-decoration:none;">Facebook</a> &nbsp;|&nbsp;		  <a href="mailto:kayla@stylewithkayla.com" style="color:#fff;text-decoration:none;">Email</a> &nbsp;|&nbsp; 
+		        <a href="https://stylewithkayla.com" style="color:#fff;text-decoration:none;">Style with Kayla</a>
+		      </p>        
+      </td></tr>
       </table>
     </td></tr>
   </table>
