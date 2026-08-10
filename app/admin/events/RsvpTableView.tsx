@@ -48,7 +48,25 @@ export default function RsvpTableView({ eventId }: { eventId: string }) {
       .catch(error => setError(error instanceof Error ? error.message : "Unable to load RSVPs."));
   }, [eventId, status]);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    let cancelled = false;
+
+    api<{ rsvps: Rsvp[] }>(
+      `/api/admin/events/${eventId}/rsvps${status ? `?status=${status}` : ""}`,
+    )
+      .then(data => {
+        if (!cancelled) setRows(data.rsvps);
+      })
+      .catch(error => {
+        if (!cancelled) {
+          setError(error instanceof Error ? error.message : "Unable to load RSVPs.");
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [eventId, status]);
 
   async function remove(row: Rsvp) {
     if (!window.confirm(`Delete RSVP for ${row.primaryGuestName}? This cannot be undone.`)) return;

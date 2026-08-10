@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 
 type ApiResponse<T> = {
@@ -185,11 +186,7 @@ function AddRsvpModal({
     return values;
   }, [event]);
 
-  useEffect(() => {
-    if (appointmentMode === "custom" && !customStart && customTimes.length) {
-      setCustomStart(String(customTimes[0]));
-    }
-  }, [appointmentMode, customStart, customTimes]);
+  const selectedCustomStart = customStart || String(customTimes[0] ?? "");
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -230,7 +227,7 @@ function AddRsvpModal({
     }
 
     if (appointmentMode === "custom") {
-      const startMs = Number(customStart);
+      const startMs = Number(selectedCustomStart);
       const duration = Number(customDuration);
       if (!startMs || !duration) {
         setError("Choose a custom start time and duration.");
@@ -445,7 +442,7 @@ function AddRsvpModal({
                 >
                   <label style={{ display: "grid", gap: 7 }}>
                     <span>Start Time</span>
-                    <select value={customStart} onChange={e => setCustomStart(e.target.value)}>
+                    <select value={selectedCustomStart} onChange={e => setCustomStart(e.target.value)}>
                       {customTimes.map(value => (
                         <option key={value} value={value}>
                           {formatCustomTime(value)}
@@ -530,6 +527,7 @@ function AddRsvpModal({
 }
 
 export function RsvpManager({ eventId }: { eventId: string }) {
+  const router = useRouter();
   const [rows, setRows] = useState<Rsvp[]>([]);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
@@ -551,11 +549,27 @@ export function RsvpManager({ eventId }: { eventId: string }) {
   }, [eventId, status]);
 
   useEffect(() => {
-    void load();
-  }, [load]);
+    let cancelled = false;
+
+    api<{ rsvps: Rsvp[] }>(
+      `/api/admin/events/${eventId}/rsvps${status ? `?status=${status}` : ""}`,
+    )
+      .then(data => {
+        if (!cancelled) setRows(data.rsvps);
+      })
+      .catch(loadError => {
+        if (!cancelled) {
+          setError(loadError instanceof Error ? loadError.message : "Unable to load RSVPs.");
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [eventId, status]);
 
   function openRsvp(row: Rsvp) {
-    window.location.href = `/admin/events/${eventId}/rsvps/${row.id}`;
+    router.push(`/admin/events/${eventId}/rsvps/${row.id}`);
   }
 
   async function cancelAppointment(row: Rsvp) {
@@ -763,6 +777,7 @@ export function RsvpDetailManager({
   eventId: string;
   rsvpId: string;
 }) {
+  const router = useRouter();
   const [rsvp, setRsvp] = useState<Rsvp | null>(null);
   const [error, setError] = useState("");
   const [deleting, setDeleting] = useState(false);
@@ -774,10 +789,22 @@ export function RsvpDetailManager({
   }, [eventId, rsvpId]);
 
   useEffect(() => {
-    load().catch(loadError =>
-      setError(loadError instanceof Error ? loadError.message : "Unable to load RSVP."),
-    );
-  }, [load]);
+    let cancelled = false;
+
+    api<{ rsvp: Rsvp }>(`/api/admin/events/${eventId}/rsvps/${rsvpId}`)
+      .then(data => {
+        if (!cancelled) setRsvp(data.rsvp);
+      })
+      .catch(loadError => {
+        if (!cancelled) {
+          setError(loadError instanceof Error ? loadError.message : "Unable to load RSVP.");
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [eventId, rsvpId]);
 
   async function cancelAppointment() {
     if (!rsvp) return;
@@ -823,7 +850,7 @@ export function RsvpDetailManager({
         `/api/admin/events/${eventId}/rsvps/${rsvpId}`,
         { method: "DELETE" },
       );
-      window.location.href = `/admin/events/${eventId}/rsvps`;
+      router.push(`/admin/events/${eventId}/rsvps`);
     } catch (deleteError) {
       setError(deleteError instanceof Error ? deleteError.message : "Unable to delete RSVP.");
       setDeleting(false);

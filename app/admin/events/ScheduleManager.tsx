@@ -80,8 +80,29 @@ export function ScheduleManager({ eventId }: { eventId: string }) {
   }, [eventId]);
 
   useEffect(() => {
-    void load().catch(error => setError(error instanceof Error ? error.message : "Unable to load schedule."));
-  }, [load]);
+    let cancelled = false;
+
+    Promise.all([
+      request<{ event: EventData }>(`/api/admin/events/${eventId}`),
+      request<{ slots: Slot[] }>(`/api/admin/events/${eventId}/schedule`),
+    ])
+      .then(([eventResult, scheduleResult]) => {
+        if (cancelled) return;
+        setEvent(eventResult.event);
+        setSlots(scheduleResult.slots);
+        setStartTime(timeValue(eventResult.event.startsAt));
+        setEndTime(timeValue(eventResult.event.endsAt));
+      })
+      .catch(error => {
+        if (!cancelled) {
+          setError(error instanceof Error ? error.message : "Unable to load schedule.");
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [eventId]);
 
   const candidates = useMemo(() => {
     if (!event || !startTime || !endTime || duration < 5) return [];

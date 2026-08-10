@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { buildEventPayload } from "@/lib/event-editor-client";
 import styles from "./EventOverviewPanel.module.css";
@@ -64,6 +64,7 @@ export default function EventOverviewPanel({ eventId }: { eventId: string }) {
   const [event, setEvent] = useState<EventData | null>(null);
   const [rsvps, setRsvps] = useState<Rsvp[]>([]);
   const [slots, setSlots] = useState<Slot[]>([]);
+  const [loadedAt, setLoadedAt] = useState<number | null>(null);
   const [error, setError] = useState("");
   const [duplicating, setDuplicating] = useState(false);
 
@@ -77,6 +78,7 @@ export default function EventOverviewPanel({ eventId }: { eventId: string }) {
         setEvent(eventData.event);
         setRsvps(rsvpData.rsvps);
         setSlots(slotData.slots);
+        setLoadedAt(Date.now());
       })
       .catch(error => setError(error instanceof Error ? error.message : "Unable to load overview."));
   }, [eventId]);
@@ -105,9 +107,8 @@ export default function EventOverviewPanel({ eventId }: { eventId: string }) {
   const confirmedGuests = confirmed.reduce((sum, row) => sum + Number(row.partySize || 0), 0);
   const bookedSlots = slots.filter(slot => Boolean(slot.guestName));
   const openSlots = slots.length - bookedSlots.length;
-  const nextAppointment = useMemo(
-    () => bookedSlots.find(slot => new Date(slot.startsAt).getTime() > Date.now()),
-    [bookedSlots],
+  const nextAppointment = bookedSlots.find(
+    slot => loadedAt !== null && new Date(slot.startsAt).getTime() > loadedAt,
   );
 
   if (error && !event) return <main className="event-admin"><p className="event-alert">{error}</p></main>;

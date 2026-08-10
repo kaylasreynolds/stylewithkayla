@@ -74,8 +74,24 @@ export default function CheckInManager({ eventId }: { eventId: string }) {
   }, [eventId]);
 
   useEffect(() => {
-    void load();
-  }, [load]);
+    let cancelled = false;
+
+    api<{ rsvps: Rsvp[] }>(
+      `/api/admin/events/${eventId}/rsvps?status=confirmed`,
+    )
+      .then(data => {
+        if (!cancelled) setRows(data.rsvps);
+      })
+      .catch(error => {
+        if (!cancelled) {
+          setError(error instanceof Error ? error.message : "Unable to load RSVPs.");
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [eventId]);
 
   async function mark(rsvpId: string, action: "checked_in" | "no_show") {
     try {
