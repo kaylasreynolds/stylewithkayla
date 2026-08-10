@@ -25,8 +25,8 @@
     rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="event-card-enhancements.css?v=20260805">
-  <link rel="stylesheet" href="event-appointment-form.css?v=20260805">
-  <script src="events.js?v=20260801-calendar-fix" defer></script>
+  <link rel="stylesheet" href="event-appointment-form.css?v=20260809-guests">
+  <script src="events.js?v=20260809-guests" defer></script>
   <script src="event-card-enhancements.js?v=20260805" defer></script>
   <script src="modal-scroll-lock.js?v=20260806" defer></script>
   <script src="event-registration-confirmation.js?v=20260806" defer></script>
@@ -84,8 +84,8 @@
               <label>Full name <span aria-hidden="true">*</span><input name="name" autocomplete="name" required maxlength="120"></label>
               <label>Email <span aria-hidden="true">*</span><input name="email" type="email" autocomplete="email" required maxlength="254"></label>
               <label>Phone (optional)<input name="phone" type="tel" autocomplete="tel" maxlength="40"></label>
+              <label id="guests-field">Guests (optional)<input name="guestCount" type="number" inputmode="numeric" min="0" step="1" value="0"><small></small></label>
               <label id="appointment-field" hidden>Appointment time <span aria-hidden="true">*</span><select name="appointmentSlotId"></select></label>
-              <label id="guests-field" hidden>Guest names (one per line)<textarea name="guestNames" rows="3"></textarea><small></small></label>
               <label>Notes (optional)<textarea name="notes" rows="3" maxlength="1000"></textarea></label>
             </div>
             <p class="rsvp-form__message" id="rsvp-message" role="status"></p>
