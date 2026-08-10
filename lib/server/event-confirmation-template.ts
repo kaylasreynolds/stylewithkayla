@@ -78,6 +78,15 @@ export const buildEventConfirmationEmailHtml = (input: ConfirmationEmailInput) =
       <td valign="middle" style="padding:18px 20px 18px 22px;border-left:1px solid #eaded8;border-bottom:1px solid #eaded8;color:${rose ? "#cf647e" : "#251f1c"};font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;font-size:21px;font-weight:600;line-height:1.2;">${value}</td>
     </tr>`;
 
+  const divider = `
+    <table role="presentation" width="170" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;">
+      <tr>
+        <td style="height:0;font-size:0;line-height:0;border-top:1px solid #f0d8de;">&nbsp;</td>
+        <td width="22" align="center" style="color:#e6a7b7;font-size:14px;line-height:1;">◇</td>
+        <td style="height:0;font-size:0;line-height:0;border-top:1px solid #f0d8de;">&nbsp;</td>
+      </tr>
+    </table>`;
+
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -106,7 +115,7 @@ export const buildEventConfirmationEmailHtml = (input: ConfirmationEmailInput) =
           <p class="intro-copy" style="margin:0;font-size:15px;line-height:1.6;">${htmlEscape(introEnd)}</p>
         </td></tr>
 
-        <tr><td align="center" style="padding:0 0 28px;"><table role="presentation" width="170" cellspacing="0" cellpadding="0" border="0"><tr><td style="height:1px;background:#edc9d2;"></td><td width="22" align="center" style="color:#e6a7b7;font-size:14px;line-height:1;">◇</td><td style="height:1px;background:#edc9d2;"></td></tr></table></td></tr>
+        <tr><td align="center" style="padding:0 0 28px;">${divider}</td></tr>
 
         <tr><td class="content-pad" style="padding:0 28px 26px;">
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;border:1px solid #eaded8;border-radius:14px;background:#fffaf8;text-align:left;border-collapse:separate;border-spacing:0;overflow:hidden;">
@@ -129,7 +138,7 @@ export const buildEventConfirmationEmailHtml = (input: ConfirmationEmailInput) =
           <p style="max-width:390px;margin:11px auto 0;color:#6c625d;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:9px;line-height:1.45;">A calendar file is also attached to this email for easy saving and reminders.</p>
         </td></tr>
 
-        <tr><td align="center" style="padding:0 0 24px;"><table role="presentation" width="250" cellspacing="0" cellpadding="0" border="0"><tr><td style="height:1px;background:#edc9d2;"></td><td width="22" align="center" style="color:#e6a7b7;font-size:14px;line-height:1;">◇</td><td style="height:1px;background:#edc9d2;"></td></tr></table></td></tr>
+        <tr><td align="center" style="padding:0 0 24px;">${divider.replace('width="170"', 'width="250"')}</td></tr>
 
         <tr><td align="center" class="closing" style="padding:0 28px 32px;">
           <p style="margin:0;font-size:15px;">I’ll see you there!</p>
