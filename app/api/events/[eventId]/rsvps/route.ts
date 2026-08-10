@@ -203,6 +203,7 @@ export async function POST(request: Request, { params }: Context) {
       rsvpId,
       eventId,
       publicToken,
+      "confirmed",
       input.name,
       input.email,
       input.phone,
