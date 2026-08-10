@@ -67,9 +67,9 @@
 
     return `
       <div class="event-details-dialog__facts">
-        ${dateTime ? `<div class="event-details-dialog__fact"><span class="event-details-dialog__fact-icon" aria-hidden="true">◷</span><span>${escape(dateTime)}</span></div>` : ""}
-        ${location ? `<div class="event-details-dialog__fact"><span class="event-details-dialog__fact-icon" aria-hidden="true">⌖</span><span>${escape(location)}</span></div>` : ""}
-        ${attendance ? `<div class="event-details-dialog__fact"><span class="event-details-dialog__fact-icon" aria-hidden="true">○</span><span>${escape(attendance)}</span></div>` : ""}
+        ${dateTime ? `<div class="event-details-dialog__fact"><img src="/images/store-event.png" alt="Time" /></span><span>${escape(dateTime)}</span></div>` : ""}
+        ${location ? `<div class="event-details-dialog__fact"><img src="/images/location.png" alt="Location"/><span>${escape(location)}</span></div>` : ""}
+        ${attendance ? `<div class="event-details-dialog__fact"><img src="/images/style-together.png" alt="Attendance"/><span>${escape(attendance)}</span></div>` : ""}
       </div>
       ${event?.offer ? `<div class="event-details-dialog__offer"><span>Special offer</span><strong>${escape(event.offer)}</strong></div>` : ""}
       ${detailDescription ? `<section class="event-details-dialog__section"><h3>About this event</h3>${paragraphMarkup(detailDescription)}</section>` : ""}
