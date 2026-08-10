@@ -33,7 +33,8 @@
 }
 
 .event-card__offer strong::before {
-  content: img-url("images/stars.png");
+  content: img src="images/stars.png" alt="Stars";
+  display: inline-flex;
 }
 
 .event-card__details-toggle {
