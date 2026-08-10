@@ -18,6 +18,9 @@ type Rsvp = {
   notes?: string;
   checkedInAt?: string | null;
   noShowAt?: string | null;
+  appointmentStartsAt?: string | null;
+  appointmentEndsAt?: string | null;
+  appointmentLabel?: string | null;
   guests?: { id: string; name: string }[];
 };
 
@@ -30,6 +33,24 @@ async function api<T>(url: string, init?: RequestInit) {
   }
 
   return json.data as T;
+}
+
+function formatAppointment(row: Rsvp) {
+  if (row.appointmentLabel) return row.appointmentLabel;
+  if (!row.appointmentStartsAt) return "No appointment";
+
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "America/Boise",
+  });
+
+  const start = formatter.format(new Date(row.appointmentStartsAt));
+  const end = row.appointmentEndsAt
+    ? formatter.format(new Date(row.appointmentEndsAt))
+    : "";
+
+  return end ? `${start}–${end}` : start;
 }
 
 function Tabs({ eventId }: { eventId: string }) {
@@ -125,6 +146,7 @@ export function RsvpManager({ eventId }: { eventId: string }) {
           <thead>
             <tr>
               <th>Guest</th>
+              <th>Appointment</th>
               <th>Status</th>
               <th>Party</th>
               <th>Arrival</th>
@@ -140,6 +162,7 @@ export function RsvpManager({ eventId }: { eventId: string }) {
                   </Link>
                   <small>{row.email}</small>
                 </td>
+                <td>{formatAppointment(row)}</td>
                 <td>{row.status}</td>
                 <td>{row.partySize}</td>
                 <td>
@@ -163,7 +186,7 @@ export function RsvpManager({ eventId }: { eventId: string }) {
             ))}
             {!rows.length && (
               <tr>
-                <td colSpan={5}>No RSVPs found.</td>
+                <td colSpan={6}>No RSVPs found.</td>
               </tr>
             )}
           </tbody>
@@ -252,6 +275,8 @@ export function RsvpDetailManager({
           <dl>
             <dt>Status</dt>
             <dd>{rsvp.status}</dd>
+            <dt>Appointment</dt>
+            <dd>{formatAppointment(rsvp)}</dd>
             <dt>Party size</dt>
             <dd>{rsvp.partySize}</dd>
             <dt>Notes</dt>
