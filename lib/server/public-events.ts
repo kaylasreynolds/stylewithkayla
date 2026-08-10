@@ -13,15 +13,41 @@ export function assertRegistrationOpen(event: { startsAt: number; registrationOp
 }
 
 export function parsePublicRsvp(value: Record<string, unknown>, maxGuests: number, appointmentRequired: boolean) {
-  rejectUnexpectedKeys(value, ["name", "email", "phone", "guestNames", "notes", "appointmentSlotId"]);
+  rejectUnexpectedKeys(value, ["name", "email", "phone", "guestNames", "guestCount", "notes", "appointmentSlotId"]);
   const name = requiredString(value.name, "name", 120);
   const email = requiredString(value.email, "email", 254).toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw validation("email", "Enter a valid email address.");
   const phone = optionalString(value.phone, "phone", 40), notes = optionalString(value.notes, "notes", 1000);
-  if (value.guestNames !== undefined && !Array.isArray(value.guestNames)) throw validation("guestNames", "Provide guest names as a list.");
-  const guestNames = (value.guestNames as unknown[] | undefined ?? []).map((guest, index) => requiredString(guest, `guestNames.${index}`, 120));
-  if (guestNames.length > maxGuests) throw validation("guestNames", `You may bring up to ${maxGuests} guest${maxGuests === 1 ? "" : "s"}.`);
+
+  let guestNames: string[] = [];
+  let guestCount = 0;
+
+  if (value.guestCount !== undefined) {
+    const parsed = Number(value.guestCount);
+    if (!Number.isInteger(parsed) || parsed < 0) throw validation("guestCount", "Enter a valid number of guests.");
+    guestCount = parsed;
+  } else if (value.guestNames !== undefined) {
+    if (!Array.isArray(value.guestNames)) throw validation("guestNames", "Provide guest information as a list.");
+    const rawGuests = value.guestNames as unknown[];
+
+    // The public RSVP form uses the existing guestNames payload key for its
+    // numeric guest counter so older clients remain compatible. A single
+    // non-negative integer value is treated as the guest count, not a name.
+    if (
+      rawGuests.length === 1 &&
+      typeof rawGuests[0] === "string" &&
+      /^\d+$/.test(rawGuests[0].trim())
+    ) {
+      guestCount = Number(rawGuests[0].trim());
+    } else {
+      guestNames = rawGuests.map((guest, index) => requiredString(guest, `guestNames.${index}`, 120));
+      guestCount = guestNames.length;
+    }
+  }
+
+  if (guestCount > maxGuests) throw validation("guestCount", `You may bring up to ${maxGuests} guest${maxGuests === 1 ? "" : "s"}.`);
+
   const appointmentSlotId = optionalString(value.appointmentSlotId, "appointmentSlotId", 100);
   if (appointmentRequired && !appointmentSlotId) throw validation("appointmentSlotId", "Choose an available appointment time.");
-  return { name, email, phone, notes, guestNames, partySize: guestNames.length + 1, appointmentSlotId };
+  return { name, email, phone, notes, guestNames, partySize: guestCount + 1, appointmentSlotId };
 }
