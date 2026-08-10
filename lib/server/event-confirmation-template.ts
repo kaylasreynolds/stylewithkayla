@@ -67,7 +67,7 @@ export const buildEventConfirmationEmailHtml = (input: ConfirmationEmailInput) =
   const status = input.appointmentStartsAt ? "Your appointment is confirmed" : "Your RSVP is confirmed";
   const introEnd = input.appointmentStartsAt
     ? "Your appointment is set, and all of the details are right here."
-    : "Your spot is saved, and all of the details are right here.";
+    : "Your spot is saved and all of the details are right here.";
   const calendarUrl = buildGoogleCalendarUrl(input);
   const logoUrl = "https://stylewithkayla.com/images/stylewithkayla_logo_white_transparent.png";
   const signatureUrl = "https://stylewithkayla.com/images/heart-name-pink.png";
@@ -146,12 +146,12 @@ export const buildEventConfirmationEmailHtml = (input: ConfirmationEmailInput) =
         </td></tr>
 
         <tr><td class="help" style="padding:22px 28px;border-top:1px solid #eaded8;background:#fbf3ef;">
-          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td width="58" align="center" valign="middle" style="color:#cf647e;font-size:24px;">✉</td><td valign="middle" style="text-align:left;color:#151312;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:13px;line-height:1.55;"><strong style="display:block;margin-bottom:2px;">Questions or changes?</strong>Reply to this email or contact me at <a href="mailto:kayla.reynolds@macys.com" style="color:#b94d68;font-weight:700;text-decoration:none;">kayla.reynolds@macys.com</a>.</td></tr></table>
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td width="58" align="center" valign="middle" style="color:#cf647e;font-size:24px;">✉</td><td valign="middle" style="text-align:left;color:#151312;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:13px;line-height:1.55;"><strong style="display:block;margin-bottom:2px;">Questions or changes?</strong>Reply to this email or contact me at <a href="mailto:kayla@stylewithkayla.com" style="color:#b94d68;font-weight:700;text-decoration:none;">kayla@stylewithkayla.com</a>.</td></tr></table>
         </td></tr>
 
         <tr><td align="center" class="footer" style="padding:20px 22px 22px;background:#111;color:#fff;">
           <p style="margin:0 0 12px;color:#e4dfdc;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;">Connect with me</p>
-          <p class="footer-links" style="margin:0;color:#fff;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;">Instagram &nbsp;|&nbsp; Facebook &nbsp;|&nbsp; <a href="mailto:kayla.reynolds@macys.com" style="color:#fff;text-decoration:none;">Email</a> &nbsp;|&nbsp; <a href="https://stylewithkayla.com" style="color:#fff;text-decoration:none;">Style with Kayla</a></p>
+          <p class="footer-links" style="margin:0;color:#fff;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;">Instagram &nbsp;|&nbsp; Facebook &nbsp;|&nbsp; <a href="mailto:kayla@stylewithkayla.com" style="color:#fff;text-decoration:none;">Email</a> &nbsp;|&nbsp; <a href="https://stylewithkayla.com" style="color:#fff;text-decoration:none;">Style with Kayla</a></p>
         </td></tr>
       </table>
     </td></tr>
@@ -183,6 +183,6 @@ export const buildEventConfirmationEmailText = (input: ConfirmationEmailInput) =
     "I’ll see you there!",
     "xo, Kayla",
     "",
-    "Questions or changes? Reply to this email or contact kayla.reynolds@macys.com.",
+    "Questions or changes? Reply to this email or contact kayla@stylewithkayla.com.",
   ].filter(Boolean).join("\n");
 };
