@@ -237,7 +237,7 @@ export async function POST(
       }
       const collision = await db
         .prepare(
-          "SELECT id FROM event_appointment_slots WHERE event_id=? AND starts_at<? AND ends_at>? LIMIT 1",
+          "SELECT id FROM event_appointment_slots WHERE event_id=? AND rsvp_id IS NOT NULL AND starts_at<? AND ends_at>? LIMIT 1",
         )
         .bind(eventId, customEnd, customStart)
         .first();
@@ -245,7 +245,7 @@ export async function POST(
         throw new ApiError(
           409,
           "APPOINTMENT_COLLISION",
-          "That custom time overlaps an existing appointment or reserved slot.",
+          "That custom time overlaps an existing booked appointment.",
         );
       }
     }
@@ -279,6 +279,13 @@ export async function POST(
       );
     } else if (customStart !== null && customEnd !== null) {
       const slotId = crypto.randomUUID();
+      statements.push(
+        db
+          .prepare(
+            "DELETE FROM event_appointment_slots WHERE event_id=? AND rsvp_id IS NULL AND starts_at<? AND ends_at>?",
+          )
+          .bind(eventId, customEnd, customStart),
+      );
       statements.push(
         db
           .prepare(
