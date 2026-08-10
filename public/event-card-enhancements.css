@@ -42,6 +42,16 @@
   vertical-align: -0.125em;
 }
 
+/* Replace the generated Coming Soon calendar icon with the branded image asset. */
+.event-card__updates-media {
+  background: url("/images/coming-soon.png") center / cover no-repeat;
+}
+
+.event-card__updates-media::before,
+.event-card__updates-mark {
+  display: none;
+}
+
 .event-card__details-toggle {
   width: 100%;
   display: inline-flex;
