@@ -24,6 +24,15 @@ const htmlEscape = (value: string) =>
     })[character] ?? character,
   );
 
+const lowercaseMeridiem = (value: string) =>
+  value.replace(/\b(AM|PM)\b/g, (marker) => marker.toLowerCase());
+
+const formatLocationLines = (location: string) => {
+  const parts = location.split(",").map((part) => part.trim()).filter(Boolean);
+  if (parts.length >= 4) return [parts[0], parts[1], parts.slice(2).join(", ")];
+  return [location.trim()];
+};
+
 export const formatConfirmationDate = (value: number, timezone: string) =>
   new Intl.DateTimeFormat("en-US", {
     weekday: "long",
@@ -34,11 +43,13 @@ export const formatConfirmationDate = (value: number, timezone: string) =>
   }).format(new Date(value));
 
 export const formatConfirmationTime = (value: number, timezone: string) =>
-  new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: timezone,
-  }).format(new Date(value));
+  lowercaseMeridiem(
+    new Intl.DateTimeFormat("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      timeZone: timezone,
+    }).format(new Date(value)),
+  );
 
 export const confirmationUtcStamp = (value: number) =>
   new Date(value).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
@@ -63,7 +74,8 @@ export const buildEventConfirmationEmailHtml = (input: ConfirmationEmailInput) =
   const scheduledStartsAt = input.appointmentStartsAt ?? input.eventStartsAt;
   const scheduledEndsAt = input.appointmentEndsAt ?? input.eventEndsAt;
   const date = formatConfirmationDate(scheduledStartsAt, input.timezone);
-  const time = input.appointmentLabel || `${formatConfirmationTime(scheduledStartsAt, input.timezone)}–${formatConfirmationTime(scheduledEndsAt, input.timezone)}`;
+  const time = lowercaseMeridiem(input.appointmentLabel || `${formatConfirmationTime(scheduledStartsAt, input.timezone)}–${formatConfirmationTime(scheduledEndsAt, input.timezone)}`);
+  const locationHtml = formatLocationLines(input.location).map(htmlEscape).join("<br>");
   const status = input.appointmentStartsAt ? "Your appointment is confirmed" : "Your RSVP is confirmed";
   const introEnd = input.appointmentStartsAt
     ? "Your appointment is set, and all of the details are right here."
@@ -124,7 +136,7 @@ export const buildEventConfirmationEmailHtml = (input: ConfirmationEmailInput) =
             ${detailRow(input.appointmentStartsAt ? "Your appointment" : "Time", htmlEscape(time), Boolean(input.appointmentStartsAt))}
             <tr>
               <td width="34%" valign="middle" style="padding:18px 18px 18px 20px;color:#b94d68;font-family:Arial,Helvetica,sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;line-height:1.35;text-transform:uppercase;">Location</td>
-              <td valign="middle" style="padding:18px 20px 18px 22px;border-left:1px solid #eaded8;color:#251f1c;font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;font-size:18px;font-weight:600;line-height:1.32;">${htmlEscape(input.location)}</td>
+              <td valign="middle" style="padding:18px 20px 18px 22px;border-left:1px solid #eaded8;color:#251f1c;font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;font-size:18px;font-weight:600;line-height:1.32;">${locationHtml}</td>
             </tr>
           </table>
         </td></tr>
@@ -164,7 +176,8 @@ export const buildEventConfirmationEmailText = (input: ConfirmationEmailInput) =
   const startsAt = input.appointmentStartsAt ?? input.eventStartsAt;
   const endsAt = input.appointmentEndsAt ?? input.eventEndsAt;
   const date = formatConfirmationDate(startsAt, input.timezone);
-  const time = input.appointmentLabel || `${formatConfirmationTime(startsAt, input.timezone)}–${formatConfirmationTime(endsAt, input.timezone)}`;
+  const time = lowercaseMeridiem(input.appointmentLabel || `${formatConfirmationTime(startsAt, input.timezone)}–${formatConfirmationTime(endsAt, input.timezone)}`);
+  const location = formatLocationLines(input.location).join("\n");
 
   return [
     input.appointmentStartsAt ? "Your appointment is confirmed." : "Your RSVP is confirmed.",
@@ -173,7 +186,7 @@ export const buildEventConfirmationEmailText = (input: ConfirmationEmailInput) =
     "",
     `Date: ${date}`,
     `${input.appointmentStartsAt ? "Your appointment" : "Time"}: ${time}`,
-    `Location: ${input.location}`,
+    `Location:\n${location}`,
     input.eventOffer ? `Appointment perk: ${input.eventOffer}` : "",
     input.notes ? `Notes: ${input.notes}` : "",
     "",
