@@ -83,17 +83,6 @@
     const location = [event?.location, event?.locationDetails].filter(Boolean).join(" · ");
     const offer = [event?.offer, event?.offerDetails].filter(Boolean).join(" — ");
 
-    const heading = form.querySelector("#rsvp-title");
-    const eyebrow = form.querySelector(":scope > .section-label");
-    const fields = form.querySelector(".rsvp-form__fields");
-    const submit = form.querySelector('[type="submit"]');
-
-    if (heading) heading.hidden = true;
-    if (eyebrow) eyebrow.hidden = true;
-    if (fields) fields.hidden = true;
-    if (submit) submit.hidden = true;
-    message.hidden = true;
-
     const confirmation = document.createElement("section");
     confirmation.className = "rsvp-confirmation";
     confirmation.setAttribute("aria-live", "polite");
@@ -168,9 +157,13 @@
       <button type="button" class="rsvp-confirmation__done">Done</button>
     `;
 
+    form.classList.add("rsvp-form--confirmed");
     form.append(confirmation);
+
     confirmation.querySelector(".rsvp-confirmation__done")?.addEventListener("click", () => dialog.close());
-    form.scrollTo({ top: 0, behavior: "smooth" });
+
+    form.scrollTop = 0;
+    confirmation.querySelector(".rsvp-confirmation__done")?.focus({ preventScroll: true });
     rendering = false;
   }
 
@@ -183,14 +176,8 @@
   });
 
   dialog.addEventListener("close", () => {
+    form.classList.remove("rsvp-form--confirmed");
     form.querySelector(".rsvp-confirmation")?.remove();
-
-    const heading = form.querySelector("#rsvp-title");
-    const eyebrow = form.querySelector(":scope > .section-label");
-
-    if (heading) heading.hidden = false;
-    if (eyebrow) eyebrow.hidden = false;
-    message.hidden = false;
     rendering = false;
   });
 })();
