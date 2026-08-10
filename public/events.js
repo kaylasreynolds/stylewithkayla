@@ -314,7 +314,7 @@
           <span class="event-card__updates-mark"><svg viewBox="0 0 72 72"><rect x="14" y="18" width="44" height="40" rx="5"/><path d="M23 12v12M49 12v12M14 30h44"/><path d="M36 49s-10-5.7-10-12a5.5 5.5 0 0 1 10-3.5A5.5 5.5 0 0 1 46 37c0 6.3-10 12-10 12Z"/></svg></span>
         </div>
         <div class="event-card__content">
-          <h3>More events coming soon</h3>
+          <h3>More Events Coming Soon</h3>
           <p class="event-card__description">
             Request updates and be the first to hear about upcoming in-store events and styling experiences.
           </p>
