@@ -3916,7 +3916,7 @@ body.service-dialog-open {
 .event-card__updates-media::before { position: absolute; width: 70%; aspect-ratio: 1; border: 1px solid rgb(197 148 131 / 45%); border-radius: 50%; content: ""; }
 .event-card__updates-mark { position: relative; display: grid; width: 88px; height: 88px; place-items: center; border-radius: 50%; background: rgb(255 253 250 / 72%); color: #9b6a5a; }
 .event-card__updates-mark svg { width: 70px; height: 70px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.45; }
-.event-card--updates .event-card__content { text-align: center; }
+.event-card--updates .event-card__content { text-align: left; }
 .sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
 .event-card button:disabled { cursor: not-allowed; opacity: .65; text-decoration: none; box-shadow: none; }
 .rsvp-dialog { width: min(620px, calc(100% - 32px)); max-height: calc(100vh - 32px); padding: 0; border: 0; border-radius: 12px; color: var(--color-charcoal); }
