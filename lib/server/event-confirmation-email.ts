@@ -1,14 +1,21 @@
 import {
   buildEventConfirmationEmailHtml,
-  buildEventConfirmationEmailText,
   confirmationUtcStamp,
   type ConfirmationEmailInput,
 } from "@/lib/server/event-confirmation-template";
 
 type EmailRuntimeConfig = {
-  apiKey: string;
-  from: string;
+  tenantId: string;
+  clientId: string;
+  clientSecret: string;
+  mailbox: string;
   replyTo: string;
+};
+
+type MicrosoftTokenResponse = {
+  access_token?: string;
+  error?: string;
+  error_description?: string;
 };
 
 const icsEscape = (value: string) =>
@@ -47,35 +54,90 @@ const buildCalendarFile = (input: ConfirmationEmailInput) => {
   ].join("\r\n");
 };
 
+async function getMicrosoftAccessToken(config: EmailRuntimeConfig) {
+  const tokenResponse = await fetch(
+    `https://login.microsoftonline.com/${encodeURIComponent(config.tenantId)}/oauth2/v2.0/token`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        client_id: config.clientId,
+        client_secret: config.clientSecret,
+        scope: "https://graph.microsoft.com/.default",
+        grant_type: "client_credentials",
+      }),
+    },
+  );
+
+  const token = (await tokenResponse.json()) as MicrosoftTokenResponse;
+
+  if (!tokenResponse.ok || !token.access_token) {
+    throw new Error(
+      `Microsoft authentication failed (${tokenResponse.status}): ${
+        token.error_description || token.error || "No access token returned."
+      }`,
+    );
+  }
+
+  return token.access_token;
+}
+
 export async function sendEventConfirmationEmail(
   config: EmailRuntimeConfig,
   input: ConfirmationEmailInput,
 ) {
+  const accessToken = await getMicrosoftAccessToken(config);
   const calendar = buildCalendarFile(input);
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${config.apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: config.from,
-      to: [input.to],
-      reply_to: config.replyTo,
-      subject: `${input.appointmentStartsAt ? "You’re booked" : "You’re confirmed"}: ${input.eventTitle}`,
-      html: buildEventConfirmationEmailHtml(input),
-      text: buildEventConfirmationEmailText(input),
-      attachments: [
-        {
-          filename: "style-with-kayla-appointment.ics",
-          content: toBase64(calendar),
+
+  const response = await fetch(
+    `https://graph.microsoft.com/v1.0/users/${encodeURIComponent(config.mailbox)}/sendMail`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: {
+          subject: `${input.appointmentStartsAt ? "You’re booked" : "You’re confirmed"}: ${input.eventTitle}`,
+          body: {
+            contentType: "HTML",
+            content: buildEventConfirmationEmailHtml(input),
+          },
+          toRecipients: [
+            {
+              emailAddress: {
+                address: input.to,
+              },
+            },
+          ],
+          replyTo: [
+            {
+              emailAddress: {
+                address: config.replyTo,
+              },
+            },
+          ],
+          attachments: [
+            {
+              "@odata.type": "#microsoft.graph.fileAttachment",
+              name: "style-with-kayla-appointment.ics",
+              contentType: "text/calendar; method=PUBLISH; charset=UTF-8",
+              contentBytes: toBase64(calendar),
+            },
+          ],
         },
-      ],
-    }),
-  });
+        saveToSentItems: true,
+      }),
+    },
+  );
 
   if (!response.ok) {
     const detail = await response.text();
-    throw new Error(`Confirmation email failed (${response.status}): ${detail.slice(0, 500)}`);
+    throw new Error(
+      `Microsoft confirmation email failed (${response.status}): ${detail.slice(0, 700)}`,
+    );
   }
 }
