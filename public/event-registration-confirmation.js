@@ -40,6 +40,31 @@
     </div>
   `;
 
+  const hideRegistrationScreen = () => {
+    [...form.children].forEach(child => {
+      if (child.classList.contains("rsvp-dialog__close")) return;
+      if (child.classList.contains("rsvp-confirmation")) return;
+
+      child.dataset.confirmationPreviousDisplay = child.style.display || "";
+      child.style.setProperty("display", "none", "important");
+    });
+
+    form.classList.add("rsvp-form--confirmed");
+  };
+
+  const restoreRegistrationScreen = () => {
+    [...form.children].forEach(child => {
+      if (!Object.prototype.hasOwnProperty.call(child.dataset, "confirmationPreviousDisplay")) return;
+
+      const previousDisplay = child.dataset.confirmationPreviousDisplay;
+      child.style.removeProperty("display");
+      if (previousDisplay) child.style.display = previousDisplay;
+      delete child.dataset.confirmationPreviousDisplay;
+    });
+
+    form.classList.remove("rsvp-form--confirmed");
+  };
+
   async function showConfirmation() {
     if (rendering || form.querySelector(".rsvp-confirmation")) return;
     if (!message.textContent?.trim().startsWith("You’re registered!")) return;
@@ -157,7 +182,7 @@
       <button type="button" class="rsvp-confirmation__done">Done</button>
     `;
 
-    form.classList.add("rsvp-form--confirmed");
+    hideRegistrationScreen();
     form.append(confirmation);
 
     confirmation.querySelector(".rsvp-confirmation__done")?.addEventListener("click", () => dialog.close());
@@ -176,8 +201,8 @@
   });
 
   dialog.addEventListener("close", () => {
-    form.classList.remove("rsvp-form--confirmed");
     form.querySelector(".rsvp-confirmation")?.remove();
+    restoreRegistrationScreen();
     rendering = false;
   });
 })();
