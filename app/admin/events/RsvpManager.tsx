@@ -86,6 +86,10 @@ export function RsvpManager({ eventId }: { eventId: string }) {
     void load();
   }, [load]);
 
+  function openRsvp(row: Rsvp) {
+    window.location.href = `/admin/events/${eventId}/rsvps/${row.id}`;
+  }
+
   async function remove(row: Rsvp) {
     const confirmed = window.confirm(
       `Delete the RSVP for ${row.primaryGuestName}?\n\nThis permanently removes the RSVP and releases any appointment time attached to it.`,
@@ -155,11 +159,22 @@ export function RsvpManager({ eventId }: { eventId: string }) {
           </thead>
           <tbody>
             {rows.map(row => (
-              <tr key={row.id}>
+              <tr
+                key={row.id}
+                role="link"
+                tabIndex={0}
+                aria-label={`Open RSVP for ${row.primaryGuestName}`}
+                style={{ cursor: "pointer" }}
+                onClick={() => openRsvp(row)}
+                onKeyDown={event => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    openRsvp(row);
+                  }
+                }}
+              >
                 <td>
-                  <Link href={`/admin/events/${eventId}/rsvps/${row.id}`}>
-                    {row.primaryGuestName}
-                  </Link>
+                  <strong>{row.primaryGuestName}</strong>
                   <small>{row.email}</small>
                 </td>
                 <td>{formatAppointment(row)}</td>
@@ -177,7 +192,11 @@ export function RsvpManager({ eventId }: { eventId: string }) {
                     type="button"
                     className="event-link-button"
                     disabled={deletingId === row.id}
-                    onClick={() => remove(row)}
+                    onClick={event => {
+                      event.stopPropagation();
+                      void remove(row);
+                    }}
+                    onKeyDown={event => event.stopPropagation()}
                   >
                     {deletingId === row.id ? "Deleting…" : "Delete"}
                   </button>
