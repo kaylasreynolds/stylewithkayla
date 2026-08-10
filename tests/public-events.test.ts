@@ -64,7 +64,7 @@ test("static event cards use the approved public hierarchy", async () => {
   const styles = await readFile(new URL("../public/styles.css", import.meta.url), "utf8");
 
   assert.match(script, /events\.length === 2 \? \[updatesCard\(\)\]/);
-  assert.match(script, /More events coming soon/);
+  assert.match(script, /More Events Coming Soon/);
   assert.match(script, /Request Event Updates/);
   assert.match(script, /class="event-card__offer"/);
   assert.doesNotMatch(script, /<dt>Cost<\/dt>/);
