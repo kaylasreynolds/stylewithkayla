@@ -19,7 +19,7 @@ import { getD1 } from "@/lib/server/runtime";
 async function get(eventId: string, rsvpId: string) {
   const row = await getD1()
     .prepare(
-      "SELECT id,event_id eventId,status,primary_guest_name primaryGuestName,email,phone,party_size partySize,notes,checked_in_at checkedInAt,no_show_at noShowAt,created_at createdAt,updated_at updatedAt FROM event_rsvps WHERE id=? AND event_id=?",
+      "SELECT r.id,r.event_id eventId,r.status,r.primary_guest_name primaryGuestName,r.email,r.phone,r.party_size partySize,r.notes,r.checked_in_at checkedInAt,r.no_show_at noShowAt,r.created_at createdAt,r.updated_at updatedAt,s.starts_at appointmentStartsAt,s.ends_at appointmentEndsAt,s.label appointmentLabel FROM event_rsvps r LEFT JOIN event_appointment_slots s ON s.rsvp_id=r.id AND s.event_id=r.event_id WHERE r.id=? AND r.event_id=?",
     )
     .bind(rsvpId, eventId)
     .first<Record<string, unknown>>();
@@ -43,6 +43,8 @@ async function get(eventId: string, rsvpId: string) {
     noShowAt: iso(row.noShowAt as number | null),
     createdAt: iso(row.createdAt as number),
     updatedAt: iso(row.updatedAt as number),
+    appointmentStartsAt: iso(row.appointmentStartsAt as number | null),
+    appointmentEndsAt: iso(row.appointmentEndsAt as number | null),
     guests: guests.map(guest => ({
       ...guest,
       checkedInAt: iso(guest.checkedInAt as number | null),
