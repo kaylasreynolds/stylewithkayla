@@ -5,6 +5,16 @@
 
   if (!dialog || !form || !message) return;
 
+  // The base RSVP stylesheet historically forced #guests-field to display:none.
+  // Override that legacy rule so the optional guest counter can be shown when
+  // events.js removes the hidden attribute for events that allow guests.
+  const guestVisibilityStyle = document.createElement("style");
+  guestVisibilityStyle.textContent = `
+    #guests-field[hidden] { display: none !important; }
+    #guests-field:not([hidden]) { display: grid !important; }
+  `;
+  document.head.append(guestVisibilityStyle);
+
   let rendering = false;
 
   const escape = value =>
