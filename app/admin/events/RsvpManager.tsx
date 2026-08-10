@@ -24,6 +24,12 @@ type Rsvp = {
   guests?: { id: string; name: string }[];
 };
 
+type CancellationResult = {
+  cancelled: boolean;
+  emailSent: boolean;
+  warning?: string | null;
+};
+
 async function api<T>(url: string, init?: RequestInit) {
   const response = await fetch(url, init);
   const json = (await response.json()) as ApiResponse<T>;
@@ -69,6 +75,7 @@ export function RsvpManager({ eventId }: { eventId: string }) {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -88,6 +95,33 @@ export function RsvpManager({ eventId }: { eventId: string }) {
 
   function openRsvp(row: Rsvp) {
     window.location.href = `/admin/events/${eventId}/rsvps/${row.id}`;
+  }
+
+  async function cancelAppointment(row: Rsvp) {
+    const confirmed = window.confirm(
+      `Cancel ${row.primaryGuestName}'s appointment?\n\nThe appointment time will become available again and the client will receive a cancellation email.`,
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setCancellingId(row.id);
+      setError("");
+      const result = await api<CancellationResult>(
+        `/api/admin/events/${eventId}/rsvps/${row.id}/cancel`,
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: "{}",
+        },
+      );
+      if (result.warning) setError(result.warning);
+      await load();
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Unable to cancel appointment.");
+    } finally {
+      setCancellingId(null);
+    }
   }
 
   async function remove(row: Rsvp) {
@@ -188,10 +222,24 @@ export function RsvpManager({ eventId }: { eventId: string }) {
                       : "Pending"}
                 </td>
                 <td>
+                  {row.appointmentStartsAt && row.status !== "cancelled" && (
+                    <button
+                      type="button"
+                      className="event-link-button"
+                      disabled={cancellingId === row.id || deletingId === row.id}
+                      onClick={event => {
+                        event.stopPropagation();
+                        void cancelAppointment(row);
+                      }}
+                      onKeyDown={event => event.stopPropagation()}
+                    >
+                      {cancellingId === row.id ? "Cancelling…" : "Cancel appointment"}
+                    </button>
+                  )}
                   <button
                     type="button"
                     className="event-link-button"
-                    disabled={deletingId === row.id}
+                    disabled={deletingId === row.id || cancellingId === row.id}
                     onClick={event => {
                       event.stopPropagation();
                       void remove(row);
@@ -225,14 +273,46 @@ export function RsvpDetailManager({
   const [rsvp, setRsvp] = useState<Rsvp | null>(null);
   const [error, setError] = useState("");
   const [deleting, setDeleting] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+
+  const load = useCallback(async () => {
+    const data = await api<{ rsvp: Rsvp }>(`/api/admin/events/${eventId}/rsvps/${rsvpId}`);
+    setRsvp(data.rsvp);
+  }, [eventId, rsvpId]);
 
   useEffect(() => {
-    api<{ rsvp: Rsvp }>(`/api/admin/events/${eventId}/rsvps/${rsvpId}`)
-      .then(data => setRsvp(data.rsvp))
-      .catch(error =>
-        setError(error instanceof Error ? error.message : "Unable to load RSVP."),
+    load().catch(error =>
+      setError(error instanceof Error ? error.message : "Unable to load RSVP."),
+    );
+  }, [load]);
+
+  async function cancelAppointment() {
+    if (!rsvp) return;
+
+    const confirmed = window.confirm(
+      `Cancel ${rsvp.primaryGuestName}'s appointment?\n\nThe appointment time will become available again and the client will receive a cancellation email.`,
+    );
+    if (!confirmed) return;
+
+    try {
+      setCancelling(true);
+      setError("");
+      const result = await api<CancellationResult>(
+        `/api/admin/events/${eventId}/rsvps/${rsvpId}/cancel`,
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: "{}",
+        },
       );
-  }, [eventId, rsvpId]);
+      await load();
+      if (result.warning) setError(result.warning);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Unable to cancel appointment.");
+    } finally {
+      setCancelling(false);
+    }
+  }
 
   async function remove() {
     if (!rsvp) return;
@@ -265,14 +345,26 @@ export function RsvpDetailManager({
           <h1>{rsvp?.primaryGuestName ?? "RSVP detail"}</h1>
         </div>
         {rsvp && (
-          <button
-            type="button"
-            className="event-button event-button--secondary"
-            disabled={deleting}
-            onClick={remove}
-          >
-            {deleting ? "Deleting…" : "Delete RSVP"}
-          </button>
+          <div>
+            {rsvp.appointmentStartsAt && rsvp.status !== "cancelled" && (
+              <button
+                type="button"
+                className="event-button event-button--secondary"
+                disabled={cancelling || deleting}
+                onClick={cancelAppointment}
+              >
+                {cancelling ? "Cancelling…" : "Cancel appointment"}
+              </button>
+            )}
+            <button
+              type="button"
+              className="event-button event-button--secondary"
+              disabled={deleting || cancelling}
+              onClick={remove}
+            >
+              {deleting ? "Deleting…" : "Delete RSVP"}
+            </button>
+          </div>
         )}
       </header>
 
