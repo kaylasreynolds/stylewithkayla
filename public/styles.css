@@ -3894,7 +3894,7 @@ body.service-dialog-open {
 .event-date span { font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
 .event-date strong { font-family: var(--font-heading); font-size: 1.9rem; font-variant-numeric: tabular-nums; font-weight: 500; line-height: .95; transform: translateY(-5px);}
 .event-card__content { display: flex; flex: 1; flex-direction: column; padding: clamp(24px, 2.2vw, 30px); }
-.event-card h3 { margin: 0 0 14px; font-family: var(--font-heading); font-size: clamp(1.75rem, 2.15vw, 2.15rem); font-weight: 600; line-height: 1.08; }
+.event-card h3 { margin: 0 0 14px; font-family: var(--font-heading); font-size: clamp(3rem, 2.15vw, 2.15rem); font-weight: 600; line-height: 1.08; }
 .event-card__description { display: -webkit-box; overflow: hidden; margin: 0 0 26px; color: #514a47; line-height: 1.6; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; }
 .event-facts { display: grid; gap: 14px; margin: 0 0 22px; }
 .event-fact { display: grid; grid-template-columns: 20px minmax(0, 1fr); align-items: start; gap: 10px; }
