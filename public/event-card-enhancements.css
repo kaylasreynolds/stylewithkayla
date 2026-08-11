@@ -64,7 +64,14 @@
 .event-card--updates .event-card__content h3 {
   margin: 0 0 18px;
 }
-
+.event-card--updates .event-card__content h3::after {
+  content: "";
+  display: block;
+  width: 76px;
+  height: 1px;
+  margin-top: 24px;
+  background: var(--color-rose);
+}
 .event-card--updates .event-card__description {
   display: block;
   overflow: visible;
