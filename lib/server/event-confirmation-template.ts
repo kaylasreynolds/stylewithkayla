@@ -78,7 +78,7 @@ export const buildEventConfirmationEmailHtml = (input: ConfirmationEmailInput) =
   const locationHtml = formatLocationLines(input.location).map(htmlEscape).join("<br>");
   const status = input.appointmentStartsAt ? "Your appointment is confirmed" : "Your RSVP is confirmed";
   const introEnd = input.appointmentStartsAt
-    ? "Your appointment is set, and all of the details are right here."
+    ? "Your appointment is set and all of the details are right here."
     : "Your spot is saved and all of the details are right here.";
   const calendarUrl = buildGoogleCalendarUrl(input);
   const logoUrl = "https://stylewithkayla.com/images/stylewithkayla_logo_white_transparent.png";
