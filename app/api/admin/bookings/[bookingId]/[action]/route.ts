@@ -20,18 +20,20 @@ export async function POST(request: Request, ctx: Params) {
     if (b.status !== expected) throw new ApiError(409, "BOOKING_STATE_CHANGED", "This request changed. Refresh before continuing.");
     assertAdminActionState(action as AdminBookingAction, b.status);
     const reason = optionalString(body.reason, "reason", 500), now = Date.now(), keyHash = await sha256(request.headers.get("idempotency-key") || crypto.randomUUID());
-    let profileAccessUrl: string | null = null, profileAccessExpiresAt: number | null = null, clientActionUrl: string | null = null, clientActionExpiresAt: number | null = null;
+    let profileAccessUrl: string | null = null, profileAccessExpiresAt: number | null = null, manageAppointmentUrl: string | null = null, clientActionUrl: string | null = null, clientActionExpiresAt: number | null = null;
 
     if (action === "confirm") {
       if (!b.holdId || b.holdStartsAt === null || b.holdEndsAt === null) throw new ApiError(409, "ACTIVE_HOLD_REQUIRED", "Assign or propose a time before confirming.");
       if (!b.profileType) throw new ApiError(422, "PROFILE_TYPE_REQUIRED", "Select a Style Profile type before confirming this request.");
-      const rawToken = randomPrivateToken(), tokenHash = await hashPrivateToken(rawToken); profileAccessExpiresAt = now + STYLE_PROFILE_TOKEN_TTL_MS; profileAccessUrl = `${new URL(request.url).origin}/style-profile/${rawToken}`;
+      const rawToken = randomPrivateToken(), tokenHash = await hashPrivateToken(rawToken), rawManageToken = randomPrivateToken(), manageTokenHash = await hashPrivateToken(rawManageToken); profileAccessExpiresAt = now + STYLE_PROFILE_TOKEN_TTL_MS; profileAccessUrl = `${new URL(request.url).origin}/style-profile/${rawToken}`; manageAppointmentUrl = `${new URL(request.url).origin}/manage/${rawManageToken}`;
       await db.batch([
         db.prepare(`UPDATE bookings SET status='confirmed',confirmed_start_at=?,confirmed_end_at=?,confirmed_at=?,updated_at=? WHERE id=? AND status=? AND EXISTS(SELECT 1 FROM booking_holds WHERE id=? AND active=1)`).bind(b.holdStartsAt, b.holdEndsAt, now, now, bookingId, expected, b.holdId),
         db.prepare(`UPDATE booking_holds SET kind='confirmed' WHERE id=? AND active=1 AND EXISTS(SELECT 1 FROM bookings WHERE id=? AND status='confirmed')`).bind(b.holdId, bookingId),
         db.prepare(`INSERT INTO style_profiles(id,booking_id,client_id,profile_type,status,schema_version,answers,current_section,created_at,updated_at) SELECT ?,id,client_id,profile_type,'draft',1,'{}',1,?,? FROM bookings WHERE id=? AND status='confirmed' ON CONFLICT(booking_id) DO NOTHING`).bind(crypto.randomUUID(), now, now, bookingId),
         db.prepare(`UPDATE private_access_tokens SET revoked_at=? WHERE booking_id=? AND purpose='style_profile' AND revoked_at IS NULL`).bind(now, bookingId),
         db.prepare(`INSERT INTO private_access_tokens(id,booking_id,profile_id,purpose,token_hash,expires_at,created_at) SELECT ?,p.booking_id,p.id,'style_profile',?,?,? FROM style_profiles p WHERE p.booking_id=?`).bind(crypto.randomUUID(), tokenHash, profileAccessExpiresAt, now, bookingId),
+        db.prepare(`UPDATE private_access_tokens SET revoked_at=? WHERE booking_id=? AND purpose='manage_appointment' AND revoked_at IS NULL`).bind(now, bookingId),
+        db.prepare(`INSERT INTO private_access_tokens(id,booking_id,purpose,token_hash,expires_at,created_at) SELECT ?,id,'manage_appointment',?,?,? FROM bookings WHERE id=? AND status='confirmed'`).bind(crypto.randomUUID(), manageTokenHash, now + 365 * 86_400_000, now, bookingId),
         history(db, bookingId, expected, "confirmed", adminEmail, reason, { action, idempotencyKeyHash: keyHash, profileLinkExpiresAt: new Date(profileAccessExpiresAt).toISOString() }, now), communication(db, bookingId, b.clientEmail, "booking_confirmed", now)
       ]);
     } else if (action === "decline") {
@@ -68,7 +70,7 @@ export async function POST(request: Request, ctx: Params) {
     } else {
       const retention = addCalendarYears(now, 2); await db.batch([db.prepare(`UPDATE bookings SET status='completed',completed_at=?,updated_at=? WHERE id=? AND status='confirmed'`).bind(now, now, bookingId), db.prepare(`UPDATE booking_holds SET active=0,released_at=?,release_reason='Appointment completed' WHERE booking_id=? AND active=1`).bind(now, bookingId), db.prepare(`UPDATE clients SET last_completed_appointment_at=?,retention_delete_after=?,updated_at=? WHERE id=?`).bind(now, retention, now, b.clientId), db.prepare(`UPDATE style_profiles SET retention_delete_after=?,updated_at=? WHERE booking_id=?`).bind(retention, now, bookingId), history(db, bookingId, "confirmed", "completed", adminEmail, reason, { action, idempotencyKeyHash: keyHash, retentionDeleteAfter: new Date(retention).toISOString() }, now)]);
     }
-    const updated = await load(db, bookingId); if (!updated || (action !== "release-hold" && updated.status === expected)) throw new ApiError(409, "BOOKING_STATE_CHANGED", "This request changed or the selected time became unavailable. Refresh before continuing."); return dataResponse({ bookingId, status: updated.status, holdActive: Boolean(updated.holdId), profileAccessUrl, profileAccessExpiresAt: profileAccessExpiresAt ? new Date(profileAccessExpiresAt).toISOString() : null, clientActionUrl, clientActionExpiresAt: clientActionExpiresAt ? new Date(clientActionExpiresAt).toISOString() : null }, 200, id);
+    const updated = await load(db, bookingId); if (!updated || (action !== "release-hold" && updated.status === expected)) throw new ApiError(409, "BOOKING_STATE_CHANGED", "This request changed or the selected time became unavailable. Refresh before continuing."); return dataResponse({ bookingId, status: updated.status, holdActive: Boolean(updated.holdId), profileAccessUrl, manageAppointmentUrl, profileAccessExpiresAt: profileAccessExpiresAt ? new Date(profileAccessExpiresAt).toISOString() : null, clientActionUrl, clientActionExpiresAt: clientActionExpiresAt ? new Date(clientActionExpiresAt).toISOString() : null }, 200, id);
   });
 }
 

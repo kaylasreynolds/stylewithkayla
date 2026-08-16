@@ -310,7 +310,7 @@ export const privateAccessTokens = sqliteTable(
       onDelete: "cascade",
     }),
     purpose: text("purpose")
-      .$type<"style_profile" | "alternate_time" | "booking_summary">()
+      .$type<"style_profile" | "alternate_time" | "booking_summary" | "manage_appointment">()
       .notNull(),
     tokenHash: text("token_hash").notNull(),
     expiresAt: integer("expires_at").notNull(),
@@ -326,6 +326,22 @@ export const privateAccessTokens = sqliteTable(
       table.revokedAt,
     ),
   ],
+);
+
+export const rescheduleRequests = sqliteTable(
+  "reschedule_requests",
+  {
+    id: text("id").primaryKey(),
+    bookingId: text("booking_id").notNull().references(() => bookings.id, { onDelete: "cascade" }),
+    requestedStartAt: integer("requested_start_at").notNull(),
+    requestedEndAt: integer("requested_end_at").notNull(),
+    note: text("note"),
+    status: text("status").$type<"pending" | "approved" | "declined">().notNull().default("pending"),
+    reviewedBy: text("reviewed_by"),
+    reviewedAt: integer("reviewed_at"),
+    createdAt: createdAt(),
+  },
+  (table) => [index("reschedule_requests_booking_status_idx").on(table.bookingId, table.status)],
 );
 
 export const inspirationAssets = sqliteTable(
