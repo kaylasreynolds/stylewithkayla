@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Style with Kayla Manage Appointment</title>
+  <style>
+    :root {
+      --ink: #1f1d1d;
+      --black: #151515;
+      --rose: #c0617d;
+      --rose-dark: #b5536f;
+      --blush: #fdf1ef;
+      --paper: #ffffff;
+      --line: #f0dedb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f3ebe8;
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .page-shell {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      background: #f3ebe8;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 990px;
+      margin: 0 auto;
+      background: var(--paper);
+    }
+
+    .brand-bar {
+      padding: 22px 24px 18px;
+      background: var(--black);
+      color: #fff;
+      text-align: center;
+    }
+
+    .wordmark {
+      margin: 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 38px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .wordmark span {
+      color: #c8758d;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 31px;
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .hero {
+      padding: 58px 52px 44px;
+      text-align: center;
+    }
+
+    .kicker {
+      margin: 0 0 22px;
+      color: var(--rose);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: .28em;
+      line-height: 1.25;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 72px;
+      font-weight: 400;
+      letter-spacing: .035em;
+      line-height: 1.1;
+    }
+
+    .section {
+      padding: 0 52px 42px;
+    }
+
+    .rounded-card {
+      overflow: hidden;
+      border-radius: 48px;
+      background: var(--blush);
+    }
+
+    .detail-row {
+      display: grid;
+      grid-template-columns: 88px 1fr auto;
+      gap: 28px;
+      align-items: center;
+      min-height: 218px;
+      padding: 42px 40px;
+      border-top: 2px solid #fff;
+    }
+
+    .detail-row:first-child {
+      border-top: 0;
+    }
+
+    .detail-content {
+      min-width: 0;
+    }
+
+    .detail-label {
+      margin: 0 0 26px;
+      color: var(--rose);
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .detail-text {
+      margin: 0;
+      color: #060606;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      font-weight: 400;
+      line-height: 1.25;
+    }
+
+    .detail-text strong {
+      font-weight: 700;
+    }
+
+    .entrance-note {
+      margin-top: 18px;
+      padding: 10px 0 10px 18px;
+      border-left: 8px solid var(--rose);
+      color: #080808;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1.25;
+      text-transform: uppercase;
+    }
+
+    .icon {
+      width: 52px;
+      color: #050505;
+      text-align: center;
+    }
+
+    .icon svg {
+      display: block;
+      width: 52px;
+      height: 52px;
+      margin: 0 auto;
+    }
+
+    .button {
+      display: inline-block;
+      min-width: 286px;
+      padding: 18px 28px;
+      border-radius: 999px;
+      background: var(--rose);
+      color: #fff;
+      font-size: 31px;
+      letter-spacing: .08em;
+      line-height: 1.1;
+      text-align: center;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .profile-card {
+      padding: 42px 40px 48px;
+      border-radius: 48px;
+      background: var(--rose);
+      color: #fff;
+    }
+
+    .action-card {
+      padding: 42px 40px 48px;
+      border-radius: 48px;
+      background: var(--blush);
+    }
+
+    .profile-card h2,
+    .action-card h2 {
+      margin: 0 0 8px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      line-height: 1.1;
+    }
+
+    .action-card h2 {
+      color: var(--rose);
+    }
+
+    .profile-card p,
+    .action-card p {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 31px;
+      line-height: 1.25;
+    }
+
+    .profile-card p {
+      color: #fff;
+    }
+
+    .action-card p {
+      color: #060606;
+    }
+
+    .full-button {
+      display: block;
+      width: 100%;
+      margin: 32px 0;
+      padding: 20px 28px;
+      border-radius: 999px;
+      background: var(--rose);
+      color: #fff;
+      font-size: 31px;
+      letter-spacing: .09em;
+      line-height: 1.2;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .profile-card .full-button {
+      background: var(--blush);
+      color: #050505;
+    }
+
+    .deadline {
+      font-family: Arial, Helvetica, sans-serif !important;
+      font-size: 27px !important;
+      line-height: 1.35 !important;
+    }
+
+    .footer {
+      padding: 22px 24px;
+      background: #000;
+      color: #fff;
+      font-size: 14px;
+      letter-spacing: .16em;
+      line-height: 1.4;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 720px) {
+      .brand-bar {
+        padding: 16px 18px 14px;
+      }
+
+      .wordmark {
+        font-size: 28px;
+      }
+
+      .wordmark span {
+        font-size: 24px;
+      }
+
+      .hero {
+        padding: 42px 24px 34px;
+      }
+
+      .kicker {
+        font-size: 14px;
+        letter-spacing: .2em;
+      }
+
+      h1 {
+        font-size: 43px;
+      }
+
+      .section {
+        padding: 0 20px 30px;
+      }
+
+      .rounded-card,
+      .profile-card,
+      .action-card {
+        border-radius: 28px;
+      }
+
+      .detail-row {
+        grid-template-columns: 42px 1fr;
+        gap: 18px;
+        min-height: auto;
+        padding: 30px 22px;
+      }
+
+      .detail-row .button {
+        grid-column: 2;
+        width: 100%;
+        min-width: 0;
+        margin-top: 10px;
+      }
+
+      .detail-label {
+        margin-bottom: 14px;
+        font-size: 14px;
+      }
+
+      .detail-text,
+      .entrance-note {
+        font-size: 20px;
+      }
+
+      .icon,
+      .icon svg {
+        width: 34px;
+        height: 34px;
+      }
+
+      .button,
+      .full-button {
+        font-size: 20px;
+      }
+
+      .profile-card,
+      .action-card {
+        padding: 30px 22px;
+      }
+
+      .profile-card h2,
+      .action-card h2 {
+        font-size: 30px;
+      }
+
+      .profile-card p,
+      .action-card p,
+      .deadline {
+        font-size: 20px !important;
+      }
+
+      .footer {
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <article class="page" aria-label="Style with Kayla manage appointment page">
+      <header class="brand-bar">
+        <p class="wordmark">Style <span>with Kayla</span></p>
+      </header>
+
+      <section class="hero">
+        <p class="kicker">Appointment Confirmed</p>
+        <h1>Manage Appointment</h1>
+      </section>
+
+      <section class="section">
+        <div class="rounded-card">
+          <div class="detail-row">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M32 58s20-22 20-38A20 20 0 0 0 12 20c0 16 20 38 20 38Z"/>
+                <circle cx="32" cy="20" r="8"/>
+              </svg>
+            </div>
+            <div class="detail-content">
+              <p class="detail-label">Where We&rsquo;ll Meet</p>
+              <p class="detail-text"><strong>Macy&rsquo;s Boise Towne Square</strong><br>370 N. Milwaukee St., Boise, ID 83704</p>
+              <div class="entrance-note">West Entrance, Near Customer Service</div>
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="32" cy="32" r="24"/>
+                <path d="M32 16v18l13 8"/>
+              </svg>
+            </div>
+            <div class="detail-content">
+              <p class="detail-label">Date and Time</p>
+              <p class="detail-text">2:00pm - 4:00pm<br>Saturday, August 15<sup>th</sup>, 2026</p>
+            </div>
+            <a class="button" href="#">Add to Calendar</a>
+          </div>
+
+          <div class="detail-row">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 22h30l4 34H13l4-34Z"/>
+                <path d="M24 22c0-9 3-14 8-14s8 5 8 14"/>
+                <path d="M28 39c2-4 6-4 8 0"/>
+                <path d="M26 44c4 4 8 4 12 0"/>
+              </svg>
+            </div>
+            <div class="detail-content">
+              <p class="detail-label">Appointment Details</p>
+              <p class="detail-text">Women&rsquo;s Everyday Styling</p>
+            </div>
+            <a class="button" href="#">View Details</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="profile-card">
+          <h2>Complete your Style Profile</h2>
+          <p>Your profile helps me prepare ideas and pull useful options before we meet.</p>
+          <a class="full-button" href="#">Complete Style Profile</a>
+          <p class="deadline">Please complete it by 2:00pm Friday, August 14<sup>th</sup>.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="action-card">
+          <h2>Request a new time</h2>
+          <p>Current time will remain confirmed until a new selection is approved.</p>
+          <a class="full-button" href="#">Select a new time</a>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="action-card">
+          <h2>Cancel Appointment</h2>
+          <p>Cancel current appointment. Excessive cancellations may result in denied bookings in the future.</p>
+          <a class="full-button" href="#">Cancel Appointment</a>
+        </div>
+      </section>
+
+      <footer class="footer">
+        &copy; 2026 Style with Kayla&nbsp;&nbsp;|&nbsp;&nbsp;Personal Stylist at Macy&rsquo;s&nbsp;&nbsp;|&nbsp;&nbsp;All Rights Reserved
+      </footer>
+    </article>
+  </main>
+</body>
+</html>
