@@ -3,722 +3,424 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/styles.css">
   <title>Style with Kayla — Appointment Confirmation</title>
-
   <style>
-    /* =========================================================
-       STYLE WITH KAYLA
-       APPOINTMENT CONFIRMATION EMAIL
-       ========================================================= */
-
     :root {
-      --email-width: 700px;
-      --side-pad: 42px;
-      --section-gap: 30px;
-
-      --color-rose: #CF8C93;
-      --color-rose-hover: #BE747E;
-      --color-rose-deep: #A85E68;
-      --color-ivory: #FCF9F6;
-      --color-blush: #F6EEEB;
-      --color-pale-rose: #F1E1DE;
-      --color-white: #FFFFFF;
-      --color-charcoal: #1F1F1F;
-      --color-gray: #5A5552;
-      --color-divider: #DDD2CA;
-
-      --shadow:
-        0 10px 26px rgba(105, 62, 57, .10);
-
-      --font-heading:
-        "Cormorant Garamond",
-        Georgia,
-        "Times New Roman",
-        serif;
-
-      --font-body:
-        "Inter",
-        Arial,
-        sans-serif;
+      --page-width: 916px;
+      --rose: #bd526f;
+      --rose-dark: #ad4563;
+      --rose-soft: #f9e9e8;
+      --ivory: #fffdfb;
+      --ink: #171515;
+      --line: #edd6d1;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: Arial, Helvetica, sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    html {
-      background: var(--color-pale-rose);
-    }
+    html { background: #eee7e3; }
 
     body {
       margin: 0;
-      padding: 34px 12px;
-
-      color: var(--color-charcoal);
-
-      font-family: var(--font-body);
-
-      background:
-        var(--color-pale-rose);
+      color: var(--ink);
+      background: #eee7e3;
+      font-family: var(--serif);
     }
 
-
-    /* =========================================================
-       EMAIL SHELL
-       ========================================================= */
-
-    .email {
-      width: min(
-        100%,
-        var(--email-width)
-      );
-
+    .page {
+      width: min(100%, var(--page-width));
+      min-height: 100vh;
       margin: 0 auto;
-
-      background:
-        var(--color-ivory);
-
-      box-shadow:
-        0 20px 55px
-        rgba(70, 54, 47, .14);
-
       overflow: hidden;
+      background: var(--ivory);
+      box-shadow: 0 16px 50px rgba(66, 42, 37, .12);
     }
 
-    .section {
-      padding: 15px 60px;
-    }
-
-    .spacer {
-      height:
-        var(--section-gap);
-    }
-
-
-    /* =========================================================
-       SECTION: LOGO
-       ========================================================= */
-
-    .logo-section {
-      text-align: center;
-
-      padding-top: 10px;
-      padding-bottom: 10px;
+    .brand-bar {
+      display: flex;
+      height: 105px;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: #030303;
     }
 
     .brand-logo {
       display: block;
-
-      width: 155px;
-      max-width: 48vw;
-
-      margin: 0 auto;
+      width: 330px;
+      max-width: 72vw;
+      max-height: 70px;
+      object-fit: contain;
     }
 
-
-    /* =========================================================
-       SECTION: CONFIRMATION HEADER
-       ========================================================= */
-
-    .confirmation-header {
+    .hero {
+      padding: 38px 24px 30px;
       text-align: center;
-
-      padding-top: 4px;
     }
 
-    .eyebrow {
-      margin:
-        0 0 4px;
-      font-size: 22px;
-      font-weight:700;
-      font-family:var(--font-body);
-      line-height: 1.3;
-    }
-
-    .client-name {
-      box-sizing: border-box;
-      display:block;
-      padding:
-        22px 0;
+    .kicker,
+    .label {
       margin: 0;
-      max-width:580px;
-      width:100%;
-      color:
-        var(--color-rose);
-      font-family:
-        var(--font-heading);
-      font-weight: 400;
-      font-size:
-        clamp(1rem,10cqw,50px);
-      line-height: 1;
-      letter-spacing:-2.75px;
-      white-space: nowrap;
-    }
-
-    .name-line {
-      position: relative;
-
-      width: 76%;
-      height: 1px;
-
-      margin:
-        20px auto 18px;
-
-      background:
-        var(--color-divider);
-    }
-
-    .name-line::after {
-      content: "";
-
-      position: absolute;
-
-      width: 7px;
-      height: 7px;
-
-      left: 50%;
-      top: 50%;
-
-      transform:
-        translate(
-          -50%,
-          -50%
-        );
-
-      border-radius: 50%;
-
-      background:
-        var(--color-rose-hover);
-    }
-
-    .service-line {
-      padding:
-        5px 0;
-
-      margin: 0;
-
-      font-size: 20px;
-
-      line-height: 1.35;
-    }
-
-
-    /* =========================================================
-       SECTION: APPOINTMENT DETAILS
-       ========================================================= */
-
-    .appointment-card {
-      padding:
-        8px 28px;
-      padding-left: 20px;
-
-      background:
-        var(--color-blush);
-
-      border:
-        1px solid
-        var(--color-rose-deep);
-      border-left: 5px solid var(--color-rose-hover);
-      border-radius: 14px;
-
-      box-shadow:
-        var(--shadow);
-    }
-
-
-    .row {
-      display: flex;
-      align-items:flex-start;
-      gap: 16px;
-      padding: 20px;
-    }
-
-    .row + .row {
-      border-top:
-        1px solid
-        rgba(207, 140, 147, .28);
-    }
-
-    .icon {
-      width: 35px;
-      height: 35px;
-      color: var(--color-rose);
-      flex-shrink:0;
-      margin-top:2px;
-      stroke: var(--color-rose);
-      fill: none;
-      stroke-width: 1.7;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      background: none;
-      
-      
-    }
-
-    .content {
-      flex:1;
-      min-width:0;
-    }
-    .detail-title {
-      color:
-        var(--color-rose-hover);
-      font-family:
-        var(--font-heading);
-      font-size: 12px;
+      color: var(--rose);
+      font-family: var(--sans);
       font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform:
-        uppercase;
-        margin: 0 0 8px 0;
-    }
-    .main-text {
-      font-family:
-        var(--font-heading);
-      font-weight: 700;
-      font-size: 16px;
-      color:
-        var(--color-charcoal);
-      line-height: 1.5;
-      margin: 0;
-    }
-    .highlight {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background:
-        var(--color-blush);
-      border-left:
-        4px solid
-        var(--color-rose-hover);
-      padding: 10px 12px;
-      margin-top: 12px;
-      border-radius: 2px;
-    }
-    .highlight span {
-      font-family:
-        var(--font-heading);
-        font-weight: 700;
-        font-size: 13px;
-      color:
-        var(--color-charcoal);
-        letter-spacing: 0.02em;
-    }
-    .row-between {
-      display: grid;
-  grid-template-columns: 1fr 170px;
-  align-items: center;
-  gap: 12px;
-}
-.row-between .btn-filled,
-.row-between .btn-outline {
-  width: 100%;
-  justify-content: center;
-    }
-
-    /* =========================================================
-       SECTION: CALENDAR BUTTON
-       ========================================================= */
-
-    .btn {
-      background:
-        var(--color-rose-deep);
-      color:
-        var(--color-white);
-      font-family:
-        var(--font-heading);
-      font-weight: 700;
-      font-size: 14px;
-      border: none;
-      border-radius: 14px;
-      padding: 12px 22px;
-      white-space: nowrap;
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-    .btn:hover {
-      background:
-        var(--color-rose-hover);
-    }
-    .btn-outline {
-      background:
-        var(--color-blush);
-       font-family:
-        var(--font-heading);
-      color: var(--color-rose-deep);
-      font-weight: 700;
-      font-size: 14px;
-      border: 1px solid var(--color-rose-hover);
-      border-radius: 14px;
-      padding: 12px 22px;
-      white-space: nowrap;
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-        .btn-outline:hover { background: var(--color-rose); 
-    }
- 
-
-    /* =========================================================
-       SECTION: STYLE PROFILE
-       ========================================================= */
-
-    .profile-block {
-      background: var(--color-rose-deep);
-      border-radius: 16px;
-      padding: 30px 32px;
-      color: var(--color-white);
-    }
-
-    .profile-block-top {
-      display: flex;
-      align-items: flex-start;
-      gap: 18px;
-      margin-bottom: 22px;
-    }
-
-    .profile-block-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: var(--color-rose);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .profile-block-icon svg {
-      width: 26px;
-      height: 26px;
-      stroke: var(--color-white);
-      fill: none;
-      stroke-width: 1.6;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .profile-block h2 {
-      font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 26px;
-      margin: 4px 0 8px;
-    }
-
-    .profile-block p {
-      margin: 0;
-      font-size: 15px;
-      line-height: 1.5;
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .profile-block .deadline {
-      text-align: center;
-      margin-top: 16px;
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.75);
-    }
-    .btn-white {
-      display: block;
-      width: 100%;
-      background:
-        var(--color-white);
-      font-family:
-        var(--font-heading);
-      font-weight: 700;
-      font-size: 14px;
-      color: var(--color-rose-hover);
-      border: 1px solid var(--color-rose-hover);
-      border-radius: 14px;
-      padding: 12px 22px;
-      white-space: nowrap;
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-    .btn:hover {
-      background:
-        var(--color-rose-hover);
-    }
-    /* =========================================================
-       MANAGE APPOINTMENT
-       ========================================================= */
-
-    .manage-card {
-      background: var(--color-blush);
-      border: 1px solid var(--color-divider);
-      border-radius: 16px;
-      padding: 28px 30px;
-    }
-
-    .manage-top {
-      display: flex;
-      align-items: flex-start;
-      gap: 18px;
-      margin-bottom: 20px;
-    }
-
-    .manage-top .content h2 {
-      font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 24px;
-      color: var(--color-rose-deep);
-      margin: 4px 0 6px;
-    }
-
-    .manage-top .content p {
-      margin: 0;
-      font-size: 15px;
-      color: var(--color-gray);
-      line-height: 1.5;
-    }
-      .icon-badge {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: var(--color-rose-deep);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.icon-badge .icon {
-  stroke: var(--color-white);
-  fill: none;
-
-}
-/* =========================================================
-       FOOTER BAR
-       ========================================================= */
-
-    .footer-bar {
-      background: black;
-      text-align: center;
-      padding: 10px 16px;
-    }
-
-    .footer-bar p {
-      margin: 0;
-      color: rgba(255, 255, 255, 0.75);
-      font-size: 12px;
-      letter-spacing: 0.06em;
+      letter-spacing: .16em;
       text-transform: uppercase;
     }
 
-    /* =========================================================
-       MOBILE
-       ========================================================= */
+    .kicker { font-size: 17px; }
 
-    @media (max-width: 620px) {
+    h1 {
+      margin: 8px 0 0;
+      font-size: clamp(43px, 6.4vw, 64px);
+      font-weight: 400;
+      letter-spacing: -.035em;
+      line-height: 1.08;
+    }
 
-      .section { padding: 15px 22px; }
+    .hero-copy {
+      margin: 14px 0 0;
+      font-size: 21px;
+      line-height: 1.4;
+    }
 
-      .header-logo { font-size: 26px; }
-      .header-logo .kayla { font-size: 32px; }
+    .hero::after {
+      display: block;
+      width: 64px;
+      height: 2px;
+      margin: 24px auto 0;
+      background: var(--rose);
+      content: "";
+    }
 
-      .confirmation-header { padding-top: 28px; }
+    .content-shell { padding: 0 52px 30px; }
 
-      .row-between {
-        flex-direction: column;
-        align-items: stretch;
-      }
+    .details-card,
+    .action-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(105deg, #fffdfb 0%, #fdf7f5 100%);
+    }
 
-      .row-between .btn,
-      .row-between .btn-outline {
-        width: 100%;
-        justify-content: center;
-        margin-top: 6px;
-      }
+    .details-card {
+      overflow: hidden;
+      border-left: 9px solid var(--rose);
+      box-shadow: 0 9px 22px rgba(102, 54, 53, .1);
+    }
 
-      .icon-badge { width: 42px; height: 42px; }
-      .icon { width: 20px; height: 20px; }
+    .detail-row {
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr) auto;
+      min-height: 183px;
+      align-items: center;
+      padding: 28px 28px 28px 30px;
+    }
 
-      .profile-block, .manage-card {
-        padding: 24px 20px;
-      }
+    .detail-row + .detail-row { border-top: 1px solid var(--line); }
+
+    .icon-disc {
+      display: grid;
+      width: 106px;
+      height: 106px;
+      flex: none;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--ink);
+      background: var(--rose-soft);
+    }
+
+    .icon-disc svg {
+      width: 58px;
+      height: 58px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+    }
+
+    .detail-content { min-width: 0; padding-left: 27px; }
+
+    .label {
+      margin-bottom: 13px;
+      font-size: 16px;
+    }
+
+    .detail-text {
+      margin: 0;
+      font-size: 23px;
+      line-height: 1.38;
+    }
+
+    .detail-text strong { font-weight: 700; }
+
+    .detail-line { display: block; }
+
+    .entrance-note {
+      margin-top: 14px;
+      padding: 8px 0 8px 15px;
+      border-left: 4px solid var(--rose);
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.3;
+      text-transform: uppercase;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 58px;
+      align-items: center;
+      justify-content: center;
+      gap: 13px;
+      padding: 13px 27px;
+      border: 2px solid var(--rose);
+      border-radius: 999px;
+      color: var(--rose-dark);
+      background: transparent;
+      font-size: 20px;
+      line-height: 1.1;
+      text-align: center;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background .2s ease, color .2s ease;
+    }
+
+    .button:hover { color: #fff; background: var(--rose-dark); }
+
+    .button:focus-visible {
+      color: #fff;
+      background: var(--rose-dark);
+      outline: 3px solid var(--ink);
+      outline-offset: 3px;
+    }
+
+    .button-filled {
+      border-color: var(--rose-dark);
+      color: #fff;
+      background: var(--rose-dark);
+    }
+
+    .button-filled:hover,
+    .button-filled:focus-visible { background: #963b56; }
+
+    .button svg {
+      width: 25px;
+      height: 25px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.8;
+    }
+
+    .profile-card {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      margin-top: 29px;
+      padding: 27px 29px 27px 27px;
+      border-radius: 18px;
+      color: #fff;
+      background: linear-gradient(115deg, #b94464, #b5526e);
+    }
+
+    .profile-card .icon-disc {
+      color: #fff;
+      background: rgba(118, 31, 57, .28);
+    }
+
+    .profile-card h2,
+    .action-card h2 {
+      margin: 6px 0 7px;
+      font-size: 29px;
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    .profile-card p,
+    .action-card p {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.45;
+    }
+
+    .profile-card .button {
+      width: 100%;
+      margin-top: 20px;
+      border: 0;
+      color: var(--ink);
+      background: var(--ivory);
+      font-size: 24px;
+    }
+
+    .profile-card .button:hover,
+    .profile-card .button:focus-visible { background: var(--rose-soft); }
+
+    .profile-card .deadline {
+      margin-top: 19px;
+      color: #fff;
+      font-size: 17px;
+    }
+
+    .action-card {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr) auto;
+      min-height: 154px;
+      align-items: center;
+      gap: 25px;
+      margin-top: 29px;
+      padding: 21px 30px 21px 25px;
+    }
+
+    .action-card .icon-disc {
+      width: 106px;
+      height: 106px;
+      color: var(--rose);
+    }
+
+    .action-card h2 { color: var(--rose); }
+
+    .footer {
+      padding: 25px 20px;
+      color: rgba(255, 255, 255, .78);
+      background: #030303;
+      font-family: var(--sans);
+      font-size: 12px;
+      letter-spacing: .1em;
+      line-height: 1.5;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 720px) {
+      .brand-bar { height: 84px; }
+      .brand-logo { width: 255px; }
+      .hero { padding: 31px 18px 25px; }
+      .kicker { font-size: 13px; }
+      h1 { font-size: clamp(35px, 11vw, 49px); }
+      .hero-copy { font-size: 18px; }
+      .content-shell { padding: 0 18px 24px; }
+      .detail-row { grid-template-columns: 70px minmax(0, 1fr); min-height: 0; padding: 24px 18px; }
+      .detail-content { padding-left: 14px; }
+      .icon-disc,
+      .action-card .icon-disc { width: 68px; height: 68px; }
+      .icon-disc svg { width: 39px; height: 39px; }
+      .label { font-size: 12px; }
+      .detail-text { font-size: 18px; }
+      .entrance-note { font-size: 14px; }
+      .detail-row > .button { grid-column: 2; width: calc(100% - 14px); margin: 18px 0 0 14px; }
+      .button { min-height: 50px; padding: 11px 20px; font-size: 17px; white-space: normal; }
+      .profile-card { grid-template-columns: 70px minmax(0, 1fr); padding: 24px 19px; }
+      .profile-card .icon-disc { grid-row: 1 / span 2; }
+      .profile-card-content { min-width: 0; padding-left: 15px; }
+      .profile-card h2,
+      .action-card h2 { margin-top: 0; font-size: 24px; }
+      .profile-card p,
+      .action-card p { font-size: 17px; }
+      .profile-card .button,
+      .profile-card .deadline { grid-column: 1 / -1; }
+      .profile-card .button { font-size: 20px; }
+      .action-card { grid-template-columns: 70px minmax(0, 1fr); gap: 14px; padding: 24px 19px; }
+      .action-card .button { grid-column: 1 / -1; width: 100%; }
+      .footer { font-size: 10px; }
+    }
+
+    @media (max-width: 380px) {
+      .content-shell { padding-inline: 10px; }
+      .detail-row { grid-template-columns: 54px minmax(0, 1fr); padding-inline: 12px; }
+      .icon-disc,
+      .action-card .icon-disc { width: 52px; height: 52px; }
+      .icon-disc svg { width: 31px; height: 31px; }
+      .detail-content { padding-left: 10px; }
+      .detail-row > .button { width: calc(100% - 10px); margin-left: 10px; }
+      .profile-card,
+      .action-card { grid-template-columns: 54px minmax(0, 1fr); padding-inline: 14px; }
+      .profile-card-content { padding-left: 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .button { transition: none; }
     }
   </style>
-
 </head>
-
-
 <body>
+  <main class="page">
+    <header class="brand-bar">
+      <img class="brand-logo" src="/images/stylewithkayla_logo_white_transparent.png" alt="Style with Kayla">
+    </header>
 
-  <main class="email">
-
-
-    <!-- =====================================================
-         LOGO
-         Replace this image path with your real logo.
-         ===================================================== -->
-
-    <section class="section logo-section">
-
-      <img
-        class="brand-logo"
-        src="/images/hanger-black.png"
-        alt="Style with Kayla"
-      >
-
+    <section class="hero" aria-labelledby="confirmation-title">
+      <p class="kicker">Appointment Confirmed</p>
+      <h1 id="confirmation-title">You&rsquo;re booked, Tanner!</h1>
+      <p class="hero-copy">Here&rsquo;s everything you need to know.</p>
     </section>
 
-
-    <!-- =====================================================
-         CONFIRMATION HEADER
-         ===================================================== -->
-
-    <section class="section confirmation-header">
-
-      <p class="eyebrow">
-        Appointment Confirmed
-      </p>
-
-      <h1 class="client-name">
-        You're booked, Tanner!
-      </h1>
-
-      <div class="name-line"></div>
-
-      <p class="service-line">
-        Here's everything you need to know.
-      </p>
-
-    </section>
-
-
-    <!-- =====================================================
-         APPOINTMENT DETAILS
-         ===================================================== -->
-
-    <section class="section">
-
-      <div class="appointment-card">
-
-
-        <!-- LOCATION -->
-
-        <div class="row">
-            <svg class="icon" viewBox="0 0 24 24">
-  <path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"/>
-  <circle cx="12" cy="9" r="2.5"/>
-</svg>
-
-            <div class="content">
-              <p class="detail-title"
-                >Where We'll Meet</p 
-              >
-              <p class="main-text">
-                Macy's Boise Towne Square<br>
-                370 N. Milwaukee St., Boise, ID 83704
-              </p>
-              <div class="highlight">
-                <span>WEST ENTRANCE, NEAR CUSTOMER SERVICE</span>
-              </div>
-            </div>
+    <div class="content-shell">
+      <section class="details-card" aria-label="Appointment details">
+        <div class="detail-row">
+          <div class="icon-disc" aria-hidden="true">
+            <svg viewBox="0 0 64 64"><path d="M32 58S50 37 50 20a18 18 0 0 0-36 0c0 17 18 38 18 38Z"/><circle cx="32" cy="20" r="8"/></svg>
           </div>
-
-        <!-- Date and TIME -->
-
-        <div class="row row-between">
-          <div style="display:flex; gap:16px; align-items:flex-start;">
-              <svg class="icon"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="9"
-                />
-
-                <path
-                  d="
-                    M12 7v6
-                    l4 2
-                  "
-                />
-              </svg>
-            <div class="content">
-              <p class="detail-title"
-                >Date and Time</p 
-              >
-              <p class="main-text">
-                2:00pm - 4:00pm<br>
-                Saturday, August 15<sup>th</sup>, 2026
-              </p>
-            </div>
+          <div class="detail-content">
+            <p class="label">Where We&rsquo;ll Meet</p>
+            <p class="detail-text"><strong class="detail-line">Macy&rsquo;s Boise Towne Square</strong><span class="detail-line">370 N. Milwaukee St., Boise, ID 83704</span></p>
+            <div class="entrance-note">West Entrance, Near Customer Service</div>
           </div>
-          <button class="btn">Add to Calendar</button>
         </div>
-       <!-- Details -->
-        <div class="row row-between">
-          <div style="display:flex; gap:16px; align-items:flex-start;">
-              <svg class="icon" viewBox="0 0 24 24">
-  <path d="M6 8h12l-1 13H7L6 8z"/>
-  <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
-</svg>
-            <div class="content">
-              <p class="detail-title"
-                >Appointment Details</p
-              >
-              <p class="main-text">Women's Everyday Styling</p>
-            </div>   
+
+        <div class="detail-row">
+          <div class="icon-disc" aria-hidden="true">
+            <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="24"/><path d="M32 15v19l14 8"/></svg>
+          </div>
+          <div class="detail-content">
+            <p class="label">Date and Time</p>
+            <p class="detail-text"><span class="detail-line">Saturday, August 15<sup>th</sup>, 2026</span><span class="detail-line">2:00pm &ndash; 4:00pm</span></p>
+          </div>
+          <a class="button button-filled" href="#calendar">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+            Add to Calendar
+          </a>
         </div>
-        <button class="btn-outline">View Details</button>
-      </div>
+
+        <div class="detail-row">
+          <div class="icon-disc" aria-hidden="true">
+            <svg viewBox="0 0 64 64"><path d="M18 21h28l4 36H14l4-36Z"/><path d="M24 21c0-9 3-14 8-14s8 5 8 14M27 40c3-5 7-5 10 0M26 46c4 4 8 4 12 0"/></svg>
+          </div>
+          <div class="detail-content">
+            <p class="label">Appointment Details</p>
+            <p class="detail-text">Women&rsquo;s Everyday Styling</p>
+          </div>
+          <a class="button" href="#details">View Appointment Details</a>
+        </div>
+      </section>
+
+      <section class="profile-card" aria-labelledby="profile-title">
+        <div class="icon-disc" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><rect x="17" y="13" width="30" height="40" rx="3"/><path d="M25 9h14v9H25zM23 28l3 3 5-6M23 39l3 3 5-6M35 29h6M35 40h6"/><circle cx="45" cy="48" r="9"/><path d="m41 48 3 3 5-6"/></svg>
+        </div>
+        <div class="profile-card-content">
+          <h2 id="profile-title">Complete your Style Profile</h2>
+          <p>Your profile helps me prepare ideas and pull useful options before we meet.</p>
+          <a class="button" href="#profile">Complete Style Profile</a>
+          <p class="deadline">Please complete it by 2:00pm Friday, August 14th.</p>
+        </div>
+      </section>
+
+      <section class="action-card" aria-labelledby="manage-title">
+        <div class="icon-disc" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><rect x="12" y="14" width="38" height="34" rx="3"/><path d="M12 23h38M21 9v10M41 9v10M36 42a11 11 0 1 0 4-13M40 24v7h-7"/></svg>
+        </div>
+        <div>
+          <h2 id="manage-title">Manage Appointment</h2>
+          <p>Request a new time, get directions, or cancel if needed.</p>
+        </div>
+        <a class="button button-filled" href="#manage">Manage Appointment</a>
+      </section>
     </div>
 
-    </section>
-    <!-- =====================================================
-         STYLE PROFILE
-         Replace # with the generated profile URL.
-         ===================================================== -->
-
-    <section class="section">
-      <div class="profile-block">
-        <div class="profile-block-top">
-          <div class="profile-block-icon">
-            <svg viewBox="0 0 24 24">
-              <rect x="6" y="4" width="12" height="17" rx="1.5"/>
-              <path d="M9 2h6v4H9z M9 10l1.5 1.5L13 9 M9 15l1.5 1.5L13 14"/>
-            </svg>
-          </div>
-          <div>
-            <h2>Complete your Style Profile</h2>
-            <p>Your profile helps me prepare ideas and pull useful options before we meet.</p>
-          </div>
-        </div>
-        <button class="btn-white">Complete Style Profile</button>
-        <p class="deadline">Please complete it by 2:00pm Friday, August 14th.</p>
-      </div>
-    </section>
-    <section class="section">
-      <div class="manage-card">
-        <div class="manage-top">
-          <div class="icon-badge">
-  <svg class="icon" viewBox="0 0 24 24">
-    <rect x="3" y="5" width="18" height="16" rx="2"/>
-    <path d="M3 10h18M8 3v4M16 3v4"/>
-    <path d="M9 15l1.5 1.5L14 13"/>
-  </svg>
-</div>
-          <div class="content">
-            <h2>Manage Appointment</h2>
-            <p>Request a new time, get directions, or cancel if needed.</p>
-          </div>
-        </div>
-        <button class="btn-white" style="background: var(--color-rose-deep); color: var(--color-white);">Manage Appointment</button>
-      </div>
-    </section>
-    
-<!-- ===================================================
-         FOOTER
-         =================================================== -->
-  
-    <div class="footer-bar">
-      <p>© 2026 Style with Kayla &nbsp;|&nbsp; Personal Stylist at Macy's &nbsp;|&nbsp; All Rights Reserved</p>
-    </div>
-
+    <footer class="footer">
+      &copy; 2026 Style with Kayla&nbsp;&nbsp;|&nbsp;&nbsp;Personal Stylist at Macy&rsquo;s&nbsp;&nbsp;|&nbsp;&nbsp;All Rights Reserved
+    </footer>
   </main>
-
 </body>
 </html>
