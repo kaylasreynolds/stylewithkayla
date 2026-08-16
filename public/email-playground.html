@@ -129,36 +129,30 @@
     .eyebrow {
       margin:
         0 0 4px;
-
       font-size: 22px;
+      font-weight:700;
+      font-family:var(--font-body)
       line-height: 1.3;
     }
 
     .client-name {
+      box-sizing: border-box;
+      display:block;
       padding:
         22px 0;
-
       margin: 0;
-
+      max-width:580px;
+      width:100%;
       color:
         var(--color-rose);
-
       font-family:
         var(--font-heading);
-
       font-weight: 400;
-
       font-size:
-        clamp(
-          48px,
-          8vw,
-          70px
-        );
-
+        clamp(1rem,10cqw,50px);
       line-height: 1;
-
-      letter-spacing:
-        -.02em;
+      letter-spacing:-2.75px;
+      white-space: nowrap;
     }
 
     .name-rule {
