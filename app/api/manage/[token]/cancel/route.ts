@@ -1,2 +1,30 @@
-import{ApiError,dataResponse,optionalString,readJsonObject,rejectUnexpectedKeys,withApi}from"@/lib/server/http";import{requireManageAccess}from"@/lib/server/profile-access";import{getD1}from"@/lib/server/runtime";type Params={params:Promise<{token:string}>};
-export async function POST(request:Request,ctx:Params){return withApi(async id=>{const{token}=await ctx.params,access=await requireManageAccess(token),body=await readJsonObject(request);rejectUnexpectedKeys(body,["reason"]);const reason=optionalString(body.reason,"reason",1000),db=getD1(),now=Date.now(),current=await db.prepare(`SELECT status FROM bookings WHERE id=?`).bind(access.bookingId).first<{status:string}>();if(current?.status!=="confirmed")throw new ApiError(409,"APPOINTMENT_NOT_CONFIRMED","This appointment is no longer active.");await db.batch([db.prepare(`UPDATE bookings SET status='cancelled',cancelled_at=?,updated_at=? WHERE id=? AND status='confirmed'`).bind(now,now,access.bookingId),db.prepare(`UPDATE booking_holds SET active=0,released_at=?,release_reason=? WHERE booking_id=? AND active=1`).bind(now,reason||"Cancelled by client",access.bookingId),db.prepare(`UPDATE reschedule_requests SET status='declined',reviewed_at=? WHERE booking_id=? AND status='pending'`).bind(now,access.bookingId),db.prepare(`INSERT INTO booking_status_history(id,booking_id,from_status,to_status,actor_type,reason,metadata,created_at) VALUES(?,?,'confirmed','cancelled','client',?,'{"action":"client_cancel"}',?)`).bind(crypto.randomUUID(),access.bookingId,reason,now)]);return dataResponse({status:"cancelled"},200,id);});}
+import { deliverAppointmentEmails } from "@/lib/server/appointment-email-delivery";
+import { ApiError, dataResponse, optionalString, readJsonObject, rejectUnexpectedKeys, withApi } from "@/lib/server/http";
+import { requireManageAccess } from "@/lib/server/profile-access";
+import { getD1 } from "@/lib/server/runtime";
+
+type Params = { params: Promise<{ token: string }> };
+type Booking = { status: string; publicReference: string; startsAt: number; endsAt: number; clientName: string; clientEmail: string; clientPhone: string; serviceName: string; audience: "women" | "men"; notes: string | null };
+
+export async function POST(request: Request, ctx: Params) {
+  return withApi(async id => {
+    const { token } = await ctx.params;
+    const access = await requireManageAccess(token);
+    const body = await readJsonObject(request);
+    rejectUnexpectedKeys(body, ["reason"]);
+    const reason = optionalString(body.reason, "reason", 1000);
+    const db = getD1();
+    const booking = await db.prepare(`SELECT b.status,b.public_reference AS publicReference,b.confirmed_start_at AS startsAt,b.confirmed_end_at AS endsAt,b.booking_notes AS notes,c.full_name AS clientName,c.email AS clientEmail,c.phone AS clientPhone,s.name AS serviceName,s.audience FROM bookings b JOIN clients c ON c.id=b.client_id JOIN services s ON s.id=b.service_id WHERE b.id=?`).bind(access.bookingId).first<Booking>();
+    if (!booking || booking.status !== "confirmed") throw new ApiError(409, "APPOINTMENT_NOT_CONFIRMED", "This appointment is no longer active.");
+    const now = Date.now();
+    await db.batch([
+      db.prepare(`UPDATE bookings SET status='cancelled',cancelled_at=?,updated_at=? WHERE id=? AND status='confirmed'`).bind(now, now, access.bookingId),
+      db.prepare(`UPDATE booking_holds SET active=0,released_at=?,release_reason=? WHERE booking_id=? AND active=1`).bind(now, reason || "Cancelled by client", access.bookingId),
+      db.prepare(`UPDATE reschedule_requests SET status='declined',reviewed_at=? WHERE booking_id=? AND status='pending'`).bind(now, access.bookingId),
+      db.prepare(`UPDATE private_access_tokens SET revoked_at=? WHERE booking_id=? AND revoked_at IS NULL`).bind(now, access.bookingId),
+      db.prepare(`INSERT INTO booking_status_history(id,booking_id,from_status,to_status,actor_type,reason,metadata,created_at) VALUES(?,?,'confirmed','cancelled','client',?,'{"action":"client_cancel"}',?)`).bind(crypto.randomUUID(), access.bookingId, reason, now),
+    ]);
+    const emailDelivery = await deliverAppointmentEmails(db, "client_cancelled", { bookingId: access.bookingId, publicReference: booking.publicReference, clientName: booking.clientName, clientEmail: booking.clientEmail, clientPhone: booking.clientPhone, serviceName: booking.serviceName, audience: booking.audience, startsAt: booking.startsAt, endsAt: booking.endsAt, notes: booking.notes, reason });
+    return dataResponse({ status: "cancelled", emailDelivery }, 200, id);
+  });
+}
