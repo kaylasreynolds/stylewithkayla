@@ -1,4 +1,5 @@
 import { requireAdmin } from "@/lib/server/admin-auth";
+import { manageAppointmentUrl as buildManageAppointmentUrl } from "@/lib/appointment/manage-path";
 import { addCalendarYears, assertAdminActionState, type AdminBookingAction } from "@/lib/server/booking-policy";
 import { hashPrivateToken, randomPrivateToken, sha256 } from "@/lib/server/crypto";
 import { ApiError, dataResponse, optionalString, readJsonObject, rejectUnexpectedKeys, requiredString, validation, withApi } from "@/lib/server/http";
@@ -25,7 +26,7 @@ export async function POST(request: Request, ctx: Params) {
     if (action === "confirm") {
       if (!b.holdId || b.holdStartsAt === null || b.holdEndsAt === null) throw new ApiError(409, "ACTIVE_HOLD_REQUIRED", "Assign or propose a time before confirming.");
       if (!b.profileType) throw new ApiError(422, "PROFILE_TYPE_REQUIRED", "Select a Style Profile type before confirming this request.");
-      const rawToken = randomPrivateToken(), tokenHash = await hashPrivateToken(rawToken), rawManageToken = randomPrivateToken(), manageTokenHash = await hashPrivateToken(rawManageToken); profileAccessExpiresAt = now + STYLE_PROFILE_TOKEN_TTL_MS; profileAccessUrl = `${new URL(request.url).origin}/style-profile/${rawToken}`; manageAppointmentUrl = `${new URL(request.url).origin}/manage/${rawManageToken}`;
+      const rawToken = randomPrivateToken(), tokenHash = await hashPrivateToken(rawToken), rawManageToken = randomPrivateToken(), manageTokenHash = await hashPrivateToken(rawManageToken); profileAccessExpiresAt = now + STYLE_PROFILE_TOKEN_TTL_MS; profileAccessUrl = `${new URL(request.url).origin}/style-profile/${rawToken}`; manageAppointmentUrl = buildManageAppointmentUrl(request.url, rawManageToken);
       await db.batch([
         db.prepare(`UPDATE bookings SET status='confirmed',confirmed_start_at=?,confirmed_end_at=?,confirmed_at=?,updated_at=? WHERE id=? AND status=? AND EXISTS(SELECT 1 FROM booking_holds WHERE id=? AND active=1)`).bind(b.holdStartsAt, b.holdEndsAt, now, now, bookingId, expected, b.holdId),
         db.prepare(`UPDATE booking_holds SET kind='confirmed' WHERE id=? AND active=1 AND EXISTS(SELECT 1 FROM bookings WHERE id=? AND status='confirmed')`).bind(b.holdId, bookingId),
