@@ -28,3 +28,13 @@ test("appointment delivery records queued, sent, and failed outcomes", async () 
   assert.match(source, /graph\.microsoft\.com\/v1\.0\/users/);
   assert.match(source, /saveToSentItems: true/);
 });
+
+test("client action pages bypass image optimization and nonessential sticky capture behavior", async () => {
+  const page = await readFile(new URL("../app/client-actions/page.tsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(page, /unoptimized/);
+  assert.match(page, /client-action-shell/);
+  assert.equal(page.match(/APPOINTMENT TIME/g)?.length, 1);
+  assert.match(css, /\.client-action-shell \.site-header \{ position:static; \}/);
+  assert.match(css, /\.profile-welcome \{ position:static; \}/);
+});

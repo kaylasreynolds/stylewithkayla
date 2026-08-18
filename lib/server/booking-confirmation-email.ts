@@ -1,6 +1,53 @@
 import { APPOINTMENT_ADDRESS, APPOINTMENT_LOCATION, formatAppointment, locationNote } from "@/lib/appointment/presentation";
-export type BookingConfirmationEmailData={firstName:string;serviceName:string;audience:"women"|"men";startsAt:number;endsAt:number;profileUrl:string;manageUrl:string;calendarUrl:string};
-const escape=(value:string)=>value.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]!));
-/** Branded confirmation markup mirroring public/email-playground.html. URLs and appointment values are always supplied by the confirmation action. */
-export function renderBookingConfirmationEmail(data:BookingConfirmationEmailData){const f=formatAppointment(data.startsAt,data.endsAt),button=(label:string,url:string,filled=false)=>`<a class="button${filled?" filled":""}" href="${escape(url)}">${label}</a>`;return `<!doctype html><html><head><meta name="viewport" content="width=device-width"><style>${EMAIL_CSS}</style></head><body><main class="page"><header><img src="https://stylewithkayla.com/images/stylewithkayla_logo_white_transparent.png" alt="Style with Kayla"></header><section class="hero"><p class="kicker">APPOINTMENT CONFIRMED</p><h1>You’re booked, ${escape(data.firstName)}!</h1><p>Here’s everything you need to know.</p></section><div class="shell"><section class="details"><div class="row"><i>⌖</i><div><b>WHERE WE’LL MEET</b><p><strong>${escape(APPOINTMENT_LOCATION)}</strong><br>${escape(APPOINTMENT_ADDRESS)}</p><em>${escape(locationNote(data.audience))}</em></div></div><div class="row"><i>◷</i><div><b>DATE AND TIME</b><p>${escape(f.date)}<br>${escape(f.time)}</p></div>${button("Add to Calendar",data.calendarUrl,true)}</div><div class="row"><i>♧</i><div><b>APPOINTMENT DETAILS</b><p>${escape(data.serviceName)}</p></div>${button("View Appointment Details",data.manageUrl)}</div></section><section class="profile"><div><h2>Complete your Style Profile</h2><p>Your profile helps me prepare ideas and pull useful options before we meet.</p>${button("Complete Style Profile",data.profileUrl)}</div></section><section class="action"><div><h2>Manage Appointment</h2><p>Request a new time, get directions, or cancel if needed.</p></div>${button("Manage Appointment",data.manageUrl,true)}</section></div><footer>© 2026 STYLE WITH KAYLA &nbsp;|&nbsp; PERSONAL STYLIST AT MACY’S &nbsp;|&nbsp; ALL RIGHTS RESERVED</footer></main></body></html>`}
-const EMAIL_CSS=`*{box-sizing:border-box}body{margin:0;background:#eee7e3;color:#171515;font-family:Georgia,serif}.page{width:min(100%,916px);margin:auto;background:#fffdfb;box-shadow:0 16px 50px #422a251f}header{height:105px;display:flex;align-items:center;justify-content:center;background:#030303}header img{width:330px;max-width:72vw}.hero{text-align:center;padding:38px 24px 30px}.kicker,b{color:#bd526f;font:700 16px Arial;letter-spacing:.16em}.hero h1{margin:8px 0;font-size:58px;font-weight:400;line-height:1.08}.hero>p:last-child{font-size:21px}.shell{padding:0 52px 30px}.details,.action{border:1px solid #edd6d1;border-radius:18px;background:linear-gradient(105deg,#fffdfb,#fdf7f5)}.details{overflow:hidden;border-left:9px solid #bd526f;box-shadow:0 9px 22px #6636351a}.row{min-height:183px;padding:28px 28px 28px 30px;display:grid;grid-template-columns:112px 1fr auto;align-items:center}.row+.row{border-top:1px solid #edd6d1}.row i{width:106px;height:106px;border-radius:50%;display:grid;place-items:center;background:#f9e9e8;font-size:55px;font-style:normal}.row p{font-size:23px;line-height:1.38}.row em{display:block;border-left:4px solid #bd526f;padding:8px 15px;font-size:19px;font-weight:bold;font-style:normal}.button{display:inline-flex;min-height:58px;align-items:center;justify-content:center;padding:13px 27px;border:2px solid #bd526f;border-radius:999px;color:#ad4563;font-size:20px;text-decoration:none}.filled{color:#fff;background:#ad4563}.profile{margin-top:29px;padding:27px 29px 27px 157px;border-radius:18px;color:white;background:linear-gradient(115deg,#b94464,#b5526e)}.profile h2,.action h2{font-size:29px;margin:6px 0}.profile p,.action p{font-size:19px;line-height:1.45}.profile .button{width:100%;background:#fffdfb;color:#171515;border:0}.action{margin-top:29px;padding:25px;display:grid;grid-template-columns:1fr auto;align-items:center}footer{padding:25px;background:#030303;color:#ffffffc7;font:12px Arial;letter-spacing:.1em;text-align:center}@media(max-width:720px){header{height:84px}.hero h1{font-size:40px}.shell{padding:0 18px 24px}.row{grid-template-columns:70px 1fr;padding:24px 18px}.row i{width:68px;height:68px;font-size:35px}.row p{font-size:18px}.row>.button{grid-column:2;margin-top:18px}.profile{padding:24px 19px}.action{grid-template-columns:1fr}.action .button{width:100%}}`;
+
+export type BookingConfirmationEmailData = {
+  firstName: string;
+  serviceName: string;
+  audience: "women" | "men";
+  startsAt: number;
+  endsAt: number;
+  profileUrl: string;
+  manageUrl: string;
+  calendarUrl: string;
+};
+
+const escape = (value: string) => value.replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]!);
+
+function button(label: string, url: string, filled = false) {
+  const background = filled ? "#b94464" : "#fffdfb";
+  const color = filled ? "#ffffff" : "#ad4563";
+  return `<table role="presentation" border="0" cellspacing="0" cellpadding="0"><tr><td bgcolor="${background}" style="border:2px solid #b94464;border-radius:999px;text-align:center;"><a href="${escape(url)}" style="display:inline-block;padding:13px 24px;color:${color};font-family:Georgia,'Times New Roman',serif;font-size:18px;line-height:22px;text-decoration:none;">${escape(label)}</a></td></tr></table>`;
+}
+
+function detail(label: string, value: string, action = "") {
+  return `<tr><td style="padding:24px 28px;border-top:1px solid #edd6d1;"><p style="margin:0 0 8px;color:#b94464;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">${escape(label)}</p><div style="color:#171515;font-family:Georgia,'Times New Roman',serif;font-size:20px;line-height:30px;">${value}</div>${action ? `<div style="padding-top:16px;">${action}</div>` : ""}</td></tr>`;
+}
+
+/** Outlook-safe appointment confirmation. Layout and critical sizing are inline and table-based. */
+export function renderBookingConfirmationEmail(data: BookingConfirmationEmailData) {
+  const appointment = formatAppointment(data.startsAt, data.endsAt);
+  const location = `<strong>${escape(APPOINTMENT_LOCATION)}</strong><br>${escape(APPOINTMENT_ADDRESS)}<br><span style="display:inline-block;margin-top:10px;padding-left:12px;border-left:3px solid #b94464;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;line-height:20px;">${escape(locationNote(data.audience))}</span>`;
+  const date = `${escape(appointment.date)}<br>${escape(appointment.time)}`;
+
+  return `<!doctype html>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>
+<body style="margin:0;padding:0;background:#eee7e3;color:#171515;">
+<table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#eee7e3" style="width:100%;background:#eee7e3;">
+<tr><td align="center" style="padding:24px 10px;">
+<table role="presentation" width="640" border="0" cellspacing="0" cellpadding="0" bgcolor="#fffdfb" style="width:100%;max-width:640px;background:#fffdfb;border:1px solid #eaded8;">
+<tr><td align="center" bgcolor="#030303" style="padding:16px 20px;background:#030303;"><img src="https://stylewithkayla.com/images/stylewithkayla_logo_white_transparent.png" width="220" alt="Style with Kayla" style="display:block;width:220px;max-width:100%;height:auto;margin:0 auto;border:0;"></td></tr>
+<tr><td align="center" style="padding:34px 28px 28px;"><p style="margin:0 0 12px;color:#b94464;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">Appointment confirmed</p><h1 style="margin:0 0 12px;color:#171515;font-family:Georgia,'Times New Roman',serif;font-size:38px;line-height:44px;font-weight:400;">You’re booked, ${escape(data.firstName)}!</h1><p style="margin:0;color:#514a48;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:24px;">Here’s everything you need to know.</p></td></tr>
+<tr><td style="padding:0 24px 24px;">
+<table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#fffaf8" style="width:100%;background:#fffaf8;border:1px solid #edd6d1;border-left:7px solid #b94464;">
+${detail("Where we’ll meet", location)}
+${detail("Date and time", date, button("Add to Calendar", data.calendarUrl, true))}
+${detail("Appointment details", escape(data.serviceName), button("View Appointment Details", data.manageUrl))}
+</table>
+</td></tr>
+<tr><td style="padding:0 24px 24px;"><table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#b94464" style="width:100%;background:#b94464;"><tr><td style="padding:24px;"><h2 style="margin:0 0 8px;color:#ffffff;font-family:Georgia,'Times New Roman',serif;font-size:26px;line-height:32px;">Complete your Style Profile</h2><p style="margin:0 0 18px;color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;">Your profile helps me prepare ideas and pull useful options before we meet.</p>${button("Complete Style Profile", data.profileUrl)}</td></tr></table></td></tr>
+<tr><td style="padding:0 24px 30px;"><table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#fffaf8" style="width:100%;background:#fffaf8;border:1px solid #edd6d1;"><tr><td style="padding:24px;"><h2 style="margin:0 0 8px;color:#171515;font-family:Georgia,'Times New Roman',serif;font-size:25px;line-height:31px;">Manage Appointment</h2><p style="margin:0 0 18px;color:#514a48;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;">Request a new time, get directions, or cancel if needed.</p>${button("Manage Appointment", data.manageUrl, true)}</td></tr></table></td></tr>
+<tr><td align="center" bgcolor="#030303" style="padding:20px;background:#030303;color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:10px;line-height:16px;letter-spacing:1px;text-transform:uppercase;">© 2026 Style with Kayla &nbsp;|&nbsp; Personal Stylist at Macy’s</td></tr>
+</table>
+</td></tr></table>
+</body></html>`;
+}
