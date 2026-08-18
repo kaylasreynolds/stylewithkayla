@@ -355,9 +355,9 @@ export default function Home() {
               <p className="small-label">STEP THREE</p>
               <h2>Your details</h2>
               <div className="form-grid">
-                <label className="full"><span>Full name *</span><input value={form.name} onChange={(e) => updateField("name", e.target.value)} placeholder="First and last name" /></label>
-                <label><span>Email address *</span><input type="email" value={form.email} onChange={(e) => updateField("email", e.target.value)} placeholder="you@example.com" /></label>
-                <label><span>Phone number *</span><input type="tel" value={form.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="(208) 555-0123" /></label>
+                <label className="full"><span>Full name *</span><input name="fullName" autoComplete="name" value={form.name} onChange={(e) => updateField("name", e.target.value)} placeholder="First and last name" /></label>
+                <label><span>Email address *</span><input name="email" autoComplete="email" type="email" value={form.email} onChange={(e) => updateField("email", e.target.value)} placeholder="you@example.com" /></label>
+                <label><span>Phone number *</span><input name="phone" autoComplete="tel" type="tel" value={form.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="(208) 555-0123" /></label>
                 <div
                   className="profile-details-row full"
                   style={{
@@ -400,6 +400,8 @@ export default function Home() {
                       </small>
                     </span>
                     <textarea
+                      name="bookingNotes"
+                      autoComplete="off"
                       value={form.notes}
                       onChange={(e) => updateField("notes", e.target.value)}
                       placeholder="Optional"

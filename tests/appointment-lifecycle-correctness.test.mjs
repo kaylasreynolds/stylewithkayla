@@ -70,3 +70,27 @@ test("cancellation revokes action tokens but leaves the manage token usable", ()
   assert.equal(db.prepare("SELECT revoked_at FROM private_access_tokens WHERE id='profile'").get().revoked_at, now + 1);
   assert.equal(db.prepare("SELECT revoked_at FROM private_access_tokens WHERE id='alternate'").get().revoked_at, now + 1);
 });
+
+test("admin profile history uses the deployed revision schema", async () => {
+  const route = await source("app/api/admin/bookings/[bookingId]/profile/route.ts");
+  assert.match(route, /actor_type AS actorType,note,changed_keys/);
+  assert.doesNotMatch(route, /actor_type AS actorType,reason,note/);
+});
+
+test("admin cancellation explains its required reason instead of appearing disabled", async () => {
+  const dashboard = await source("app/admin/AdminDashboard.tsx");
+  assert.match(dashboard, /Enter a cancellation reason before cancelling the appointment/);
+  assert.match(dashboard, /A reason is required to cancel\. A completion note is optional\./);
+  assert.match(dashboard, /onClick=\{cancelAppointment\}/);
+  assert.doesNotMatch(dashboard, /className="danger" disabled=\{!reason\} onClick=\{\(\) => void mutate\("cancel"\)\}/);
+});
+
+test("booking notes opt out of contact autofill", async () => {
+  const [home, book] = await Promise.all([source("app/page.tsx"), source("app/book/page.tsx")]);
+  for (const page of [home, book]) {
+    assert.match(page, /name="fullName" autoComplete="name"/);
+    assert.match(page, /name="email" autoComplete="email"/);
+    assert.match(page, /name="phone" autoComplete="tel"/);
+    assert.match(page, /name="bookingNotes"\s+autoComplete="off"/);
+  }
+});
