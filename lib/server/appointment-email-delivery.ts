@@ -7,6 +7,7 @@ type DeliveryKind =
   | "confirmed"
   | "alternate_time_proposed"
   | "proposal_accepted"
+  | "proposal_declined"
   | "another_time_requested"
   | "declined"
   | "client_reschedule_requested"
@@ -88,6 +89,10 @@ function messages(config: MailConfig, kind: DeliveryKind, input: AppointmentDeli
     return kind === "proposal_accepted" ? [customer, adminMessage(config, input, "Client accepted proposed appointment time", [details, `Client: ${escape(input.clientName)}`], "proposal_accepted_admin_notification")] : [customer];
   }
   if (kind === "alternate_time_proposed") return [clientMessage(input, "Kayla proposed a different appointment time", [`A different time is available for your ${escape(input.serviceName)} appointment.`, details], input.actionUrl ? { label: "Review proposed time", url: input.actionUrl } : null, "alternate_time_proposed")];
+  if (kind === "proposal_declined") return [
+    clientMessage(input, "Your appointment request has been cancelled", [`You declined the proposed time for your ${escape(input.serviceName)} appointment. The request is now cancelled and the time has been released.`], null, "proposal_declined"),
+    adminMessage(config, input, "Client declined a proposed appointment time", [details, `Client: ${escape(input.clientName)}`, input.reason ? `Reason: ${escape(input.reason)}` : ""].filter(Boolean), "proposal_declined_admin_notification"),
+  ];
   if (kind === "another_time_requested") return [
     clientMessage(input, "We received your new time request", ["Your new requested time is being held while Kayla reviews it. This is not confirmed yet.", details], null, "alternate_time_requested"),
     adminMessage(config, input, "Client requested another appointment time", [details, `Client: ${escape(input.clientName)}`], "alternate_time_requested_admin_notification"),

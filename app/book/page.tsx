@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import { sanitizeBookingNotes } from "@/lib/booking-notes";
 
 type Service = {
   id: string;
@@ -223,7 +224,7 @@ export default function Home() {
         serviceCode: serviceId, requestedStartAt: selectedTime, client: { fullName: form.name, email: form.email, phone: form.phone },
         returningClient: form.returning === "Yes", howHeard: form.returning === "Yes" ? null : form.heard,
         eventType: selectedService.isEvent ? form.eventType : null, eventDate: selectedService.isEvent ? form.eventDate : null,
-        bookingNotes: form.notes || null, privacy: { policyVersion: "2026-07-13", acknowledged: form.privacy },
+        bookingNotes: sanitizeBookingNotes(form.notes, form.phone), privacy: { policyVersion: "2026-07-13", acknowledged: form.privacy },
       }) });
       const payload = await response.json() as {data:{publicReference:string};error?:{message?:string}}; if (!response.ok) throw new Error(payload.error?.message || "Your request could not be submitted.");
       setPublicReference(payload.data.publicReference); setSubmitted(true);
@@ -355,9 +356,9 @@ export default function Home() {
               <p className="small-label">STEP THREE</p>
               <h2>Your details</h2>
               <div className="form-grid">
-                <label className="full"><span>Full name *</span><input value={form.name} onChange={(e) => updateField("name", e.target.value)} placeholder="First and last name" /></label>
-                <label><span>Email address *</span><input type="email" value={form.email} onChange={(e) => updateField("email", e.target.value)} placeholder="you@example.com" /></label>
-                <label><span>Phone number *</span><input type="tel" value={form.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="(208) 555-0123" /></label>
+                <label className="full"><span>Full name *</span><input name="fullName" autoComplete="name" value={form.name} onChange={(e) => updateField("name", e.target.value)} placeholder="First and last name" /></label>
+                <label><span>Email address *</span><input name="email" autoComplete="email" type="email" value={form.email} onChange={(e) => updateField("email", e.target.value)} placeholder="you@example.com" /></label>
+                <label><span>Phone number *</span><input name="phone" autoComplete="tel" type="tel" value={form.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="(208) 555-0123" /></label>
                 <div
                   className="profile-details-row full"
                   style={{
@@ -400,6 +401,9 @@ export default function Home() {
                       </small>
                     </span>
                     <textarea
+                      name="appointmentRequestDetails"
+                      autoComplete="new-password"
+                      data-form-type="other"
                       value={form.notes}
                       onChange={(e) => updateField("notes", e.target.value)}
                       placeholder="Optional"

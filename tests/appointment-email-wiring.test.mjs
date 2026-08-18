@@ -7,6 +7,7 @@ const lifecycleRoutes = [
   "app/api/admin/bookings/[bookingId]/[action]/route.ts",
   "app/api/admin/bookings/[bookingId]/reschedule-request/route.ts",
   "app/api/client-actions/[token]/accept-proposed-time/route.ts",
+  "app/api/client-actions/[token]/decline-proposed-time/route.ts",
   "app/api/client-actions/[token]/request-another-time/route.ts",
   "app/api/manage/[token]/cancel/route.ts",
   "app/api/manage/[token]/reschedule/route.ts",

@@ -9,7 +9,30 @@ import { getD1 } from "@/lib/server/runtime";
 import { calculateAvailability, localDateKey } from "@/lib/server/scheduling";
 
 type Params = { params: Promise<{ bookingId: string; action: string }> };
-type B = { id: string; publicReference: string; status: string; serviceCode: string; serviceName: string; audience: "women" | "men"; durationMinutes: number; profileType: string | null; clientId: string; clientName: string; clientEmail: string; clientPhone: string; notes: string | null; holdId: string | null; holdStartsAt: number | null; holdEndsAt: number | null };
+type B = {
+  id: string;
+  publicReference: string;
+  status: string;
+  serviceCode: string;
+  serviceName: string;
+  audience: "women" | "men";
+  durationMinutes: number;
+  profileType: string | null;
+  clientId: string;
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
+  notes: string | null;
+  requestedStartAt: number;
+  requestedEndAt: number;
+  proposedStartAt: number | null;
+  proposedEndAt: number | null;
+  confirmedStartAt: number | null;
+  confirmedEndAt: number | null;
+  holdId: string | null;
+  holdStartsAt: number | null;
+  holdEndsAt: number | null;
+};
 
 export async function POST(request: Request, ctx: Params) {
   return withApi(async id => {
@@ -22,13 +45,13 @@ export async function POST(request: Request, ctx: Params) {
     if (b.status !== expected) throw new ApiError(409, "BOOKING_STATE_CHANGED", "This request changed. Refresh before continuing.");
     assertAdminActionState(action as AdminBookingAction, b.status);
     const reason = optionalString(body.reason, "reason", 500), now = Date.now(), keyHash = await sha256(request.headers.get("idempotency-key") || crypto.randomUUID());
-    let profileAccessUrl: string | null = null, profileAccessExpiresAt: number | null = null, manageAppointmentUrl: string | null = null, clientActionUrl: string | null = null, clientActionExpiresAt: number | null = null;
+    let profileAccessUrl: string | null = null, profileAccessExpiresAt: number | null = null, manageAppointmentUrl: string | null = null, clientActionUrl: string | null = null, clientActionExpiresAt: number | null = null, transitionApplied = false;
 
     if (action === "confirm") {
       if (!b.holdId || b.holdStartsAt === null || b.holdEndsAt === null) throw new ApiError(409, "ACTIVE_HOLD_REQUIRED", "Assign or propose a time before confirming.");
       if (!b.profileType) throw new ApiError(422, "PROFILE_TYPE_REQUIRED", "Select a Style Profile type before confirming this request.");
       const rawToken = randomPrivateToken(), tokenHash = await hashPrivateToken(rawToken), rawManageToken = randomPrivateToken(), manageTokenHash = await hashPrivateToken(rawManageToken); profileAccessExpiresAt = now + STYLE_PROFILE_TOKEN_TTL_MS; profileAccessUrl = `${new URL(request.url).origin}/style-profile/${rawToken}`; manageAppointmentUrl = buildManageAppointmentUrl(request.url, rawManageToken);
-      await db.batch([
+      const results = await db.batch([
         db.prepare(`UPDATE bookings SET status='confirmed',confirmed_start_at=?,confirmed_end_at=?,confirmed_at=?,updated_at=? WHERE id=? AND status=? AND EXISTS(SELECT 1 FROM booking_holds WHERE id=? AND active=1)`).bind(b.holdStartsAt, b.holdEndsAt, now, now, bookingId, expected, b.holdId),
         db.prepare(`UPDATE booking_holds SET kind='confirmed' WHERE id=? AND active=1 AND EXISTS(SELECT 1 FROM bookings WHERE id=? AND status='confirmed')`).bind(b.holdId, bookingId),
         db.prepare(`INSERT INTO style_profiles(id,booking_id,client_id,profile_type,status,schema_version,answers,current_section,created_at,updated_at) SELECT ?,id,client_id,profile_type,'draft',1,'{}',1,?,? FROM bookings WHERE id=? AND status='confirmed' ON CONFLICT(booking_id) DO NOTHING`).bind(crypto.randomUUID(), now, now, bookingId),
@@ -38,10 +61,11 @@ export async function POST(request: Request, ctx: Params) {
         db.prepare(`INSERT INTO private_access_tokens(id,booking_id,purpose,token_hash,expires_at,created_at) SELECT ?,id,'manage_appointment',?,?,? FROM bookings WHERE id=? AND status='confirmed'`).bind(crypto.randomUUID(), manageTokenHash, now + 365 * 86_400_000, now, bookingId),
         history(db, bookingId, expected, "confirmed", adminEmail, reason, { action, idempotencyKeyHash: keyHash, profileLinkExpiresAt: new Date(profileAccessExpiresAt).toISOString() }, now)
       ]);
+      transitionApplied = Number(results[0]?.meta.changes || 0) > 0;
     } else if (action === "decline") {
-      const why = requiredString(body.reason, "reason", 500); await db.batch([db.prepare(`UPDATE bookings SET status='declined',declined_at=?,updated_at=? WHERE id=? AND status=?`).bind(now, now, bookingId, expected), db.prepare(`UPDATE booking_holds SET active=0,released_at=?,release_reason=? WHERE booking_id=? AND active=1 AND EXISTS(SELECT 1 FROM bookings WHERE id=? AND status='declined')`).bind(now, why, bookingId, bookingId), history(db, bookingId, expected, "declined", adminEmail, why, { action, idempotencyKeyHash: keyHash }, now)]);
+      const why = requiredString(body.reason, "reason", 500); const results = await db.batch([db.prepare(`UPDATE bookings SET status='declined',declined_at=?,updated_at=? WHERE id=? AND status=?`).bind(now, now, bookingId, expected), db.prepare(`UPDATE booking_holds SET active=0,released_at=?,release_reason=? WHERE booking_id=? AND active=1 AND EXISTS(SELECT 1 FROM bookings WHERE id=? AND status='declined')`).bind(now, why, bookingId, bookingId), history(db, bookingId, expected, "declined", adminEmail, why, { action, idempotencyKeyHash: keyHash }, now)]); transitionApplied = Number(results[0]?.meta.changes || 0) > 0;
     } else if (action === "release-hold") {
-      if (!b.holdId) throw new ApiError(409, "NO_ACTIVE_HOLD", "This request no longer has an active hold."); const why = reason ?? "Released by Kayla"; await db.batch([db.prepare(`UPDATE booking_holds SET active=0,released_at=?,release_reason=? WHERE id=? AND active=1`).bind(now, why, b.holdId), history(db, bookingId, expected, expected, adminEmail, why, { action, idempotencyKeyHash: keyHash }, now)]);
+      if (!b.holdId) throw new ApiError(409, "NO_ACTIVE_HOLD", "This request no longer has an active hold."); const why = reason ?? "Released by Kayla"; const results = await db.batch([db.prepare(`UPDATE booking_holds SET active=0,released_at=?,release_reason=? WHERE id=? AND active=1`).bind(now, why, b.holdId), history(db, bookingId, expected, expected, adminEmail, why, { action, idempotencyKeyHash: keyHash }, now)]); transitionApplied = Number(results[0]?.meta.changes || 0) > 0;
     } else if (action === "propose-time") {
       if (!b.profileType) throw new ApiError(422, "PROFILE_TYPE_REQUIRED", "Select a Style Profile type before proposing a client-confirmable time.");
       const text = requiredString(body.requestedStartAt, "requestedStartAt", 40), start = Date.parse(text);
@@ -58,7 +82,7 @@ export async function POST(request: Request, ctx: Params) {
       const selectionSource = outsidePublicAvailability ? "custom" : requestedSource;
       const holdId = crypto.randomUUID(), rawActionToken = randomPrivateToken(), actionTokenHash = await hashPrivateToken(rawActionToken);
       clientActionExpiresAt = Math.min(start, now + STYLE_PROFILE_TOKEN_TTL_MS); clientActionUrl = `${new URL(request.url).origin}/client-actions/${rawActionToken}`;
-      await db.batch([
+      const results = await db.batch([
         db.prepare(`UPDATE booking_holds SET active=0,released_at=?,release_reason='Replaced by proposed time' WHERE booking_id=? AND active=1`).bind(now, bookingId),
         db.prepare(`INSERT INTO booking_holds(id,booking_id,kind,starts_at,ends_at,active,created_at) SELECT ?,id,'proposed',?,?,1,? FROM bookings WHERE id=? AND status=? AND NOT EXISTS(SELECT 1 FROM booking_holds h WHERE h.active=1 AND h.booking_id<>? AND h.starts_at<? AND h.ends_at>?)`).bind(holdId, start, end, now, bookingId, expected, bookingId, end, start),
         db.prepare(`UPDATE bookings SET status='change_proposed',proposed_start_at=?,proposed_end_at=?,updated_at=? WHERE id=? AND status=? AND EXISTS(SELECT 1 FROM booking_holds WHERE id=? AND active=1)`).bind(start, end, now, bookingId, expected, holdId),
@@ -66,17 +90,17 @@ export async function POST(request: Request, ctx: Params) {
         db.prepare(`INSERT INTO private_access_tokens(id,booking_id,purpose,token_hash,expires_at,created_at) SELECT ?,id,'alternate_time',?,?,? FROM bookings WHERE id=? AND status='change_proposed'`).bind(crypto.randomUUID(), actionTokenHash, clientActionExpiresAt, now, bookingId),
         history(db, bookingId, expected, "change_proposed", adminEmail, reason, { action, idempotencyKeyHash: keyHash, clientActionExpiresAt: new Date(clientActionExpiresAt).toISOString(), selectionSource, outsidePublicAvailability, overrideConfirmed }, now),
       ]);
+      transitionApplied = Number(results[2]?.meta.changes || 0) > 0;
     } else if (action === "cancel") {
-      const why = requiredString(body.reason, "reason", 500); await db.batch([db.prepare(`UPDATE bookings SET status='cancelled',cancelled_at=?,updated_at=? WHERE id=? AND status='confirmed'`).bind(now, now, bookingId), db.prepare(`UPDATE booking_holds SET active=0,released_at=?,release_reason=? WHERE booking_id=? AND active=1`).bind(now, why, bookingId), db.prepare(`UPDATE private_access_tokens SET revoked_at=? WHERE booking_id=? AND revoked_at IS NULL`).bind(now, bookingId), history(db, bookingId, "confirmed", "cancelled", adminEmail, why, { action, idempotencyKeyHash: keyHash }, now)]);
+      const why = requiredString(body.reason, "reason", 500); const results = await db.batch([db.prepare(`UPDATE bookings SET status='cancelled',cancelled_at=?,updated_at=? WHERE id=? AND status='confirmed'`).bind(now, now, bookingId), db.prepare(`UPDATE booking_holds SET active=0,released_at=?,release_reason=? WHERE booking_id=? AND active=1`).bind(now, why, bookingId), db.prepare(`UPDATE reschedule_requests SET status='declined',reviewed_at=? WHERE booking_id=? AND status='pending'`).bind(now, bookingId), db.prepare(`UPDATE private_access_tokens SET revoked_at=? WHERE booking_id=? AND purpose<>'manage_appointment' AND revoked_at IS NULL`).bind(now, bookingId), history(db, bookingId, "confirmed", "cancelled", adminEmail, why, { action, idempotencyKeyHash: keyHash }, now)]); transitionApplied = Number(results[0]?.meta.changes || 0) > 0;
     } else {
-      const retention = addCalendarYears(now, 2); await db.batch([db.prepare(`UPDATE bookings SET status='completed',completed_at=?,updated_at=? WHERE id=? AND status='confirmed'`).bind(now, now, bookingId), db.prepare(`UPDATE booking_holds SET active=0,released_at=?,release_reason='Appointment completed' WHERE booking_id=? AND active=1`).bind(now, bookingId), db.prepare(`UPDATE clients SET last_completed_appointment_at=?,retention_delete_after=?,updated_at=? WHERE id=?`).bind(now, retention, now, b.clientId), db.prepare(`UPDATE style_profiles SET retention_delete_after=?,updated_at=? WHERE booking_id=?`).bind(retention, now, bookingId), history(db, bookingId, "confirmed", "completed", adminEmail, reason, { action, idempotencyKeyHash: keyHash, retentionDeleteAfter: new Date(retention).toISOString() }, now)]);
+      const retention = addCalendarYears(now, 2); const results = await db.batch([db.prepare(`UPDATE bookings SET status='completed',completed_at=?,updated_at=? WHERE id=? AND status='confirmed'`).bind(now, now, bookingId), db.prepare(`UPDATE booking_holds SET active=0,released_at=?,release_reason='Appointment completed' WHERE booking_id=? AND active=1`).bind(now, bookingId), db.prepare(`UPDATE clients SET last_completed_appointment_at=?,retention_delete_after=?,updated_at=? WHERE id=?`).bind(now, retention, now, b.clientId), db.prepare(`UPDATE style_profiles SET retention_delete_after=?,updated_at=? WHERE booking_id=?`).bind(retention, now, bookingId), history(db, bookingId, "confirmed", "completed", adminEmail, reason, { action, idempotencyKeyHash: keyHash, retentionDeleteAfter: new Date(retention).toISOString() }, now)]); transitionApplied = Number(results[0]?.meta.changes || 0) > 0;
     }
-    const updated = await load(db, bookingId); if (!updated || (action !== "release-hold" && updated.status === expected)) throw new ApiError(409, "BOOKING_STATE_CHANGED", "This request changed or the selected time became unavailable. Refresh before continuing.");
+    const updated = await load(db, bookingId); if (!transitionApplied || !updated || (action !== "release-hold" && updated.status === expected)) throw new ApiError(409, "BOOKING_STATE_CHANGED", "This request changed or the selected time became unavailable. Refresh before continuing.");
     let emailDelivery: { sent: number; failed: number; warning: string | null } | null = null;
-    if (["confirm", "decline", "propose-time", "cancel"].includes(action) && b.holdStartsAt !== null && b.holdEndsAt !== null) {
+    if (["confirm", "decline", "propose-time", "cancel"].includes(action)) {
       const kind = action === "confirm" ? "confirmed" : action === "decline" ? "declined" : action === "propose-time" ? "alternate_time_proposed" : "admin_cancelled";
-      const startsAt = action === "propose-time" ? Date.parse(String(body.requestedStartAt)) : b.holdStartsAt;
-      const endsAt = action === "propose-time" ? startsAt + b.durationMinutes * 60_000 : b.holdEndsAt;
+      const { startsAt, endsAt } = deliveryWindow(action, b, body);
       emailDelivery = await deliverAppointmentEmails(db, kind, { bookingId, publicReference: b.publicReference, clientName: b.clientName, clientEmail: b.clientEmail, clientPhone: b.clientPhone, serviceName: b.serviceName, audience: b.audience, startsAt, endsAt, notes: b.notes, reason, actionUrl: clientActionUrl, profileUrl: profileAccessUrl, manageUrl: manageAppointmentUrl, calendarUrl: manageAppointmentUrl ? `${new URL(request.url).origin}/api/manage/${manageAppointmentUrl.split("/").pop()}/calendar` : null });
     }
     return dataResponse({ bookingId, status: updated.status, holdActive: Boolean(updated.holdId), profileAccessUrl, manageAppointmentUrl, profileAccessExpiresAt: profileAccessExpiresAt ? new Date(profileAccessExpiresAt).toISOString() : null, clientActionUrl, clientActionExpiresAt: clientActionExpiresAt ? new Date(clientActionExpiresAt).toISOString() : null, emailDelivery }, 200, id);
@@ -89,5 +113,22 @@ function isBoiseQuarterHour(epoch: number) {
   return Number.isInteger(minute) && minute % 15 === 0;
 }
 
-async function load(db: D1Database, id: string) { return db.prepare(`SELECT b.id,b.public_reference AS publicReference,b.status,b.profile_type AS profileType,b.client_id AS clientId,b.booking_notes AS notes,s.code AS serviceCode,s.name AS serviceName,s.audience,s.duration_minutes AS durationMinutes,c.full_name AS clientName,c.email AS clientEmail,c.phone AS clientPhone,h.id AS holdId,h.starts_at AS holdStartsAt,h.ends_at AS holdEndsAt FROM bookings b JOIN services s ON s.id=b.service_id JOIN clients c ON c.id=b.client_id LEFT JOIN booking_holds h ON h.booking_id=b.id AND h.active=1 WHERE b.id=?`).bind(id).first<B>(); }
-function history(db: D1Database, id: string, from: string, to: string, actor: string, reason: string | null, metadata: object, now: number) { return db.prepare(`INSERT INTO booking_status_history(id,booking_id,from_status,to_status,actor_type,actor_id,reason,metadata,created_at) SELECT ?,id,?,?,'admin',?,?,?,? FROM bookings WHERE id=? AND status=?`).bind(crypto.randomUUID(), from, to, actor, reason, JSON.stringify(metadata), now, id, to); }
+function deliveryWindow(action: string, booking: B, body: Record<string, unknown>) {
+  if (action === "propose-time") {
+    const startsAt = Date.parse(String(body.requestedStartAt));
+    return { startsAt, endsAt: startsAt + booking.durationMinutes * 60_000 };
+  }
+  if (action === "cancel" && booking.confirmedStartAt !== null && booking.confirmedEndAt !== null) {
+    return { startsAt: booking.confirmedStartAt, endsAt: booking.confirmedEndAt };
+  }
+  if (booking.holdStartsAt !== null && booking.holdEndsAt !== null) {
+    return { startsAt: booking.holdStartsAt, endsAt: booking.holdEndsAt };
+  }
+  if (booking.status === "change_proposed" && booking.proposedStartAt !== null && booking.proposedEndAt !== null) {
+    return { startsAt: booking.proposedStartAt, endsAt: booking.proposedEndAt };
+  }
+  return { startsAt: booking.requestedStartAt, endsAt: booking.requestedEndAt };
+}
+
+async function load(db: D1Database, id: string) { return db.prepare(`SELECT b.id,b.public_reference AS publicReference,b.status,b.profile_type AS profileType,b.client_id AS clientId,b.booking_notes AS notes,b.requested_start_at AS requestedStartAt,b.requested_end_at AS requestedEndAt,b.proposed_start_at AS proposedStartAt,b.proposed_end_at AS proposedEndAt,b.confirmed_start_at AS confirmedStartAt,b.confirmed_end_at AS confirmedEndAt,s.code AS serviceCode,s.name AS serviceName,s.audience,s.duration_minutes AS durationMinutes,c.full_name AS clientName,c.email AS clientEmail,c.phone AS clientPhone,h.id AS holdId,h.starts_at AS holdStartsAt,h.ends_at AS holdEndsAt FROM bookings b JOIN services s ON s.id=b.service_id JOIN clients c ON c.id=b.client_id LEFT JOIN booking_holds h ON h.booking_id=b.id AND h.active=1 WHERE b.id=?`).bind(id).first<B>(); }
+function history(db: D1Database, id: string, from: string, to: string, actor: string, reason: string | null, metadata: object, now: number) { return db.prepare(`INSERT INTO booking_status_history(id,booking_id,from_status,to_status,actor_type,actor_id,reason,metadata,created_at) SELECT ?,id,?,?,'admin',?,?,?,? FROM bookings WHERE id=? AND status=? AND (?=? OR updated_at=?)`).bind(crypto.randomUUID(), from, to, actor, reason, JSON.stringify(metadata), now, id, to, from, to, now); }
