@@ -9,8 +9,8 @@ export function formatAppointment(startsAt: number, endsAt: number) {
   const time = (value: number) => new Intl.DateTimeFormat("en-US", { timeZone: APPOINTMENT_TIMEZONE, hour: "numeric", minute: "2-digit" }).format(value).replace(" AM", "am").replace(" PM", "pm");
   return { date, time: `${time(startsAt)} – ${time(endsAt)}` };
 }
-export function appointmentIcs(input: { startsAt:number; endsAt:number; serviceName:string }) {
+export function appointmentIcs(input: { startsAt:number; endsAt:number; serviceName:string; uid?:string; organizer?:string; attendees?:string[]; method?:"PUBLISH"|"REQUEST" }) {
   const stamp=(value:number)=>new Date(value).toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
   const safe=(value:string)=>value.replace(/([,;\\])/g,"\\$1").replace(/\n/g,"\\n");
-  return ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Style with Kayla//Appointment//EN","CALSCALE:GREGORIAN","BEGIN:VEVENT",`UID:${crypto.randomUUID()}@stylewithkayla.com`,`DTSTAMP:${stamp(Date.now())}`,`DTSTART:${stamp(input.startsAt)}`,`DTEND:${stamp(input.endsAt)}`,"SUMMARY:Style with Kayla Appointment",`DESCRIPTION:${safe(input.serviceName)}`,`LOCATION:${safe(`${APPOINTMENT_LOCATION}, ${APPOINTMENT_ADDRESS}`)}`,"END:VEVENT","END:VCALENDAR",""] .join("\r\n");
+  return ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Style with Kayla//Appointment//EN","CALSCALE:GREGORIAN",`METHOD:${input.method??"PUBLISH"}`,"BEGIN:VEVENT",`UID:${input.uid??`${crypto.randomUUID()}@stylewithkayla.com`}`,`DTSTAMP:${stamp(Date.now())}`,`DTSTART:${stamp(input.startsAt)}`,`DTEND:${stamp(input.endsAt)}`,"SEQUENCE:0","STATUS:CONFIRMED",input.organizer?`ORGANIZER:mailto:${input.organizer}`:"",...(input.attendees??[]).map(email=>`ATTENDEE;RSVP=TRUE:mailto:${email}`),"SUMMARY:Style with Kayla Appointment",`DESCRIPTION:${safe(input.serviceName)}`,`LOCATION:${safe(`${APPOINTMENT_LOCATION}, ${APPOINTMENT_ADDRESS}`)}`,"END:VEVENT","END:VCALENDAR",""] .filter(Boolean).join("\r\n");
 }

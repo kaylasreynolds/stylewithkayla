@@ -57,7 +57,9 @@
 	"vars": {
 		"ADMIN_EMAILS": "kaylasreynolds@gmail.com",
 		"EVENT_EMAIL_FROM": "Style with Kayla <appointments@stylewithkayla.com>",
-		"EVENT_EMAIL_REPLY_TO": "kayla@stylewithkayla.com"
+		"EVENT_EMAIL_REPLY_TO": "kayla@stylewithkayla.com",
+		"APPOINTMENT_EMAIL_REPLY_TO": "kayla.reynolds@macys.com",
+		"APPOINTMENT_NOTIFICATION_TO": "kayla.reynolds@macys.com"
 	},
 	"d1_databases": [
 		{

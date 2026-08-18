@@ -11,6 +11,8 @@ type RuntimeEnv = {
   MICROSOFT_CLIENT_SECRET?: string;
   MICROSOFT_EVENT_MAILBOX?: string;
   EVENT_EMAIL_REPLY_TO?: string;
+  APPOINTMENT_EMAIL_REPLY_TO?: string;
+  APPOINTMENT_NOTIFICATION_TO?: string;
 };
 
 export function getD1() {
@@ -55,5 +57,17 @@ export function getEventEmailConfig() {
     clientSecret,
     mailbox: runtime.MICROSOFT_EVENT_MAILBOX?.trim() || "kayla@stylewithkayla.com",
     replyTo: runtime.EVENT_EMAIL_REPLY_TO?.trim() || "kayla@stylewithkayla.com",
+  };
+}
+
+export function getAppointmentEmailConfig() {
+  const runtime = env as unknown as RuntimeEnv;
+  const base = getEventEmailConfig();
+  if (!base) return null;
+
+  return {
+    ...base,
+    replyTo: runtime.APPOINTMENT_EMAIL_REPLY_TO?.trim() || "kayla.reynolds@macys.com",
+    notificationTo: runtime.APPOINTMENT_NOTIFICATION_TO?.trim() || "kayla.reynolds@macys.com",
   };
 }
