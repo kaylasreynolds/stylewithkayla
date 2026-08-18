@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { DatabaseSync } from "node:sqlite";
+import { sanitizeBookingNotes } from "../lib/booking-notes.ts";
 
 const migration = await readFile(new URL("../drizzle/0000_silent_ser_duncan.sql", import.meta.url), "utf8");
 const source = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
@@ -85,12 +86,17 @@ test("admin cancellation explains its required reason instead of appearing disab
   assert.doesNotMatch(dashboard, /className="danger" disabled=\{!reason\} onClick=\{\(\) => void mutate\("cancel"\)\}/);
 });
 
-test("booking notes opt out of contact autofill", async () => {
+test("booking notes resist contact autofill and discard a duplicated phone number", async () => {
   const [home, book] = await Promise.all([source("app/page.tsx"), source("app/book/page.tsx")]);
   for (const page of [home, book]) {
     assert.match(page, /name="fullName" autoComplete="name"/);
     assert.match(page, /name="email" autoComplete="email"/);
     assert.match(page, /name="phone" autoComplete="tel"/);
-    assert.match(page, /name="bookingNotes"\s+autoComplete="off"/);
+    assert.match(page, /name="appointmentRequestDetails"\s+autoComplete="new-password"\s+data-form-type="other"/);
+    assert.match(page, /sanitizeBookingNotes\(form\.notes, form\.phone\)/);
   }
+  assert.equal(sanitizeBookingNotes("9876543210", "987-654-3210"), null);
+  assert.equal(sanitizeBookingNotes("(987) 654-3210", "9876543210"), null);
+  assert.equal(sanitizeBookingNotes("Please call 9876543210", "9876543210"), "Please call 9876543210");
+  assert.equal(sanitizeBookingNotes("Needs petite sizing", "9876543210"), "Needs petite sizing");
 });

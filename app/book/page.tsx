@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import { sanitizeBookingNotes } from "@/lib/booking-notes";
 
 type Service = {
   id: string;
@@ -223,7 +224,7 @@ export default function Home() {
         serviceCode: serviceId, requestedStartAt: selectedTime, client: { fullName: form.name, email: form.email, phone: form.phone },
         returningClient: form.returning === "Yes", howHeard: form.returning === "Yes" ? null : form.heard,
         eventType: selectedService.isEvent ? form.eventType : null, eventDate: selectedService.isEvent ? form.eventDate : null,
-        bookingNotes: form.notes || null, privacy: { policyVersion: "2026-07-13", acknowledged: form.privacy },
+        bookingNotes: sanitizeBookingNotes(form.notes, form.phone), privacy: { policyVersion: "2026-07-13", acknowledged: form.privacy },
       }) });
       const payload = await response.json() as {data:{publicReference:string};error?:{message?:string}}; if (!response.ok) throw new Error(payload.error?.message || "Your request could not be submitted.");
       setPublicReference(payload.data.publicReference); setSubmitted(true);
@@ -400,8 +401,9 @@ export default function Home() {
                       </small>
                     </span>
                     <textarea
-                      name="bookingNotes"
-                      autoComplete="off"
+                      name="appointmentRequestDetails"
+                      autoComplete="new-password"
+                      data-form-type="other"
                       value={form.notes}
                       onChange={(e) => updateField("notes", e.target.value)}
                       placeholder="Optional"
