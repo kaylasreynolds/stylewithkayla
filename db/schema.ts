@@ -28,6 +28,38 @@ export type ActorType = "client" | "admin" | "system";
 export type JsonRecord = Record<string, unknown>;
 export type EventStatus = "draft" | "published" | "archived";
 export type RsvpStatus = "confirmed" | "waitlisted" | "cancelled" | "declined";
+export type RecapStatus =
+  | "not_started"
+  | "draft"
+  | "ready_for_review"
+  | "published"
+  | "archived";
+export type AppointmentOutcome =
+  | "great_success"
+  | "good_progress"
+  | "partial_success"
+  | "research_needed"
+  | "no_purchase_useful_discovery";
+export type InsightCategory =
+  | "fit"
+  | "silhouette"
+  | "color"
+  | "fabric"
+  | "comfort"
+  | "brand"
+  | "size"
+  | "styling"
+  | "lifestyle"
+  | "preference"
+  | "other";
+export type InsightPolarity = "worked" | "didnt_work";
+export type ItemDisposition = "purchased" | "considered";
+export type PriorityStatus =
+  | "open"
+  | "in_progress"
+  | "completed"
+  | "no_longer_needed";
+export type ConfidenceLevel = "low" | "medium" | "high";
 
 const createdAt = () =>
   integer("created_at")
@@ -299,6 +331,185 @@ export const styleProfileRevisions = sqliteTable(
   ],
 );
 
+export const appointmentRecaps = sqliteTable(
+  "appointment_recaps",
+  {
+    id: text("id").primaryKey(),
+    bookingId: text("booking_id")
+      .notNull()
+      .references(() => bookings.id, { onDelete: "cascade" }),
+    clientId: text("client_id")
+      .notNull()
+      .references(() => clients.id, { onDelete: "restrict" }),
+    status: text("status")
+      .$type<RecapStatus>()
+      .notNull()
+      .default("not_started"),
+    outcome: text("outcome").$type<AppointmentOutcome>(),
+    whatWeSolved: text("what_we_solved"),
+    kaylaNote: text("kayla_note"),
+    nextMomentServiceType: text("next_moment_service_type"),
+    nextMomentTiming: text("next_moment_timing"),
+    nextMomentReason: text("next_moment_reason"),
+    nextMomentBookingCtaEnabled: integer(
+      "next_moment_booking_cta_enabled",
+      { mode: "boolean" },
+    )
+      .notNull()
+      .default(false),
+    privateFollowUpNote: text("private_follow_up_note"),
+    createdAt: createdAt(),
+    updatedAt: integer("updated_at")
+      .notNull()
+      .default(sql`(unixepoch() * 1000)`),
+  },
+  (table) => [
+    uniqueIndex("appointment_recaps_booking_unique").on(table.bookingId),
+    index("appointment_recaps_client_idx").on(table.clientId, table.createdAt),
+    index("appointment_recaps_status_idx").on(table.status),
+  ],
+);
+
+export const recapInsights = sqliteTable(
+  "recap_insights",
+  {
+    id: text("id").primaryKey(),
+    recapId: text("recap_id")
+      .notNull()
+      .references(() => appointmentRecaps.id, { onDelete: "cascade" }),
+    polarity: text("polarity").$type<InsightPolarity>().notNull(),
+    category: text("category").$type<InsightCategory>().notNull(),
+    insightText: text("insight_text").notNull(),
+    clientFacing: integer("client_facing", { mode: "boolean" })
+      .notNull()
+      .default(false),
+    importance: text("importance").$type<ConfidenceLevel>(),
+    sortOrder: integer("sort_order").notNull().default(0),
+    savedToClientNotes: integer("saved_to_client_notes", { mode: "boolean" })
+      .notNull()
+      .default(false),
+    clientStyleNoteId: text("client_style_note_id").references(
+      () => clientStyleNotes.id,
+      { onDelete: "set null" },
+    ),
+    createdAt: createdAt(),
+  },
+  (table) => [
+    index("recap_insights_recap_idx").on(table.recapId, table.polarity),
+  ],
+);
+
+export const recapItems = sqliteTable(
+  "recap_items",
+  {
+    id: text("id").primaryKey(),
+    recapId: text("recap_id")
+      .notNull()
+      .references(() => appointmentRecaps.id, { onDelete: "cascade" }),
+    itemName: text("item_name").notNull(),
+    brand: text("brand"),
+    size: text("size"),
+    color: text("color"),
+    category: text("category"),
+    note: text("note"),
+    disposition: text("disposition").$type<ItemDisposition>().notNull(),
+    clientFacing: integer("client_facing", { mode: "boolean" })
+      .notNull()
+      .default(false),
+    sortOrder: integer("sort_order").notNull().default(0),
+    createdAt: createdAt(),
+  },
+  (table) => [index("recap_items_recap_idx").on(table.recapId)],
+);
+
+export const recapFormulas = sqliteTable(
+  "recap_formulas",
+  {
+    id: text("id").primaryKey(),
+    recapId: text("recap_id")
+      .notNull()
+      .references(() => appointmentRecaps.id, { onDelete: "cascade" }),
+    formulaText: text("formula_text").notNull(),
+    explanation: text("explanation"),
+    sortOrder: integer("sort_order").notNull().default(0),
+    createdAt: createdAt(),
+  },
+  (table) => [index("recap_formulas_recap_idx").on(table.recapId)],
+);
+
+export const recapPriorities = sqliteTable(
+  "recap_priorities",
+  {
+    id: text("id").primaryKey(),
+    recapId: text("recap_id")
+      .notNull()
+      .references(() => appointmentRecaps.id, { onDelete: "cascade" }),
+    category: text("category"),
+    priorityText: text("priority_text").notNull(),
+    status: text("status").$type<PriorityStatus>().notNull().default("open"),
+    rank: integer("rank").notNull().default(0),
+    clientFacing: integer("client_facing", { mode: "boolean" })
+      .notNull()
+      .default(true),
+    createdAt: createdAt(),
+  },
+  (table) => [
+    index("recap_priorities_recap_idx").on(table.recapId, table.rank),
+  ],
+);
+
+export const clientStyleNotes = sqliteTable(
+  "client_style_notes",
+  {
+    id: text("id").primaryKey(),
+    clientId: text("client_id")
+      .notNull()
+      .references(() => clients.id, { onDelete: "cascade" }),
+    category: text("category").$type<InsightCategory>().notNull(),
+    normalizedLabel: text("normalized_label"),
+    insightText: text("insight_text").notNull(),
+    sourceRecapId: text("source_recap_id").references(
+      () => appointmentRecaps.id,
+      { onDelete: "set null" },
+    ),
+    firstObservedAt: createdAt(),
+    lastConfirmedAt: integer("last_confirmed_at")
+      .notNull()
+      .default(sql`(unixepoch() * 1000)`),
+    active: integer("active", { mode: "boolean" }).notNull().default(true),
+    confidence: text("confidence").$type<ConfidenceLevel>(),
+    internalNotes: text("internal_notes"),
+  },
+  (table) => [
+    index("client_style_notes_client_idx").on(table.clientId, table.active),
+    index("client_style_notes_client_category_idx").on(
+      table.clientId,
+      table.category,
+    ),
+  ],
+);
+
+export const recapSummaries = sqliteTable(
+  "recap_summaries",
+  {
+    id: text("id").primaryKey(),
+    recapId: text("recap_id")
+      .notNull()
+      .references(() => appointmentRecaps.id, { onDelete: "cascade" }),
+    version: integer("version").notNull(),
+    content: text("content", { mode: "json" }).$type<JsonRecord>().notNull(),
+    sentAt: integer("sent_at"),
+    recipient: text("recipient"),
+    createdAt: createdAt(),
+  },
+  (table) => [
+    uniqueIndex("recap_summaries_recap_version_unique").on(
+      table.recapId,
+      table.version,
+    ),
+  ],
+);
+
 export const privateAccessTokens = sqliteTable(
   "private_access_tokens",
   {
@@ -309,8 +520,18 @@ export const privateAccessTokens = sqliteTable(
     profileId: text("profile_id").references(() => styleProfiles.id, {
       onDelete: "cascade",
     }),
+    recapSummaryId: text("recap_summary_id").references(
+      () => recapSummaries.id,
+      { onDelete: "cascade" },
+    ),
     purpose: text("purpose")
-      .$type<"style_profile" | "alternate_time" | "booking_summary" | "manage_appointment">()
+      .$type<
+        | "style_profile"
+        | "alternate_time"
+        | "booking_summary"
+        | "manage_appointment"
+        | "recap_summary"
+      >()
       .notNull(),
     tokenHash: text("token_hash").notNull(),
     expiresAt: integer("expires_at").notNull(),
