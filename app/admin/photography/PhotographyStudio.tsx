@@ -26,6 +26,19 @@ type ReviewBlock = {
   decision: string;
 };
 
+function isAsset(value: unknown): value is Asset {
+  if (!value || typeof value !== "object") return false;
+  return "id" in value && typeof value.id === "string"
+    && "name" in value && typeof value.name === "string"
+    && "sceneId" in value && typeof value.sceneId === "string"
+    && "promptBuildId" in value && typeof value.promptBuildId === "string"
+    && "orientation" in value && typeof value.orientation === "string"
+    && "approvalStatus" in value && typeof value.approvalStatus === "string"
+    && "approvedUses" in value && Array.isArray(value.approvedUses) && value.approvedUses.every(item => typeof item === "string")
+    && "originalFilename" in value && typeof value.originalFilename === "string"
+    && "sizeBytes" in value && typeof value.sizeBytes === "number";
+}
+
 function createReviewBlock(id: number): ReviewBlock {
   return {
     id,
@@ -38,10 +51,16 @@ function createReviewBlock(id: number): ReviewBlock {
   };
 }
 
-async function readApi(response: Response) {
-  const body = await response.json();
-  if (!response.ok) throw new Error(body?.error?.message ?? "The request failed.");
-  return body.data;
+type ApiPayload = {
+  data?: Record<string, unknown>;
+  error?: { message?: string };
+};
+
+async function readApi(response: Response): Promise<Record<string, unknown>> {
+  const value: unknown = await response.json();
+  const body: ApiPayload = value && typeof value === "object" ? value : {};
+  if (!response.ok) throw new Error(body.error?.message ?? "The request failed.");
+  return body.data ?? {};
 }
 
 export default function PhotographyStudio({ foundation }: { foundation: string }) {
@@ -109,7 +128,7 @@ export default function PhotographyStudio({ foundation }: { foundation: string }
     try {
       const buildNotes = [notes.trim(), chatUrl.trim() ? `ChatGPT working thread: ${chatUrl.trim()}` : "", referenceName ? `Reference image used: ${referenceName}` : ""].filter(Boolean).join("\n");
       const data = await readApi(await fetch("/api/admin/photography/prompt-builds", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sceneId: scene.id, sceneName: scene.name, moduleSelections: selections, assembledPrompt: prompt, buildNotes }) }));
-      setPromptBuildId(data.id); setStatus(`Saved prompt build ${data.id}. You can now upload a process image.`);
+      setPromptBuildId(String(data.id)); setStatus(`Saved prompt build ${String(data.id)}. You can now upload a process image.`);
     } catch (error) { setStatus(error instanceof Error ? error.message : "Unable to save prompt build."); }
     finally { setBusy(false); }
   }
@@ -121,7 +140,7 @@ export default function PhotographyStudio({ foundation }: { foundation: string }
     try {
       const form = new FormData(event.currentTarget); form.set("promptBuildId", promptBuildId);
       const data = await readApi(await fetch("/api/admin/photography/process-images", { method: "POST", body: form }));
-      setProcessImageId(data.id); setStatus(`Uploaded process image ${data.id}. The review form is now active.`);
+      setProcessImageId(String(data.id)); setStatus(`Uploaded process image ${String(data.id)}. The review form is now active.`);
     } catch (error) { setStatus(error instanceof Error ? error.message : "Unable to upload process image."); }
     finally { setBusy(false); }
   }
@@ -145,13 +164,13 @@ export default function PhotographyStudio({ foundation }: { foundation: string }
     try {
       const form = new FormData(event.currentTarget); form.set("promptBuildId", promptBuildId); form.set("sceneId", scene.id); form.set("sourceProcessImageId", processImageId);
       const data = await readApi(await fetch("/api/admin/photography/assets", { method: "POST", body: form }));
-      setStatus(`Permanent asset ${data.id} saved.`); await loadAssets();
+      setStatus(`Permanent asset ${String(data.id)} saved.`); await loadAssets();
     } catch (error) { setStatus(error instanceof Error ? error.message : "Unable to upload final asset."); }
     finally { setBusy(false); }
   }
 
   async function loadAssets() {
-    try { const data = await readApi(await fetch("/api/admin/photography/assets")); setAssets(data.assets); }
+    try { const data = await readApi(await fetch("/api/admin/photography/assets")); setAssets(Array.isArray(data.assets) ? data.assets.filter(isAsset) : []); }
     catch (error) { setStatus(error instanceof Error ? error.message : "Unable to load assets."); }
   }
 

@@ -7,7 +7,7 @@ const statuses = new Set(["in_progress","completed","declined"]);
 
 export async function PATCH(request:Request,ctx:Params) {
   return withApi(async id => {
-    requireAdmin(request,true); const {requestId}=await ctx.params;
+    requireAdmin(request); const {requestId}=await ctx.params;
     const body=await readJsonObject(request);rejectUnexpectedKeys(body,["status","resolutionNote"]);
     const status=requiredString(body.status,"status",20), note=typeof body.resolutionNote === "string" ? body.resolutionNote.trim() : "";
     if(!statuses.has(status))throw new ApiError(422,"INVALID_DATA_REQUEST_STATUS","Choose in progress, completed, or declined.");

@@ -161,9 +161,6 @@ export default function AdminAvailability({ userName, signOutPath }: { userName:
 
   useEffect(() => {
     if (kind !== "unavailable" || !startsAt || !endsAt || blockValidation || !services.length) {
-      setImpact([]);
-      setImpactError("");
-      setCheckingImpact(false);
       return;
     }
 
@@ -294,7 +291,11 @@ export default function AdminAvailability({ userName, signOutPath }: { userName:
     }
   }
 
-  const affectedCount = impact.reduce((total, item) => total + item.slots.length, 0);
+  const canCheckImpact = kind === "unavailable" && startsAt && endsAt && !blockValidation && services.length > 0;
+  const visibleImpact = canCheckImpact ? impact : [];
+  const visibleImpactError = canCheckImpact ? impactError : "";
+  const isCheckingImpact = Boolean(canCheckImpact) && checkingImpact;
+  const affectedCount = visibleImpact.reduce((total, item) => total + item.slots.length, 0);
 
   return (
     <main className="admin-shell">
@@ -374,15 +375,15 @@ export default function AdminAvailability({ userName, signOutPath }: { userName:
         {kind === "unavailable" && startsAt && endsAt && !blockValidation && (
           <div className="availability-impact" aria-live="polite">
             <strong>Affected public appointments</strong>
-            {checkingImpact ? (
+            {isCheckingImpact ? (
               <p>Checking current appointment availability…</p>
-            ) : impactError ? (
-              <p className="admin-warning">{impactError}</p>
+            ) : visibleImpactError ? (
+              <p className="admin-warning">{visibleImpactError}</p>
             ) : affectedCount ? (
               <>
-                <p>This block currently removes {affectedCount} available appointment {affectedCount === 1 ? "start" : "starts"} across {impact.length} {impact.length === 1 ? "service" : "services"}.</p>
+                <p>This block currently removes {affectedCount} available appointment {affectedCount === 1 ? "start" : "starts"} across {visibleImpact.length} {visibleImpact.length === 1 ? "service" : "services"}.</p>
                 <div className="availability-impact-list">
-                  {impact.map(item => (
+                  {visibleImpact.map(item => (
                     <div key={item.serviceCode}>
                       <strong>{item.serviceName} · {item.durationMinutes} min</strong>
                       <p>{item.slots.map(slot => `${fmtTime(slot.startsAt)}–${fmtTime(slot.endsAt)}`).join(", ")}</p>

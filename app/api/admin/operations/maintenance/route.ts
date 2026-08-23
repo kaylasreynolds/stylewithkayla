@@ -8,6 +8,6 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  return withApi(async id => { requireAdmin(request,true); return dataResponse(await runRetentionMaintenance(getD1()),200,id); });
+  return withApi(async id => { requireAdmin(request); return dataResponse(await runRetentionMaintenance(getD1()),200,id); });
 }
 

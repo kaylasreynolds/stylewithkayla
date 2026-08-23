@@ -20,7 +20,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   return withApi(async id => {
-    requireAdmin(request,true);
+    requireAdmin(request);
     const body = await readJsonObject(request); rejectUnexpectedKeys(body,["clientEmail","kind","requestDetails"]);
     const email = requiredString(body.clientEmail,"clientEmail",254).toLowerCase(), kind = requiredString(body.kind,"kind",20), details = optionalString(body.requestDetails,"requestDetails",2000);
     if (!kinds.has(kind)) throw new ApiError(422,"INVALID_DATA_REQUEST_KIND","Choose access, correction, or deletion.");

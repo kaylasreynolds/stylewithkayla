@@ -89,7 +89,7 @@ function renderFieldErrors(fieldErrors: Record<string, string>) {
   openCorrectStep(entries.map(([field]) => field));
 
   window.setTimeout(() => {
-    let firstControl: HTMLElement | null = null;
+    const focusTargets: HTMLElement[] = [];
 
     entries.forEach(([field, rawMessage], index) => {
       const control = controlForField(field);
@@ -98,7 +98,7 @@ function renderFieldErrors(fieldErrors: Record<string, string>) {
       const focusTarget = control.matches("fieldset")
         ? control.querySelector<HTMLElement>("button, input, select, textarea") ?? control
         : control;
-      firstControl ??= focusTarget;
+      if (!focusTargets.length) focusTargets.push(focusTarget);
 
       const highlightTarget = control.matches('input[type="checkbox"]')
         ? control.closest<HTMLElement>("label") ?? control
@@ -117,11 +117,12 @@ function renderFieldErrors(fieldErrors: Record<string, string>) {
       const container = control.matches("fieldset")
         ? control
         : control.closest("label") ?? control.parentElement;
-      container?.append(message);
+      container?.appendChild(message);
     });
 
-    firstControl?.focus({ preventScroll: true });
-    firstControl?.scrollIntoView({ behavior: "smooth", block: "center" });
+    const target = focusTargets[0];
+    target?.focus({ preventScroll: true });
+    target?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, 50);
 }
 
