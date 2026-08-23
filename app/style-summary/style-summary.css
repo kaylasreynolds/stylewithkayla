@@ -1,0 +1,26 @@
+.style-summary-page { width:min(860px,calc(100% - 40px)); margin:0 auto; padding:64px 0 84px; }
+.style-summary { display:grid; gap:0; background:var(--paper); border:1px solid var(--line); box-shadow:0 20px 60px rgba(61,43,39,.08); }
+.style-summary-hero,.style-summary section,.style-summary-closing { padding:clamp(28px,6vw,58px); }
+.style-summary-hero { background:var(--blush); text-align:center; }
+.style-summary h1,.style-summary h2 { font-family:var(--font-heading); font-weight:500; }
+.style-summary h1 { margin:14px 0; font-size:clamp(42px,8vw,68px); line-height:1; }
+.style-summary h2 { margin:0 0 24px; font-size:clamp(32px,5vw,43px); }
+.style-summary h3 { margin:0 0 9px; }
+.style-summary p,.style-summary li { line-height:1.75; }
+.style-summary section { border-top:1px solid var(--line); }
+.style-summary-date { color:var(--charcoal); }
+.style-summary-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.style-summary-card { padding:22px; background:var(--ivory); border:1px solid var(--line); border-radius:6px; }
+.style-summary-card ul { margin:0; padding-left:20px; }
+.style-summary-formulas { display:grid; gap:16px; padding-left:28px; }
+.style-summary-formulas p { margin:4px 0 0; color:var(--charcoal); }
+.style-summary-roadmap { list-style:none; padding:0; display:grid; gap:18px; }
+.style-summary-roadmap li { display:flex; gap:18px; align-items:flex-start; }
+.style-summary-roadmap span { flex:0 0 38px; height:38px; display:grid; place-items:center; border-radius:50%; background:var(--rose); color:white; }
+.style-summary-roadmap small,.style-summary-roadmap strong { display:block; }
+.style-summary-roadmap small { color:var(--rose-dark); text-transform:uppercase; letter-spacing:.12em; }
+.style-summary-note { background:var(--blush); }
+.style-summary-closing { text-align:center; border-top:1px solid var(--line); font-family:var(--font-heading); font-size:24px; }
+.style-summary-closing span { color:var(--rose-dark); }
+.style-summary-state { min-height:50vh; display:grid; place-content:center; text-align:center; padding:48px 24px; }
+@media(max-width:640px){.style-summary-grid{grid-template-columns:1fr}.style-summary-page{width:100%;padding:0}.style-summary{border-left:0;border-right:0;box-shadow:none}}

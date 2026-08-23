@@ -8,6 +8,9 @@ html { scroll-behavior:smooth; }
 body { margin:0; background:var(--ivory); color:var(--ink); font-family:var(--font-body); }
 button, input, select, textarea { font:inherit; }
 button, a { -webkit-tap-highlight-color:transparent; }
+.recap-preview-admin { min-height:100vh; }
+.recap-preview-admin > .admin-header,.recap-preview-actions { width:min(1100px,calc(100% - 48px)); margin:24px auto; }
+.recap-preview-actions { padding:20px; background:var(--blush); border:1px solid var(--line); }
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline:2px solid var(--rose); outline-offset:3px; }
 .site-shell { min-height:100vh; background:radial-gradient(circle at 18% 38%, rgba(247,236,238,.48), transparent 30%), var(--ivory); }
 .container { width:min(1180px, calc(100% - 48px)); margin:0 auto; }
