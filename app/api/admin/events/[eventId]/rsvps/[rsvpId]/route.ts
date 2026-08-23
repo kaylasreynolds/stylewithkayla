@@ -22,7 +22,23 @@ async function get(eventId: string, rsvpId: string) {
       "SELECT r.id,r.event_id eventId,r.status,r.primary_guest_name primaryGuestName,r.email,r.phone,r.party_size partySize,r.notes,r.checked_in_at checkedInAt,r.no_show_at noShowAt,r.created_at createdAt,r.updated_at updatedAt,s.starts_at appointmentStartsAt,s.ends_at appointmentEndsAt,s.label appointmentLabel FROM event_rsvps r LEFT JOIN event_appointment_slots s ON s.rsvp_id=r.id AND s.event_id=r.event_id WHERE r.id=? AND r.event_id=?",
     )
     .bind(rsvpId, eventId)
-    .first<Record<string, unknown>>();
+    .first<{
+      id: string;
+      eventId: string;
+      status: string;
+      primaryGuestName: string;
+      email: string;
+      phone: string | null;
+      partySize: number;
+      notes: string | null;
+      checkedInAt: number | null;
+      noShowAt: number | null;
+      createdAt: number;
+      updatedAt: number;
+      appointmentStartsAt: number | null;
+      appointmentEndsAt: number | null;
+      appointmentLabel: string | null;
+    }>();
 
   if (!row) {
     throw new ApiError(404, "RSVP_NOT_FOUND", "RSVP not found.");
