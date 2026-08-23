@@ -1,0 +1,5 @@
+-- Metadata-only baseline generated from db/schema.ts on 2026-08-23.
+--
+-- The tables represented by this migration already exist in D1 through the
+-- preserved 0000-0005 SQL history. This file must remain a no-op: its matching
+-- snapshot is the starting point for future Drizzle Kit schema diffs.
