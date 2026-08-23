@@ -30,6 +30,18 @@ const asMinutes = (value: string) => {
   return hour * 60 + minute;
 };
 
+function snapDateTimeLocalToQuarterHour(value: string) {
+  if (!value) return "";
+  const [date, time] = value.split("T");
+  const [year, month, day] = date.split("-").map(Number);
+  const [hour, minute] = time.split(":").map(Number);
+  if (![year, month, day, hour, minute].every(Number.isFinite)) return value;
+
+  const snappedMinutes = Math.round((hour * 60 + minute) / 15) * 15;
+  const snapped = new Date(Date.UTC(year, month - 1, day, 0, snappedMinutes));
+  return `${snapped.getUTCFullYear()}-${String(snapped.getUTCMonth() + 1).padStart(2, "0")}-${String(snapped.getUTCDate()).padStart(2, "0")}T${String(snapped.getUTCHours()).padStart(2, "0")}:${String(snapped.getUTCMinutes()).padStart(2, "0")}`;
+}
+
 function boiseLocalToIso(value: string) {
   const [date, time] = value.split("T");
   const [year, month, day] = date.split("-").map(Number);
@@ -342,11 +354,11 @@ export default function AdminAvailability({ userName, signOutPath }: { userName:
           </label>
           <label>
             Starts
-            <input type="datetime-local" step={900} value={startsAt} onChange={event => setStartsAt(event.target.value)} />
+            <input type="datetime-local" step={900} value={startsAt} onChange={event => setStartsAt(snapDateTimeLocalToQuarterHour(event.target.value))} />
           </label>
           <label>
             Ends
-            <input type="datetime-local" step={900} value={endsAt} onChange={event => setEndsAt(event.target.value)} />
+            <input type="datetime-local" step={900} value={endsAt} onChange={event => setEndsAt(snapDateTimeLocalToQuarterHour(event.target.value))} />
           </label>
           <label className="wide">
             Note
