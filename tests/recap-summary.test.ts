@@ -1,15 +1,20 @@
 import assert from "node:assert/strict";
-import { createHash, randomBytes } from "node:crypto";
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { DatabaseSync } from "node:sqlite";
+import { DatabaseSync, type SQLInputValue } from "node:sqlite";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { StyleSummarySections } from "../components/StyleSummarySections";
+import { ApiError } from "../lib/server/http";
+import { findRecapSummaryAccess } from "../lib/server/recap-access";
 import { buildRecapSummaryContent, RECAP_SUMMARY_TOKEN_TTL_MS } from "../lib/server/recap-policy";
+import { publishRecapSummary } from "../lib/server/recap-publication";
 
 const baseline = readFileSync(new URL("../drizzle/0000_silent_ser_duncan.sql", import.meta.url), "utf8");
 const migration = readFileSync(new URL("../drizzle/20260823032130_appointment_recap_data_layer.sql", import.meta.url), "utf8");
 const publishRoute = readFileSync(new URL("../app/api/admin/bookings/[bookingId]/recap/publish/route.ts", import.meta.url), "utf8");
 const publicRoute = readFileSync(new URL("../app/api/style-summary/[token]/route.ts", import.meta.url), "utf8");
-const sections = readFileSync(new URL("../components/StyleSummarySections.tsx", import.meta.url), "utf8");
 
 function apply(db: DatabaseSync, sql: string) { for (const statement of sql.split("--> statement-breakpoint").map(value => value.trim()).filter(Boolean)) db.exec(statement); }
 function fixture() {
@@ -33,22 +38,25 @@ function liveContent(db: DatabaseSync, serviceName: string) {
   return buildRecapSummaryContent(recap, insights, items, formulas, priorities, {fullName:"Jamie Client"}, {confirmedStartAt:"2026-08-23T16:00:00.000Z"}, {name:serviceName});
 }
 const hash = (raw: string) => createHash("sha256").update(raw).digest("hex");
-function publish(db: DatabaseSync, now: number, serviceName: string) {
-  const recap = db.prepare("SELECT status FROM appointment_recaps WHERE id='recap-summary'").get() as {status:string};
-  if (recap.status === "published") return {status:409, code:"ALREADY_PUBLISHED"};
-  const content = liveContent(db, serviceName), raw = randomBytes(32).toString("base64url"), summaryId = `summary-${now}`;
-  db.exec("BEGIN"); try {
-    db.prepare("INSERT INTO recap_summaries(id,recap_id,version,content,sent_at,recipient,created_at) VALUES(?,?,COALESCE((SELECT MAX(version)+1 FROM recap_summaries WHERE recap_id=?),1),?,?,?,?)").run(summaryId,"recap-summary","recap-summary",JSON.stringify(content),now,"jamie@example.com",now);
-    db.prepare("UPDATE appointment_recaps SET status='published',updated_at=? WHERE id='recap-summary'").run(now);
-    db.prepare("UPDATE private_access_tokens SET revoked_at=? WHERE booking_id='booking-summary' AND purpose='recap_summary' AND revoked_at IS NULL").run(now);
-    db.prepare("INSERT INTO private_access_tokens(id,booking_id,recap_summary_id,purpose,token_hash,expires_at,created_at) VALUES(?,?,?,'recap_summary',?,?,?)").run(`token-${now}`,"booking-summary",summaryId,hash(raw),now+RECAP_SUMMARY_TOKEN_TTL_MS,now);
-    db.exec("COMMIT"); return {status:200, raw, content};
-  } catch(error) { db.exec("ROLLBACK"); throw error; }
+function d1(database: DatabaseSync): D1Database {
+  class Prepared {
+    values: SQLInputValue[] = [];
+    constructor(readonly sql: string) {}
+    bind(...values: SQLInputValue[]) { this.values = values; return this; }
+    async first<T>() { return (database.prepare(this.sql).get(...this.values) ?? null) as T | null; }
+    async all<T>() { return { results: database.prepare(this.sql).all(...this.values) as T[] }; }
+    run() { const result = database.prepare(this.sql).run(...this.values); return { success: true, meta: { changes: Number(result.changes) }, results: [] }; }
+  }
+  return { prepare: (sql: string) => new Prepared(sql), batch: async (statements: Prepared[]) => { database.exec("BEGIN IMMEDIATE"); try { const results = statements.map(statement => statement.run()); database.exec("COMMIT"); return results; } catch (error) { database.exec("ROLLBACK"); throw error; } } } as unknown as D1Database;
 }
-function access(db: DatabaseSync, raw: string, at: number) {
-  const row = db.prepare("SELECT recap_summary_id AS summaryId,expires_at AS expiresAt,revoked_at AS revokedAt FROM private_access_tokens WHERE token_hash=? AND purpose='recap_summary'").get(hash(raw)) as {summaryId:string;expiresAt:number;revokedAt:number|null}|undefined;
-  if (!row) return {status:404}; if (row.revokedAt || row.expiresAt <= at) return {status:410};
-  const summary = db.prepare("SELECT content FROM recap_summaries WHERE id=?").get(row.summaryId) as {content:string}|undefined; return summary ? {status:200, content:JSON.parse(summary.content)} : {status:404};
+let idSequence = 0;
+async function publish(db: DatabaseSync, now: number, serviceName: string, raw = "r".repeat(43)) {
+  return publishRecapSummary({ db: d1(db), bookingId: "booking-summary", recapId: "recap-summary", recipient: "jamie@example.com", content: liveContent(db, serviceName), origin: "https://style.test" }, { now: () => now, id: () => `generated-${++idSequence}`, rawToken: () => raw, hashToken: async value => hash(value) });
+}
+async function access(db: DatabaseSync, raw: string, at: number) {
+  const row = await findRecapSummaryAccess(d1(db), raw, at, async value => hash(value));
+  const summary = db.prepare("SELECT content FROM recap_summaries WHERE id=?").get(row.recapSummaryId) as {content:string};
+  return JSON.parse(summary.content);
 }
 
 test("preview and publication share the sole client-facing projection", () => {
@@ -58,25 +66,30 @@ test("preview and publication share the sole client-facing projection", () => {
   assert.match(publishRoute, /buildRecapSummaryContent\(/); assert.doesNotMatch(publicRoute, /buildRecapSummaryContent/);
 });
 
-test("published content remains byte-for-byte frozen after live recap edits", () => {
-  const {db, now, service} = fixture(), first = publish(db, now, service.name); assert.equal(first.status, 200);
-  const before = access(db, first.raw!, now+1); assert.equal(before.status, 200); const frozen = JSON.stringify(before.content);
+test("published content remains byte-for-byte frozen after live recap edits", async () => {
+  const {db, now, service} = fixture(), raw = "i".repeat(43), first = await publish(db, now, service.name, raw); assert.equal(first.status, "published");
+  const frozen = JSON.stringify(await access(db, raw, now+1));
   db.prepare("UPDATE appointment_recaps SET what_we_solved='CHANGED',kayla_note='CHANGED' WHERE id='recap-summary'").run(); db.prepare("UPDATE recap_insights SET insight_text='CHANGED' WHERE id='public-insight'").run();
-  const after = access(db, first.raw!, now+2); assert.equal(JSON.stringify(after.content), frozen); assert.equal(JSON.stringify(after.content).includes("CHANGED"), false);
+  const after = await access(db, raw, now+2); assert.equal(JSON.stringify(after), frozen); assert.equal(JSON.stringify(after).includes("CHANGED"), false);
 });
 
-test("publish is idempotent and creates one snapshot and one active token", () => {
-  const {db, now, service} = fixture(); assert.equal(publish(db, now, service.name).status, 200); assert.deepEqual(publish(db, now+1, service.name), {status:409,code:"ALREADY_PUBLISHED"});
+test("production publication guard lets only one caller write", async () => {
+  const {db, now, service} = fixture(); assert.equal((await publish(db, now, service.name)).status, "published");
+  await assert.rejects(publish(db, now+1, service.name, "s".repeat(43)), (error: unknown) => error instanceof ApiError && error.status === 409 && error.code === "ALREADY_PUBLISHED");
   assert.equal((db.prepare("SELECT COUNT(*) count FROM recap_summaries").get() as {count:number}).count, 1); assert.equal((db.prepare("SELECT COUNT(*) count FROM private_access_tokens WHERE purpose='recap_summary' AND revoked_at IS NULL").get() as {count:number}).count, 1);
 });
 
-test("summary access enforces purpose, expiration, and revocation while storing only a hash", () => {
-  const {db, now, service} = fixture(), result = publish(db, now, service.name); const raw = result.raw!;
-  assert.equal(access(db, raw, now+1).status, 200); assert.equal((db.prepare("SELECT COUNT(*) count FROM private_access_tokens WHERE token_hash=?").get(raw) as {count:number}).count, 0);
-  db.prepare("INSERT INTO private_access_tokens(id,booking_id,purpose,token_hash,expires_at,created_at) VALUES('wrong-purpose','booking-summary','style_profile',?,?,?)").run(hash("x".repeat(43)),now+1000,now); assert.equal(access(db,"x".repeat(43),now+1).status,404);
-  assert.equal(access(db,raw,now+RECAP_SUMMARY_TOKEN_TTL_MS).status,410); db.prepare("UPDATE private_access_tokens SET revoked_at=? WHERE token_hash=?").run(now+2,hash(raw)); assert.equal(access(db,raw,now+3).status,410);
+test("production summary access enforces purpose, expiration, and revocation while storing only a hash", async () => {
+  const {db, now, service} = fixture(), raw = "a".repeat(43); await publish(db, now, service.name, raw);
+  assert.equal((await findRecapSummaryAccess(d1(db),raw,now+1,async value=>hash(value))).bookingId,"booking-summary"); assert.equal((db.prepare("SELECT COUNT(*) count FROM private_access_tokens WHERE token_hash=?").get(raw) as {count:number}).count, 0);
+  db.prepare("INSERT INTO private_access_tokens(id,booking_id,purpose,token_hash,expires_at,created_at) VALUES('wrong-purpose','booking-summary','style_profile',?,?,?)").run(hash("x".repeat(43)),now+1000,now);
+  await assert.rejects(findRecapSummaryAccess(d1(db),"x".repeat(43),now+1,async value=>hash(value)),(error:unknown)=>error instanceof ApiError&&error.status===404);
+  await assert.rejects(findRecapSummaryAccess(d1(db),raw,now+RECAP_SUMMARY_TOKEN_TTL_MS,async value=>hash(value)),(error:unknown)=>error instanceof ApiError&&error.status===410);
+  db.prepare("UPDATE private_access_tokens SET revoked_at=? WHERE token_hash=?").run(now+2,hash(raw)); await assert.rejects(findRecapSummaryAccess(d1(db),raw,now+3,async value=>hash(value)),(error:unknown)=>error instanceof ApiError&&error.status===410);
 });
 
 test("rendering guards omit every empty optional section", () => {
-  for (const guard of ["content.insights.length > 0", "content.formulas.length > 0", "content.items.length > 0", "content.priorities.length > 0", "content.kaylaNote &&", "content.nextStylingMoment &&"]) assert.match(sections, new RegExp(guard.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")));
+  const markup = renderToStaticMarkup(createElement(StyleSummarySections,{content:{client:{firstName:"Jamie",appointmentDate:null,serviceName:"Personal Styling"},whatWeSolved:null,insights:[],formulas:[],items:[],priorities:[],kaylaNote:null,nextStylingMoment:null}}));
+  for (const heading of ["What We Worked On","What We Learned","Your Outfit Formulas","What We Added","Your Wardrobe Roadmap","A Note From Kayla","Your Next Styling Moment"]) assert.equal(markup.includes(heading),false);
+  assert.equal((markup.match(/<section/g)??[]).length,0);
 });
