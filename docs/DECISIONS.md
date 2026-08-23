@@ -30,6 +30,20 @@ Documentation is organized into specialized domains. Each document is considered
 
 Specialized documents should be referenced rather than duplicated.
 
+## Drizzle migration metadata baseline
+
+On 2026-08-23, Drizzle Kit metadata was regenerated from `db/schema.ts` as the
+current schema baseline. The matching timestamped SQL migration is intentionally
+a no-op because the represented application tables already exist through the
+preserved D1 migration history. Future generated migrations use timestamp
+prefixes so they sort after the existing index-prefixed files.
+
+The historical migration names include duplicate `0001` and `0003` prefixes.
+They are deployed history and must not be renamed or reordered. Some tables
+managed by hand-written SQL (including contact inquiry, photography, and event
+RSVP idempotency tables) are not declared in `db/schema.ts`; Drizzle therefore
+does not manage those tables or include them in its metadata snapshot.
+
 ---
 
 # ADR-001 — Unified Website Architecture
