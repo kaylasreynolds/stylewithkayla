@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root { --ivory:#fcf9f6; --paper:#fffefd; --blush:#f6eeeb; --rose:#cf8c93; --rose-dark:#be747e; --ink:#1f1f1f; --charcoal:#5a5552; --line:#ddd2ca; --soft:#f4efec; --color-rose:#cf8c93; --color-rose-hover:#be747e; --color-ivory:#fcf9f6; --color-blush:#f6eeeb; --color-white:#fff; --color-charcoal:#1f1f1f; --color-gray:#5a5552; --color-divider:#ddd2ca; --font-heading:"Cormorant Garamond",Georgia,serif; --font-body:"Inter",Arial,sans-serif; }
