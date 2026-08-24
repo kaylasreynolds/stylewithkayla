@@ -10,7 +10,7 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
     <header className="style-summary-hero">
       <p className="eyebrow">Your Style Summary</p>
       <span className="pink-rule" aria-hidden="true" />
-      <h1>{content.client.firstName}, your style—made clearer.</h1>
+      <h1>Curated for: {content.client.firstName}</h1>
       {content.client.appointmentDate && <p className="style-summary-meta"><span>{formatDate(content.client.appointmentDate)}</span><span className="style-summary-meta-dot" aria-hidden="true" /><span>{content.client.serviceName}</span></p>}
     </header>
 
