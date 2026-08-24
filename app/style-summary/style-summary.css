@@ -15,7 +15,7 @@
 /* ---- section headings ---- */
 .style-summary h2 { margin:0 0 20px; font-family:var(--font-heading); font-weight:500; font-size:clamp(24px,3.6vw,30px); letter-spacing:-.005em; color:var(--ink); }
 .style-summary h3 { margin:0 0 8px; font-family:var(--font-body); font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--rose-dark); }
-.style-summary p, .style-summary li { font-size:15px; line-height:1.75; color:var(--ink); }
+.style-summary p, .style-summary li { font-size:15px; line-height:1.75; color:var(--rose-dark); }
 .style-summary-lede { max-width:60ch; }
 
 /* ---- cards (What We Learned / What We Added) ---- */
