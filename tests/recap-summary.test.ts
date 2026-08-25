@@ -93,3 +93,22 @@ test("rendering guards omit every empty optional section", () => {
   for (const heading of ["What We Worked On","What We Learned","Your Outfit Formulas","What We Added","Your Wardrobe Roadmap","A Note From Kayla","Your Next Styling Moment"]) assert.equal(markup.includes(heading),false);
   assert.equal((markup.match(/<section/g)??[]).length,0);
 });
+
+test("summary rendering preserves links, signature, semantics, and repeated content", () => {
+  const { db, service } = fixture();
+  db.prepare("INSERT INTO recap_insights(id,recap_id,polarity,category,insight_text,client_facing,sort_order,created_at) VALUES('second-insight','recap-summary','worked','color','Rose is another favorite',1,2,0)").run();
+  db.prepare("INSERT INTO recap_formulas(id,recap_id,formula_text,explanation,sort_order,created_at) VALUES('second-formula','recap-summary','Dress + flats','Keep this free text',1,0)").run();
+  db.prepare("INSERT INTO recap_priorities(id,recap_id,category,priority_text,status,rank,client_facing,created_at) VALUES('second-priority','recap-summary','Later','Tailor the trousers','open',1,1,0)").run();
+  const markup = renderToStaticMarkup(
+    createElement(StyleSummarySections, { content: liveContent(db, service.name) }),
+  );
+
+  for (const text of ["Emerald brightens your palette", "Rose is another favorite", "Blazer + tee + trouser", "Dress + flats", "Add a neutral shoe", "Tailor the trousers"]) {
+    assert.match(markup, new RegExp(text.replaceAll("+", "\\+")));
+  }
+  assert.match(markup, /<ol class="style-summary-formulas"/);
+  assert.match(markup, /<ol class="style-summary-roadmap"/);
+  assert.match(markup, /href="\/book"/);
+  assert.match(markup, /src="\/images\/kayla-bl\.png"/);
+  assert.match(markup, /See you soon,/);
+});
