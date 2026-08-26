@@ -16,17 +16,17 @@ const labels: Record<string, string> = {
 };
 
 const insightIcons: Record<string, string> = {
-  fit: "/images/hanger-pink.png",
-  silhouette: "/images/womens-styling.png",
-  color: "/images/kayla-swatches.png",
-  fabric: "/images/finishing-touches.png",
-  comfort: "/images/heart-pink.png",
-  brand: "/images/shopping-bag.svg",
-  size: "/images/what-to-expect.png",
-  styling: "/images/stars.png",
-  lifestyle: "/images/womens-everyday.png",
-  preference: "/images/heart-pink.png",
-  other: "/images/stars.png",
+  fit: "/images/slim-fit.png",
+  silhouette: "/images/dressing.png",
+  color: "/images/pantone.png",
+  fabric: "/images/fabric.png",
+  comfort: "/images/soft.png",
+  brand: "/images/best-product.png",
+  size: "/images/measurement.png",
+  styling: "/images/effect.png",
+  lifestyle: "/images/healthy.png",
+  preference: "/images/choose.png",
+  other: "/images/circle-variant.png",
 };
 
 const details = (values: Array<string | null>) =>
@@ -43,13 +43,8 @@ function DecorativeIcon({ src }: { src: string }) {
 }
 
 export function StyleSummarySections({ content }: { content: RecapSummaryContent }) {
-  const groups = content.insights.reduce<Record<string, typeof content.insights>>(
-    (result, insight) => {
-      (result[insight.category] ??= []).push(insight);
-      return result;
-    },
-    {},
-  );
+  const complimentaryInsights = content.insights.filter(insight => insight.polarity === "worked");
+  const lessFlatteringInsights = content.insights.filter(insight => insight.polarity === "didnt_work");
 
   return (
     <article className="style-summary">
@@ -83,20 +78,9 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
       {content.insights.length > 0 && (
         <section className="style-summary-section style-summary-learned">
           <h2>What We Learned</h2>
-          <div className="style-summary-insight-list">
-            {Object.entries(groups).map(([category, insights]) => (
-              <div className="style-summary-insight-card" key={category}>
-                <DecorativeIcon src={insightIcons[category] || insightIcons.other} />
-                <div>
-                  <h3>{labels[category] || category.replace(/_/g, " ")}</h3>
-                  <ul>
-                    {insights.map((insight, index) => (
-                      <li key={`${category}-${index}`}>{insight.insightText}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
+          <div className="style-summary-insight-grid">
+            <InsightCard title="Compliments You" tone="complimentary" insights={complimentaryInsights} />
+            <InsightCard title="Less Flattering" tone="less-flattering" insights={lessFlatteringInsights} />
           </div>
         </section>
       )}
@@ -211,6 +195,22 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
         />
       </footer>
     </article>
+  );
+}
+
+function InsightCard({ title, tone, insights }: { title: string; tone: string; insights: RecapSummaryContent["insights"] }) {
+  return (
+    <div className={`style-summary-insight-card style-summary-insight-card--${tone}`}>
+      <h3>{title}</h3>
+      <ul>
+        {insights.map((insight, index) => (
+          <li key={`${insight.category}-${index}`}>
+            <DecorativeIcon src={insightIcons[insight.category] || insightIcons.other} />
+            <p><strong>{labels[insight.category] || insight.category.replace(/_/g, " ")}</strong><span aria-hidden="true"> – </span>{insight.insightText}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

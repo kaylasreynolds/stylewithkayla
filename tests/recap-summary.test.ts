@@ -31,7 +31,7 @@ function fixture() {
 }
 function liveContent(db: DatabaseSync, serviceName: string) {
   const recap = db.prepare("SELECT what_we_solved AS whatWeSolved,kayla_note AS kaylaNote,next_moment_service_type AS nextMomentServiceType,next_moment_timing AS nextMomentTiming,next_moment_reason AS nextMomentReason,next_moment_booking_cta_enabled AS nextMomentBookingCtaEnabled FROM appointment_recaps WHERE id='recap-summary'").get()!;
-  const insights = db.prepare("SELECT category,insight_text AS insightText,client_facing AS clientFacing FROM recap_insights WHERE recap_id='recap-summary' ORDER BY sort_order").all();
+  const insights = db.prepare("SELECT polarity,category,insight_text AS insightText,client_facing AS clientFacing FROM recap_insights WHERE recap_id='recap-summary' ORDER BY sort_order").all();
   const items = db.prepare("SELECT item_name AS itemName,brand,size,color,note,client_facing AS clientFacing FROM recap_items WHERE recap_id='recap-summary' ORDER BY sort_order").all();
   const formulas = db.prepare("SELECT formula_text AS formulaText,explanation FROM recap_formulas WHERE recap_id='recap-summary' ORDER BY sort_order").all();
   const priorities = db.prepare("SELECT category,priority_text AS priorityText,rank,client_facing AS clientFacing FROM recap_priorities WHERE recap_id='recap-summary' ORDER BY rank").all();
@@ -61,7 +61,7 @@ async function access(db: DatabaseSync, raw: string, at: number) {
 
 test("preview and publication share the sole client-facing projection", () => {
   const {db, service} = fixture(), content = liveContent(db, service.name);
-  assert.equal(content.client.firstName, "Jamie"); assert.deepEqual(content.insights, [{category:"color",insightText:"Emerald brightens your palette"}]);
+  assert.equal(content.client.firstName, "Jamie"); assert.deepEqual(content.insights, [{polarity:"worked",category:"color",insightText:"Emerald brightens your palette"}]);
   assert.deepEqual(content.items.map(item => item.itemName), ["Navy blazer"]); assert.equal(JSON.stringify(content).includes("PRIVATE"), false); assert.equal(content.formulas.length, 1); assert.equal(content.priorities.length, 1);
   assert.match(publishRoute, /buildRecapSummaryContent\(/); assert.doesNotMatch(publicRoute, /buildRecapSummaryContent/);
 });
@@ -111,4 +111,17 @@ test("summary rendering preserves links, signature, semantics, and repeated cont
   assert.match(markup, /href="\/book"/);
   assert.match(markup, /src="\/images\/kayla-bl\.png"/);
   assert.match(markup, /See you soon,/);
+});
+
+test("what we learned renders equal polarity cards with category icons", () => {
+  const { db, service } = fixture();
+  db.prepare("UPDATE recap_insights SET client_facing=1 WHERE id='private-insight'").run();
+  const markup = renderToStaticMarkup(createElement(StyleSummarySections, { content: liveContent(db, service.name) }));
+  assert.match(markup, /Compliments You/);
+  assert.match(markup, /Less Flattering/);
+  assert.match(markup, /style-summary-insight-card--complimentary/);
+  assert.match(markup, /style-summary-insight-card--less-flattering/);
+  assert.match(markup, /src="\/images\/pantone\.png"/);
+  assert.match(markup, /src="\/images\/measurement\.png"/);
+  assert.match(markup, /COLOR<\/strong><span[^>]*> – <\/span>Emerald brightens your palette/i);
 });
