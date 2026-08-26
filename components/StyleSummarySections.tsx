@@ -163,11 +163,22 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
       {content.nextStylingMoment && (
         <section className="style-summary-section style-summary-next">
           <h2>Your Next Styling Moment</h2>
-          <div className="style-summary-next-card">
+          <div
+            className="style-summary-next-card"
+            style={{ minHeight: "150px", padding: "24px 22px" }}
+          >
             <DecorativeIcon src="/images/store-event.png" />
             <div className="style-summary-next-copy">
               <small>Recommended next</small>
-              <h3>Seasonal Refresh</h3>
+              <h3
+                style={{
+                  margin: "2px 0 6px",
+                  fontSize: "clamp(30px, 4.5vw, 38px)",
+                  lineHeight: 1.05,
+                }}
+              >
+                Seasonal Refresh
+              </h3>
               <p>Update closet for fall</p>
             </div>
             <div className="style-summary-next-action">
