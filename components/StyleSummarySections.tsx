@@ -169,11 +169,12 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
           >
             <DecorativeIcon src="/images/store-event.png" />
             <div className="style-summary-next-copy">
-              <small>Recommended next</small>
               <h3
                 style={{
                   margin: "2px 0 6px",
+                  color: "var(--rose-dark)",
                   fontSize: "clamp(30px, 4.5vw, 38px)",
+                  fontWeight: 600,
                   lineHeight: 1.05,
                 }}
               >
