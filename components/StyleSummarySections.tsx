@@ -110,7 +110,7 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
           <ul className="style-summary-item-list">
             {content.items.map((item, index) => (
               <li className="style-summary-item-card" key={index}>
-                <span className="style-summary-item-bullet" aria-hidden="true">·</span>
+                <DecorativeIcon src="/images/shopping-bag.svg" />
                 <div>
                   <h3>{item.itemName}</h3>
                   {details([item.brand, item.color, item.size]) && (
@@ -163,23 +163,10 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
       {content.nextStylingMoment && (
         <section className="style-summary-section style-summary-next">
           <h2>Your Next Styling Moment</h2>
-          <div
-            className="style-summary-next-card"
-            style={{ minHeight: "150px", padding: "24px 22px" }}
-          >
+          <div className="style-summary-next-card">
             <DecorativeIcon src="/images/store-event.png" />
             <div className="style-summary-next-copy">
-              <h3
-                style={{
-                  margin: "2px 0 6px",
-                  color: "var(--rose-dark)",
-                  fontSize: "clamp(30px, 4.5vw, 38px)",
-                  fontWeight: 600,
-                  lineHeight: 1.05,
-                }}
-              >
-                Seasonal Refresh
-              </h3>
+              <h3>Seasonal Refresh</h3>
               <p>Update closet for fall</p>
             </div>
             <div className="style-summary-next-action">
