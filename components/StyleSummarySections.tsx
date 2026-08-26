@@ -69,15 +69,16 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
       </header>
 
       {content.whatWeSolved && (
-        <section className="style-summary-section style-summary-worked-on">
-          <h2>What We Worked On</h2>
-          <ol className="style-summary-formulas" >
-           <span className="style-summary-worked-on-list">
-            <DecorativeIcon src="/images/womens-event.png" /> </span>
-             <p className="style-summary-lede">{content.whatWeSolved}</p>
-          </ol>
-        </section>
-      )}
+  <section className="style-summary-section style-summary-worked-on">
+    <h2>What We Worked On</h2>
+
+    <div className="style-summary-worked-on-card">
+      <DecorativeIcon src="/images/womens-event.png" />
+
+      <strong>{content.whatWeSolved}</strong>
+    </div>
+  </section>
+)}
 
       {content.insights.length > 0 && (
         <section className="style-summary-section style-summary-learned">

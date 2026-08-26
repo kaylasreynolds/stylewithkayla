@@ -115,16 +115,38 @@
   object-fit: contain;
   opacity: .75;
 }
-
-.style-summary-worked-on h2,
-.style-summary-worked-on p {
-  margin: 0;
+.style-summary-worked-on-card {
+  display: flex;
+  min-height: 88px;
+  padding: 15px 22px;
+  align-items: center;
+  gap: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  box-shadow: 0 3px 9px rgba(61, 43, 39, .06);
 }
 
-.style-summary-worked-on p {
-  margin-top: 7px;
+.style-summary-worked-on-card .style-summary-icon {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  border: 1px solid var(--rose);
+  background: var(--blush);
 }
-.style-summary-worked-on-list,
+
+.style-summary-worked-on-card .style-summary-icon img {
+  width: 25px;
+  height: 25px;
+}
+
+.style-summary-worked-on-card strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 23px;
+  font-weight: 500;
+  line-height: 1.25;
+}
 .style-summary-insight-list,
 .style-summary-item-list,
 .style-summary-formulas,
@@ -436,10 +458,14 @@
     gap: 7px 12px;
   }
 
-  .style-summary-worked-on {
-    align-items: flex-start;
-    gap: 17px;
-  }
+ .style-summary-worked-on-card {
+  padding: 13px;
+  gap: 13px;
+}
+
+.style-summary-worked-on-card strong {
+  font-size: 20px;
+}
 
   .style-summary-icon {
     width: 54px;
