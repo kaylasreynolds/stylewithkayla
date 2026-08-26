@@ -107,19 +107,22 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
       {content.items.length > 0 && (
         <section className="style-summary-section style-summary-added">
           <h2>What We Added</h2>
-          <div className="style-summary-item-list">
+          <ul className="style-summary-item-list">
             {content.items.map((item, index) => (
-              <div className="style-summary-item-card" key={index}>
-                <h3>{item.itemName}</h3>
-                {details([item.brand, item.color, item.size]) && (
-                  <p className="style-summary-card-meta">
-                    {details([item.brand, item.color, item.size])}
-                  </p>
-                )}
-                {item.note && <p className="style-summary-item-note">{item.note}</p>}
-              </div>
+              <li className="style-summary-item-card" key={index}>
+                <span className="style-summary-item-bullet" aria-hidden="true">·</span>
+                <div>
+                  <h3>{item.itemName}</h3>
+                  {details([item.brand, item.color, item.size]) && (
+                    <p className="style-summary-card-meta">
+                      {details([item.brand, item.color, item.size])}
+                    </p>
+                  )}
+                  {item.note && <p className="style-summary-item-note">{item.note}</p>}
+                </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       )}
 
@@ -130,8 +133,7 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
             {content.priorities.map((priority, index) => (
               <li key={index}>
                 <span className="style-summary-roadmap-marker" aria-hidden="true">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/images/location.png" alt="" width={34} height={34} />
+                  {index + 1}
                 </span>
                 <div>
                   {priority.category && <small>{priority.category}</small>}
@@ -152,6 +154,9 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
             <h2>A Note From Kayla</h2>
             <p>{content.kaylaNote}</p>
           </div>
+          <span className="style-summary-quote style-summary-quote--closing" aria-hidden="true">
+            ”
+          </span>
         </section>
       )}
 
@@ -161,24 +166,17 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
           <div className="style-summary-next-card">
             <DecorativeIcon src="/images/store-event.png" />
             <div className="style-summary-next-copy">
-              <small>Recommended next</small>
-              {content.nextStylingMoment.serviceType && (
-                <h3>{content.nextStylingMoment.serviceType}</h3>
-              )}
-              {content.nextStylingMoment.timing && (
-                <p className="style-summary-timing">
-                  <strong>Recommended:</strong> {content.nextStylingMoment.timing}
-                </p>
-              )}
-              {content.nextStylingMoment.reason && (
-                <p>{content.nextStylingMoment.reason}</p>
+              <small>Seasonal Refresh</small>
+              <p>Update closet for fall</p>
+            </div>
+            <div className="style-summary-next-action">
+              <p className="style-summary-timing">Suggested booking date: October 2026</p>
+              {content.nextStylingMoment.bookingCtaEnabled && (
+                <Link className="style-summary-booking-link" href="/book">
+                  Book Your Next Appointment
+                </Link>
               )}
             </div>
-            {content.nextStylingMoment.bookingCtaEnabled && (
-              <Link className="style-summary-booking-link" href="/book">
-                Book your next appointment
-              </Link>
-            )}
           </div>
         </section>
       )}
