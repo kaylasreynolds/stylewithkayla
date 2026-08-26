@@ -71,10 +71,11 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
       {content.whatWeSolved && (
         <section className="style-summary-section style-summary-worked-on">
           <h2>What We Worked On</h2>
-           <div className="style-summary-worked-on-list">
-            <DecorativeIcon src="/images/womens-event.png" />
+          <ol className="style-summary-formulas" >
+           <span className="style-summary-worked-on-list">
+            <DecorativeIcon src="/images/womens-event.png" /> </span>
              <p className="style-summary-lede">{content.whatWeSolved}</p>
-          </div>
+          </ol>
         </section>
       )}
 
