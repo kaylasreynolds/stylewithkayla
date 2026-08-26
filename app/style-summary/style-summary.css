@@ -116,14 +116,6 @@
   opacity: .75;
 }
 
-.style-summary-worked-on {
-  display: flex;
-  padding-top: 26px;
-  padding-bottom: 26px;
-  align-items: center;
-  gap: 32px;
-}
-
 .style-summary-worked-on h2,
 .style-summary-worked-on p {
   margin: 0;
