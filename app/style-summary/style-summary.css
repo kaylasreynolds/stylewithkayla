@@ -154,6 +154,7 @@
   margin: 0;
   padding: 0;
   gap: 10px;
+  list-style: none;
 }
 
 .style-summary-insight-grid {
@@ -283,10 +284,20 @@
 }
 
 .style-summary-item-card {
+  display: flex;
   padding: 24px clamp(24px, 7vw, 68px);
+  align-items: flex-start;
+  gap: 16px;
   border: 1px solid color-mix(in srgb, var(--rose) 50%, transparent);
   border-radius: 12px;
   background: color-mix(in srgb, var(--blush) 63%, white);
+}
+
+.style-summary-item-bullet {
+  color: var(--rose-dark);
+  font-family: var(--font-heading);
+  font-size: 34px;
+  line-height: .55;
 }
 
 .style-summary-card-meta,
@@ -324,13 +335,10 @@
   border: 2px solid var(--rose-dark);
   border-radius: 50%;
   background: var(--paper);
-}
-
-.style-summary-roadmap-marker img {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-  opacity: .6;
+  color: var(--rose-dark);
+  font-family: var(--font-heading);
+  font-size: 21px;
+  font-weight: 600;
 }
 
 .style-summary-roadmap > li:not(:last-child)::after {
@@ -353,11 +361,16 @@
   display: grid;
   margin: 16px 6px;
   padding: 27px 28px;
-  grid-template-columns: 62px 1fr;
+  grid-template-columns: 62px 1fr 62px;
   gap: 18px;
   border: 1px solid color-mix(in srgb, var(--rose) 42%, transparent);
   border-radius: 12px;
   background: color-mix(in srgb, var(--blush) 72%, white);
+}
+
+.style-summary-quote--closing {
+  align-self: end;
+  text-align: right;
 }
 
 .style-summary-note h2,
@@ -397,6 +410,12 @@
   flex: 1;
 }
 
+.style-summary-next-copy small {
+  color: var(--rose-dark);
+  font-size: 11px;
+  text-transform: none;
+}
+
 .style-summary-next h3 {
   margin: 1px 0 4px;
   color: var(--ink);
@@ -415,8 +434,17 @@
   line-height: 1.45;
 }
 
-.style-summary-timing strong {
-  color: var(--rose-dark);
+.style-summary-next-action {
+  display: grid;
+  max-width: 245px;
+  justify-items: stretch;
+  gap: 10px;
+  text-align: right;
+}
+
+.style-summary-next-action .style-summary-timing {
+  margin: 0;
+  color: var(--ink);
 }
 
 .style-summary-booking-link {
@@ -541,7 +569,7 @@
   .style-summary-note {
     margin-inline: 0;
     padding: 22px 18px;
-    grid-template-columns: 42px 1fr;
+    grid-template-columns: 32px 1fr 32px;
     gap: 8px;
   }
 
@@ -557,6 +585,12 @@
   .style-summary-next-copy {
     width: calc(100% - 76px);
     flex: none;
+  }
+
+  .style-summary-next-action {
+    width: 100%;
+    max-width: none;
+    text-align: left;
   }
 
   .style-summary-booking-link {
