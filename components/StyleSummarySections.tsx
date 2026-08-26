@@ -166,7 +166,8 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
           <div className="style-summary-next-card">
             <DecorativeIcon src="/images/store-event.png" />
             <div className="style-summary-next-copy">
-              <small>Seasonal Refresh</small>
+              <small>Recommended next</small>
+              <h3>Seasonal Refresh</h3>
               <p>Update closet for fall</p>
             </div>
             <div className="style-summary-next-action">
