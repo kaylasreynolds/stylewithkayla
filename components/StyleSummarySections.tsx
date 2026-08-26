@@ -68,7 +68,7 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
     <h2>What We Accomplished Today</h2>
 
     <div className="style-summary-worked-on-card">
-      <DecorativeIcon src="/images/style-together.png" />
+      <DecorativeIcon src="/images/stars.png" />
 
       <strong>{content.whatWeSolved}</strong>
     </div>
