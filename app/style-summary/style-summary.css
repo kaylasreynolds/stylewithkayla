@@ -16,7 +16,7 @@
 }
 
 .style-summary-eyebrow {
-  margin: 0 0 14px;
+  margin: 14px 0 14px;
   color: var(--rose-dark);
   font-size: 13px;
   font-weight: 600;
@@ -132,7 +132,7 @@
 .style-summary-worked-on p {
   margin-top: 7px;
 }
-
+.style-summary-worked-on-list,
 .style-summary-insight-list,
 .style-summary-item-list,
 .style-summary-formulas,
