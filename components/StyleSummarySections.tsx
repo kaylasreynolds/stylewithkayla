@@ -70,7 +70,7 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
 
       {content.whatWeSolved && (
   <section className="style-summary-section style-summary-worked-on">
-    <h2>What We Worked On</h2>
+    <h2>What We Accomplished Today</h2>
 
     <div className="style-summary-worked-on-card">
       <DecorativeIcon src="/images/womens-event.png" />
@@ -141,7 +141,7 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
 
       {content.priorities.length > 0 && (
         <section className="style-summary-section style-summary-roadmap-section">
-          <h2>Your Wardrobe Roadmap</h2>
+          <h2>Next Priorities</h2>
           <ol className="style-summary-roadmap">
             {content.priorities.map((priority, index) => (
               <li key={index}>
