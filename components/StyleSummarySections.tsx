@@ -110,7 +110,7 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
           <ul className="style-summary-item-list">
             {content.items.map((item, index) => (
               <li className="style-summary-item-card" key={index}>
-                <DecorativeIcon src="/images/shopping-bag.svg" />
+                <DecorativeIcon src="/images/icon-enjoy.png" />
                 <div>
                   <h3>{item.itemName}</h3>
                   {details([item.brand, item.color, item.size]) && (
