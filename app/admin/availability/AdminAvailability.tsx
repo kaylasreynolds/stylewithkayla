@@ -106,6 +106,19 @@ const fmtTime = (value: string) =>
     minute: "2-digit",
   }).format(new Date(value));
 
+function fmtLocalInput(value: string) {
+  if (!value) return "";
+  const [date, time] = value.split("T");
+  const [year, month, day] = date.split("-").map(Number);
+  const [hour, minute] = time.split(":").map(Number);
+  if (![year, month, day, hour, minute].every(Number.isFinite)) return value;
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "UTC",
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(Date.UTC(year, month - 1, day, hour, minute)));
+}
+
 export default function AdminAvailability({ userName, signOutPath }: { userName: string; signOutPath: string }) {
   const [rules, setRules] = useState<Rule[]>([]);
   const [overrides, setOverrides] = useState<Override[]>([]);
@@ -254,19 +267,25 @@ export default function AdminAvailability({ userName, signOutPath }: { userName:
       return;
     }
     try {
+      const savedStart = startsAt;
+      const savedEnd = endsAt;
       const response = await fetch("/api/admin/settings/availability/overrides", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           kind,
-          startsAt: boiseLocalToIso(startsAt),
-          endsAt: boiseLocalToIso(endsAt),
+          startsAt: boiseLocalToIso(savedStart),
+          endsAt: boiseLocalToIso(savedEnd),
           note: note || null,
         }),
       });
       const payload = (await response.json()) as { error?: { message?: string } };
       if (!response.ok) throw new Error(payload.error?.message);
-      setSaved(kind === "unavailable" ? "Blocked time saved. Public appointment availability has been recalculated." : "Added available time saved.");
+      setSaved(
+        kind === "unavailable"
+          ? `Blocked ${fmtLocalInput(savedStart)} to ${fmtLocalInput(savedEnd)} Boise time. Public appointment availability has been recalculated.`
+          : `Added availability from ${fmtLocalInput(savedStart)} to ${fmtLocalInput(savedEnd)} Boise time.`,
+      );
       setStartsAt("");
       setEndsAt("");
       setNote("");
@@ -372,6 +391,13 @@ export default function AdminAvailability({ userName, signOutPath }: { userName:
 
         {blockValidation && <p className="admin-warning" role="alert">{blockValidation}</p>}
 
+        {startsAt && endsAt && !blockValidation && (
+          <div className="availability-preview" aria-live="polite">
+            <strong>{kind === "unavailable" ? "You are blocking" : "You are adding availability"}</strong>
+            <p>{fmtLocalInput(startsAt)} to {fmtLocalInput(endsAt)} · Boise time</p>
+          </div>
+        )}
+
         {kind === "unavailable" && startsAt && endsAt && !blockValidation && (
           <div className="availability-impact" aria-live="polite">
             <strong>Affected public appointments</strong>
@@ -412,6 +438,8 @@ export default function AdminAvailability({ userName, signOutPath }: { userName:
       </section>
 
       <style>{`
+        .availability-preview { margin-top: 18px; padding: 14px 16px; border: 1px solid var(--rose); border-radius: 8px; background: var(--blush); }
+        .availability-preview p { margin: 5px 0 0; font-size: 15px; line-height: 1.45; }
         .availability-impact { margin-top: 18px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: rgba(246, 238, 235, 0.45); }
         .availability-impact > p { margin: 7px 0 0; }
         .availability-impact-list { display: grid; gap: 10px; margin-top: 12px; }
