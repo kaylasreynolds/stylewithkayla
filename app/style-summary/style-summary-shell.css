@@ -1,0 +1,88 @@
+.style-summary-standalone-shell {
+  min-height: 100vh;
+  padding: clamp(34px, 6vw, 72px) 20px;
+  background: color-mix(in srgb, var(--blush) 78%, #f7eeee);
+}
+
+.style-summary-standalone-shell .style-summary-page {
+  width: min(900px, 100%);
+  margin: 0 auto;
+  padding: 0;
+}
+
+.style-summary-standalone-shell .style-summary {
+  padding: clamp(36px, 5.5vw, 62px) clamp(24px, 5vw, 54px) clamp(30px, 5vw, 50px);
+  border: 1px solid color-mix(in srgb, var(--rose) 22%, transparent);
+  border-radius: 22px;
+  background: var(--ivory);
+  box-shadow: 0 22px 60px rgba(91, 58, 60, .10);
+}
+
+.style-summary-standalone-shell .style-summary-state {
+  width: min(760px, 100%);
+  min-height: min(62vh, 520px);
+  margin: 0 auto;
+  padding: 48px 28px;
+  border: 1px solid color-mix(in srgb, var(--rose) 22%, transparent);
+  border-radius: 22px;
+  background: var(--ivory);
+  box-shadow: 0 22px 60px rgba(91, 58, 60, .10);
+}
+
+.recap-preview-admin .style-summary-page {
+  width: min(900px, calc(100% - 40px));
+  margin: 32px auto 64px;
+  padding: 0;
+}
+
+.recap-preview-admin .style-summary-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: color-mix(in srgb, var(--blush) 78%, #f7eeee);
+}
+
+.recap-preview-admin .style-summary-page .style-summary {
+  padding: clamp(36px, 5.5vw, 62px) clamp(24px, 5vw, 54px) clamp(30px, 5vw, 50px);
+  border: 1px solid color-mix(in srgb, var(--rose) 22%, transparent);
+  border-radius: 22px;
+  background: var(--ivory);
+  box-shadow: 0 22px 60px rgba(91, 58, 60, .10);
+}
+
+@media (max-width: 640px) {
+  .style-summary-standalone-shell {
+    padding: 14px 10px 24px;
+  }
+
+  .style-summary-standalone-shell .style-summary-page,
+  .recap-preview-admin .style-summary-page {
+    width: 100%;
+  }
+
+  .style-summary-standalone-shell .style-summary,
+  .recap-preview-admin .style-summary-page .style-summary {
+    padding: 30px 14px 24px;
+    border-radius: 16px;
+  }
+
+  .style-summary-standalone-shell .style-summary-state {
+    min-height: 60vh;
+    padding: 36px 20px;
+    border-radius: 16px;
+  }
+}
+
+@media print {
+  .style-summary-standalone-shell {
+    padding: 0;
+    background: white;
+  }
+
+  .style-summary-standalone-shell .style-summary {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
