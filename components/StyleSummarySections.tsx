@@ -75,12 +75,12 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
   </section>
 )}
 
-      {content.insights.length > 0 && (
+      {(complimentaryInsights.length > 0 || lessFlatteringInsights.length > 0) && (
         <section className="style-summary-section style-summary-learned">
           <h2>What We Learned</h2>
           <div className="style-summary-insight-grid">
-            <InsightCard title="Compliments You" tone="complimentary" insights={complimentaryInsights} />
-            <InsightCard title="Less Flattering" tone="less-flattering" insights={lessFlatteringInsights} />
+            {complimentaryInsights.length > 0 && <InsightCard title="Compliments You" tone="complimentary" insights={complimentaryInsights} />}
+            {lessFlatteringInsights.length > 0 && <InsightCard title="Less Flattering" tone="less-flattering" insights={lessFlatteringInsights} />}
           </div>
         </section>
       )}
@@ -165,11 +165,11 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
           <div className="style-summary-next-card">
             <DecorativeIcon src="/images/store-event.png" />
             <div className="style-summary-next-copy">
-              <h3>Seasonal Refresh</h3>
-              <p>Update closet for fall</p>
+              {content.nextStylingMoment.serviceType && <h3>{content.nextStylingMoment.serviceType}</h3>}
+              {content.nextStylingMoment.reason && <p>{content.nextStylingMoment.reason}</p>}
             </div>
             <div className="style-summary-next-action">
-              <p className="style-summary-timing">Suggested booking date: October 2026</p>
+              {content.nextStylingMoment.timing && <p className="style-summary-timing">{content.nextStylingMoment.timing}</p>}
               {content.nextStylingMoment.bookingCtaEnabled && (
                 <Link className="style-summary-booking-link" href="/book">
                   Book Your Next Appointment
