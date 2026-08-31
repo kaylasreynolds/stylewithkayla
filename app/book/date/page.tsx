@@ -226,14 +226,14 @@ export default function SingleDateBookingPage() {
     return (
       <main className={styles.page}>
         <header className={styles.header}>
-          <a href="https://stylewithkayla.com/" className={styles.backLink}> ← Back to website </a>
+          <a href="https://stylewithkayla.com/index.html" className={styles.backLink}> ← Back to website </a>
           <div className={styles.wordmark}>STYLE <span>WITH KAYLA</span><em>Personal Stylist</em></div>
           <span />
         </header>
         <section className={styles.success}>
           <div className={styles.successMark}>✓</div>
           <p className={styles.kicker}>REQUEST RECEIVED</p>
-          <h1>You're all set for review.</h1>
+          <h1>You're request is being reviewed.</h1>
           <p>Your request for <strong>{readableDate(selectedDate)}</strong> at <strong>{timeLabel(selectedTime)}</strong> has been sent to Kayla.</p>
           <div className={styles.reviewCard}>
             <div><span>Service</span><strong>{selectedService.name}</strong></div>
