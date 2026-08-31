@@ -226,7 +226,7 @@ export default function SingleDateBookingPage() {
     return (
       <main className={styles.page}>
         <header className={styles.header}>
-          <Link href="/" className={styles.backLink}>← Home</Link>
+          <Link href="/index.html" className={styles.backLink}> ← Back to website </Link>
           <div className={styles.wordmark}>STYLE <span>WITH KAYLA</span><em>Personal Stylist</em></div>
           <span />
         </header>
