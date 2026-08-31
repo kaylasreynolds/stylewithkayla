@@ -233,7 +233,7 @@ export default function SingleDateBookingPage() {
         <section className={styles.success}>
           <div className={styles.successMark}>✓</div>
           <p className={styles.kicker}>REQUEST RECEIVED</p>
-          <h1>You're request is being reviewed.</h1>
+          <h1>Your request is being reviewed.</h1>
           <p>Your request for <strong>{readableDate(selectedDate)}</strong> at <strong>{timeLabel(selectedTime)}</strong> has been sent to Kayla.</p>
           <div className={styles.reviewCard}>
             <div><span>Service</span><strong>{selectedService.name}</strong></div>
