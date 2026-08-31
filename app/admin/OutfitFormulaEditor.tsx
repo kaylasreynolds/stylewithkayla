@@ -19,6 +19,7 @@ export function OutfitFormulaEditor({ formulas, onChange }: { formulas: OutfitFo
   return (
     <fieldset className="recap-formula-editor">
       <legend>Outfit Formulas</legend>
+      <p>Up to 8 formulas may be saved; only the first 4 show in the client Style Summary.</p>
       {formulas.map((formula, index) => (
         <div className="recap-repeat-row recap-formula-row" key={formula.id ?? index}>
           <label>Title<input maxLength={200} value={formula.title} onChange={event => update(index, { title: event.target.value })} /></label>
@@ -32,7 +33,7 @@ export function OutfitFormulaEditor({ formulas, onChange }: { formulas: OutfitFo
           </div>
         </div>
       ))}
-      <details className="recap-formula-picker" ref={picker}>
+      {formulas.length < 8 && <details className="recap-formula-picker" ref={picker}>
         <summary>Add Formula</summary>
         <div className="recap-formula-picker-panel">
           {OUTFIT_FORMULA_PRESET_GROUPS.map(group => (
@@ -45,7 +46,7 @@ export function OutfitFormulaEditor({ formulas, onChange }: { formulas: OutfitFo
           ))}
           <button className="recap-formula-custom" type="button" onClick={() => add(blankOutfitFormula())}>+ Create Custom Formula</button>
         </div>
-      </details>
+      </details>}
     </fieldset>
   );
 }

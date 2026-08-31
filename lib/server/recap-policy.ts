@@ -44,7 +44,7 @@ export function buildRecapSummaryContent(
       equation: text(row.equation) || text(row.formulaText),
       whyItWorks: text(row.whyItWorks) || text(row.explanation),
       try: text(row.tryText) || text(row.try),
-    })).filter(formula => formula.title || formula.equation || formula.whyItWorks || formula.try),
+    })).filter(formula => formula.title || formula.equation || formula.whyItWorks || formula.try).slice(0, 4),
     items: items.filter(row => Boolean(row.clientFacing) && text(row.itemName)).map(row => ({ itemName: text(row.itemName)!, brand: text(row.brand), size: text(row.size), color: text(row.color), note: text(row.note) })),
     priorities: [...priorities].filter(row => Boolean(row.clientFacing) && text(row.priorityText)).sort((a, b) => Number(a.rank ?? 0) - Number(b.rank ?? 0)).map(row => ({ priorityText: text(row.priorityText)!, category: text(row.category) })),
     kaylaNote: text(recap.kaylaNote),

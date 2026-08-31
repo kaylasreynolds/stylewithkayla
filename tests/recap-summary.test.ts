@@ -15,6 +15,8 @@ const baseline = readFileSync(new URL("../drizzle/0000_silent_ser_duncan.sql", i
 const migration = readFileSync(new URL("../drizzle/20260823032130_appointment_recap_data_layer.sql", import.meta.url), "utf8");
 const publishRoute = readFileSync(new URL("../app/api/admin/bookings/[bookingId]/recap/publish/route.ts", import.meta.url), "utf8");
 const publicRoute = readFileSync(new URL("../app/api/style-summary/[token]/route.ts", import.meta.url), "utf8");
+const recapRoute = readFileSync(new URL("../app/api/admin/bookings/[bookingId]/recap/route.ts", import.meta.url), "utf8");
+const privatePage = readFileSync(new URL("../app/style-summary/[token]/page.tsx", import.meta.url), "utf8");
 
 function apply(db: DatabaseSync, sql: string) { for (const statement of sql.split("--> statement-breakpoint").map(value => value.trim()).filter(Boolean)) db.exec(statement); }
 function fixture() {
@@ -127,6 +129,21 @@ test("new outfit formula fields render in order while empty fields are omitted",
   assert.doesNotMatch(markup, /style-summary-index|Formula 1|Formula 2/);
 });
 
+test("client summary preserves saved formula order and displays only the first four", () => {
+  const formulas = Array.from({ length: 6 }, (_, index) => ({ title: `Formula ${index + 1}`, equation: `Equation ${index + 1}`, whyItWorks: null, tryText: null }));
+  const content = buildRecapSummaryContent({}, [], [], formulas, [], { fullName: "Jamie" }, {}, { name: "Styling" });
+  assert.deepEqual(content.formulas.map(formula => formula.title), ["Formula 1", "Formula 2", "Formula 3", "Formula 4"]);
+});
+
+test("recap API enforces eight formulas and private page loads frozen content on the server", () => {
+  assert.match(recapRoute, /formulas\.length\s*>\s*8/);
+  assert.match(privatePage, /requireRecapSummaryAccess\(token\)/);
+  assert.match(privatePage, /SELECT content FROM recap_summaries/);
+  assert.match(privatePage, /StyleSummarySections content=\{result\.content\}/);
+  assert.match(privatePage, /dynamic = "force-dynamic"/);
+  assert.doesNotMatch(privatePage, /fetch\(/);
+});
+
 test("what we learned renders equal polarity cards with category icons", () => {
   const { db, service } = fixture();
   db.prepare("UPDATE recap_insights SET client_facing=1 WHERE id='private-insight'").run();
@@ -138,4 +155,13 @@ test("what we learned renders equal polarity cards with category icons", () => {
   assert.match(markup, /src="\/images\/pantone\.png"/);
   assert.match(markup, /src="\/images\/measurement\.png"/);
   assert.match(markup, /COLOR<\/strong><span[^>]*> – <\/span>Emerald brightens your palette/i);
+});
+
+test("what we learned omits an empty polarity card and next styling moment uses saved content", () => {
+  const { db, service } = fixture();
+  const markup = renderToStaticMarkup(createElement(StyleSummarySections, { content: liveContent(db, service.name) }));
+  assert.match(markup, /Compliments You/);
+  assert.doesNotMatch(markup, /Less Flattering/);
+  for (const value of ["Closet Edit", "Build on today’s versatile foundation", "This fall"]) assert.match(markup, new RegExp(value));
+  for (const hardcoded of ["Seasonal Refresh", "Update closet for fall", "October 2026"]) assert.doesNotMatch(markup, new RegExp(hardcoded));
 });
