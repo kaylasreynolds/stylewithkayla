@@ -510,6 +510,21 @@ textarea { resize:vertical; }
 .recap-repeat-row > label {align-self: center;}
 .recap-repeat-row > button { width:max-content; max-width:100%; align-self:center; justify-self:start; white-space:normal; }
 .recap-repeat-row.client-emphasis { border-left: 4px solid #8d6948; }
+.recap-formula-row { grid-template-columns:minmax(0,1fr); }
+.recap-formula-row > label { width:100%; }
+.recap-formula-row textarea { width:100%; min-width:0; resize:vertical; }
+.recap-formula-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.recap-formula-picker { position:relative; margin-top:.75rem; }
+.recap-formula-picker > summary { display:inline-block; border:1px solid var(--line); border-radius:5px; background:#fff; padding:11px 16px; cursor:pointer; }
+.recap-formula-picker > summary::-webkit-details-marker { display:none; }
+.recap-formula-picker-panel { display:grid; gap:16px; width:min(100%,620px); margin-top:10px; padding:16px; box-sizing:border-box; border:1px solid #d8d0c6; border-radius:6px; background:#fff; }
+.recap-formula-picker-panel section { min-width:0; }
+.recap-formula-picker-panel h4 { margin:0 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
+.recap-formula-preset-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr)); gap:8px; }
+.recap-formula-preset-list button { width:100%; min-width:0; text-align:left; white-space:normal; }
+.recap-formula-custom { justify-self:start; color:var(--rose-dark); font-weight:700; white-space:normal!important; }
+.recap-wrap-up button:focus-visible,.recap-formula-picker > summary:focus-visible { outline:3px solid #b9506b55; outline-offset:2px; }
+.recap-wrap-up button:disabled { cursor:not-allowed; opacity:.5; }
 .private-recap-note { display:grid; width:100%; background:#fff3d8; border:1px solid #d9b96f; padding:1rem; }
 .recap-wrap-up > .recap-action-row { display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-end; gap:8px; margin-top: .25rem; }
 .recap-action-row > button, .recap-preview-button { width:auto; min-width:0; min-height:0; align-self:center; padding:11px 16px; border:1px solid var(--line); border-radius:5px; background:white; color:var(--rose-dark); font:inherit; font-size:12px; line-height:normal; text-align:center; text-decoration:none; white-space:nowrap; }

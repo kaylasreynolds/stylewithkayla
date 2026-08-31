@@ -88,19 +88,18 @@ export function StyleSummarySections({ content }: { content: RecapSummaryContent
       {content.formulas.length > 0 && (
         <section className="style-summary-section style-summary-formula-section">
           <h2>Your Outfit Formulas</h2>
-          <ol className="style-summary-formulas">
+          <ul className="style-summary-formulas">
             {content.formulas.map((formula, index) => (
               <li key={index}>
-                <span className="style-summary-index" aria-hidden="true">
-                  {index + 1}
-                </span>
                 <div>
-                  <strong>{formula.formulaText}</strong>
-                  {formula.explanation && <p>{formula.explanation}</p>}
+                  {formula.title && <h3>{formula.title}</h3>}
+                  {formula.equation && <p className="style-summary-formula-equation">{formula.equation}</p>}
+                  {formula.whyItWorks && <p>{formula.whyItWorks}</p>}
+                  {formula.try && <p className="style-summary-formula-try"><strong>Try:</strong> {formula.try}</p>}
                 </div>
               </li>
             ))}
-          </ol>
+          </ul>
         </section>
       )}
 
