@@ -1,5 +1,3 @@
-export const RECAP_SUMMARY_TOKEN_TTL_MS = 180 * 24 * 60 * 60 * 1000;
-
 export type RecapSummaryContent = {
   client: { firstName: string; appointmentDate: string | null; serviceName: string };
   whatWeSolved: string | null;

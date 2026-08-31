@@ -15,6 +15,13 @@
       "when": 1787455290177,
       "tag": "20260823032130_appointment_recap_data_layer",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1788177600000,
+      "tag": "20260831120000_recap_summary_canonical_token",
+      "breakpoints": true
     }
   ]
 }
