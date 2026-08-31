@@ -39,3 +39,13 @@ test("client action pages bypass image optimization and nonessential sticky capt
   assert.match(css, /\.client-action-shell \.site-header \{ position:static; \}/);
   assert.match(css, /\.profile-welcome \{ position:static; \}/);
 });
+
+test("manage appointment actions are consolidated in the compact modal", async () => {
+  const source = await readFile(new URL("../app/manage/ManageAppointment.tsx", import.meta.url), "utf8");
+  assert.match(source, /aria-labelledby="manage-dialog-title"/);
+  assert.match(source, />Manage Appointment<\/button>/);
+  assert.match(source, /<strong>Request a New Time<\/strong>/);
+  assert.match(source, /<strong>Cancel Appointment<\/strong>/);
+  assert.match(source, /window\.confirm\("Are you sure you want to cancel this appointment\?"\)/);
+  assert.doesNotMatch(source, /View Appointment Details|className="action-card"|className="details-dialog"/);
+});
