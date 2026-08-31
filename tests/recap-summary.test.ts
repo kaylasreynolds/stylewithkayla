@@ -106,11 +106,25 @@ test("summary rendering preserves links, signature, semantics, and repeated cont
   for (const text of ["Emerald brightens your palette", "Rose is another favorite", "Blazer + tee + trouser", "Dress + flats", "Add a neutral shoe", "Tailor the trousers"]) {
     assert.match(markup, new RegExp(text.replaceAll("+", "\\+")));
   }
-  assert.match(markup, /<ol class="style-summary-formulas"/);
+  assert.match(markup, /<ul class="style-summary-formulas"/);
+  assert.doesNotMatch(markup, /style-summary-index/);
   assert.match(markup, /<ol class="style-summary-roadmap"/);
   assert.match(markup, /href="\/book"/);
   assert.match(markup, /src="\/images\/kayla-bl\.png"/);
   assert.match(markup, /See you soon,/);
+});
+
+test("new outfit formula fields render in order while empty fields are omitted", () => {
+  const formulas = [
+    { title: "Elevated Denim", equation: "Top + Denim + Shoe", whyItWorks: "Comfort with polish.", tryText: "Jeans and loafers." },
+    { title: "Custom", equation: "Dress + Flats", whyItWorks: "", tryText: "" },
+  ];
+  const content = buildRecapSummaryContent({}, [], [], formulas, [], { fullName: "Jamie" }, {}, { name: "Styling" });
+  const markup = renderToStaticMarkup(createElement(StyleSummarySections, { content }));
+  assert.ok(markup.indexOf("Elevated Denim") < markup.indexOf("Custom"));
+  for (const value of ["Top + Denim + Shoe", "Comfort with polish.", "Try:</strong> Jeans and loafers.", "Dress + Flats"]) assert.match(markup, new RegExp(value.replaceAll("+", "\\+")));
+  assert.equal((markup.match(/Try:<\/strong>/g) ?? []).length, 1);
+  assert.doesNotMatch(markup, /style-summary-index|Formula 1|Formula 2/);
 });
 
 test("what we learned renders equal polarity cards with category icons", () => {

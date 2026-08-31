@@ -8,7 +8,7 @@ export async function loadRecapSummarySource(db: D1Database, bookingId: string) 
   const [insights, items, formulas, priorities] = await Promise.all([
     db.prepare(`SELECT polarity,category,insight_text AS insightText,client_facing AS clientFacing FROM recap_insights WHERE recap_id=? ORDER BY sort_order`).bind(base.recapId).all<Row>(),
     db.prepare(`SELECT item_name AS itemName,brand,size,color,note,client_facing AS clientFacing FROM recap_items WHERE recap_id=? ORDER BY sort_order`).bind(base.recapId).all<Row>(),
-    db.prepare(`SELECT formula_text AS formulaText,explanation FROM recap_formulas WHERE recap_id=? ORDER BY sort_order`).bind(base.recapId).all<Row>(),
+    db.prepare(`SELECT formula_text AS formulaText,explanation,title,equation,why_it_works AS whyItWorks,try_text AS tryText FROM recap_formulas WHERE recap_id=? ORDER BY sort_order`).bind(base.recapId).all<Row>(),
     db.prepare(`SELECT category,priority_text AS priorityText,rank,client_facing AS clientFacing FROM recap_priorities WHERE recap_id=? ORDER BY rank`).bind(base.recapId).all<Row>(),
   ]);
   const recap: Row = { ...base, nextMomentBookingCtaEnabled: Boolean(base.nextMomentBookingCtaEnabled) };

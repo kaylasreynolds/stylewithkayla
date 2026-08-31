@@ -253,36 +253,32 @@
   min-height: 88px;
   padding: 15px 22px;
   align-items: flex-start;
-  gap: 20px;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--paper);
   box-shadow: 0 3px 9px rgba(61, 43, 39, .06);
 }
 
-.style-summary-index {
-  display: grid;
-  width: 40px;
-  height: 40px;
-  flex: 0 0 40px;
-  place-items: center;
-  border: 1px solid var(--rose);
-  border-radius: 50%;
-  background: var(--blush);
-  color: var(--rose-dark);
-  font-family: var(--font-body);
-  font-size: 16px;
-  font-weight: 700;
-  font-variant-numeric: lining-nums tabular-nums;
-}
-
-.style-summary-formulas strong,
+.style-summary-formulas h3,
 .style-summary-roadmap strong {
   display: block;
   font-family: var(--font-heading);
   font-size: 23px;
   font-weight: 500;
   line-height: 1.25;
+}
+
+.style-summary-formulas h3 { margin: 0; }
+
+.style-summary-formulas .style-summary-formula-equation {
+  font-weight: 700;
+}
+
+.style-summary-formulas .style-summary-formula-try strong {
+  display: inline;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 700;
 }
 
 .style-summary-formulas p {
@@ -553,7 +549,7 @@
     flex-basis: 40px;
   }
 
-  .style-summary-formulas strong,
+  .style-summary-formulas h3,
   .style-summary-roadmap strong {
     font-size: 20px;
   }
