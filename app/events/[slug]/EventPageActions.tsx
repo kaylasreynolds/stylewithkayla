@@ -4,10 +4,11 @@ import { FormEvent, useRef, useState } from "react";
 import {
   isRegisterableEvent,
   registrationAvailability,
+  type PublicRegistrationEvent,
 } from "@/lib/event-rsvp-state";
 import styles from "./event-page.module.css";
 
-type EventData = Record<string, unknown> & {
+type EventData = Record<string, unknown> & PublicRegistrationEvent & {
   id?: unknown;
   slug?: unknown;
   ctaAction?: unknown;
@@ -94,7 +95,14 @@ export default function EventPageActions({
         )}`,
       );
 
-      const body = await response.json();
+      const body = await response.json() as {
+        data?: {
+          event?: EventData;
+        };
+        error?: {
+          message?: string;
+        };
+      };
 
       if (!response.ok) {
         setMessage(
@@ -104,6 +112,12 @@ export default function EventPageActions({
         return;
       }
 
+      if (!body.data?.event) {
+        setMessage(
+          "Registration options could not be loaded.",
+        );
+        return;
+      }
       setDetail(body.data.event);
       setMessage("");
     } catch {
@@ -160,7 +174,16 @@ export default function EventPageActions({
         },
       );
 
-      const body = await response.json();
+      const body = await response.json() as {
+        data?: {
+          registration?: {
+            partySize?: number;
+          };
+        };
+        error?: {
+          message?: string;
+        };
+      };
 
       if (!response.ok) {
         setMessage(
@@ -170,18 +193,22 @@ export default function EventPageActions({
         return;
       }
 
-      setPartySize(
-        Number(
-          body.data.registration.partySize,
-        ),
-      );
+      const savedPartySize =
+        body.data?.registration?.partySize;
+      if (typeof savedPartySize !== "number") {
+        setMessage(
+          "We could not complete registration.",
+        );
+        return;
+      }
 
+      setPartySize(savedPartySize);
       setMessage("");
-    } catch {
+        } catch {
       setMessage(
-        "We could not complete registration.",
+           "We could not complete registration.",
       );
-    } finally {
+        } finally {
       setSubmitting(false);
     }
   }
@@ -195,26 +222,16 @@ export default function EventPageActions({
   }
 
   async function copyUrl(url: string) {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(
-        url,
-      );
-      return;
-    }
-
-    const input =
-      document.createElement("textarea");
-
-    input.value = url;
-    input.setAttribute("readonly", "");
-    input.style.position = "fixed";
-    input.style.opacity = "0";
-
-    document.body.append(input);
-    input.select();
-    document.execCommand("copy");
-    input.remove();
+  if (!navigator.clipboard?.writeText) {
+    throw new Error(
+      "Clipboard is not available.",
+    );
   }
+
+  await navigator.clipboard.writeText(
+    url,
+  );
+}
 
   async function share() {
     const url = `${location.origin}/events/${event.slug}`;
@@ -540,4 +557,4 @@ export default function EventPageActions({
       </dialog>
     </section>
   );
-}
+  }
