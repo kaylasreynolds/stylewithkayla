@@ -374,7 +374,7 @@ export default function EventPageActions({
               <p>
   {partySize === 1
     ? `Your spot is saved for ${String(event.title)}.`
-    : `Your spot plus ${partySize - 1} guest${partySize - 1 === 1 ? "" : "s"} ${partySize - 1 === 1 ? "is" : "are"} saved for ${String(event.title)}.`}
+    : `Your spots are saved for ${String(event.title)}.`}
 </p>
 
               <button
@@ -434,14 +434,12 @@ export default function EventPageActions({
                     detail.maxGuests,
                   ) > 0 && (
                     <label>
-                      Number of guests
+                      Additional guests
                       <input
                         name="guestCount"
                         type="number"
                         min="0"
-                        max={Number(
-                          detail.maxGuests,
-                        )}
+                        max="1"
                         defaultValue="0"
                       />
                     </label>
