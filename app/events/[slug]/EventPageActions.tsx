@@ -338,6 +338,11 @@ export default function EventPageActions({
         className={styles.dialog}
         aria-labelledby="event-rsvp-title"
         onClose={resetRegistration}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) {
+            dialog.current?.close();
+          }
+        }}  
       >
         <form
           ref={form}

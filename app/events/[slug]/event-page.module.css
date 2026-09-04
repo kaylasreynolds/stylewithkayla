@@ -28,9 +28,10 @@
 .primary:disabled{opacity:.55}
 .secondary{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .secondary a,.secondary button{min-height:48px;display:flex;align-items:center;justify-content:center;border:1px solid #d7c9c3;border-radius:8px;background:#fffefd;color:#574d49;text-decoration:none;font:600 14px Inter,Arial,sans-serif;cursor:pointer}
-.dialog{width:min(calc(100% - 28px),520px);max-height:calc(100vh - 40px);padding:0;border:1px solid #dfd1cb;border-radius:14px;background:#fffefd;color:#25211f}
+.dialog{width:min(calc(100% - 28px),520px);max-height:calc(100vh - 40px);padding:0;border:1px solid #dfd1cb;border-radius:14px;background:#fffefd;color:#25211f; position: fixed; inset:50% auto auto 50%; transform:translate(-50%,-50%);margin:0;}
 .dialog::backdrop{background:#21191699}
-.dialog form{position:relative;padding:28px;display:grid;gap:14px}
+.dialog form{position:relative;padding:28px;display:grid;gap:14px; max-height:calc(100vh - 40px); overflow-y:auto;}
+.dialog[open]{display:block;}
 .close{position:absolute;right:14px;top:10px;border:0;background:transparent;font-size:30px;cursor:pointer}
 .form{display:grid;gap:13px}
 .form label{display:grid;gap:6px;font-size:12px;font-weight:700}
