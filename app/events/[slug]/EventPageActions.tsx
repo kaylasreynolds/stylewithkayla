@@ -372,13 +372,10 @@ export default function EventPageActions({
               </h2>
 
               <p>
-                We saved {partySize} spot
-                {partySize === 1
-                  ? ""
-                  : "s"}{" "}
-                for{" "}
-                {String(event.title)}.
-              </p>
+  {partySize === 1
+    ? `Your spot is saved for ${String(event.title)}.`
+    : `Your spot plus ${partySize - 1} guest${partySize - 1 === 1 ? "" : "s"} ${partySize - 1 === 1 ? "is" : "are"} saved for ${String(event.title)}.`}
+</p>
 
               <button
                 className={
