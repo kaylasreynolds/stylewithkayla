@@ -76,8 +76,8 @@ function buildCancellationHtml(input: AppointmentCancellationEmailInput) {
       <table role="presentation" width="620" cellspacing="0" cellpadding="0" border="0" style="width:620px;max-width:620px;background:#fffdfb;border:1px solid #ded4ce;text-align:center;">
         <tr><td align="center" style="padding:6px 18px;background:#111111;"><img src="${logoUrl}" width="190" alt="Style with Kayla" style="display:block;width:190px;max-width:70%;height:auto;margin:0 auto;border:0;"></td></tr>
         <tr><td style="padding:38px 30px 10px;">
-          <p style="margin:0 0 12px;color:#cf647e;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;">Appointment cancelled</p>
-          <h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:500;line-height:1.15;">Your appointment has been cancelled</h1>
+          <p style="margin:0 0 12px;color:#cf647e;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;">Appointment Update</p>
+          <h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:29px;font-weight:500;line-height:1.15;white-space:nowrap;">Your appointment has been cancelled</h1>
         </td></tr>
         <tr><td style="padding:24px 34px 26px;font-size:15px;line-height:1.65;">
           <p style="margin:0 0 18px;">Hi ${htmlEscape(input.guestName)},</p>
