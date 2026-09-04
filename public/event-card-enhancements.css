@@ -302,6 +302,8 @@ body.event-details-open {
   border-top: 1px solid var(--color-divider);
 }
 
+.event-details-dialog__full{grid-column:1/-1;justify-self:center;color:#a95265;font-size:.88rem;font-weight:700;text-underline-offset:4px}.event-details-dialog__full:focus-visible{outline:3px solid #cf8c9366;outline-offset:3px}
+
 .event-details-dialog__primary,
 .event-details-dialog__done {
   min-height: 50px;

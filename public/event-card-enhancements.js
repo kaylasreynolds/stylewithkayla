@@ -85,6 +85,7 @@
       <h2 class="event-details-dialog__title"></h2>
       <div class="event-details-dialog__body"></div>
       <div class="event-details-dialog__actions">
+        <a class="event-details-dialog__full" hidden>View Full Event →</a>
         <button class="event-details-dialog__primary" type="button"></button>
         <button class="event-details-dialog__done" type="button">Close</button>
       </div>
@@ -95,6 +96,7 @@
   const closeButton = dialog.querySelector(".event-details-dialog__close");
   const doneButton = dialog.querySelector(".event-details-dialog__done");
   const primaryButton = dialog.querySelector(".event-details-dialog__primary");
+  const fullEventLink = dialog.querySelector(".event-details-dialog__full");
   const title = dialog.querySelector(".event-details-dialog__title");
   const body = dialog.querySelector(".event-details-dialog__body");
 
@@ -128,6 +130,8 @@
     body.innerHTML = details;
     primaryButton.textContent = primaryAction?.textContent?.trim() || event?.ctaLabel || "Learn More";
     primaryButton.hidden = !primaryAction || primaryAction.disabled;
+    fullEventLink.hidden = !event?.slug;
+    if (event?.slug) fullEventLink.href = `/events/${encodeURIComponent(event.slug)}`;
     document.body.classList.add("event-details-open");
     dialog.showModal();
     closeButton.focus();

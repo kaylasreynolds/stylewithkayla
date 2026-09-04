@@ -11,6 +11,7 @@ import { eventDateToPickerValue, formatEventSchedule, isValidEventDate, pickerVa
 import { buildEventPayload, defaultEventCostLabel, EventSubmissionGuard, eventImageFileError, eventImageUploadForm, hasEventOffer, isUploadedEventImage, readUploadResponse, withoutEventOffer } from "@/lib/event-editor-client";
 import { formatImageBytes, optimizeEventImage } from "@/lib/event-image-optimizer";
 import { CURRENT_ATTENDANCE_OPTIONS, CURRENT_EVENT_LABELS } from "@/lib/event-presentation";
+import { eventSlugError, eventSlugSuggestion, shouldRefreshSuggestedSlug } from "@/lib/event-slug";
 import { PublicEventCard } from "@/components/PublicEventCard";
 type EventRow = {
   id: string;
@@ -76,10 +77,10 @@ async function api<T>(
 const labels=CURRENT_EVENT_LABELS;
 const attendance=CURRENT_ATTENDANCE_OPTIONS;
 const actions=[['registration','Event registration form'],['appointment','Appointment selection'],['interest_list','Interest-list form'],['external_url','External URL'],['email','Email'],['phone','Phone'],['information','Information-only detail view'],['add_to_calendar','Add to calendar'],['none','No CTA']];
-const blank:Record<string,unknown>={title:'',eventLabel:'',customLabel:'',shortDescription:'',description:'',offer:'',offerDetails:'',offerTerms:'',eventDate:'',startTime:'',endTime:'',allDay:false,timezone:'America/Boise',location:'',locationDetails:'',directionsUrl:'',attendanceType:'',capacity:null,unlimitedCapacity:false,maxGuests:0,allowGuestNames:false,registrationOpensDate:'',registrationOpensTime:'',registrationClosesDate:'',registrationClosesTime:'',allowDuplicateRegistration:false,appointmentRequired:false,appointmentRecommended:false,costType:'complimentary',costLabel:'',ctaLabel:'',ctaAction:'',ctaUrl:'',ctaEmail:'',ctaPhone:'',sharingEnabled:true,shareMessage:'',imageAssetId:null,imageAlt:'',status:'draft'};
+const blank:Record<string,unknown>={title:'',slug:'',eventLabel:'',customLabel:'',shortDescription:'',description:'',offer:'',offerDetails:'',offerTerms:'',eventDate:'',startTime:'',endTime:'',allDay:false,timezone:'America/Boise',location:'',locationDetails:'',directionsUrl:'',attendanceType:'',capacity:null,unlimitedCapacity:false,maxGuests:0,allowGuestNames:false,registrationOpensDate:'',registrationOpensTime:'',registrationClosesDate:'',registrationClosesTime:'',allowDuplicateRegistration:false,appointmentRequired:false,appointmentRecommended:false,costType:'complimentary',costLabel:'',ctaLabel:'',ctaAction:'',ctaUrl:'',ctaEmail:'',ctaPhone:'',sharingEnabled:true,shareMessage:'',imageAssetId:null,imageAlt:'',status:'draft'};
 export function EventEditor({eventId}:{eventId?:string}){
  const[form,setForm]=useState<Record<string,unknown>>(blank),[loaded,setLoaded]=useState(!eventId),[dirty,setDirty]=useState(false),[error,setError]=useState(''),[errors,setErrors]=useState<Record<string,string>>({}),[progress,setProgress]=useState<number|null>(null),[imageStatus,setImageStatus]=useState<'idle'|'optimizing'|'uploading'|'uploaded'|'failed'>('idle'),[imageError,setImageError]=useState(''),[imageSizes,setImageSizes]=useState<{original:number;optimized:number}|null>(null),[localPreview,setLocalPreview]=useState(''),[asset,setAsset]=useState<{id:string;previewUrl:string;width:number;height:number;sizeBytes:number}|null>(null),[saving,setSaving]=useState(false),[pickerDate,setPickerDate]=useState(''),[offerOpen,setOfferOpen]=useState(false);
- const pickerRef=useRef<HTMLInputElement|null>(null),costLabels=useRef<Record<string,string>>({complimentary:'Complimentary'}),uploadSequence=useRef(0);
+ const slugCustomized=useRef(false),previousSlugSuggestion=useRef(''),pickerRef=useRef<HTMLInputElement|null>(null),costLabels=useRef<Record<string,string>>({complimentary:'Complimentary'}),uploadSequence=useRef(0);
  const [submissionGuard] = useState(() => new EventSubmissionGuard(eventId));
 useEffect(() => {
   if (!eventId) return;
@@ -94,6 +95,8 @@ useEffect(() => {
         ...blank,
         ...e,
       });
+      slugCustomized.current = Boolean(e.slug);
+      previousSlugSuggestion.current = String(e.slug ?? "");
       const loadedPickerDate = eventDateToPickerValue(e.eventDate);
       if (loadedPickerDate) setPickerDate(loadedPickerDate);
       setOfferOpen(hasEventOffer(e));
@@ -119,6 +122,16 @@ useEffect(() => {
       );
     });
 }, [eventId]);
+useEffect(() => {
+  if (eventId || !loaded) return;
+  const suggestion = eventSlugSuggestion(form.title, form.eventDate);
+  const current = String(form.slug ?? "");
+  if (suggestion && shouldRefreshSuggestedSlug(current, previousSlugSuggestion.current, slugCustomized.current)) {
+    previousSlugSuggestion.current = suggestion;
+    setForm(value => ({ ...value, slug: suggestion }));
+  }
+}, [eventId, form.title, form.eventDate, form.slug, loaded]);
+
 useEffect(() => {
   const warn = (event: BeforeUnloadEvent) => {
     if (!dirty) return;
@@ -303,7 +316,7 @@ async function submit(publish = false) {
 ['CTA configuration',form.ctaAction==='none'||!!form.ctaAction&&!!form.ctaLabel]] as const;
  return <Shell title={eventId?'Edit event':'Create event'} actions={<Link href="/admin/events" className="event-button event-button--secondary">Return to Events</Link>}>
   {error&&<p className="event-alert" role="alert">{error}</p>}<form className="event-form event-editor" onSubmit={e=>{e.preventDefault();submit(false)}} noValidate>
-  <fieldset><legend>1. Event Basics</legend><p className="event-section-help">Introduce the event on its public card and detail experience.</p><div className="event-form-grid">{field('title','Event title',{maxLength:160})}<label>Event label/type<select value={String(form.eventLabel)} onChange={e=>set('eventLabel',e.target.value)} aria-invalid={!!errors.eventLabel}><option value="">Choose a label</option>{Boolean(form.eventLabel)&&!labels.includes(form.eventLabel as typeof labels[number])&&<option value={String(form.eventLabel)} disabled>Legacy: {String(form.eventLabel)} — choose a current label</option>}{labels.map(x=><option key={x}>{x}</option>)}</select>{errors.eventLabel&&<small className="event-field-error">{errors.eventLabel}</small>}</label>{form.eventLabel==='Custom'&&field('customLabel','Custom label',{maxLength:80,required:true})}<div className="event-span">{text('shortDescription','Short card description',3,320)}</div><div className="event-span">{text('description','Full event description',7,5000)}</div></div></fieldset>
+  <fieldset><legend>1. Event Basics</legend><p className="event-section-help">Introduce the event on its public card and detail experience.</p><div className="event-form-grid">{field('title','Event title',{maxLength:160})}<div className="event-span event-public-url"><label>Public URL<span className="event-url-control"><span>stylewithkayla.com/events/</span><input name="slug" value={String(form.slug??"")} maxLength={180} autoCapitalize="none" spellCheck={false} aria-invalid={!!errors.slug} onChange={e=>{slugCustomized.current=true;set("slug",e.target.value)}} /></span><small>{form.status==='published'?"Changing this may break links you’ve already shared.":"Customize this if you’d like. This will become the public event link."}</small>{eventSlugError(form.slug)&&!errors.slug&&<small className="event-field-error">{eventSlugError(form.slug)}</small>}{errors.slug&&<small className="event-field-error">{errors.slug}</small>}</label></div><label>Event label/type<select value={String(form.eventLabel)} onChange={e=>set('eventLabel',e.target.value)} aria-invalid={!!errors.eventLabel}><option value="">Choose a label</option>{Boolean(form.eventLabel)&&!labels.includes(form.eventLabel as typeof labels[number])&&<option value={String(form.eventLabel)} disabled>Legacy: {String(form.eventLabel)} — choose a current label</option>}{labels.map(x=><option key={x}>{x}</option>)}</select>{errors.eventLabel&&<small className="event-field-error">{errors.eventLabel}</small>}</label>{form.eventLabel==='Custom'&&field('customLabel','Custom label',{maxLength:80,required:true})}<div className="event-span">{text('shortDescription','Short card description',3,320)}</div><div className="event-span">{text('description','Full event description',7,5000)}</div></div></fieldset>
   <fieldset className="event-image-field"><legend>2. Event Image</legend><p>JPG, PNG, or WebP. Images are resized without cropping and must be no more than 5 MiB after optimization.</p>{(localPreview || asset) && (
   <Image
     src={localPreview || asset?.previewUrl || ""}

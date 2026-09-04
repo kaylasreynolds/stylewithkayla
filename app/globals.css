@@ -536,3 +536,6 @@ textarea { resize:vertical; }
   .recap-repeat-row > button { width:auto; }
   .recap-wrap-up > .recap-action-row { justify-content:flex-start; }
 }
+
+.event-public-url small{font-weight:400;color:#6e625d}.event-url-control{display:flex;align-items:stretch;border:1px solid #b9aaa4;border-radius:6px;background:#fcf8f5;overflow:hidden}.event-url-control>span{display:flex;align-items:center;padding:0 10px;color:#6e625d;font-size:.9rem;white-space:nowrap}.event-url-control input{min-width:0;border:0!important;border-left:1px solid #d9cbc5!important;border-radius:0!important}.event-public-url:has([aria-invalid=true]) .event-url-control{border-color:#a3203d}
+@media(max-width:680px){.event-url-control{display:grid}.event-url-control>span{min-height:40px}.event-url-control input{border-left:0!important;border-top:1px solid #d9cbc5!important}}

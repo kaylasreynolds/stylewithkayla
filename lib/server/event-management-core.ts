@@ -19,6 +19,7 @@ function iso(value: number): string {
 export function publicEventJson(row: Record<string, unknown>) {
   return {
     id: row.id,
+    slug: row.slug,
     title: row.title,
     description: row.description,
     shortDescription: row.shortDescription,

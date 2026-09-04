@@ -22,7 +22,7 @@ export function withoutEventOffer<T extends Record<string, unknown>>(value: T): 
 
 /** Fields an event editor is allowed to send to the create and update APIs. */
 export const EDITABLE_EVENT_FIELDS = [
-  "title", "eventLabel", "customLabel", "shortDescription", "description",
+  "title", "slug", "eventLabel", "customLabel", "shortDescription", "description",
   "offer", "offerDetails", "offerTerms", "eventDate", "startTime", "endTime",
   "allDay", "timezone", "location", "locationDetails", "directionsUrl",
   "attendanceType", "capacity", "unlimitedCapacity", "maxGuests", "allowGuestNames",
