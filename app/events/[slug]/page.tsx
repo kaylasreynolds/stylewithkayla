@@ -140,13 +140,12 @@ export default async function EventPage({
           ← Back to Events
         </Link>
 
-        <Image
-          src="/images/stylewithkayla_logo.png"
-          alt="Style with Kayla"
-          width={180}
-          height={68}
-          priority
-        />
+        <img
+  src="/images/stylewithkayla_logo.png"
+  alt="Style with Kayla"
+  width="180"
+  height="68"
+/>
 
         <span aria-hidden="true" />
       </header>
