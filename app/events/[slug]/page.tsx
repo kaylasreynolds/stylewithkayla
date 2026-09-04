@@ -100,7 +100,9 @@ export default async function EventPage({
   } = row;
 
   const event =
-    publicEventJson(publicRow);
+    publicEventJson(
+      publicRow,
+    ) as Record<string, unknown>;  
 
   const isPast =
     Number(row.endsAt) <=
@@ -178,7 +180,7 @@ export default async function EventPage({
           </span>
         </section>
 
-        {event.imageUrl && (
+        {Boolean(event.imageUrl) && (
           <div
             className={styles.image}
           >
@@ -227,7 +229,7 @@ export default async function EventPage({
           )}
         </dl>
 
-        {event.description && (
+        {Boolean(event.description) && (
           <section
             className={styles.about}
           >
@@ -252,7 +254,7 @@ export default async function EventPage({
           </section>
         )}
 
-        {event.offer && (
+        {Boolean(event.offer) && (
           <aside
             className={styles.offer}
           >
@@ -262,7 +264,7 @@ export default async function EventPage({
               {String(event.offer)}
             </h2>
 
-            {event.offerDetails && (
+            {Boolean(event.offerDetails) && (
               <div>
                 {String(
                   event.offerDetails,
@@ -270,7 +272,7 @@ export default async function EventPage({
               </div>
             )}
 
-            {event.offerTerms && (
+            {Boolean(event.offerTerms) && (
               <small>
                 {String(
                   event.offerTerms,
