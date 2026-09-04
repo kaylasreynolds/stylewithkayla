@@ -23,11 +23,13 @@ test("appointment lifecycle routes invoke real delivery and contain no deferred-
 
 test("appointment delivery records queued, sent, and failed outcomes", async () => {
   const source = await readFile(new URL("../lib/server/appointment-email-delivery.ts", import.meta.url), "utf8");
+  const transport = await readFile(new URL("../lib/server/microsoft-graph-mail.ts", import.meta.url), "utf8");
   assert.match(source, /'queued'/);
   assert.match(source, /status='sent'/);
   assert.match(source, /status='failed'/);
-  assert.match(source, /graph\.microsoft\.com\/v1\.0\/users/);
-  assert.match(source, /saveToSentItems: true/);
+  assert.match(source, /sendMicrosoftGraphMail/);
+  assert.match(transport, /graph\.microsoft\.com\/v1\.0\/users/);
+  assert.match(transport, /saveToSentItems:true/);
 });
 
 test("client action pages bypass image optimization and nonessential sticky capture behavior", async () => {

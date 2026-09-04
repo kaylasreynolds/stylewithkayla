@@ -1,6 +1,7 @@
 import { appointmentIcs, formatAppointment } from "@/lib/appointment/presentation";
 import { renderBookingConfirmationEmail } from "@/lib/server/booking-confirmation-email";
 import { getAppointmentEmailConfig } from "@/lib/server/runtime";
+import { sendMicrosoftGraphMail } from "@/lib/server/microsoft-graph-mail";
 
 type DeliveryKind =
   | "request_received"
@@ -115,24 +116,6 @@ function messages(config: MailConfig, kind: DeliveryKind, input: AppointmentDeli
   return [clientMessage(input, "Your appointment has been cancelled", [`Your ${escape(input.serviceName)} appointment for ${escape(when)} has been cancelled and the time has been released.`, input.reason ? `Message from Kayla: ${escape(input.reason)}` : ""].filter(Boolean), null, "booking_cancelled")];
 }
 
-async function accessToken(config: MailConfig) {
-  const response = await fetch(`https://login.microsoftonline.com/${encodeURIComponent(config.tenantId)}/oauth2/v2.0/token`, { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ client_id: config.clientId, client_secret: config.clientSecret, scope: "https://graph.microsoft.com/.default", grant_type: "client_credentials" }) });
-  const payload = await response.json() as { access_token?: string; error_description?: string; error?: string };
-  if (!response.ok || !payload.access_token) throw new Error(`Microsoft authentication failed (${response.status}): ${payload.error_description || payload.error || "No access token returned."}`);
-  return payload.access_token;
-}
-
-const base64 = (value: string) => {
-  const bytes = new TextEncoder().encode(value); let binary = "";
-  for (const byte of bytes) binary += String.fromCharCode(byte);
-  return btoa(binary);
-};
-
-async function send(config: MailConfig, token: string, message: Message) {
-  const response = await fetch(`https://graph.microsoft.com/v1.0/users/${encodeURIComponent(config.mailbox)}/sendMail`, { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify({ message: { subject: message.subject, body: { contentType: "HTML", content: message.html }, toRecipients: [{ emailAddress: { address: message.to } }], replyTo: [{ emailAddress: { address: config.replyTo } }], attachments: message.calendar ? [{ "@odata.type": "#microsoft.graph.fileAttachment", name: "style-with-kayla-appointment.ics", contentType: "text/calendar; method=REQUEST; charset=UTF-8", contentBytes: base64(message.calendar) }] : [] }, saveToSentItems: true }) });
-  if (!response.ok) throw new Error(`Microsoft appointment email failed (${response.status}): ${(await response.text()).slice(0, 700)}`);
-}
-
 export async function deliverAppointmentEmails(db: D1Database, kind: DeliveryKind, input: AppointmentDelivery) {
   const config = getAppointmentEmailConfig();
   const pending = config ? messages(config, kind, input) : [{ templateKey: kind, to: input.clientEmail, subject: "", html: "", text: "" }];
@@ -142,17 +125,9 @@ export async function deliverAppointmentEmails(db: D1Database, kind: DeliveryKin
     await db.batch(ids.map(id => db.prepare(`UPDATE communications SET status='failed',error_message=? WHERE id=?`).bind("Microsoft appointment email is not configured.", id)));
     return { sent: 0, failed: ids.length, warning: "Appointment email is not configured." };
   }
-  let token: string;
-  try { token = await accessToken(config); }
-  catch (error) {
-    const detail = error instanceof Error ? error.message : String(error);
-    await db.batch(ids.map(id => db.prepare(`UPDATE communications SET status='failed',error_message=? WHERE id=?`).bind(detail.slice(0, 1000), id)));
-    console.error("Appointment email authentication failed", { bookingId: input.bookingId, kind, error: detail });
-    return { sent: 0, failed: ids.length, warning: "Appointment email delivery failed." };
-  }
   let sent = 0, failed = 0;
   for (let index = 0; index < pending.length; index += 1) {
-    try { await send(config, token, pending[index]); await db.prepare(`UPDATE communications SET status='sent',sent_at=?,error_message=NULL WHERE id=?`).bind(Date.now(), ids[index]).run(); sent += 1; }
+    try { await sendMicrosoftGraphMail(config, pending[index]); await db.prepare(`UPDATE communications SET status='sent',sent_at=?,error_message=NULL WHERE id=?`).bind(Date.now(), ids[index]).run(); sent += 1; }
     catch (error) { const detail = error instanceof Error ? error.message : String(error); await db.prepare(`UPDATE communications SET status='failed',error_message=? WHERE id=?`).bind(detail.slice(0, 1000), ids[index]).run(); console.error("Appointment email failed", { bookingId: input.bookingId, kind, recipient: pending[index].to, error: detail }); failed += 1; }
   }
   return { sent, failed, warning: failed ? "One or more appointment emails could not be sent." : null };

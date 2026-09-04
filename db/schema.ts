@@ -538,7 +538,10 @@ export const privateAccessTokens = sqliteTable(
       >()
       .notNull(),
     tokenHash: text("token_hash").notNull(),
-    expiresAt: integer("expires_at").notNull(),
+    expiresAt: integer("expires_at"),
+    tokenCiphertext: text("token_ciphertext"),
+    tokenIv: text("token_iv"),
+    tokenAuthTag: text("token_auth_tag"),
     usedAt: integer("used_at"),
     revokedAt: integer("revoked_at"),
     createdAt: createdAt(),

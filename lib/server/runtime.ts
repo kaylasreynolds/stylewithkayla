@@ -13,12 +13,19 @@ type RuntimeEnv = {
   EVENT_EMAIL_REPLY_TO?: string;
   APPOINTMENT_EMAIL_REPLY_TO?: string;
   APPOINTMENT_NOTIFICATION_TO?: string;
+  STYLE_SUMMARY_TOKEN_ENCRYPTION_KEY?: string;
 };
 
 export function getD1() {
   const db = (env as unknown as RuntimeEnv).DB;
   if (!db) throw new Error("D1 binding DB is unavailable.");
   return db;
+}
+
+export function getStyleSummaryTokenEncryptionKey() {
+  const key = (env as unknown as RuntimeEnv).STYLE_SUMMARY_TOKEN_ENCRYPTION_KEY?.trim();
+  if (!key) throw new Error("STYLE_SUMMARY_TOKEN_ENCRYPTION_KEY is required.");
+  return key;
 }
 
 export function getPhotoAssetsBucket() {
