@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   isRegisterableEvent,
   registrationAvailability,
@@ -128,7 +128,7 @@ export default function EventPageActions({
   }
 
   async function submit(
-    registrationForm: FormEvent<HTMLFormElement>,
+    registrationForm: React.SyntheticEvent<HTMLFormElement>,
   ) {
     registrationForm.preventDefault();
 

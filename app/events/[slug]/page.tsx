@@ -141,7 +141,7 @@ export default async function EventPage({
         </Link>
 
         <Image
-          src="/images/stylewithkayla_logo.png"
+          src="/public/images/stylewithkayla_logo.png"
           alt="Style with Kayla"
           width={180}
           height={68}
