@@ -9,6 +9,7 @@ import {
 import { attendanceText } from "@/lib/event-presentation";
 import EventPageActions from "./EventPageActions";
 import styles from "./event-page.module.css";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
@@ -61,7 +62,75 @@ const timeFormat = (
           String(event.endsAt),
         ),
       )}`;
+export async function generateMetadata({
+  params,
+}: Context): Promise<Metadata> {
+  const { slug } = await params;
 
+  const row = await getD1()
+    .prepare(
+      `SELECT ${PUBLIC_EVENT_FIELDS}
+       FROM events e
+       WHERE e.slug=?
+         AND e.status='published'
+         AND e.archived_at IS NULL
+       LIMIT 1`,
+    )
+    .bind(slug)
+    .first<Record<string, unknown>>();
+
+  if (!row) {
+    return {};
+  }
+
+  const event = publicEventJson(
+    row,
+  ) as Record<string, unknown>;
+
+  const title = String(
+    event.title || "Style with Kayla Event",
+  );
+
+  const description = String(
+    event.shortDescription ||
+      event.description ||
+      "Upcoming Style with Kayla event.",
+  );
+
+  const url = `/events/${slug}`;
+
+  const image = event.imageUrl
+    ? String(event.imageUrl)
+    : "/images/Hero-image.png";
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      type: "website",
+      url,
+      title,
+      description,
+      images: [
+        {
+          url: image,
+          alt: String(
+            event.imageAlt || title,
+          ),
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
+  };
+}
 export default async function EventPage({
   params,
 }: Context) {
