@@ -12,6 +12,7 @@ import {
   withApi,
 } from "@/lib/server/http";
 import { getD1 } from "@/lib/server/runtime";
+import { assertEventSlugAvailable, generatedAvailableEventSlug } from "@/lib/server/event-slugs";
 
 function editableEventFromStoredEvent(
   event: Record<string, unknown>,
@@ -64,17 +65,21 @@ export async function POST(
 
     const storedEvent = eventJson(row);
 
-    validateEventForPublish(
-      editableEventFromStoredEvent(storedEvent),
-    );
+    const editableEvent = editableEventFromStoredEvent(storedEvent);
+    validateEventForPublish(editableEvent);
+
+    const db = getD1();
+    const customSlug = String(storedEvent.slug ?? "");
+    const slug = customSlug || await generatedAvailableEventSlug(db, storedEvent.title, storedEvent.eventDate);
+    if (customSlug) await assertEventSlugAvailable(db, customSlug, eventId);
 
     const now = Date.now();
 
-    await getD1()
+    await db
       .prepare(
-        "UPDATE events SET status='published',published_at=?,updated_at=? WHERE id=?",
+        "UPDATE events SET slug=?,status='published',published_at=?,updated_at=? WHERE id=?",
       )
-      .bind(now, now, eventId)
+      .bind(slug, now, now, eventId)
       .run();
 
     return dataResponse(
@@ -82,6 +87,7 @@ export async function POST(
         eventId,
         status: "published",
         publishedAt: new Date(now).toISOString(),
+        slug,
       },
       200,
       requestId,

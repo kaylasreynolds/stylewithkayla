@@ -690,6 +690,7 @@ export const dataRequests = sqliteTable(
 /** Event records use opaque internal ids. Only rsvps.publicToken is suitable for guests. */
 export const events = sqliteTable("events", {
   id: text("id").primaryKey(),
+  slug: text("slug"),
   title: text("title").notNull(),
   description: text("description").notNull().default(""),
   category: text("category").notNull().default(""),
@@ -744,7 +745,7 @@ export const events = sqliteTable("events", {
   createdBy: text("created_by").notNull(),
   createdAt: createdAt(),
   updatedAt: integer("updated_at").notNull().default(sql`(unixepoch() * 1000)`),
-}, (table) => [index("events_status_starts_idx").on(table.status, table.startsAt)]);
+}, (table) => [uniqueIndex("events_slug_unique").on(table.slug), index("events_status_starts_idx").on(table.status, table.startsAt)]);
 
 /** Server-inspected uploads. The owner column prevents one administrator replacing an image with another account's asset. */
 export const eventImageAssets = sqliteTable("event_image_assets", {

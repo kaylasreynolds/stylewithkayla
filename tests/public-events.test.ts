@@ -25,6 +25,7 @@ test("public event projection excludes private and lifecycle fields", () => {
   }
 
   for (const field of [
+    "e.slug",
     "e.title",
     "e.short_description",
     "e.location",

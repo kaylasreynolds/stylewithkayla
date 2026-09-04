@@ -2,8 +2,9 @@ import { requireAdmin } from "@/lib/server/admin-auth";
 import { eventJson, materializeDraftTimes, parseEventDraft } from "@/lib/server/event-management";
 import { ApiError, dataResponse, readJsonObject, withApi } from "@/lib/server/http";
 import { getD1 } from "@/lib/server/runtime";
+import { assertEventSlugAvailable } from "@/lib/server/event-slugs";
 export async function GET(request:Request){return withApi(async id=>{requireAdmin(request);const url=new URL(request.url),status=url.searchParams.get("status"),q=url.searchParams.get("q")?.trim()??"";if(status&&!["draft","published","archived"].includes(status))throw new ApiError(422,"INVALID_STATUS","Choose a valid event status.");const where=[status?"status=?":"1=1",q?"(title LIKE ? OR location LIKE ?)":"1=1"].join(" AND "),binds=[...(status?[status]:[]),...(q?[`%${q}%`,`%${q}%`]:[])];const rows=(await getD1().prepare(`SELECT e.*,(SELECT COALESCE(SUM(party_size),0) FROM event_rsvps r WHERE r.event_id=e.id AND r.status='confirmed') confirmed_count FROM events e WHERE ${where} ORDER BY starts_at DESC LIMIT 200`).bind(...binds).all<Record<string,unknown>>()).results;return dataResponse({events:rows.map(eventJson)},200,id);});}
-export async function POST(request:Request){return withApi(async id=>{const email=requireAdmin(request),body=parseEventDraft(await readJsonObject(request)),times=materializeDraftTimes(body),eventId=crypto.randomUUID(),now=Date.now(),db=getD1();let asset:null|Record<string,unknown>=null;if(body.imageAssetId){asset=await db.prepare("SELECT id,storage_key,mime_type,size_bytes,width,height FROM event_image_assets WHERE id=? AND owner_email=?").bind(body.imageAssetId,email).first<Record<string,unknown>>();if(!asset)throw new ApiError(422,"INVALID_EVENT_IMAGE","Choose an image uploaded by your account.");}const c=columns(body,times,asset);await db.prepare(`INSERT INTO events (id,${c.names.join(",")},status,created_by,created_at,updated_at) VALUES (?,${c.names.map(()=>"?").join(",")},'draft',?,?,?)`).bind(eventId,...c.values,email,now,now).run();const row=await db.prepare("SELECT * FROM events WHERE id=?").bind(eventId).first<Record<string,unknown>>();return dataResponse({event:eventJson(row!)},201,id);});}
+export async function POST(request:Request){return withApi(async id=>{const email=requireAdmin(request),body=parseEventDraft(await readJsonObject(request)),times=materializeDraftTimes(body),eventId=crypto.randomUUID(),now=Date.now(),db=getD1();await assertEventSlugAvailable(db,String(body.slug??""));let asset:null|Record<string,unknown>=null;if(body.imageAssetId){asset=await db.prepare("SELECT id,storage_key,mime_type,size_bytes,width,height FROM event_image_assets WHERE id=? AND owner_email=?").bind(body.imageAssetId,email).first<Record<string,unknown>>();if(!asset)throw new ApiError(422,"INVALID_EVENT_IMAGE","Choose an image uploaded by your account.");}const c=columns(body,times,asset);await db.prepare(`INSERT INTO events (id,${c.names.join(",")},status,created_by,created_at,updated_at) VALUES (?,${c.names.map(()=>"?").join(",")},'draft',?,?,?)`).bind(eventId,...c.values,email,now,now).run();const row=await db.prepare("SELECT * FROM events WHERE id=?").bind(eventId).first<Record<string,unknown>>();return dataResponse({event:eventJson(row!)},201,id);});}
 export function columns(
   body: Record<string, unknown>,
   times: Record<string, number | null>,
@@ -11,6 +12,7 @@ export function columns(
 ) {
   const map: Record<string, string> = {
     title: "title",
+    slug: "slug",
     eventLabel: "category",
     customLabel: "custom_label",
     shortDescription: "short_description",
@@ -59,7 +61,7 @@ export function columns(
   const values: unknown[] = keys.map(
     key =>
       body[key] ??
-      (key === "capacity" ? 0 : ""),
+      (key === "slug" ? null : key === "capacity" ? 0 : ""),
   );
 
   names.push(

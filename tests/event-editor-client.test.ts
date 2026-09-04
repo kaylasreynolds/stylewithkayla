@@ -31,6 +31,7 @@ test("loaded events produce an allowlisted POST and PATCH payload", () => {
   assert.deepEqual(payload, approved);
   for (const field of Object.keys(serverOwned)) assert.equal(Object.hasOwn(payload, field), false, field);
   assert.equal(payload.imageAssetId, approved.imageAssetId);
+  assert.equal(payload.slug, approved.slug);
 });
 
 test("the PATCH route sanitizes the loaded event before strict merge validation", async () => {
