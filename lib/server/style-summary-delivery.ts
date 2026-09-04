@@ -11,15 +11,17 @@ export async function loadCanonicalStyleSummary(db:D1Database,bookingId:string,o
   if(row.status!=="published")throw new ApiError(409,"STYLE_SUMMARY_NOT_PUBLISHED","Publish the Style Summary before sending it.");
   if(!row.summaryId)throw new ApiError(409,"STYLE_SUMMARY_NOT_FOUND","The published Style Summary is unavailable.");
   if(row.revokedAt)throw new ApiError(410,"STYLE_SUMMARY_LINK_REVOKED","The canonical Style Summary link has been revoked.");
-  if(!row.tokenCiphertext||!row.tokenIv||!row.tokenAuthTag)throw new ApiError(409,"STYLE_SUMMARY_LINK_UNAVAILABLE","The canonical Style Summary link cannot be recovered.");
+  const content=typeof row.content==="string"?JSON.parse(row.content) as RecapSummaryContent:row.content;
+  if(!row.tokenCiphertext||!row.tokenIv||!row.tokenAuthTag)return {...row,content,styleSummaryUrl:null,linkRecoverable:false as const};
   let raw:string; try{raw=await decryptPrivateToken(row,key);}catch{throw new ApiError(409,"STYLE_SUMMARY_LINK_UNAVAILABLE","The canonical Style Summary link cannot be recovered.");}
-  return {...row,content:typeof row.content==="string"?JSON.parse(row.content) as RecapSummaryContent:row.content,styleSummaryUrl:`${origin}/style-summary/${raw}`};
+  return {...row,content,styleSummaryUrl:`${origin}/style-summary/${raw}`,linkRecoverable:true as const};
 }
 
 type MailConfig={tenantId:string;clientId:string;clientSecret:string;mailbox:string;replyTo:string;notificationTo:string};
 type DeliveryDependencies={key:string;config:MailConfig|null;now?:()=>number;id?:()=>string;send?:typeof sendMicrosoftGraphMail};
 export async function deliverStyleSummaryEmail(db:D1Database,bookingId:string,origin:string,dependencies:DeliveryDependencies) {
   const canonical=await loadCanonicalStyleSummary(db,bookingId,origin,dependencies.key);
+  if(!canonical.linkRecoverable)throw new ApiError(409,"STYLE_SUMMARY_LINK_UNAVAILABLE","The canonical Style Summary link cannot be recovered.");
   const recipient=canonical.clientEmail.trim();
   if(!recipient||!/^\S+@\S+\.\S+$/.test(recipient))throw new ApiError(409,"CLIENT_EMAIL_UNAVAILABLE","No client email address is available.");
   const id=(dependencies.id??(()=>crypto.randomUUID()))(),now=(dependencies.now??Date.now)();
