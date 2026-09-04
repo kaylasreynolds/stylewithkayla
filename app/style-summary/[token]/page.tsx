@@ -16,7 +16,7 @@ return (
     <main className="style-summary-page">
       <div className="style-summary-logo">
         <img
-          src="/images/stylewithkayla_logo.png"
+          src="/images/stylewithkayla_hor.png"
           alt="Style with Kayla"
         />
       </div>
