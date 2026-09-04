@@ -502,7 +502,16 @@
 .style-summary-state p {
   color: var(--charcoal);
 }
+.style-summary-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 28px;
+}
 
+.style-summary-logo img {
+  width: 180px;
+  height: auto;
+}
 @media (max-width: 640px) {
   .style-summary-page {
     width: 100%;
